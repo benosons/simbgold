@@ -1,0 +1,565 @@
+*{
+	margin:0;
+	padding:0;
+	border:none;
+	outline:none;
+}
+body{
+	font-family:"Open Sans", Helvetica, Arial, sans-serif;
+	font-size:12px;
+	color:#333;
+}
+a{
+	color:#06F;
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
+
+p{
+}
+h1{
+}
+h2{
+}
+h3{
+}
+.clear{
+	clear:both;
+	width:100%;
+	height:20px;
+	background:url(../images/pattern.png) repeat;
+	display:block;
+}
+.clear_line{
+	clear:both;
+	width:100%;
+	border-bottom:1px solid rgba(0,0,0,0.1);
+	height:1px;
+	display:block;
+}
+.title{
+	color: #333333;
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0 0 5px;
+    text-align: left;
+}
+/*==STRUCTURE==*/
+#header{
+	height:80px;
+	border-bottom:1px solid #F1F1F1;
+}
+#content{
+}
+#foooter{
+}
+
+#container{ width:1000px; min-width:960px; position:relative; }
+.content_left{
+	float: left;
+    margin-bottom: 50px;
+    width: 67%;
+}
+.content_leftcenter{
+	width:66%;
+	float:left;
+	text-align: left;
+}
+.content_leftcenter .content_left{
+	width:50%;
+	float:left;
+}
+.content_leftcenter .content_center{
+	width:50%;
+	float:left;
+}
+.content_leftcenter .full_leftcenter{
+	width:100%;
+	float:left;
+}
+
+.content_center{
+	width:33%;
+	height:500px;
+	float:left;
+}
+.content_right{
+	width:33%;
+	float:right;
+}
+/*==END STRUCTURE==*/
+
+/*==HEADER==*/
+#header #logo{
+	float:left;
+	margin:20px 0 0 20px;
+}
+#header #logo a{
+}
+#header #logo a img{
+	width:150px;
+}
+#header ul#menu{
+	margin:0;
+	padding:0;
+	position:absolute;
+	right:20px;
+	top:46px;
+}
+#header ul#menu li{
+	margin:0 0 0 20px;
+	padding:0;
+	list-style:none;
+	display:inline;
+}
+#header ul#menu li a{
+	font-size:15px;
+	font-weight:100;
+	color:#999;
+	padding:0 0 10px 0;
+}
+#header ul#menu li a:hover,#header ul#menu li a.active{
+	text-decoration:none;
+	color:#06F;
+	border-bottom:4px solid #06F;
+}
+/*==END HEADER==*/
+
+/*==MAP==*/
+#map{
+	width:100%;
+	height:450px;
+	position:relative;
+	box-shadow:0 0 20px 5px rgba(0,0,0,0.1);
+}
+#map iframe{
+	position:absolute;
+	z-index:-1;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
+#map #search_upk{
+	width:500px;
+	margin:0;
+	padding:190px 0 0 0;
+}
+#map #search_upk form.search{
+	background:#FFF;
+}
+
+#map #search_upk{
+	margin:0;
+}
+#map #search_upk form.search{
+	margin:0 20px 10px 20px;
+	padding:0 15px;
+	height:46px;
+	border:1px solid #FFF;
+	position:relative;
+	border-radius:5px;
+	box-shadow:0 10px 50px 10px rgba(0,0,0,0.3);
+}
+#map #search_upk form.search input{
+	width:100%;
+	color:#999;
+	margin:10px 0 0 0;
+	font-size:20px;
+	font-weight:100;
+	font-family:"Open Sans", Helvetica, Arial, sans-serif;
+}
+#map #search_upk form.search input:focus{
+	color:#333;
+}
+#map #search_upk form.search button{
+	position:absolute;
+	cursor:pointer;
+	background:#03F;
+	border-radius:0 5px 5px 0;
+	width:45px;
+	height:46px;
+	right:0;
+	top:0;
+	border:1px solid rgba(0,0,0,0.1);
+	box-shadow:inset 0 1px 0 0 rgba(255,255,255,0.5),inset 0 -30px 50px -20px rgba(0,0,0,0.2);
+}
+#map #search_upk form.search button img{
+	width:30px;
+}
+
+/*==END MAP==*/
+
+/*==CONTENT LEFT==*/
+#daftar_upk{
+	margin: 20px;
+}
+#search_upk{
+	margin:20px 0 0 0;
+}
+#search_upk form.search{
+	margin:0 20px 10px 20px;
+	padding:10px;
+	border:1px solid #CCCCCC;
+	position:relative;
+}
+#search_upk form.search input{
+	border: medium none !important;
+    box-shadow: none !important;
+    color: #CCCCCC;
+    width: 99%;
+    padding: 0;
+}
+#search_upk form.search input:focus{
+	color:#333;
+}
+#search_upk form.search button{
+	cursor:pointer;
+	float: right;
+}
+#search_upk form.search button img{
+	position:absolute;
+	right: 15px;
+    top: 14px;
+    width: 16px;
+}
+#short_by_upk{
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    height: auto;
+    margin: 0;
+    position: relative;
+}
+#short_by_upk .title{
+	padding:0 0 10px;
+}
+
+#short_by_upk a{
+	position:absolute;
+	color:#999;
+	right:0;
+	top:0;
+	background:#FFF;
+	border:1px solid rgba(0,0,0,0.1);
+	border-radius:5px;
+	padding:0 0 0 10px;
+}
+#short_by_upk a:hover{
+	text-decoration:none;
+}
+#short_by_upk a img{
+	background: none repeat scroll 0 0 #0066FF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0 5px 5px 0;
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.5) inset, 0 -30px 40px -20px rgba(0, 0, 0, 0.2) inset;
+    margin: 0 0 0 8px;
+    vertical-align: middle;
+    height: 28px;
+}
+.list_upk{
+	margin: 0px;
+}
+.list_upk .upk{
+	padding:10px 0;
+	border-bottom:1px solid #F1F1F1;
+}
+.list_upk .upk table  tr td{
+	vertical-align:top;
+}
+.list_upk .upk .upk_pp{
+	text-align:left;
+}
+.list_upk .upk .upk_pp a{
+	display:block;
+	width:60px;
+	height:50px;
+	background:#333;
+	background-position:center;
+	background-repeat:no-repeat;
+	background-size:120%;
+	margin:0;
+}
+.list_upk .upk .upk_deskription{
+	margin:0;
+	text-align:left;
+	color:#999;
+}
+.list_upk .upk .upk_deskription .upk_name{
+	font-size:20px;
+	font-weight:200;
+}
+.list_upk .upk .upk_deskription .upk_category{
+	float: left;
+}
+.list_upk .upk .upk_deskription .upk_rating{
+}
+.list_upk .upk .upk_deskription .upk_location{
+	float: right;
+}
+.list_upk .upk .upk_deskription .upk_location a.globe-icon{
+	background: url('../images/map_icon.png') no-repeat center;
+	height: 20px;
+	width: 20px;
+}
+.list_upk .upk .upk_deskription .upk_location a img{
+	vertical-align:top;
+	margin:-3px 0 0 4px;
+	width: 20px;
+	height: 20px;
+}
+.list_upk .upk .upk_deskription .upk_name,.list_upk .upk .upk_deskription .upk_category,.list_upk .upk .upk_deskription .upk_rating,.list_upk .upk .upk_deskription .upk_location{
+	margin:0 0 5px 0;
+	padding:0;
+}
+.list_upk .upk .upk_deskription table{
+	margin:0;
+}
+.list_upk .upk .upk_deskription table tr td{
+	padding:0 20px 0 0;
+}
+/*==END CONTENT LEFT==*/
+
+/*==CONTENT CENTER==*/
+/*
+#peta_sebaran{
+	margin:20px;
+	text-align:left;
+}
+#peta_sebaran form{
+	color:#999;
+}
+#peta_sebaran form label{
+	display:block;
+	margin:0 0 5px 0;
+}
+#peta_sebaran form select{
+	width:96%;
+	padding:5px;
+	border:1px solid #CCC;
+	margin:0 0 5px 0;
+	color:#CCC;
+}
+#peta_sebaran form select:focus{
+	color:#333;
+}
+*/
+#peta_sebaran{
+	margin:20px;
+	text-align:left;
+}
+#peta_sebaran form{
+	color:#999;
+}
+#peta_sebaran form label{
+	display:block;
+	margin:0 0 5px 0;
+}
+#peta_sebaran form select{
+	width:33%;
+	padding:5px;
+	border:1px solid #CCC;
+	margin:0 0 5px 0;
+	color:#CCC;
+	border-radius:5px;
+}
+#peta_sebaran form select:focus{
+	color:#333;
+}
+#peta_sebaran .list_urut_upk{
+}
+#peta_sebaran .list_urut_upk .daftar_upk{
+	padding:10px 0;
+	border-bottom:1px solid #F1F1F1;
+}
+#peta_sebaran .list_urut_upk .daftar_upk .upk_group{
+}
+#peta_sebaran .list_urut_upk .daftar_upk .upk_name{
+	font-size:15px;
+}
+#peta_sebaran .list_urut_upk .daftar_upk .upk_rating{
+}
+#peta_sebaran .list_urut_upk .daftar_upk .upk_category{
+}
+#peta_sebaran .list_urut_upk .daftar_upk .upk_location{
+}
+#peta_sebaran .list_urut_upk .daftar_upk .upk_location a img{
+	vertical-align:middle;
+}
+/*==END CONTENT CENTER==*/
+
+/*==CONTENT RIGHT==*/
+#form_login{
+	margin:20px 0 0 0;
+	padding:20px;
+	background:#FFF;
+	border:1px solid #F2F2F2;
+	border-top:none;
+}
+#form_login form.login{
+	text-align:left;
+}
+#form_login form.login label{
+	text-align:left;
+	margin:0 0 0 5px;
+	color:#999;
+	vertical-align:middle;
+}
+#form_login form.login input[type='text'],#form_login form.login input[type='password']{
+	width:96%;
+	padding:10px 0 10px 10px;
+	border:1px solid #CCC;
+	margin:0 0 5px 0;
+	color:#CCC;
+}
+#form_login form.login input[type='checkbox']{
+	vertical-align:middle;
+}
+#form_login form.login input[type='text']:focus,#form_login form.login input[type='password']:focus{
+	color:#333;
+}
+#form_login form.login button{
+	width:100%;
+	padding:10px;
+	cursor:pointer;
+	background:#06F;
+	border:1px solid #06F;
+	color:#FFF;
+	margin:0 0 10px 0;
+}
+
+#form_daftar{
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #E7EBF2;
+    border-color: -moz-use-text-color rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1);
+    border-image: none;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-style: none solid solid;
+    border-width: medium 1px 1px;
+    margin: 0;
+    padding: 10px 20px 20px;
+}
+#form_daftar form.daftar{
+	text-align:left;
+}
+#form_daftar form.daftar label{
+	text-align:left;
+	margin:0 0 5px 0;
+	color:#999;
+	vertical-align:middle;
+	display:block;
+}
+#form_daftar form.daftar input[type='text'],#form_daftar form.daftar input[type='password'],#form_daftar form.daftar input[type='email']{
+	width:96%;
+	padding:5px 0 5px 10px;
+	border:1px solid #CCC;
+	margin:0 0 10px 0;
+	color:#CCC;
+}
+#form_daftar form.daftar input[type='checkbox']{
+	vertical-align:middle;
+}
+#form_daftar form.daftar input[type='text']:focus,#form_daftar form.daftar input[type='password']:focus,#form_daftar form.daftar input[type='email']:focus{
+	color:#333;
+}
+#form_daftar form.daftar button{
+	background: none repeat scroll 0 0 #00CC33;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.5) inset, 0 -30px 40px -20px rgba(0, 0, 0, 0.2) inset;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0 0 10px;
+    padding: 10px;
+    width: 100%;
+}
+/*==END CONTENT RIGHT==*/
+
+#footer img{
+	width:150px;
+	vertical-align:middle;
+	margin:0 20px 0 0;
+}
+
+/*==GLOBAL CSS==*/
+select.selectbox{
+	border: 1px solid #CCCCCC;
+    color: #CCCCCC;
+    margin: 0 0 5px;
+    padding: 3px;
+    width: 100%;
+}
+select.selectbox:focus{
+    color: #333;
+}
+.hidden-field{
+	display:none;
+}
+/* ERROR INPUT */
+#map-canvas img, #index-maps img{ max-width: none !important;}
+select.error, input.error{ border: 1px solid #FF3738 !important;}
+select.error{ margin-bottom: 10px;}
+label.error{ color: #FF0000 !important;
+    float: right;
+    font-size: 10px;
+    margin-top: -10px !important;
+    position: relative;}
+
+#maincontent{
+	padding-top: 10px;
+    text-align: left;
+    min-width:960px;
+    width: 1000px;
+}
+#index-maps{
+	height: 325px;
+}
+
+/* from register member */
+.additional{ display: none;}
+
+.row-fluid {margin-top:10px;}
+.container-fluid div.title{ 
+	color: #333333;
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0 0 5px;
+    text-align: left;
+}
+
+#schedule .title, #facility .title{ border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 10px;}
+
+/* INDEX UPK */
+#schedule {}
+
+.list-schedule{border-bottom: 1px dashed rgba(0, 0, 0, 0.1); padding: 7px; text-align: left;}
+.list-schedule label{ float: left; font-size: 12px; font-weight: 700; text-transform: uppercase; width: 150px;}
+
+.sidebar-widget{}
+.sidebar-widget h5{ padding:0; margin:0;}
+
+#upk-information address{ text-align: left;}
+#upk-information address .upk-name {font-size:13px; text-transform: uppercase; font-weight: 700;}
+
+#room-categories{}
+#room-categories .categories-list{ padding: 7px;}
+#room-categories .categories-list .categories-name{float: left; font-weight: 700; padding-left: 5px;}
+#room-categories .categories-list .categories-counter{float: right; padding-right: 5px;}
+
+.pendaftaran-list{ padding: 7px;}
+.pendaftaran-list .pendaftaran-label{float: left; font-weight: 700; padding-left: 5px;}
+.pendaftaran-list .pendaftaran-counter{float: right; padding-right: 5px;}
+
+#register table th{ font-size: 12px;}
+
+#facility{}
+.con-facility{ text-align: left;}
+.con-facility h4{ text-transform: uppercase; color: #0066FF;}
+.con-facility .list-facility{ font-weight: 700; color:#CCC; cursor: pointer; margin-left: 0px; }
+.con-facility .list-facility.available{color:#000; } 
+
+.headtitle{ color: #333333; font-size: 20px; font-weight: 400; margin: 0 0 5px; text-align: left; }

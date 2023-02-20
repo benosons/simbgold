@@ -1,0 +1,23 @@
+<?php
+
+
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class CSRF extends CI_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('simbg_lib');
+    }
+
+    public function generateCSRF()
+    {
+        $data = [
+            'token' => $this->simbg_lib->getCSRFToken()
+        ];
+        echo json_encode($data);
+    }
+}
+
+/* End of file CSRF.php */

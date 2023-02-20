@@ -1,0 +1,124 @@
+*{
+	margin:0;
+	padding:0;
+	border:none;
+	outline:none;
+}
+body{
+	font-family:"Open Sans", Helvetica, Arial, sans-serif;
+	font-size:12px;
+	color:#333;
+	background:#2761E2;
+}
+a{
+	color:#06F;
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
+
+p{
+}
+h1{
+}
+h2{
+}
+h3{
+}
+.clear{
+	width:100%;
+	height:20px;
+	background:url(../images/pattern.png) repeat;
+	display:block;
+}
+#dashboard_title{
+	font-size:50px;
+	color:#FFF;
+	margin:15% 0 20px 0 ;
+	font-weight:bold;
+	letter-spacing:-3px;
+	text-shadow:0 2px 1px rgba(0,0,0,0.2),0 5px 20px rgba(0,0,0,0.3);
+}
+#login_form{
+	width:320px;
+	height:auto;
+}
+#login_form form{
+}
+#login_form form input[type='text'],#login_form form input[type='password']{
+	width:300px;
+	padding:10px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	-o-border-radius:5px;
+	border:1px solid #2659D5;
+	color:#999;
+	box-shadow:inset 0 2px 10px 0 rgba(0,0,0,0.2),0 1px 0 0 rgba(255,255,255,0.3);
+	-webkit-box-shadow:inset 0 2px 10px 0 rgba(0,0,0,0.2),0 1px 0 0 rgba(255,255,255,0.3);
+	-moz-box-shadow:inset 0 2px 10px 0 rgba(0,0,0,0.2),0 1px 0 0 rgba(255,255,255,0.3);
+	-o-box-shadow:inset 0 2px 10px 0 rgba(0,0,0,0.2),0 1px 0 0 rgba(255,255,255,0.3);
+	text-shadow:0 1px 0 #FFF;
+	margin:0 0 10px 0;
+	background:#F2F2F2;
+}
+#login_form form input[type='text']:focus,#login_form form input[type='password']:focus{
+	background:#FFF;
+}
+#login_form form .button_area{
+	width:321px;
+	height:60px;
+	position:relative;
+}
+#login_form form button{
+	width:321px;
+	padding:10px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	-o-border-radius:5px;
+	border:1px solid #2659D5;
+	color:#FFF;
+	box-shadow: 0 2px 10px 0 rgba(0,0,0,0.2),inset 0 1px 0 0 rgba(255,255,255,0.3);
+	-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,0.2),inset 0 1px 0 0 rgba(255,255,255,0.3);
+	-moz-box-shadow: 0 2px 10px 0 rgba(0,0,0,0.2),inset 0 1px 0 0 rgba(255,255,255,0.3);
+	-o-box-shadow: 0 2px 10px 0 rgba(0,0,0,0.2),inset 0 1px 0 0 rgba(255,255,255,0.3);
+	cursor:pointer;
+	background:#3D71E5;
+	text-shadow:0 -1px 0 #1E52BA;
+	font-size:20px;
+	font-weight:bold;
+	margin:0 0 15px 0;
+}
+#login_form form button:active{
+	margin:1px 0 15px 0;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.3),inset 0 1px 0 0 rgba(255,255,255,0.3);
+	-webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.3),inset 0 1px 0 0 rgba(255,255,255,0.3);
+	-moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.3),inset 0 1px 0 0 rgba(255,255,255,0.3);
+	-o-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.3),inset 0 1px 0 0 rgba(255,255,255,0.3);
+}
+#login_form form input[type='checkbox']{
+	margin:0 5px 0 0;
+}
+#login_form form label{
+	color:#FFF;
+	font-size:10px;
+	vertical-align:top;
+}
+#login_form form label a{
+	vertical-align:top;
+	color:#9CC;
+}
+#login_form form label.daftar{
+	margin:0 0 0 20px;
+}
+#copyrights{
+	margin:50px 0 0 0;
+	color:#FFFFFF;
+	font-size:10px;
+}
+#copyrights img{
+	width:200px;
+	margin:0 0 10px 0;
+}
