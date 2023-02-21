@@ -15,6 +15,7 @@ class Dashboard extends CI_Controller
 	}
 	public function index()
 	{
+		
 		if ($this->session->userdata('loc_role_id') != 0) {
 			$tahun = date('Y');
 			if ($this->session->userdata('loc_role_id') == 1) { //Dashboard Untuk Super Admin
@@ -73,8 +74,10 @@ class Dashboard extends CI_Controller
 	//Begin Dashboard Akun SuperAdmin/Pengembangan
 	protected function DashboardSuperAdmin()
 	{
+
 		$id_kabkot = $this->session->userdata('loc_id_kabkot');
 		$pbg_rekap = $this->mdashboard->GetJmlPbgDinas($id_kabkot);
+		
 		$data['pbg_rekap'] = $pbg_rekap;
 		$slf_rekap = $this->mdashboard->GetJmlSLFDinas($id_kabkot);
 		$data['slf_rekap'] = $slf_rekap;

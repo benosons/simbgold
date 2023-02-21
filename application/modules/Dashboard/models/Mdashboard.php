@@ -176,16 +176,28 @@ class Mdashboard extends CI_Model
 	
 	public function get_rekapIMB($cari=null)
 	{
+		// $sql = "SELECT a.id_provinsi, a.nama_provinsi,b.id_fungsi_bg,
+		// 		SUM(CASE  when (b.nib !='') then 1 else 0 END ) AS Memiliki_NIB,
+		// 		SUM(CASE  when (b.nib ='0') then 1 else 0 END ) AS Memiliki_NIB2,
+		// 		SUM(CASE  when (b.nib is null) then 1 else 0 END ) AS Non_NIB1,
+		// 		SUM(CASE  when (b.nib ='') then 1 else 0 END ) AS Non_NIB2
+		// 		FROM tr_provinsi a 
+		// 		LEFT JOIN tm_imb_permohonan b ON ( a.id_provinsi = b.id_provinsi_bg )
+		// 		Where (a.id_provinsi)  AND b.pernyataan = '1'
+		// 		$cari
+		// 		GROUP BY a.id_provinsi";
 		$sql = "SELECT a.id_provinsi, a.nama_provinsi,b.id_fungsi_bg,
-				SUM(CASE  when (b.nib !='') then 1 else 0 END ) AS Memiliki_NIB,
-				SUM(CASE  when (b.nib ='0') then 1 else 0 END ) AS Memiliki_NIB2,
-				SUM(CASE  when (b.nib is null) then 1 else 0 END ) AS Non_NIB1,
-				SUM(CASE  when (b.nib ='') then 1 else 0 END ) AS Non_NIB2
+				1 AS Memiliki_NIB,
+				1 AS Memiliki_NIB2,
+				1 AS Non_NIB1,
+				1 AS Non_NIB2
+				
 				FROM tr_provinsi a 
 				LEFT JOIN tm_imb_permohonan b ON ( a.id_provinsi = b.id_provinsi_bg )
 				Where (a.id_provinsi)  AND b.pernyataan = '1'
 				$cari
-				GROUP BY a.id_provinsi";
+				
+				";
 		//echo $sql;
 		$hasil  = $this->db->query($sql);
 		return $hasil;

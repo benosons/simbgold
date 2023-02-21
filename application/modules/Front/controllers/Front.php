@@ -32,10 +32,12 @@ class Front extends CI_Controller
 	//Begin Login Logout
 	public function Skill()
 	{
+		
 		$this->load->library('form_validation');
 		$this->load->helper('security');
 		$this->form_validation->set_rules('saya','Saya','required|max_length[50]|xss_clean');
 		$this->form_validation->set_rules('bukan','Bukan','required|min_length[6]|max_length[20]|xss_clean');
+		
 		if($this->form_validation->run() == false){
 			$this->session->set_flashdata('message', 'Periksa Kembali Data Anda.');
 			$this->session->set_flashdata('status', 'danger');
@@ -53,6 +55,7 @@ class Front extends CI_Controller
 		$email		= $email;
 		$password 	= sha1($password . $this->config->item('encryption_key'));
 		$query	= $this->Mauth->getLoginData('a.id,a.username,a.email,a.id_kabkot,a.level,a.role_id,a.asosiasi,a.id_asosiasi,b.group', $email, $password);
+		
 		if ($query->num_rows() > 0) {
 			$row	= $query->row();
 			$data	= array(

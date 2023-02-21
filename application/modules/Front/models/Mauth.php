@@ -5,15 +5,19 @@ class Mauth extends CI_Model
 
 	public function getLoginData($select = '*', $email, $password)
 	{
-		$this->db->select($select, FALSE);
-		$this->db->where('a.username', $email);
+		// $this->db->select($select, FALSE);
+		// $this->db->where('a.username', $email);
 		//$this->db->or_where('a.email', $email);
-		$this->db->where('a.password', $password);
-		$this->db->where('a.status', "1");
-		$this->db->join('tm_role b', 'a.role_id = b.id');
-		$this->db->join('tm_user_data c', 'a.id = c.user_id', 'LEFT');
-		return $this->db->get('tm_user a');
+		// $this->db->where('a.password', $password);
+		// $this->db->where('a.status', "1");
+		// $this->db->join('tm_role b', 'a.role_id = b.id');
+		// $this->db->join('tm_user_data c', 'a.id = c.user_id', 'LEFT');
+		// return $this->db->get('tm_user a');
 		//echo $this->db->last_query(); die;
+
+		$query = $this->db->query("SELECT $select FROM `tm_user` `a` JOIN `tm_role` `b` ON `a`.`role_id` = `b`.`id` LEFT JOIN `tm_user_data` `c` ON `a`.`id` = `c`.`user_id` WHERE `a`.`username` = '$email' AND `a`.`password` = '$password' AND `a`.`status` = '1'");
+		
+		return $query;
 	}
 
 
