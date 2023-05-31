@@ -10,7 +10,7 @@
         <div class="sidebar-header">
             <div class="d-flex justify-content-between">
                 <div class="logo">
-                    <a href="index.html">
+                    <a href="bgh/">
                         <!-- <img src="<?= base_url() ?>assets/images/logo/logo.png" alt="Logo" srcset=""
                 /> -->
                         Permohonan BGH
