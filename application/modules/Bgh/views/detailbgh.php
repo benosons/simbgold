@@ -28,7 +28,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5> <a href="<?= base_url('pengajuan/bangunanbaru') ?>"><i class="fa fa-arrow-left me-3"></i></a> <?= $permohonan->kode_bgh ?> <span class="badge bg-success float-end"><?= ucfirst($permohonan->kategori) ?></span></h5>
+                            <h5> <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>"><i class="fa fa-arrow-left me-3"></i></a> <?= $permohonan->kode_bgh ?> <span class="badge bg-success float-end"><?= ucfirst($permohonan->kategori) ?></span></h5>
                         </div>
                         <div class="card-body mt-4">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
