@@ -12,7 +12,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon bg-white">
-                                            <img src="<?= base_url('assets/images/icon/jumlah.png') ?>" class="img-fluid" alt="">
+                                            <img src="<?= base_url('assets/bgh/images/icon/jumlah.png') ?>" class="img-fluid" alt="">
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -31,7 +31,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon bg-white">
-                                            <img src="<?= base_url('assets/images/icon/BGH.png') ?>" class="img-fluid" alt="">
+                                            <img src="<?= base_url('assets/bgh/images/icon/BGH.png') ?>" class="img-fluid" alt="">
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -50,7 +50,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon bg-white">
-                                            <img src="<?= base_url('assets/images/icon/H2M.png') ?>" class="img-fluid" alt="">
+                                            <img src="<?= base_url('assets/bgh/images/icon/H2M.png') ?>" class="img-fluid" alt="">
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -69,7 +69,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon bg-white">
-                                            <img src="<?= base_url('assets/images/icon/Kawasan_Hijau.png') ?>" class="img-fluid" alt="">
+                                            <img src="<?= base_url('assets/bgh/images/icon/Kawasan_Hijau.png') ?>" class="img-fluid" alt="">
                                         </div>
                                     </div>
                                     <div class="col-md-8">
