@@ -8,23 +8,19 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="<?= base_url() ?>assets/bgh/css/bootstrap.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/bootstrap.css" />
 
-    <link rel="stylesheet" href="<?= base_url() ?>assets/bgh/vendors/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>assets/bgh/vendors/bootstrap-icons/bootstrap-icons.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>assets/bgh/css/app.css" />
-    <link rel="stylesheet" href="<?= base_url() ?>assets/bgh/vendors/jquery-datatables/jquery.dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="<?= base_url() ?>assets/bgh/vendors/fontawesome/all.min.css">
-    <link rel="shortcut icon" href="<?= base_url() ?>assets/bgh/images/favicon.svg" type="image/x-icon" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/vendors/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/vendors/bootstrap-icons/bootstrap-icons.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/app.css" />
+    <link rel="stylesheet" href="<?= base_url() ?>assets/vendors/jquery-datatables/jquery.dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/vendors/fontawesome/all.min.css">
+    <link rel="shortcut icon" href="<?= base_url() ?>assets/images/favicon.svg" type="image/x-icon" />
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
 
-    <link rel="stylesheet" href="<?= base_url() ?>assets/bgh/vendors/sweetalert2/sweetalert2.min.css">
-    <link
-      rel="stylesheet"
-      href="<?= base_url() ?>assets/bgh/vendors/choices.js/choices.css"
-/>
+    <link rel="stylesheet" href="<?= base_url() ?>assets/vendors/sweetalert2/sweetalert2.min.css">
     <style>
         /*form styles*/
         #msform {
@@ -176,16 +172,12 @@
         #progressbar li {
             list-style-type: none;
             font-size: 12px;
-            width: 16%;
+            width: 20%;
             float: left;
             position: relative;
         }
 
         /*Icons in the ProgressBar*/
-        #progressbar #pemilik:before {
-            font-family: FontAwesome;
-            content: "\f016";
-        }
         #progressbar #account:before {
             font-family: FontAwesome;
             content: "\f016";
@@ -275,71 +267,7 @@
             object-fit: cover;
         }
     </style>
-
-    <script src="<?= base_url() ?>assets/bgh/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="<?= base_url() ?>assets/bgh/js/bootstrap.bundle.min.js"></script>
-
-    <script src="<?= base_url() ?>assets/bgh/js/mazer.js"></script>
-    <script src="<?= base_url() ?>assets/bgh/vendors/jquery/jquery.min.js"></script>
-    <script src="<?= base_url() ?>assets/bgh/vendors/jquery-datatables/jquery.dataTables.min.js"></script>
-    <script src="<?= base_url() ?>assets/bgh/vendors/jquery-datatables/custom.jquery.dataTables.bootstrap5.min.js"></script>
-    <script src="<?= base_url() ?>assets/bgh/vendors/fontawesome/all.min.js"></script>
-    <!-- filepond validation -->
-    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
-    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
-    <script src="<?= base_url() ?>assets/bgh/vendors/sweetalert2/sweetalert2.all.min.js"></script>
 </head>
 
 <body>
     <div id="app">
-        <?php $this->load->view('include/sidebar') ?>
-        <div id="main" class='layout-navbar'>
-            <!-- Begin Load Header -->
-
-            <?php $this->load->view('include/header') ?>
-
-            <!-- End Load Header --> 
-
-            <div id="main-content">
-                <div class="page-title">
-                    <div class="row">
-                        <div class="col-12 col-md-6 order-md-1 order-last">
-                            <h3><?= $page_heading ?></h3>
-                        </div>
-                        <div class="col-12 col-md-6 order-md-2 order-first">
-                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item">
-                                        <a href="<?= base_url() ?>index.html">Dashboard</a>
-                                    </li>
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        <?= $page_heading ?>
-                                    </li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-
-                <?php echo $page_content; ?>
-
-                <footer>
-                    <div class="footer clearfix mb-0 text-muted">
-                        <div class="float-start">
-                        <p>2023 &copy;</p>
-                        </div>
-                        <div class="float-end">
-                        <p>
-                            
-                        </p>
-                        </div>
-                    </div>
-                </footer>
-            </div>
-        </div>
-          
-    </div>    
-</body>
-
-</html>
