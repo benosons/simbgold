@@ -452,8 +452,8 @@
 			</div>
 			<div class="form-actions">
 				<center>
-					<button type="submit" class="btn green">Lanjut</button>
 					<button class="btn red" onClick="window.location.href = '<?php echo base_url(); ?>Konsultasi/FormPendaftaran/<?php echo $id; ?>';return false;">Kembali</button>
+					<button type="submit" class="btn green">Lanjut</button>
 				</center>
 			</div>
 		</form>

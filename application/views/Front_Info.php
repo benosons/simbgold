@@ -52,12 +52,14 @@
 								<li class=" submenu"><a href="<?= base_url(); ?>Informasi/Pelaksana_Kontruksi">Pelaksana Kontruksi</a></li>
 								<li class=" submenu"><a href="<?= base_url(); ?>Informasi/Perencana_Pembongkaran">Perencana Pembongkaran</a></li>
 								<li class=" submenu"><a href="<?= base_url(); ?>Informasi/Pelaksana_Pembongkaran">Pelaksana Pembongkaran</a></li>
+								<li class=" submenu"><a href="<?= base_url(); ?>Informasi/Permohonan_bgh">Permohonan BGH</a></li>
 							</ul>
 						</li>
 						<li class="menu-dropdown classic-menu-dropdown">
 							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="">TPA <i class="fa fa-angle-down"></i></a>
 							<ul class="dropdown-menu">
 								<li class=" submenu"><a href="<?= base_url(); ?>Informasi/Calon_TPA">Calon TPA</a></li>
+								<li class=" submenu"><a href="<?= base_url(); ?>Informasi/Tpa_bgh">TPA BGH</a></li>
 								<li class=" submenu"><a href="<?= base_url(); ?>Informasi/Asosiasi_Profesi">Asosiasi Profesi</a></li>
 								<li class=" submenu"><a href="<?= base_url(); ?>Informasi/Perguruan_Tinggi">Perguruan Tinggi</a></li>
 							</ul>

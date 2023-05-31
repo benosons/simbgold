@@ -157,6 +157,13 @@
 							<a href="javascript:;" class="btn blue" disabled><span>Pendataan Bangunan Gedung</span></a>
 						</div>
 					</div>
+					<div class="col-sm-12">
+						<div class="top-news">
+							<a href="https://bios-studio.com/bgh/pengajuan/recommendedbghbaru" class="btn blue">
+								<span>Permohonan Bangunan Gedung Hijau</span>
+							</a>
+						</div>
+					</div>
 					<br>
 				</div>
 			</div>
@@ -164,6 +171,19 @@
 	</div>
 	<div class="modal-footer">
 		<center><button type="button" data-dismiss="modal" class="btn yellow-crusta">Batal</button></center>
+	</div>
+</div>
+
+<div class="modal fade" id="modal-bgh" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-body">
+			<div class="row">
+				<div class="col-md-12">
+				<h4>Data Permohonan PBG Anda Memerlukan Permohonan BGH <br> Terlebih Dahulu</h4>
+				<a href="https://bios-studio.com/bgh/pengajuan/mandatorybghbaru" class="btn btn-primary">AJukan Permohonan BGH</a>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -392,7 +412,7 @@
 							$usaha = '';
 							$sosbud = '';
 							$khusus = '';
-							if ($DataBangunan->id_jns_bg != NULL) {
+							if ($DataBangunan!= NULL || $DataBangunan->id_jns_bg != NULL) {
 								$jenis = json_decode($DataBangunan->id_jns_bg);
 								foreach ($jenis as $dt_cek) {
 									if ($dt_cek == 1) $hunian = 'checked';
@@ -406,15 +426,15 @@
 							<label class="control-label col-md-3">Jenis Bangunan <span class="required">*minimal 2</span></label>
 							<div class="col-md-7 checkbox-inline">
 								<label>
-									<input type="checkbox" class="form-control" name="dcampur[]" value="1" <?= $hunian; ?>> Hunian </label>
+									<input type="checkbox" class="form-control" name="dcampur[]" value="1" <?= $hunian; ?>>Fungsi Hunian </label>
 								<label>
-									<input type="checkbox" class="form-control" name="dcampur[]" value="2" <?= $keagamaan; ?>> Keagamaan </label>
+									<input type="checkbox" class="form-control" name="dcampur[]" value="2" <?= $keagamaan; ?>>Fungsi Keagamaan </label>
 								<label>
-									<input type="checkbox" class="form-control" name="dcampur[]" value="3" <?= $usaha; ?>> Usaha </label>
+									<input type="checkbox" class="form-control" name="dcampur[]" value="3" <?= $usaha; ?>>Fungsi Usaha </label>
 								<label>
-									<input type="checkbox" class="form-control" name="dcampur[]" value="4" <?= $sosbud; ?>> Sosial & Budaya </label>
+									<input type="checkbox" class="form-control" name="dcampur[]" value="4" <?= $sosbud; ?>>Fungsi Sosial & Budaya </label>
 								<label>
-									<input type="checkbox" class="form-control" name="dcampur[]" value="5" <?= $khusus; ?>> Khusus </label>
+									<input type="checkbox" class="form-control" name="dcampur[]" value="5" <?= $khusus; ?>>Fungsi Khusus </label>
 							</div>
 						</div>
 						<div id="prasarana" style="display: none;">
@@ -487,7 +507,7 @@
 								<label class="control-label col-md-3">Jumlah Lantai Bangunan<span class="required">* </span></label>
 								<div class="col-md-5">
 									<div class="checkbox-list">
-										<select name="lantai_bg" id="lantai_bg" class="form-control dropdown-lantai">
+										<select name="lantai_bg" id="lantai_bg" onchange="cek()" class="form-control dropdown-lantai">
 											<?php
 											for ($i = 1; $i < 11; $i++) {
 												$selectedLantai = $i == $DataBangunan->jml_lantai ? 'selected' : '';
@@ -1067,6 +1087,31 @@
 
 		var luas_bg = $('#luas_bg').val();
 		var lantai_bg = $('#lantai_bg').val();
+		if (luas_bg >= 50000 && lantai_bg >= 4) {
+					// alert('Anda masuk ke klas 4 dan 5')
+			$('#modal-bgh').modal({
+				'show': true,
+				'backdrop':'static'
+			});
+		}else if(luas_bg>= 5000 && lantai_bg >=4){
+			$('#modal-bgh').modal({
+				'show': true,
+				'backdrop':'static'
+			});
+			// alert('Anda Masuk ke klas 6, 7 dan 8');
+		}else if(luas_bg >= 20000){
+			$('#modal-bgh').modal({
+				'show': true,
+				'backdrop':'static'
+			});
+			// alert('Anda Masuk ke klas 9a');
+		}else if(luas_bg >= 10000){
+			$('#modal-bgh').modal({
+				'show': true,
+				'backdrop':'static'
+			});
+			// alert('Anda Masuk ke klas 9b');
+		}
 		if ($("#id_izin").val() == 1) {
 			if ($("#id_fungsi_bg").val() == 1) {
 				if (luas_bg <= 100 && lantai_bg <= 2) {

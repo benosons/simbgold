@@ -23,7 +23,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = BASE_URL;
+// $config['base_url'] = BASE_URL;
+$root  =(isset($_SERVER['HTTPS']) ? "https://" : "http://").$_SERVER['HTTP_HOST'];
+$root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+$config['base_url']  = "$root";
 
 /*
 |--------------------------------------------------------------------------
@@ -454,69 +457,69 @@ $config['global_xss_filtering'] = TRUE;
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
-$config['csrf_protection'] = TRUE;
-$config['csrf_token_name'] = 'csrf_test_name';
-$config['csrf_cookie_name'] = 'csrf_cookie_name';
-$config['csrf_expire'] = 7200;
-$config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array(
-    'Profile/getDataKabKota/[0-9]+',
-    'Profile/getDataKecamatan/[0-9]+',
-    'Profile/getDataKelurahan/[0-9]+',
-    'Konsultasi/getDataKabKota/[0-9]+',
-    'Konsultasi/getDataKecamatan/[0-9]+',
-    'Konsultasi/getDataKelurahan/[0-9]+',
+// $config['csrf_protection'] = TRUE;
+// $config['csrf_token_name'] = 'csrf_test_name';
+// $config['csrf_cookie_name'] = 'csrf_cookie_name';
+// $config['csrf_expire'] = 7200;
+// $config['csrf_regenerate'] = TRUE;
+// $config['csrf_exclude_uris'] = array(
+//     'Profile/getDataKabKota/[0-9]+',
+//     'Profile/getDataKecamatan/[0-9]+',
+//     'Profile/getDataKelurahan/[0-9]+',
+//     'Konsultasi/getDataKabKota/[0-9]+',
+//     'Konsultasi/getDataKecamatan/[0-9]+',
+//     'Konsultasi/getDataKelurahan/[0-9]+',
 	
-	'KonsultasiOSS/getDataKabKota/[0-9]+',
-    'KonsultasiOSS/getDataKecamatan/[0-9]+',
-    'KonsultasiOSS/getDataKelurahan/[0-9]+',
-	'KonsultasiOSS/getDataJnsBg/[0-9]+',
+// 	'KonsultasiOSS/getDataKabKota/[0-9]+',
+//     'KonsultasiOSS/getDataKecamatan/[0-9]+',
+//     'KonsultasiOSS/getDataKelurahan/[0-9]+',
+// 	'KonsultasiOSS/getDataJnsBg/[0-9]+',
 	
-    'Dashboard/check_status/[0-9]+',
-    'Pusat/ResetPass/[0-9]+',
-    'InputTPA/valid_ktp2/[0-9]+',
-    'Pupr/Tampil_Pilih_Tpa',
-    'Pusat/data_kas',
-    'TenagaAhli/getDataKabKota/[0-9]+',
-    'TenagaAhli/getDataKecamatan/[0-9]+',
-    'InputTPA/getDataKabKota/[0-9]+',
-    'InputTPA/getDataKecamatan/[0-9]+',
-    'Penjadwalan/konsultasi/[0-9]+',
-);
-$config['csrf_excludes'] = array(
-    '@^/?DataSetting/?@i',
-	'@^/?DataDetail/?@i',
-    '@^/?Penugasan/?@i',
-    '@^/?Pusat/?@i',
-    '@^/?Pusat/?@i',
-    '@^/?Rekap/?@i',
-    '@^/?Setting/?@i',
-    '@^/?Pemeriksaan/cekStep?@i',
-    '@^/?Pemeriksaan/saveStep?@i',
-    '@^/?Pemeriksaan/getDataKabKota/?@i',
-    '@^/?Pemeriksaan/getDataKecamatan/?@i',
-    '@^/?Pemeriksaan/getDataKelurahan/?@i',
-    '@^/?Pemeriksaan/getDataJnsBg/?@i',
-    '@^/?Pemeriksaan/cekKesesuaian/?@i',
-    '@^/?Pemeriksaan/saveDataFinalisasi/?@i',
-    '@^/?Perhitungan/simpan_retribusi/?@i',
-    '@^/?Penjadwalan/konsultasi/?@i',
-    '@^/?InputTPA/?@i',
-    '@^/?Inspeksi/cek_step?@i',
-    '@^/?Inspeksi/save_step?@i',
-    '@^/?Konsultasi/FormRevisi/?@i',
-    '@^/?SimbgServices/receiveDataOSS_post/?@i',
-    '@^/?Perhitungan/SimpanRetribusi/?@i',
-    '@^/?PerubahanData/Ubah/?@i',
-    '@^/?PerubahanData/getDataKabKota/?@i',
-    '@^/?PerubahanData/getDataKecamatan/?@i',
-    '@^/?PerubahanData/getDataKelurahan/?@i',
-    '@^/?Teknis/status_dt_teknis/?@i',
-    '@^/?Teknis/FormPenugasan/?@i',
-    '@^/?DataSetting/saveDataPersyaratanKonsultasi/?@i',
-	'@^/?Sso/?@i',
+//     'Dashboard/check_status/[0-9]+',
+//     'Pusat/ResetPass/[0-9]+',
+//     'InputTPA/valid_ktp2/[0-9]+',
+//     'Pupr/Tampil_Pilih_Tpa',
+//     'Pusat/data_kas',
+//     'TenagaAhli/getDataKabKota/[0-9]+',
+//     'TenagaAhli/getDataKecamatan/[0-9]+',
+//     'InputTPA/getDataKabKota/[0-9]+',
+//     'InputTPA/getDataKecamatan/[0-9]+',
+//     'Penjadwalan/konsultasi/[0-9]+',
+// );
+// $config['csrf_excludes'] = array(
+//     '@^/?DataSetting/?@i',
+// 	'@^/?DataDetail/?@i',
+//     '@^/?Penugasan/?@i',
+//     '@^/?Pusat/?@i',
+//     '@^/?Pusat/?@i',
+//     '@^/?Rekap/?@i',
+//     '@^/?Setting/?@i',
+//     '@^/?Pemeriksaan/cekStep?@i',
+//     '@^/?Pemeriksaan/saveStep?@i',
+//     '@^/?Pemeriksaan/getDataKabKota/?@i',
+//     '@^/?Pemeriksaan/getDataKecamatan/?@i',
+//     '@^/?Pemeriksaan/getDataKelurahan/?@i',
+//     '@^/?Pemeriksaan/getDataJnsBg/?@i',
+//     '@^/?Pemeriksaan/cekKesesuaian/?@i',
+//     '@^/?Pemeriksaan/saveDataFinalisasi/?@i',
+//     '@^/?Perhitungan/simpan_retribusi/?@i',
+//     '@^/?Penjadwalan/konsultasi/?@i',
+//     '@^/?InputTPA/?@i',
+//     '@^/?Inspeksi/cek_step?@i',
+//     '@^/?Inspeksi/save_step?@i',
+//     '@^/?Konsultasi/FormRevisi/?@i',
+//     '@^/?SimbgServices/receiveDataOSS_post/?@i',
+//     '@^/?Perhitungan/SimpanRetribusi/?@i',
+//     '@^/?PerubahanData/Ubah/?@i',
+//     '@^/?PerubahanData/getDataKabKota/?@i',
+//     '@^/?PerubahanData/getDataKecamatan/?@i',
+//     '@^/?PerubahanData/getDataKelurahan/?@i',
+//     '@^/?Teknis/status_dt_teknis/?@i',
+//     '@^/?Teknis/FormPenugasan/?@i',
+//     '@^/?DataSetting/saveDataPersyaratanKonsultasi/?@i',
+// 	'@^/?Sso/?@i',
     
-);
+// );
 /*
 |--------------------------------------------------------------------------
 | Output Compression

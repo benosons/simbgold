@@ -70,6 +70,11 @@ class DinasTeknis extends CI_Controller
 		$data['heading']	=	'';
 		$this->load->view('backend_adm', $data);
 	}
+
+	public function VerifikasiBGH()
+	{
+		header('Location:https://bios-studio.com/bgh/verifikator/');
+	}
 	//End List Data Verifikasi Operator
 	//Begin Form Verifikasi Kelengkapan Dokumen
 	public function FormVerifikasi()

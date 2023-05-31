@@ -101,6 +101,20 @@ class Informasi extends CI_Controller
 			redirect('Dashboard');
 		}
 	}
+
+	public function Permohonan_bgh()
+	{
+		$checkLogin = $this->session->userdata('loc_login');
+		if ($checkLogin != TRUE) {
+			//$data['head_title'] = '.:: SIMBG ::.';
+			$tahun = date('Y');
+			$data['tahun'] = $tahun;
+			$data['content'] = $this->load->view('Depan_BGH', $data, TRUE);
+			$this->load->view('Front_Info', $data);
+		} else {
+			redirect('Dashboard');
+		}
+	}
 	
 	//Akhir Menu Pemohon
 
@@ -127,6 +141,19 @@ class Informasi extends CI_Controller
 			$tahun = date('Y');
 			$data['tahun'] = $tahun;
 			$data['content'] = $this->load->view('Depan_CTPA', $data, TRUE);
+			$this->load->view('Front_Info', $data);
+		} else {
+			redirect('Dashboard');
+		}
+	}
+	public function Tpa_bgh()
+	{
+		$checkLogin = $this->session->userdata('loc_login');
+		if ($checkLogin != TRUE) {
+			//$data['head_title'] = '.:: SIMBG ::.';
+			$tahun = date('Y');
+			$data['tahun'] = $tahun;
+			$data['content'] = $this->load->view('Depan_TPAH', $data, TRUE);
 			$this->load->view('Front_Info', $data);
 		} else {
 			redirect('Dashboard');

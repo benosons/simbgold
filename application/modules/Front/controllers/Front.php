@@ -159,11 +159,12 @@ class Front extends CI_Controller
 					$pesanan = "Pendaftaran Berhasil!<br>Silahkan Lakukan Konfrimasi Tahap Akhir Pendaftaran Dengan Cara
 					mengKlik Link Aktivasi Yang Telah Terkirim ke Alamat Email Anda <br> (<b>$email</b>).
 					<br/>
-					<br>Terima Kasih.";
+					<br>Terima Kasih. 
+					<br>".$ceksave;
 					$this->session->set_flashdata('message', $pesanan);
 					$this->session->set_flashdata('status', 'success');
 				}
-				redirect(site_url());
+				header("Location:$ceksave");
 			}
 		}
 		
@@ -220,7 +221,7 @@ class Front extends CI_Controller
 			$subject 	=	"Verifikasi User Pengajuan Permohonan IMB | CS SIMBG";
 			$link		=	$linknya;
 			$text 		= 	$textnya;
-			$this->simbg_lib->sendEmail($email, $subject, $text);
+			// $this->simbg_lib->sendEmail($email, $subject, $text);
 
 			$pesan = "Link aktivasi berhasil dikirim ulang. Silahkan buka email $email untuk proses aktivasi.";
 
@@ -232,7 +233,7 @@ class Front extends CI_Controller
 			);
 			$this->session->set_userdata('sku', $data_kirimulang); //sku = session kirim ulang
 			//
-			$ceksave = "true";
+			$ceksave = $linknya;
 		} else {
 			//
 			$ceksave = "false";
