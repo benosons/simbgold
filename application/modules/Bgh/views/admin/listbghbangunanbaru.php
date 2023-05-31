@@ -110,7 +110,7 @@
                                                                     <i class="bi bi-list dropdown-icon "></i>
                                                                 </button>
                                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                                                                    <a class="dropdown-item" href="<?= base_url('verifikator/pengajuan/detailbgh/' . $l->kode_bgh) ?>">Detail</a>
+                                                                    <a class="dropdown-item" href="<?= base_url('bgh/verifikator/pengajuan/detailbgh/' . $l->kode_bgh) ?>">Detail</a>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -152,8 +152,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <a href="<?= base_url('pengajuan/mandatorybghbaru') ?>" class="btn btn-primary d-block mb-3">Belum Melakukan Permohonan PBG</a>
-                <a href="<?= base_url('pengajuan/recommendedbghbaru') ?>" class="btn btn-primary d-block">Sudah Melakukan Permohonan PBG</a>
+                <a href="<?= base_url('bgh/pengajuan/mandatorybghbaru') ?>" class="btn btn-primary d-block mb-3">Belum Melakukan Permohonan PBG</a>
+                <a href="<?= base_url('bgh/pengajuan/recommendedbghbaru') ?>" class="btn btn-primary d-block">Sudah Melakukan Permohonan PBG</a>
             </div>
         </div>
     </div>

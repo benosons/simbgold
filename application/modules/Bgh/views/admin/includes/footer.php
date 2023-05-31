@@ -161,7 +161,7 @@
                 type:'post',
                 dataType:'json',
                 data:{id:id},
-                url:'<?= base_url('verifikator/tpa/detail') ?>',
+                url:'<?= base_url('bgh/verifikator/tpa/detail') ?>',
                 success:function(result){
                     var unsur = '';
                     if (result.data.id_lembaga == "1") {
@@ -367,7 +367,7 @@
                 data:new FormData(this),
                 processData:false,
                 contentType:false,
-                url:"<?= base_url('verifikator/informasi/formjuknis') ?>",
+                url:"<?= base_url('bgh/verifikator/informasi/formjuknis') ?>",
                 success:function(response){
                     if (response.code === 1) {
                         Swal.fire({
@@ -419,7 +419,7 @@
                         type:'post',
                         dataType:'json',
                         data:{id:id},
-                        url:'<?= base_url('verifikator/informasi/deletejuknis') ?>',
+                        url:'<?= base_url('bgh/verifikator/informasi/deletejuknis') ?>',
                         success:function(result)
                         {
                             if (result.code === 1) {
@@ -462,7 +462,7 @@
                 data:new FormData(this),
                 processData:false,
                 contentType:false,
-                url:"<?= base_url('verifikator/informasi/forminformasi') ?>",
+                url:"<?= base_url('bgh/verifikator/informasi/forminformasi') ?>",
                 success:function(response){
                     if (response.code === 1) {
                         Swal.fire({
@@ -514,7 +514,7 @@
                         type:'post',
                         dataType:'json',
                         data:{id:id},
-                        url:'<?= base_url('verifikator/informasi/deleteinformasi') ?>',
+                        url:'<?= base_url('bgh/verifikator/informasi/deleteinformasi') ?>',
                         success:function(result)
                         {
                             if (result.code === 1) {
@@ -547,7 +547,7 @@
                 type:'post',
                 dataType:'json',
                 data:{id:id},
-                url:'<?= base_url('verifikator/pengajuan/update_status_notif') ?>',
+                url:'<?= base_url('bgh/verifikator/pengajuan/update_status_notif') ?>',
                 success:function(response){
                     console.log(repsonse.msg);
                 }

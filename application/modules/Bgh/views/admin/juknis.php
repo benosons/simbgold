@@ -9,7 +9,7 @@
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="<?= base_url() ?>index.html">Dashboard</a>
+                                <a href="<?= base_url('bgh/') ?>index.html">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
                                 Juknis BGH
@@ -54,7 +54,7 @@
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
                                                 <a class="dropdown-item editjuknis" href="javascript:;" data-id="<?= $j->id ?>" data-nama="<?= $j->nama_dokumen ?>" data-jenis="<?= $j->jenis_dokumen ?>" data-penerbit="<?= $j->penerbit ?>" data-tahun="<?= $j->tahun ?>" data-berkas="<?= $j->file ?>"><i class="fa fa-pen"></i> Edit</a>
                                                 <a class="dropdown-item deletejuknis" href="javascript:;" data-id="<?= $j->id ?>"><i class="fa fa-trash"></i> Delete</a>
-                                                <a class="dropdown-item" href="<?= base_url('assets/juknis/'.$j->file) ?>" target="_blank"><i class="fa fa-download"></i> Unduh / Lihat</a>
+                                                <a class="dropdown-item" href="<?= base_url('assets/bgh/juknis/'.$j->file) ?>" target="_blank"><i class="fa fa-download"></i> Unduh / Lihat</a>
                                             </div>
                                         </td>
                                     </tr>

@@ -166,7 +166,7 @@
                 data: fd,
                 contentType: false,
                 processData: false,
-                url: '<?= base_url('pengajuan/savepengajuan') ?>',
+                url: '<?= base_url('bgh/pengajuan/savepengajuan') ?>',
                 success: function(result) {
                     if (result.code === 1) {
                         $('.next').trigger('click');
@@ -187,7 +187,7 @@
                 type:'post',
                 dataType:'json',
                 data:{id_provinsi:id_prov},
-                url:"<?= base_url('pengajuan/getkabkot') ?>",
+                url:"<?= base_url('bgh/pengajuan/getkabkot') ?>",
                 success:function(response){
                     let html = '<option value="">PILIH</option>';
                     response.data.forEach(e => {
@@ -217,7 +217,7 @@
                     type:'post',
                     dataType:'json',
                     data:{id_kabkot:id},
-                    url:"<?= base_url('pengajuan/getkecamatan') ?>",
+                    url:"<?= base_url('bgh/pengajuan/getkecamatan') ?>",
                     success:function(response){
                         let html = '<option value="">PILIH</option>';
                         response.data.forEach(e => {
@@ -238,7 +238,7 @@
                     type:'post',
                     dataType:'json',
                     data:{id_kecamatan:id},
-                    url:"<?= base_url('pengajuan/getkelurahan') ?>",
+                    url:"<?= base_url('bgh/pengajuan/getkelurahan') ?>",
                     success:function(response){
                         let html = '<option value="">PILIH</option>';
                         response.data.forEach(e => {
@@ -259,7 +259,7 @@
                 data: new FormData(this),
                 contentType:false,
                 processData:false,
-                url:'<?= base_url('pengajuan/pengajuanmandatory') ?>',
+                url:'<?= base_url('bgh/pengajuan/pengajuanmandatory') ?>',
                 success:function(response)
                 {
                     if (response.code === 1) {
@@ -286,7 +286,7 @@
                 data: fd,
                 contentType: false,
                 processData: false,
-                url: '<?= base_url('pengajuan/saveformdokbgh') ?>',
+                url: '<?= base_url('bgh/pengajuan/saveformdokbgh') ?>',
                 success: function(result) {
                     if (result.code === 1) {
                         $('#idpermohonanglobal').val(result.permohonan);
@@ -311,7 +311,7 @@
                 data: fd,
                 contentType: false,
                 processData: false,
-                url: '<?= base_url('pengajuan/savepengajuan') ?>',
+                url: '<?= base_url('bgh/pengajuan/savepengajuan') ?>',
                 success: function(result) {
                     if (result.code === 1) {
                         $('#idpermohonanglobal').val(result.permohonan);
@@ -336,7 +336,7 @@
                 data: fd,
                 contentType: false,
                 processData: false,
-                url: '<?= base_url('pengajuan/savearsitektur') ?>',
+                url: '<?= base_url('bgh/pengajuan/savearsitektur') ?>',
                 success: function(result) {
                     if (result.code === 1) {
                         $('#nextdokarsitektur').trigger('click');
@@ -354,7 +354,7 @@
                 data: fd,
                 contentType: false,
                 processData: false,
-                url: '<?= base_url('pengajuan/savestruktur') ?>',
+                url: '<?= base_url('bgh/pengajuan/savestruktur') ?>',
                 success: function(result) {
                     if (result.code === 1) {
                         $('#nextdokstruktur').trigger('click');
@@ -372,7 +372,7 @@
                 data: fd,
                 contentType: false,
                 processData: false,
-                url: '<?= base_url('pengajuan/savemep') ?>',
+                url: '<?= base_url('bgh/pengajuan/savemep') ?>',
                 success: function(result) {
                     if (result.code === 1) {
                         $('#nextdokmep').trigger('click');
@@ -462,7 +462,7 @@
                 type:'post',
                 dataType:'json',
                 data:{id:id},
-                url:'<?= base_url('pengajuan/update_status_notif') ?>',
+                url:'<?= base_url('bgh/pengajuan/update_status_notif') ?>',
                 success:function(response){
                     console.log(repsonse.msg);
                 }

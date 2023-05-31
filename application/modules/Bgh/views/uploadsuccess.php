@@ -56,7 +56,7 @@
                                                     <div class="text-center">
                                                         <span>
                                                             <i class="bi bi-info-circle"></i> Dokumen anda sedang diperiksa. Mohon menunggu.
-                                                            <a href="<?= base_url('pengajuan/peringkatbgh') ?>">cek disini</a> untuk melihat peringkat BGH anda
+                                                            <a href="<?= base_url('bgh/pengajuan/peringkatbgh') ?>">cek disini</a> untuk melihat peringkat BGH anda
                                                         </span>
                                                     </div>
                                                 </div>

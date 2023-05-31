@@ -158,8 +158,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <a href="<?= base_url('pengajuan/mandatorybghbaru') ?>" class="btn btn-primary d-block mb-3">Belum Melakukan Permohonan PBG</a>
-                <a href="<?= base_url('pengajuan/recommendedbghbaru') ?>" class="btn btn-primary d-block">Sudah Melakukan Permohonan PBG</a>
+                <a href="<?= base_url('bgh/pengajuan/mandatorybghbaru') ?>" class="btn btn-primary d-block mb-3">Belum Melakukan Permohonan PBG</a>
+                <a href="<?= base_url('bgh/pengajuan/recommendedbghbaru') ?>" class="btn btn-primary d-block">Sudah Melakukan Permohonan PBG</a>
             </div>
         </div>
     </div>

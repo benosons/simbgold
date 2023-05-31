@@ -9,7 +9,7 @@
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="<?= base_url() ?>index.html">Dashboard</a>
+                                <a href="<?= base_url('bgh/') ?>index.html">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
                                 Pengajuan BGH Bangunan Baru
@@ -135,7 +135,7 @@
                                                                 <h5>Permohonan BGH anda akan dicek terlebih dahulu. </h5>
                                                             </div>
                                                         </div>
-                                                        <a href="<?= base_url('pengajuan/bangunanbaru') ?>">Lihat List Permonohonan</a>
+                                                        <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>">Lihat List Permonohonan</a>
                                                     </div>
                                                 </fieldset>
                                             </form>

@@ -51,7 +51,7 @@
                                                 <i class="bi bi-list dropdown-icon "></i>
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                                                <a class="dropdown-item" href="<?= base_url('assets/juknis/'.$j->file) ?>" target="_blank"><i class="fa fa-download"></i> Unduh / Lihat</a>
+                                                <a class="dropdown-item" href="<?= base_url('assets/bgh/juknis/'.$j->file) ?>" target="_blank"><i class="fa fa-download"></i> Unduh / Lihat</a>
                                             </div>
                                         </td>
                                     </tr>

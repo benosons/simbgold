@@ -284,7 +284,7 @@
                                                                 <h5>Permohonan BGH anda akan dicek terlebih dahulu</h5>
                                                             </div>
                                                         </div>
-                                                        <a href="<?= base_url('pengajuan/bangunanbaru') ?>">Kembali</a>
+                                                        <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>">Kembali</a>
                                                     </div>
                                                 </fieldset>
                                             </div>

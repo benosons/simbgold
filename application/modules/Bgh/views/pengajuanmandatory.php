@@ -68,7 +68,7 @@
                                                 <label for="" class="form-control-label">Kalkulator Energi</label>
                                                 <input type="file" class="form-control" required>
                                             </div>
-                                            <a href="<?= base_url('pengajuan/uploadsuccess') ?>" class="btn btn-primary btn-sm float-end">Upload Dokumen</a>
+                                            <a href="<?= base_url('bgh/pengajuan/uploadsuccess') ?>" class="btn btn-primary btn-sm float-end">Upload Dokumen</a>
                                             <!-- </form> -->
                                         </div>
                                     </div>

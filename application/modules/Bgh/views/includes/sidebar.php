@@ -105,7 +105,7 @@
                                         if($item->status==1){
                                 ?>
                                 <li class="dropdown-item notification-item">
-                                    <a class="d-flex align-items-center click-notif" href="<?= base_url().$item->url ?>" data-id="<?= $item->id ?>">
+                                    <a class="d-flex align-items-center click-notif" href="<?= base_url('bgh/').$item->url ?>" data-id="<?= $item->id ?>">
                                         <div class="notification-text ms-4 text-muted">
                                             <p class="notification-title font-bold mb-0">
                                             <?= $item->nama_jenis_notif ?>
@@ -122,7 +122,7 @@
                                 <?php }else{
                                 ?>
                                 <li class="dropdown-item notification-item">
-                                    <a class="d-flex align-items-center click-notif" href="<?= base_url().$item->url ?>" data-id="<?= $item->id ?>">
+                                    <a class="d-flex align-items-center click-notif" href="<?= base_url('bgh/').$item->url ?>" data-id="<?= $item->id ?>">
                                         <div class="notification-text ms-4">
                                             <p class="notification-title font-bold mb-0">
                                             <?= $item->nama_jenis_notif ?>

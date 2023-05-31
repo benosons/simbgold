@@ -9,10 +9,10 @@
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="<?= base_url() ?>index.html">Dashboard</a>
+                                <a href="<?= base_url('bgh/') ?>index.html">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="<?= base_url() ?>index.html">Pengajuan BGH Bangunan Baru</a>
+                                <a href="<?= base_url('bgh/') ?>index.html">Pengajuan BGH Bangunan Baru</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
                                 Detail
@@ -29,7 +29,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h5> 
-                                <a href="<?= base_url('verifikator/pengajuan/bangunanbaru') ?>"><i class="fa fa-arrow-left me-3"></i></a><?= $permohonan->kode_bgh ?>
+                                <a href="<?= base_url('bgh/verifikator/pengajuan/bangunanbaru') ?>"><i class="fa fa-arrow-left me-3"></i></a><?= $permohonan->kode_bgh ?>
                                 <span class="float-end">
                                     <?php 
                                     if ($permohonan->kategori == "mandatory") {
@@ -200,7 +200,7 @@
                                                                 <h6>
                                                                     <?= $s->nama ?>
                                                                 </h6>
-                                                                <a href="<?= base_url('assets/files/'.$permohonan->id.'/dokbgh/' . $f->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
+                                                                <a href="<?= base_url('bgh/assets/files/'.$permohonan->id.'/dokbgh/' . $f->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
                                                                 <small class="text-muted d-block"><em>Last Updated : <?= $f->update_date ?></em></small>
                                                             </div>
                                                             <?php if ($f->verifikasi == 0) { ?>
@@ -254,7 +254,7 @@
                                                             </div>
                                                             <div class="card-body">
                                                                 <h6><?= $sa->nama ?></h6>
-                                                                <a href="<?= base_url('assets/files/'.$permohonan->id.'/dokarsitektur/' . $fa->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
+                                                                <a href="<?= base_url('bgh/assets/files/'.$permohonan->id.'/dokarsitektur/' . $fa->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
                                                                 <small class="text-muted d-block"><em>Last Updated : <?= $fa->update_date ?></em></small>
                                                             </div>
                                                             <?php if ($fa->verifikasi == 0) { ?>
@@ -307,7 +307,7 @@
                                                             </div>
                                                             <div class="card-body">
                                                                 <h6><?= $ss->nama ?></h6>
-                                                                <a href="<?= base_url('assets/files/'.$permohonan->id.'/dokstruktur/' . $fs->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
+                                                                <a href="<?= base_url('bgh/assets/files/'.$permohonan->id.'/dokstruktur/' . $fs->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
                                                                 <small class="text-muted d-block"><em>Last Updated : <?= $fs->update_date ?></em></small>
                                                             </div>
                                                             <?php if ($fs->verifikasi == 0) { ?>
@@ -360,7 +360,7 @@
                                                             </div>
                                                             <div class="card-body">
                                                                 <h6><?= $sm->nama ?></h6>
-                                                                <a href="<?= base_url('assets/files/'.$permohonan->id.'/dokmep/' . $fm->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
+                                                                <a href="<?= base_url('bgh/assets/files/'.$permohonan->id.'/dokmep/' . $fm->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
                                                                 <small class="text-muted d-block"><em>Last Updated : <?= $fm->update_date ?></em></small>
                                                             </div>
                                                             <?php if ($fm->verifikasi == 0) { ?>

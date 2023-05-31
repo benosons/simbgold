@@ -56,7 +56,7 @@
                                                                 <i class="bi bi-list dropdown-icon "></i>
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                                                                <a class="dropdown-item" href="<?= base_url('admin/listbgh/detail') ?>">Detail</a>
+                                                                <a class="dropdown-item" href="<?= base_url('bgh/admin/listbgh/detail') ?>">Detail</a>
                                                                 <a class="dropdown-item" href="#">Lihat Sertifikat</a>
                                                             </div>
                                                         </td>
@@ -72,7 +72,7 @@
                                                                 <i class="bi bi-list dropdown-icon "></i>
                                                             </button>
                                                             <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="<?= base_url('admin/listbgh/detail') ?>">Detail</a>
+                                                                <a class="dropdown-item" href="<?= base_url('bgh/admin/listbgh/detail') ?>">Detail</a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -87,7 +87,7 @@
                                                                 <i class="bi bi-list dropdown-icon "></i>
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                                                                <a class="dropdown-item" href="<?= base_url('admin/listbgh/detail') ?>">Detail</a>
+                                                                <a class="dropdown-item" href="<?= base_url('bgh/admin/listbgh/detail') ?>">Detail</a>
                                                             </div>
                                                         </td>
                                                     </tr>

@@ -60,8 +60,8 @@
                                                 </div>
                                             </div>
                                             <div class="text-center">
-                                                <!-- <a href="<?= base_url('pengajuan/under') ?>" class="btn btn-primary btn-sm">Banding</a> -->
-                                                <a href="<?= base_url('pengajuan/under') ?>" class="btn btn-success btn-sm">Kembali lakukan Pemohonan PBG</a>
+                                                <!-- <a href="<?= base_url('bgh/pengajuan/under') ?>" class="btn btn-primary btn-sm">Banding</a> -->
+                                                <a href="<?= base_url('bgh/pengajuan/under') ?>" class="btn btn-success btn-sm">Kembali lakukan Pemohonan PBG</a>
                                             </div>
                                         </div>
                                     </div>
