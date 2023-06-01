@@ -193,10 +193,11 @@
                                                     <button type="submit" class="action-button">Next Step</button>
                                                 </form>
                                                 <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                                <a href="<?= base_url() ?>bgh/pengajuan/bangunanbaru" type="button" class="action-button bg-warning text-dark simpan" onclick="confirm('Simpan Dahulu Progres Permohonan ?')" >Simpan</a>
                                                 <input type="button" name="next" class="next action-button" id="nextdokbgh" value="Next Step" hidden />
                                             </fieldset>
                                             <fieldset>
-                                                <input type="text" id="idpermohonanglobal" hidden>
+                                                <input type="text" id="idpermohonanglobal" value="<?= (!empty($pengajuan)) ? $pengajuan->id:'' ?>" hidden>
                                                 <form id="formDokarsitektur" enctype="multipart/form-data">
                                                     <div class="row p-3">
                                                         <?php foreach ($arsitektur as $a) { ?>
@@ -218,6 +219,7 @@
                                                     <button type="submit" class="action-button">Next Step</button>
                                                 </form>
                                                 <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                                <a href="<?= base_url() ?>bgh/pengajuan/bangunanbaru" type="button" class="action-button bg-warning text-dark simpan" onclick="confirm('Simpan Dahulu Progres Permohonan ?')" >Simpan</a>
                                                 <input type="button" name="next" class="next action-button" value="Next Step" id="nextdokarsitektur" hidden />
                                             </fieldset>
                                             <fieldset>
@@ -361,6 +363,9 @@
 <script>
     $(document).ready(function(){
 
+        if (step == "0") {
+            $('#nextdatabangunan').trigger('click');
+        }
         $('#bangunanbaru-menu').addClass('active');
 
         if (id_prov !== "0") {
@@ -369,74 +374,7 @@
         }
 
 
-        var current_fs, next_fs, previous_fs; //fieldsets
-        var opacity;
-
-        $(".next").click(function() {
-
-            current_fs = $(this).parent();
-            next_fs = $(this).parent().next();
-
-            //Add Class Active
-            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-            //show the next fieldset
-            next_fs.show();
-            //hide the current fieldset with style
-            current_fs.animate({
-                opacity: 0
-            }, {
-                step: function(now) {
-                    // for making fielset appear animation
-                    opacity = 1 - now;
-
-                    current_fs.css({
-                        'display': 'none',
-                        'position': 'relative'
-                    });
-                    next_fs.css({
-                        'opacity': opacity
-                    });
-                },
-                duration: 600
-            });
-        });
-
-        $(".previous").click(function() {
-
-            current_fs = $(this).parent();
-            previous_fs = $(this).parent().prev();
-
-            //Remove class active
-            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-            //show the previous fieldset
-            previous_fs.show();
-
-            //hide the current fieldset with style
-            current_fs.animate({
-                opacity: 0
-            }, {
-                step: function(now) {
-                    // for making fielset appear animation
-                    opacity = 1 - now;
-
-                    current_fs.css({
-                        'display': 'none',
-                        'position': 'relative'
-                    });
-                    previous_fs.css({
-                        'opacity': opacity
-                    });
-                },
-                duration: 600
-            });
-        });
-
-        $('.radio-group .radio').click(function() {
-            $(this).parent().find('.radio').removeClass('selected');
-            $(this).addClass('selected');
-        });
+        
 
         $("#msform").submit(function(e) {
             e.preventDefault(e);
@@ -686,4 +624,73 @@
             })
         })
     })
+
+    var current_fs, next_fs, previous_fs; //fieldsets
+        var opacity;
+
+        $(".next").click(function() {
+
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
+
+            //Add Class Active
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+            //show the next fieldset
+            next_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({
+                opacity: 0
+            }, {
+                step: function(now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    next_fs.css({
+                        'opacity': opacity
+                    });
+                },
+                duration: 600
+            });
+        });
+
+        $(".previous").click(function() {
+
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
+
+            //Remove class active
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+            //show the previous fieldset
+            previous_fs.show();
+
+            //hide the current fieldset with style
+            current_fs.animate({
+                opacity: 0
+            }, {
+                step: function(now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    previous_fs.css({
+                        'opacity': opacity
+                    });
+                },
+                duration: 600
+            });
+        });
+
+        $('.radio-group .radio').click(function() {
+            $(this).parent().find('.radio').removeClass('selected');
+            $(this).addClass('selected');
+        });
 </script>

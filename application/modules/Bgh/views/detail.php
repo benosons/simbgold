@@ -8,10 +8,10 @@
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="<?= base_url('bgh/') ?>">Dashboard</a>
+                            <a href="<?= base_url() ?>index.html">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="<?= base_url('bgh/') ?>">Pengajuan BGH Bangunan Baru</a>
+                            <a href="<?= base_url() ?>index.html">Pengajuan BGH Bangunan Baru</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             Detail
@@ -27,18 +27,32 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5> <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>"><i class="fa fa-arrow-left me-3"></i></a> <?= $permohonan->kode_bgh ?> <span class="badge bg-success float-end"><?= ucfirst($permohonan->kategori) ?></span></h5>
+                        <h5> 
+                            <a href="<?= base_url('verifikator/pengajuan/bangunanbaru') ?>"><i class="fa fa-arrow-left me-3"></i></a><?= $permohonan->kode_bgh ?>
+                            <span class="float-end">
+                                <?php 
+                                if ($permohonan->kategori == "mandatory") {
+                                    if ($vfile == 0 && $vfilears == 0 && $vfilestruktur == 0 && $vfilemep == 0 && $permohonan->status != 3) {
+                                        echo '<button class="btn btn-primary btn-sm verifikasipermohonan" data-id="' . $permohonan->id . '">Verifikasi Permohonan</button>';
+                                    }
+                                } else {
+                                    if ($vfile == 0 && $permohonan->status != 3) {
+                                        echo '<button class="btn btn-primary btn-sm verifikasipermohonan" data-id="' . $permohonan->id . '">Verifikasi Permohonan</button>';
+                                    }
+                                }
+                                ?>
+                            </span>
+                    </h5>
                     </div>
                     <div class="card-body mt-4">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <?php 
+                            <?php 
                                 $k = 'pemilik';
                                 if (isset($_GET['k'])) {
                                     $k=$_GET['k'];
                                 }
-
-                                if($permohonan->kategori == "mandatory"){
-                            ?>
+                            if($permohonan->kategori == "mandatory"){
+                                ?>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link <?= $k == 'pemilik' ? 'active' : '' ?>" id="pemilik-tab" data-bs-toggle="tab" href="#pemilik" role="tab" aria-controls="pemilik" aria-selected="true">Data Bangunan dan Pemilik</a>
                             </li>
@@ -46,7 +60,8 @@
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link <?= $k == 'home' ? 'active' : '' ?>" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Dokumen BGH</a>
                             </li>
-                            <?php if ($permohonan->kategori == "mandatory") { ?>
+                            <?php 
+                            if ($permohonan->kategori == "mandatory") { ?>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link <?= $k == 'arsitektur' ? 'active' : '' ?>" id="arsitektur-tab" data-bs-toggle="tab" href="#arsitektur" role="tab" aria-controls="arsitektur" aria-selected="false">Dokumen Arsitektur</a>
                             </li>
@@ -59,7 +74,7 @@
                             <?php } ?>
                         </ul>
                         <div class="tab-content" id="myTabContent">
-                            <?php if($permohonan->kategori == "mandatory"){ ?>
+                        <?php if($permohonan->kategori == "mandatory"){ ?>
                                 <div class="tab-pane p-3 fade show <?= $k == 'pemilik' ? 'active' : '' ?>" id="pemilik" role="tabpanel" aria-labelledby="pemilik-tab">
                                     <div class="row">
                                         <h5>Data Bangunan dan Pemilik</h5>
@@ -181,26 +196,21 @@
                                                         ?>
                                                         </div>
                                                         <div class="card-body">
-                                                            <h6><?= $s->nama ?></h6>
-                                                            <div class="row">
-                                                                <div class="col-6">
-                                                                    <a target="_blank" href="<?= base_url('assets/bgh/files/'.$permohonan->id.'/dokbgh/' . $f->file) ?>"><i class="fa fa-download"></i> Lihat File</a>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <?php
-                                                                        if ($f->verifikasi == 1 && $f->new == 0) {
-                                                                            $ext = explode('.', $f->file);
-                                                                            echo '<a href="javascript:;" class="link-primary edit-permohonan" data-url="editpermohonan/1/'.$f->id.'/'.$permohonan->id.'/'.$permohonan->kode_bgh.'" data-label="'.$s->nama.'" data-dok="'.$ext[1].'">| <i class="fa fa-pen"></i> Edit</a>';
-                                                                        }
-                                                                    ?>
-                                                                </div>
-                                                            </div>
-                                                            <small class="text-muted d-block mt-3"><em>Waktu Upload : <?= $f->update_date ?> </em></small>
+                                                            <h6>
+                                                                <?= $s->nama ?>
+                                                            </h6>
+                                                            <a href="<?= base_url('assets/bgh/files/'.$permohonan->id.'/dokbgh/' . $f->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
+                                                            <small class="text-muted d-block"><em>Last Updated : <?= $f->update_date ?></em></small>
                                                         </div>
-                                                        <?php 
-                                                            if ($f->verifikasi == 1) {
-                                                        ?>
+                                                        <?php if ($f->verifikasi == 0) { ?>
+                                                            <div class="card-footer">
+                                                                <a href="javascript:void(0)" class="d-block revisidokumen" data-url="revisidokumen/1/<?= $f->id ?>/<?= $permohonan->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-edit"></i> Revisi Dokumen ini</a>
+                                                                <a href="javascript:void(0)" class="d-block verifikasidokumen" data-url="verifikasidokumen/1/<?= $f->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-check"></i> Verifikasi Dokumen ini</a>
+                                                            </div>
+                                                        <?php } else if ($f->verifikasi == 1) { ?>
                                                             <div class=" card-footer">
+                                                                <a href="javascript:void(0)" class="d-block verifikasidokumen" data-url="verifikasidokumen/1/<?= $f->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-check"></i> Verifikasi Dokumen ini</a>
+                                                                <a href="javascript:void(0)" class="d-block revisidokumen" data-url="revisidokumen/1/<?= $f->id ?>/<?= $permohonan->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-edit"></i>Edit Revisi</a>
                                                                 Catatan Revisi :
                                                                 <p>
                                                                     <?= $f->catatan ?>
@@ -209,9 +219,7 @@
                                                                 Waktu Revisi : <?=   date('d-m-Y H:i', strtotime($f->date_catatan)) ?> WIB
                                                                 </small>
                                                             </div>
-                                                        <?php
-                                                            }
-                                                        ?>
+                                                        <?php } ?>
                                                     </div>
                                                 </div>
                                     <?php }
@@ -224,12 +232,11 @@
                                 <div class="row">
                                     <h5>Dokumen Arsitektur</h5>
                                     <?php
-                                    if (isset($sarsitektur)) {
-                                        foreach ($sarsitektur as $sa) {
-                                            foreach ($filears as $fa) {
-                                                if ($fa->id_syarat_bgh == $sa->id) {
-                                    ?>
-                                                    <div class="col-md-4">
+                                    foreach ($sarsitektur as $sa) {
+                                        foreach ($filears as $fa) {
+                                            if ($fa->id_syarat_bgh == $sa->id) {
+                                                ?>
+                                                <div class="col-md-4">
                                                     <div class="card shadow">
                                                         <div class="card-header">
                                                         <?php 
@@ -240,31 +247,24 @@
                                                             }else if($fa->verifikasi == 0 && $fa->new == 0){
                                                                 echo '<span class="badge bg-primary p-1" style="white-space:normal !important;">Perlu Tinjauan</span>';
                                                             } else if($fa->verifikasi == 2){
-                                                                echo '<span class="badge bg-success p-1" style="white-space:normal !important;"><i class="fa fa-check me-1"></i>Terverifikasi</span>';
+                                                                echo '<span class="badge bg-success p-1" style="white-space:normal !important;"><i class="fa fa-check" me-1></i> Terverifikasi</span>';
                                                             }
                                                         ?>
                                                         </div>
                                                         <div class="card-body">
                                                             <h6><?= $sa->nama ?></h6>
-                                                            <div class="row">
-                                                                <div class="col-6">
-                                                                    <a target="_blank" href="<?= base_url('assets/bgh/files/'.$permohonan->id.'/dokarsitektur/' . $fa->file) ?>"><i class="fa fa-download"></i> Lihat File</a>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <?php
-                                                                        if ($fa->verifikasi == 1 && $fa->new == 0) {
-                                                                            $ext = explode('.', $fa->file);
-                                                                            echo '<a href="javascript:;" class="link-primary edit-permohonan" data-url="editpermohonan/2/'.$fa->id.'/'.$permohonan->id.'/'.$permohonan->kode_bgh.'" data-label="'.$sa->nama.'" data-dok="'.$ext[1].'">| <i class="fa fa-pen"></i> Edit</a>';
-                                                                        }
-                                                                    ?>
-                                                                </div>
-                                                            </div>
-                                                            <small class="text-muted d-block mt-3"><em>Waktu Upload : <?= $fa->update_date ?> </em></small>
+                                                            <a href="<?= base_url('assets/bgh/files/'.$permohonan->id.'/dokarsitektur/' . $fa->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
+                                                            <small class="text-muted d-block"><em>Last Updated : <?= $fa->update_date ?></em></small>
                                                         </div>
-                                                        <?php 
-                                                            if ($fa->verifikasi == 1) {
-                                                        ?>
+                                                        <?php if ($fa->verifikasi == 0) { ?>
+                                                            <div class="card-footer">
+                                                                <a href="javascript:void(0)" class="d-block revisidokumen" data-url="revisidokumen/2/<?= $fa->id ?>/<?= $permohonan->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-edit"></i> Revisi Dokumen ini</a>
+                                                                <a href="javascript:void(0)" class="d-block verifikasidokumen" data-url="verifikasidokumen/2/<?= $fa->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-check"></i> Verifikasi Dokumen ini</a>
+                                                            </div>
+                                                        <?php } else if ($fa->verifikasi == 1) { ?>
                                                             <div class=" card-footer">
+                                                                <a href="javascript:void(0)" class="d-block verifikasidokumen" data-url="verifikasidokumen/2/<?= $fa->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-check"></i> Verifikasi Dokumen ini</a>
+                                                                <a href="javascript:void(0)" class="d-block revisidokumen" data-url="revisidokumen/2/<?= $fa->id ?>/<?= $permohonan->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-edit"></i>Edit Revisi</a>
                                                                 Catatan Revisi :
                                                                 <p>
                                                                     <?= $fa->catatan ?>
@@ -273,13 +273,10 @@
                                                                 Waktu Revisi : <?=   date('d-m-Y H:i', strtotime($fa->date_catatan)) ?> WIB
                                                                 </small>
                                                             </div>
-                                                        <?php
-                                                            }
-                                                        ?>
+                                                        <?php } ?>
                                                     </div>
                                                 </div>
                                     <?php }
-                                            }
                                         }
                                     } ?>
                                 </div>
@@ -288,14 +285,13 @@
                                 <div class="row">
                                     <h5>Dokumen Struktur</h5>
                                     <?php
-                                    if (isset($sstruktur)) {
-                                        foreach ($sstruktur as $ss) {
-                                            foreach ($filestruktur as $fs) {
-                                                if ($fs->id_syarat_bgh == $ss->id) {
-                                    ?>
-                                                    <div class="col-md-4">
+                                    foreach ($sstruktur as $ss) {
+                                        foreach ($filestruktur as $fs) {
+                                            if ($fs->id_syarat_bgh == $ss->id) {
+                                                ?>
+                                                <div class="col-md-4">
                                                     <div class="card shadow">
-                                                        <div class="card-header">
+                                                    <div class="card-header">
                                                         <?php 
                                                             if ($fs->verifikasi == 1 && $fs->new == 0) {
                                                                 echo '<span class="badge bg-danger p-1" style="white-space:normal !important;">Perlu Revisi</span>';
@@ -310,25 +306,18 @@
                                                         </div>
                                                         <div class="card-body">
                                                             <h6><?= $ss->nama ?></h6>
-                                                            <div class="row">
-                                                                <div class="col-6">
-                                                                    <a target="_blank" href="<?= base_url('assets/bgh/files/'.$permohonan->id.'/dokstruktur/' . $fs->file) ?>"><i class="fa fa-download"></i> Lihat File</a>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <?php
-                                                                        if ($fs->verifikasi == 1 && $fs->new == 0) {
-                                                                            $ext = explode('.', $fs->file);
-                                                                            echo '<a href="javascript:;" class="link-primary edit-permohonan" data-url="editpermohonan/3/'.$fs->id.'/'.$permohonan->id.'/'.$permohonan->kode_bgh.'" data-label="'.$ss->nama.'" data-dok="'.$ext[1].'">| <i class="fa fa-pen"></i> Edit</a>';
-                                                                        }
-                                                                    ?>
-                                                                </div>
-                                                            </div>
-                                                            <small class="text-muted d-block mt-3"><em>Waktu Upload : <?= $fs->update_date ?> </em></small>
+                                                            <a href="<?= base_url('assets/bgh/files/'.$permohonan->id.'/dokstruktur/' . $fs->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
+                                                            <small class="text-muted d-block"><em>Last Updated : <?= $fs->update_date ?></em></small>
                                                         </div>
-                                                        <?php 
-                                                            if ($fs->verifikasi == 1) {
-                                                        ?>
+                                                        <?php if ($fs->verifikasi == 0) { ?>
+                                                            <div class="card-footer">
+                                                                <a href="javascript:void(0)" class="d-block revisidokumen" data-url="revisidokumen/3/<?= $fs->id ?>/<?= $permohonan->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-edit"></i> Revisi Dokumen ini</a>
+                                                                <a href="javascript:void(0)" class="d-block verifikasidokumen" data-url="verifikasidokumen/3/<?= $fs->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-check"></i> Verifikasi Dokumen ini</a>
+                                                            </div>
+                                                        <?php } else if ($fs->verifikasi == 1) { ?>
                                                             <div class=" card-footer">
+                                                                <a href="javascript:void(0)" class="d-block verifikasidokumen" data-url="verifikasidokumen/3/<?= $fs->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-check"></i> Verifikasi Dokumen ini</a>
+                                                                <a href="javascript:void(0)" class="d-block revisidokumen" data-url="revisidokumen/3/<?= $fs->id ?>/<?= $permohonan->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-edit"></i>Edit Revisi</a>
                                                                 Catatan Revisi :
                                                                 <p>
                                                                     <?= $fs->catatan ?>
@@ -337,13 +326,10 @@
                                                                 Waktu Revisi : <?=   date('d-m-Y H:i', strtotime($fs->date_catatan)) ?> WIB
                                                                 </small>
                                                             </div>
-                                                        <?php
-                                                            }
-                                                        ?>
+                                                        <?php } ?>
                                                     </div>
                                                 </div>
                                     <?php }
-                                            }
                                         }
                                     } ?>
                                 </div>
@@ -352,14 +338,13 @@
                                 <div class="row">
                                     <h5>Dokumen MEP</h5>
                                     <?php
-                                    if (isset($smep)) {
-                                        foreach ($smep as $sm) {
-                                            foreach ($filemep as $fm) {
-                                                if ($fm->id_syarat_bgh == $sm->id) {
+                                    foreach ($smep as $sm) {
+                                        foreach ($filemep as $fm) {
+                                            if ($fm->id_syarat_bgh == $sm->id) {
                                     ?>
-                                                    <div class="col-md-4">
+                                                <div class="col-md-4">
                                                     <div class="card shadow">
-                                                        <div class="card-header">
+                                                    <div class="card-header">
                                                         <?php 
                                                             if ($fm->verifikasi == 1 && $fm->new == 0) {
                                                                 echo '<span class="badge bg-danger p-1" style="white-space:normal !important;">Perlu Revisi</span>';
@@ -374,81 +359,276 @@
                                                         </div>
                                                         <div class="card-body">
                                                             <h6><?= $sm->nama ?></h6>
-                                                            <div class="row">
-                                                                <div class="col-6">
-                                                                    <a target="_blank" href="<?= base_url('assets/bgh/files/'.$permohonan->id.'/dokmep/' . $fm->file) ?>"><i class="fa fa-download"></i> Lihat File</a>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <?php
-                                                                        if ($fm->verifikasi == 1 && $fm->new == 0) {
-                                                                            $ext = explode('.', $fm->file);
-                                                                            echo '<a href="javascript:;" class="link-primary edit-permohonan" data-url="editpermohonan/4/'.$fm->id.'/'.$permohonan->id.'/'.$permohonan->kode_bgh.'" data-label="'.$sm->nama.'" data-dok="'.$ext[1].'">| <i class="fa fa-pen"></i> Edit</a>';
-                                                                        }
-                                                                    ?>
-                                                                </div>
-                                                            </div>
-                                                            <small class="text-muted d-block mt-3"><em>Waktu Upload : <?= $fm->update_date ?> </em></small>
+                                                            <a href="<?= base_url('assets/bgh/files/'.$permohonan->id.'/dokmep/' . $fm->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
+                                                            <small class="text-muted d-block"><em>Last Updated : <?= $fm->update_date ?></em></small>
                                                         </div>
-                                                        <?php 
-                                                            if ($fm->verifikasi == 1) {
-                                                        ?>
+                                                        <?php if ($fm->verifikasi == 0) { ?>
+                                                            <div class="card-footer">
+                                                                <a href="javascript:void(0)" class="d-block revisidokumen" data-url="revisidokumen/4/<?= $fm->id ?>/<?= $permohonan->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-edit"></i> Revisi Dokumen ini</a>
+                                                                <a href="javascript:void(0)" class="d-block verifikasidokumen" data-url="verifikasidokumen/4/<?= $fm->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-check"></i> Verifikasi Dokumen ini</a>
+                                                            </div>
+                                                        <?php } else if ($fm->verifikasi == 1) { ?>
                                                             <div class=" card-footer">
+                                                                <a href="javascript:void(0)" class="d-block verifikasidokumen" data-url="verifikasidokumen/4/<?= $fm->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-check"></i> Verifikasi Dokumen ini</a>
+                                                                <a href="javascript:void(0)" class="d-block revisidokumen" data-url="revisidokumen/4/<?= $fm->id ?>/<?= $permohonan->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-edit"></i>Edit Revisi</a>
                                                                 Catatan Revisi :
                                                                 <p>
                                                                     <?= $fm->catatan ?>
                                                                 </p>
                                                                 <small class="text-muted">
-                                                                Waktu Revisi : <?=   date('d-m-Y H:i', strtotime($fm->date_catatan)) ?> WIB
+                                                                Waktu Revisi : <?= date('d-m-Y H:i', strtotime($fm->date_catatan)) ?> WIB
                                                                 </small>
                                                             </div>
-                                                        <?php
-                                                            }
-                                                        ?>
+                                                        <?php } ?>
                                                     </div>
                                                 </div>
                                     <?php }
-                                            }
                                         }
                                     } ?>
                                 </div>
                             </div>
-                        <?php } ?>
+                        </div>
+                            <?php
+
+                        } ?>
                     </div>
                 </div>
             </div>
         </div>
-</div>
 
-<div class="modal fade text-left modal-borderless" id="modaleditpermohonan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Form Edit Permohonan</h5>
-                <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fa fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formeditpermohonan">
+    </section>
+
+
+    <div class="modal fade text-left modal-borderless" id="border-less" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Form Revisi</h5>
+                    <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
                     <div class="form-group">
-                        <input type="text" id="urleditpermohonan" hidden>
-                        <label for="catatan" class="form-control-label" id="label-dokumen"></label>
-                        <div id="input-dok">
-                            
-                        </div>
+                        <input type="text" id="urlrevisi" hidden>
+                        <label for="catatan" class="form-control-label">Catatan Revisi</label>
+                        <textarea name="" id="catatan" cols="30" rows="5" class="form-control"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-sm" id="btn-edit-submit">Submit</button>
-                </form>
+                    <button class="btn btn-primary btn-sm" id="btn-revisi-submit">Submit</button>
+                </div>
             </div>
         </div>
     </div>
+    <!-- Basic Tables end -->
 </div>
-                                    
+
 <script>
     $(function(){
         $('#bangunanbaru-menu').addClass('active');
-        
+        $(document).on('click', '.edit-permohonan', function(){
+            let url = $(this).data('url');
+            let label = $(this).data('label');
+            let dok = $(this).data('dok');
+
+            $('#urleditpermohonan').val(url);
+            $('#label-dokumen').html(label);
+            $('#input-dok').html('<input type="file" name="file-edit" class="form-control" accept=".'+dok+'" required>');
+            $('#modaleditpermohonan').modal('show');
+        })
+
+        $('#verifikasi').click(function() {
+            Swal.fire({
+                icon: 'info',
+                title: 'Yakin untuk verifikasi permohonan ini ?',
+                text: 'Dokumen BGH akan diteruskan ke SIMBG',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yakin'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Verifikasi Berhasil',
+                        text: 'Dokumen BGH telah diteruskan ke SIMBG'
+                    });
+                }
+            })
+        })
+
+        $(document).on('click', '.verifikasidokumen', function() {
+            Swal.fire({
+                icon: 'info',
+                title: 'Yakin untuk verifikasi dokumen ini ?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yakin'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = $(this).data('url');
+                    $.ajax({
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            'verifikasi': 2
+                        },
+                        url: '../' + url,
+                        success: function(result) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Verifikasi Berhasil'
+                            }).then((response) => {
+                                if (response.isConfirmed) {
+                                    window.location.href=result.url;
+                                }
+                            });
+                        }
+                    })
+                }
+            })
+        })
+
+        $(document).on('click', '.revisidokumen', function() {
+            $('#border-less').modal('show');
+            var url = $(this).data('url');
+            $('#urlrevisi').val(url);
+        })
+
+        $('#btn-revisi-submit').click(function() {
+            $('#border-less').modal('hide');
+            var catatan = $('#catatan').val();
+            var url = $('#urlrevisi').val();
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    catatan: catatan
+                },
+                url: '../' + url,
+                success: function(result) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil direvisi',
+                        text: 'Catatan revisi telah dikirmkan kepada pemohon'
+                    }).then((results) => {
+                        if (results.isConfirmed) {
+                            window.location.href=result.url;
+                        }
+                    })
+                }
+            })
+        })
+
+        $(document).on('click', '.verifikasipermohonan', function() {
+            Swal.fire({
+                icon: 'info',
+                title: 'Yakin untuk verifikasi Permohonan ini ?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yakin'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = $(this).data('id');
+                    $.ajax({
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            'id': id,
+                            'status': 3
+                        },
+                        url: '../verifikasipermohonan',
+                        success: function(result) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Verifikasi Berhasil'
+                            }).then((response) => {
+                                if (response.isConfirmed) {
+                                    window.location.href = "../bangunanbaru";
+                                }
+                            });
+                        }
+                    })
+                }
+            })
+        })
+
+        $('#formeditpermohonan').submit(function(e){
+            e.preventDefault();
+            let url = $('#urleditpermohonan').val();
+            
+            $.ajax({
+                type:'post',
+                dataType:'json',
+                data:new FormData(this),
+                processData:false,
+                contentType:false,
+                url: '../'+url,
+                success:function(response)
+                {
+                    if (response.code === 1) {
+                        Swal.fire({
+                            icon:'success',
+                            title:'Berhasil !',
+                            text: response.msg
+                        }).then((res) => {
+                            if (res.isConfirmed) {
+                                window.location.href=response.url;
+                            }
+                        })
+                    }else{
+                        Swal.fire({
+                            icon:'error',
+                            title:'Warning',
+                            text:response.msg
+                        });
+                    }
+                }
+            })
+        })
+
+        $('#verifikasi').click(function() {
+            Swal.fire({
+                icon: 'info',
+                title: 'Yakin untuk verifikasi permohonan ini ?',
+                text: 'Dokumen BGH akan diteruskan ke SIMBG',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yakin'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Verifikasi Berhasil',
+                        text: 'Dokumen BGH telah diteruskan ke SIMBG'
+                    });
+                }
+            })
+        })
+
+        $('#btn-revisi-submit').click(function() {
+            $('#border-less').modal('hide');
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil direvisi',
+                text: 'Catatan revisi telah dikirmkan kepada pemohon'
+            })
+        })
+
+        $(document).on('click','.click-notif',function(){
+            let id = $(this).data('id');
+
+            $.ajax({
+                type:'post',
+                dataType:'json',
+                data:{id:id},
+                url:'<?= base_url('bgh/pengajuan/update_status_notif') ?>',
+                success:function(response){
+                    console.log(repsonse.msg);
+                }
+            })
+        })
     })
-    
-    
 </script>
