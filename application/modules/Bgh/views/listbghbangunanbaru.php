@@ -100,9 +100,10 @@
                                                                                 echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen Struktur</span>';
                                                                             }else if($l->step == 3){
                                                                                 echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen MEP</span>';
-                                                                            }else if($l->step == 4){
-                                                                                echo '<span class="badge bg-primary p-2">Perlu Verifikasi Melalui Email</span>';
                                                                             }
+                                                                            // }else if($l->step == 4){
+                                                                            //     echo '<span class="badge bg-primary p-2">Perlu Verifikasi Melalui Email</span>';
+                                                                            // }
                                                                         }else if ($l->status == 1) {
                                                                             echo '<span class="badge bg-info p-2">Pemeriksaan Dokumen</span>';
                                                                         } else if ($l->status == 2) {
@@ -121,14 +122,14 @@
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
                                                                 <?php 
-                                                                    if($l->step > 5){
-                                                                        if($this->session->userdata('loc_role_id') === 10){
-                                                                            echo '<a class="dropdown-item" href="<?= base_url()pengajuan/detailbgh/'.$l->kode_bgh.'">Detail</a>';
+                                                                    if($l->step >= 4){
+                                                                        if($this->session->userdata('loc_role_id') == 10){
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbgh/'.$l->kode_bgh.'">Detail</a>';
                                                                         }else{
-                                                                            echo '<a class="dropdown-item" href="<?= base_url()pengajuan/detailbghverifikator/'.$l->kode_bgh.'">Detail</a>';
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbghverifikator/'.$l->kode_bgh.'">Detail</a>';
                                                                         }
                                                                     }else{
-                                                                        if($this->session->userdata('loc_role_id') === 10){
+                                                                        if($this->session->userdata('loc_role_id') == 10){
                                                                             echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/mandatorybghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
                                                                         }
                                                                     }

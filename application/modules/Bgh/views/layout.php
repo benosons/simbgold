@@ -112,7 +112,7 @@
 
         /*Previous Buttons*/
         #msform .action-button-previous {
-            width: 100px;
+            width: 110px;
             background: #616161;
             font-weight: bold;
             color: white;

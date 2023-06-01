@@ -62,10 +62,9 @@ class Pengajuan extends CI_Controller
                 'klas' => $klas
             );
         }
-        $this->load->view('includes/header');
-        $this->load->view('includes/sidebar');
-        $this->load->view('detailbgh', $data);
-        $this->load->view('includes/footer', $data);
+        $data['page_content'] = $this->load->view('detailbgh', $data, TRUE);
+
+        $this->load->view('layout', $data);
     }
 
     public function detailbghverifikator($kode)
@@ -114,10 +113,9 @@ class Pengajuan extends CI_Controller
                 'klas' => $klas
             );
         }
-        $this->load->view('admin/includes/header');
-        $this->load->view('admin/includes/sidebar');
-        $this->load->view('admin/detail', $data);
-        $this->load->view('admin/includes/footer', $data);
+        $data['page_content'] = $this->load->view('detail', $data, TRUE);
+
+        $this->load->view('layout', $data);
     }
 
     public function mandatorybghbaru($kode = NULL)
@@ -263,7 +261,8 @@ class Pengajuan extends CI_Controller
             'lantai' => $params->lantai,
             'luas_bangunan' => $params->luas_bangunan,
             'klas_bangunan' => $params->klas_bangunan,
-            'status' => 0
+            'status' => 0,
+            'step' => 0,
         );
 
         $this->db->insert('t_permohonan_bgh', $databangunan);
@@ -286,14 +285,14 @@ class Pengajuan extends CI_Controller
     public function saveformdokbgh()
     {
         $id_permohonan = $this->input->post('idpermohonan');
-        if (!file_exists('assets/files/' . $id_permohonan)) {
-            mkdir('assets/files/' . $id_permohonan, 0777, true);
+        if (!file_exists('assets/bgh/files/' . $id_permohonan)) {
+            mkdir('assets/bgh/files/' . $id_permohonan, 0777, true);
         }
-        if (!file_exists('assets/files/' . $id_permohonan . '/dokbgh')) {
-            mkdir('assets/files/' . $id_permohonan . '/dokbgh', 0777, true);
+        if (!file_exists('assets/bgh/files/' . $id_permohonan . '/dokbgh')) {
+            mkdir('assets/bgh/files/' . $id_permohonan . '/dokbgh', 0777, true);
         }
 
-        $config['upload_path'] = './assets/files/' . $id_permohonan . '/dokbgh/';
+        $config['upload_path'] = './assets/bgh/files/' . $id_permohonan . '/dokbgh/';
         $config['allowed_types'] = 'pdf|xlsx';
         $config['encrypt_name'] = true;
         $this->load->library('upload', $config);
@@ -333,6 +332,8 @@ class Pengajuan extends CI_Controller
             }
         }
         if (!empty($response)) {
+            $this->db->where(array('id' => $id_permohonan));
+            $this->db->update('t_permohonan_bgh', ['step' => 1]);
             echo json_encode($response);
         } else {
             echo json_encode(array('code' => 1, 'permohonan' => $id_permohonan));
@@ -357,14 +358,14 @@ class Pengajuan extends CI_Controller
         $this->db->insert('t_permohonan_bgh', $data1);
         $insert_id = $this->db->insert_id();
         $insert_id = $this->input->post('idpermohonan');
-        if (!file_exists('assets/files/' . $insert_id)) {
-            mkdir('assets/files/' . $insert_id, 0777, true);
+        if (!file_exists('assets/bgh/files/' . $insert_id)) {
+            mkdir('assets/bgh/files/' . $insert_id, 0777, true);
         }
-        if (!file_exists('assets/files/' . $insert_id . '/dokbgh')) {
-            mkdir('assets/files/' . $insert_id . '/dokbgh', 0777, true);
+        if (!file_exists('assets/bgh/files/' . $insert_id . '/dokbgh')) {
+            mkdir('assets/bgh/files/' . $insert_id . '/dokbgh', 0777, true);
         }
 
-        $config['upload_path'] = './assets/files/' . $insert_id . '/dokbgh/';
+        $config['upload_path'] = './assets/bgh/files/' . $insert_id . '/dokbgh/';
         $config['allowed_types'] = 'pdf';
         $config['encrypt_name'] = true;
         $this->load->library('upload', $config);
@@ -412,14 +413,14 @@ class Pengajuan extends CI_Controller
     public function savearsitektur()
     {
         $permohonan = $this->input->post('idpermohonan');
-        if (!file_exists('assets/files/' . $permohonan)) {
-            mkdir('assets/files/' . $permohonan, 0777, true);
+        if (!file_exists('assets/bgh/files/' . $permohonan)) {
+            mkdir('assets/bgh/files/' . $permohonan, 0777, true);
         }
-        if (!file_exists('assets/files/' . $permohonan . '/dokarsitektur')) {
-            mkdir('assets/files/' . $permohonan . '/dokarsitektur', 0777, true);
+        if (!file_exists('assets/bgh/files/' . $permohonan . '/dokarsitektur')) {
+            mkdir('assets/bgh/files/' . $permohonan . '/dokarsitektur', 0777, true);
         }
 
-        $config['upload_path'] = './assets/files/' . $permohonan . '/dokarsitektur/';
+        $config['upload_path'] = './assets/bgh/files/' . $permohonan . '/dokarsitektur/';
         $config['allowed_types'] = 'pdf';
         $config['encrypt_name'] = true;
         $this->load->library('upload', $config);
@@ -449,20 +450,21 @@ class Pengajuan extends CI_Controller
                 }
             }
         }
-
+        $this->db->where(array('id' => $id_permohonan));
+        $this->db->update('t_permohonan_bgh', ['step' => 2]);
         echo json_encode(array('code' => 1));
     }
     public function savestruktur()
     {
         $permohonan = $this->input->post('idpermohonan');
-        if (!file_exists('assets/files/' . $permohonan)) {
-            mkdir('assets/files/' . $permohonan, 0777, true);
+        if (!file_exists('assets/bgh/files/' . $permohonan)) {
+            mkdir('assets/bgh/files/' . $permohonan, 0777, true);
         }
-        if (!file_exists('assets/files/' . $permohonan . '/dokstruktur')) {
-            mkdir('assets/files/' . $permohonan . '/dokstruktur', 0777, true);
+        if (!file_exists('assets/bgh/files/' . $permohonan . '/dokstruktur')) {
+            mkdir('assets/bgh/files/' . $permohonan . '/dokstruktur', 0777, true);
         }
 
-        $config['upload_path'] = './assets/files/' . $permohonan . '/dokstruktur/';
+        $config['upload_path'] = './assets/bgh/files/' . $permohonan . '/dokstruktur/';
         $config['allowed_types'] = 'pdf';
         $config['encrypt_name'] = true;
         $this->load->library('upload', $config);
@@ -492,20 +494,21 @@ class Pengajuan extends CI_Controller
                 }
             }
         }
-
+        $this->db->where(array('id' => $id_permohonan));
+        $this->db->update('t_permohonan_bgh', ['step' => 3]);
         echo json_encode(array('code' => 1));
     }
     public function savemep()
     {
         $permohonan = $this->input->post('idpermohonan');
-        if (!file_exists('assets/files/' . $permohonan)) {
-            mkdir('assets/files/' . $permohonan, 0777, true);
+        if (!file_exists('assets/bgh/files/' . $permohonan)) {
+            mkdir('assets/bgh/files/' . $permohonan, 0777, true);
         }
-        if (!file_exists('assets/files/' . $permohonan . '/dokmep')) {
-            mkdir('assets/files/' . $permohonan . '/dokmep', 0777, true);
+        if (!file_exists('assets/bgh/files/' . $permohonan . '/dokmep')) {
+            mkdir('assets/bgh/files/' . $permohonan . '/dokmep', 0777, true);
         }
 
-        $config['upload_path'] = './assets/files/' . $permohonan . '/dokmep/';
+        $config['upload_path'] = './assets/bgh/files/' . $permohonan . '/dokmep/';
         $config['allowed_types'] = 'pdf';
         $config['encrypt_name'] = true;
         $this->load->library('upload', $config);
@@ -535,7 +538,8 @@ class Pengajuan extends CI_Controller
                 }
             }
         }
-
+        $this->db->where(array('id' => $id_permohonan));
+        $this->db->update('t_permohonan_bgh', ['step' => 4, 'status' => 1]);
         echo json_encode(array('code' => 1));
     }
 
@@ -556,7 +560,7 @@ class Pengajuan extends CI_Controller
         }
 
 
-        $config['upload_path'] = './assets/files/' . $id_permohonan . '/' . $folder . '/';
+        $config['upload_path'] = './assets/bgh/files/' . $id_permohonan . '/' . $folder . '/';
         $config['allowed_types'] = 'pdf|xlsx';
         $config['encrypt_name'] = true;
         $this->load->library('upload', $config);
