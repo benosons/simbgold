@@ -1,0 +1,8 @@
+ul.list-style{list-style: none; margin:0; padding: 0;}
+ul.list-style li{}
+ul.list-style li a{display: block; text-decoration: none; padding: 5px; font-weight: bold;}
+ul.list-style li a:hover{ background: #338BB8; color: #FFF;}
+
+.content-loader{background: url("../images/loader-awan.gif") no-repeat scroll center center transparent;
+    height: 100%;
+    min-height: 200px;}

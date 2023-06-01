@@ -1,0 +1,52 @@
+body{background:#999; font-family: "CartoGothicStdBook","Helvetica Neue","HelveticaNeue",Helvetica,Arial,sans-serif;}
+#container{z-index:-99;}
+#login-images{background:url(../images/base.png) no-repeat; width:540px; height:45px; z-index:-1; margin-left:auto; 	margin-right:auto;	margin-top:100px;}
+#loginbox{	width:300px;
+			background-color: rgba(70,123,123,1);
+			-moz-border-radius: 7px;  
+			-webkit-border-radius:7px;
+			border-radius:7px;
+		
+			-moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);  
+			-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);  
+			box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);  /* CSS3 */
+			
+			background-image: url(gradients.svg);
+			background-size: 100% 100%;
+			background: -moz-linear-gradient(center top , #EEE, #DDD) repeat scroll 0 0 transparent;  
+			background: -webkit-gradient(linear, left top, left bottom, from(#EEE), to(#DDD)); /* for webkit browsers */
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EEEEEE', endColorstr='#DDDDDD');
+			-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#EEEEEE', endColorstr='#DDDDDD')";
+					
+			border: 1px solid #666; 
+			padding: 5px;   
+			position: relative;	
+			margin:10px auto; 
+			margin:0px auto; 
+			min-height:115px; 
+			z-index:1;
+			}
+#login-form{ padding:20px 5px 10px;}
+#login-version{font-size: 11px; margin: 5px auto; text-align: center; text-shadow: 1px 1px 1px #FFFFFF; width: 100%;}
+.pos, .pos-button{width: 100%;}
+.caption-field { font-size: 12px; font-weight: bold; }
+.input-field { font-size: 12px; margin: 5px 0; }
+.note-field{font-size: 11px; font-style: italic; margin-bottom: 5px; margin-top: 10px; text-align: center;}
+.textbox{
+	padding: 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius:5px;
+	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+	background: url("../images/bg.png") repeat scroll 0 0 transparent;
+	border: 1px solid #BBBBBB;
+	color: #444444;
+	font-size: 12px;
+	font-weight: normal;
+	outline: 0 none;
+	width: 95%;
+}
+.textbox:focus{ border: 1px solid #000	;}
+.button{background-color: #323232; -moz-border-radius: 5px; -webkit-border-radius:5px; border: 1px solid #323232; color: #FFFFFF; cursor: pointer; font-size: 12px; padding: 5px 0; margin-top: 10px; width: 100%;}
+input.error{ background:rgba(200,10,10,0.7); border:1px solid #000;}
+.loader-box{background:url(../images/loader-box.gif) no-repeat; background-position:center center; min-height:87px;}

@@ -1,0 +1,1 @@
+<CENTER><STRONG>INFORMASI TAMPILAN  FROND END <br>UNTUK KE HALAMAN BACK END <a href="<?php echo base_url();?>admin">   KLIK LINK INI</a></STRONG></CENTER>
