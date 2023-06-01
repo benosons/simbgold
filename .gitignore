@@ -2,3 +2,8 @@ file/*
 object-storage/*
 public/*
 dekill/*
+assets/bgh/files/*
+assets/bgh/informasi/*
+assets/bgh/juknis/*
+assets/bgh/informasi/*
+.env
