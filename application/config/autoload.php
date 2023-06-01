@@ -133,3 +133,7 @@ $autoload['language'] = array();
 |	$autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = array('mglobals','Mglobals','mglobal','Mglobal','mmenu','Global_model','Outh_model');
+
+require_once BASEPATH . 'dotenv/autoloader.php';
+$dotenv = new Dotenv\Dotenv(FCPATH);
+$dotenv->load();
