@@ -141,13 +141,301 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <h5 class="mt-3">Soon !</h5>
+                                <div class="card mt-3">
+                                    <div class="card-header">
+                                        <?= ($this->session->userdata('loc_role_id') == 10) ? '<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#border-less"> <i class="fa fa-plus"></i> Ajukan Sertifikasi BGH Baru</button>' : '' ?>
+                                    </div>
+                                    <div class="card-body">
+                                    <table class="table" id="table1">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nomor Pengajuan</th>
+                                                    <th>Nomor PBG</th>
+                                                    <th>Nama Gedung</th>
+                                                    <th>Nama Pemilik</th>
+                                                    <th>Kategori</th>
+                                                    <th>Info</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($list as $l) { ?>
+                                                    <tr>
+                                                        <td>P<?= $l->kode_bgh ?></td>
+                                                        <td><?= $l->kode_pbg ?></td>
+                                                        <td>
+                                                            <?= $l->nama_gedung ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $l->nm_pemilik ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= ucfirst($l->kategori) ?>
+                                                        </td>
+                                                        <td>
+                                                            <div class="card shadow">
+                                                                <div class="card-body">
+                                                                    <p>
+                                                                        Lantai : <?= $l->lantai ?> Lantai
+                                                                    </p>
+                                                                    <p>
+                                                                        Luas : <?= $l->luas_bangunan ?> m<sup>2</sup>
+                                                                    </p>
+                                                                    <p>
+                                                                        Klas Bangunan : <?= $l->klas ?>
+                                                                    </p>
+                                                                    <p>
+                                                                        <i class="fa fa-calendar"></i>
+                                                                        <?= date('d-m-Y', strtotime($l->create_date)) ?>
+                                                                    </p>
+                                                                    <p>
+                                                                    <?php
+                                                                        if ($l->status == 0) {
+                                                                            if ($l->step == 0) {
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen Dukungan BGH</span>';
+                                                                            }else if($l->step == 1){
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen Arsitektur</span>';
+                                                                            }else if($l->step == 2){
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen Struktur</span>';
+                                                                            }else if($l->step == 3){
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen MEP</span>';
+                                                                            }
+                                                                        }else if ($l->status == 1) {
+                                                                            echo '<span class="badge bg-info p-2">Pemeriksaan Dokumen</span>';
+                                                                        } else if ($l->status == 2) {
+                                                                            echo '<span class="badge bg-warning p-2">Perlu Direvisi</span>';
+                                                                        } else {
+                                                                            echo '<span class="badge bg-success p-2">Sertifikat Terbit</span>';
+                                                                        }
+                                                                    ?>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="bi bi-list dropdown-icon "></i>
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                                                <?php 
+                                                                    if($l->step >= 4){
+                                                                        if($this->session->userdata('loc_role_id') == 10){
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbgh/'.$l->kode_bgh.'">Detail</a>';
+                                                                        }else{
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbghverifikator/'.$l->kode_bgh.'">Detail</a>';
+                                                                        }
+                                                                    }else{
+                                                                        if($this->session->userdata('loc_role_id') == 10){
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/mandatorybghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
+                                                                        }
+                                                                    }
+                                                                ?>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                <h5 class="mt-3">Soon !</h5>
+                                <div class="card mt-3">
+                                    <div class="card-header">
+                                        <?= ($this->session->userdata('loc_role_id') == 10) ? '<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#border-less"> <i class="fa fa-plus"></i> Ajukan Sertifikasi BGH Baru</button>' : '' ?>
+                                    </div>
+                                    <div class="card-body">
+                                    <table class="table" id="table1">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nomor Pengajuan</th>
+                                                    <th>Nomor PBG</th>
+                                                    <th>Nama Gedung</th>
+                                                    <th>Nama Pemilik</th>
+                                                    <th>Kategori</th>
+                                                    <th>Info</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($list as $l) { ?>
+                                                    <tr>
+                                                        <td>P<?= $l->kode_bgh ?></td>
+                                                        <td><?= $l->kode_pbg ?></td>
+                                                        <td>
+                                                            <?= $l->nama_gedung ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $l->nm_pemilik ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= ucfirst($l->kategori) ?>
+                                                        </td>
+                                                        <td>
+                                                            <div class="card shadow">
+                                                                <div class="card-body">
+                                                                    <p>
+                                                                        Lantai : <?= $l->lantai ?> Lantai
+                                                                    </p>
+                                                                    <p>
+                                                                        Luas : <?= $l->luas_bangunan ?> m<sup>2</sup>
+                                                                    </p>
+                                                                    <p>
+                                                                        Klas Bangunan : <?= $l->klas ?>
+                                                                    </p>
+                                                                    <p>
+                                                                        <i class="fa fa-calendar"></i>
+                                                                        <?= date('d-m-Y', strtotime($l->create_date)) ?>
+                                                                    </p>
+                                                                    <p>
+                                                                    <?php
+                                                                        if ($l->status == 0) {
+                                                                            if ($l->step == 0) {
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen Dukungan BGH</span>';
+                                                                            }else if($l->step == 1){
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen Arsitektur</span>';
+                                                                            }else if($l->step == 2){
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen Struktur</span>';
+                                                                            }else if($l->step == 3){
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen MEP</span>';
+                                                                            }
+                                                                        }else if ($l->status == 1) {
+                                                                            echo '<span class="badge bg-info p-2">Pemeriksaan Dokumen</span>';
+                                                                        } else if ($l->status == 2) {
+                                                                            echo '<span class="badge bg-warning p-2">Perlu Direvisi</span>';
+                                                                        } else {
+                                                                            echo '<span class="badge bg-success p-2">Sertifikat Terbit</span>';
+                                                                        }
+                                                                    ?>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="bi bi-list dropdown-icon "></i>
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                                                <?php 
+                                                                    if($l->step >= 4){
+                                                                        if($this->session->userdata('loc_role_id') == 10){
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbgh/'.$l->kode_bgh.'">Detail</a>';
+                                                                        }else{
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbghverifikator/'.$l->kode_bgh.'">Detail</a>';
+                                                                        }
+                                                                    }else{
+                                                                        if($this->session->userdata('loc_role_id') == 10){
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/mandatorybghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
+                                                                        }
+                                                                    }
+                                                                ?>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="bongkar" role="tabpanel" aria-labelledby="bongkar-tab">
-                                <h5 class="mt-3">Soon !</h5>
+                                <div class="card mt-3">
+                                    <div class="card-header">
+                                        <?= ($this->session->userdata('loc_role_id') == 10) ? '<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#border-less"> <i class="fa fa-plus"></i> Ajukan Sertifikasi BGH Baru</button>' : '' ?>
+                                    </div>
+                                    <div class="card-body">
+                                    <table class="table" id="table1">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nomor Pengajuan</th>
+                                                    <th>Nomor PBG</th>
+                                                    <th>Nama Gedung</th>
+                                                    <th>Nama Pemilik</th>
+                                                    <th>Kategori</th>
+                                                    <th>Info</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($list as $l) { ?>
+                                                    <tr>
+                                                        <td>P<?= $l->kode_bgh ?></td>
+                                                        <td><?= $l->kode_pbg ?></td>
+                                                        <td>
+                                                            <?= $l->nama_gedung ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $l->nm_pemilik ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= ucfirst($l->kategori) ?>
+                                                        </td>
+                                                        <td>
+                                                            <div class="card shadow">
+                                                                <div class="card-body">
+                                                                    <p>
+                                                                        Lantai : <?= $l->lantai ?> Lantai
+                                                                    </p>
+                                                                    <p>
+                                                                        Luas : <?= $l->luas_bangunan ?> m<sup>2</sup>
+                                                                    </p>
+                                                                    <p>
+                                                                        Klas Bangunan : <?= $l->klas ?>
+                                                                    </p>
+                                                                    <p>
+                                                                        <i class="fa fa-calendar"></i>
+                                                                        <?= date('d-m-Y', strtotime($l->create_date)) ?>
+                                                                    </p>
+                                                                    <p>
+                                                                    <?php
+                                                                        if ($l->status == 0) {
+                                                                            if ($l->step == 0) {
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen Dukungan BGH</span>';
+                                                                            }else if($l->step == 1){
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen Arsitektur</span>';
+                                                                            }else if($l->step == 2){
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen Struktur</span>';
+                                                                            }else if($l->step == 3){
+                                                                                echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen MEP</span>';
+                                                                            }
+                                                                        }else if ($l->status == 1) {
+                                                                            echo '<span class="badge bg-info p-2">Pemeriksaan Dokumen</span>';
+                                                                        } else if ($l->status == 2) {
+                                                                            echo '<span class="badge bg-warning p-2">Perlu Direvisi</span>';
+                                                                        } else {
+                                                                            echo '<span class="badge bg-success p-2">Sertifikat Terbit</span>';
+                                                                        }
+                                                                    ?>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="bi bi-list dropdown-icon "></i>
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                                                <?php 
+                                                                    if($l->step >= 4){
+                                                                        if($this->session->userdata('loc_role_id') == 10){
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbgh/'.$l->kode_bgh.'">Detail</a>';
+                                                                        }else{
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbghverifikator/'.$l->kode_bgh.'">Detail</a>';
+                                                                        }
+                                                                    }else{
+                                                                        if($this->session->userdata('loc_role_id') == 10){
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/mandatorybghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
+                                                                        }
+                                                                    }
+                                                                ?>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

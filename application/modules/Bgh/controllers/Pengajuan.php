@@ -1074,4 +1074,38 @@ class Pengajuan extends CI_Controller
 
         return $revisi;
     }
+
+    // H2M 
+    public function kawasanhijau()
+    {
+        $list = $this->Pengajuan_model->geth2m()->result();
+        $data['list'] = $list;
+        $data['page_content'] = $this->load->view('listkawasan', $data, TRUE);
+
+        $this->load->view('layout', $data);
+    }
+
+    public function formkawasanhijau()
+    {
+        $data['page_content'] = $this->load->view('formkawasan', $data, TRUE);
+
+        $this->load->view('layout', $data);
+    }
+
+    // Kawasan hijau 
+    public function h2m()
+    {
+        $list = $this->Pengajuan_model->geth2m()->result();
+        $data['list'] = $list;
+        $data['page_content'] = $this->load->view('listh2m', $data, TRUE);
+
+        $this->load->view('layout', $data);
+    }
+
+    public function formh2m()
+    {
+        $data['page_content'] = $this->load->view('formh2m', $data, TRUE);
+
+        $this->load->view('layout', $data);
+    }
 }

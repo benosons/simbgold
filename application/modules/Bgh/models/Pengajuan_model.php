@@ -126,4 +126,10 @@ class Pengajuan_model extends CI_Model
         $this->db->where($where);
         $query = $this->db->delete('t_data_file_mep');
     }
+
+    public function geth2m()
+    {
+        $query = $this->db->get('t_permohonan_h2m');
+        return $query;
+    }
 }
