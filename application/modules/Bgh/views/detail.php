@@ -28,7 +28,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5> 
-                            <a href="<?= base_url('verifikator/pengajuan/bangunanbaru') ?>"><i class="fa fa-arrow-left me-3"></i></a><?= $permohonan->kode_bgh ?>
+                            <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>"><i class="fa fa-arrow-left me-3"></i></a><?= $permohonan->kode_bgh ?>
                             <span class="float-end">
                                 <?php 
                                 if ($permohonan->kategori == "mandatory") {

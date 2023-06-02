@@ -134,6 +134,10 @@
                                                                             }
                                                                         }
                                                                     }
+
+                                                                    if($l->status == 3){
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/generatepdf/'.$l->kode_bgh.'">Unduh Sertifikat</a>';
+                                                                    }
                                                                 ?>
                                                             </div>
                                                         </td>
