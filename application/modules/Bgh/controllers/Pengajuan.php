@@ -154,11 +154,17 @@ class Pengajuan extends CI_Controller
         $this->load->view('layout', $data);
     }
 
-    public function recommendedbghbaru()
+    public function recommendedbghbaru($kode = NULL)
     {
         $this->load->model('Syarat_bgh');
         $syarat = $this->Syarat_bgh->get()->result();
         $data = array('page' => 'bangunanbaru', 'syarat' => $syarat);
+        if ($kode != NULL) {
+            $permohonan = $this->Pengajuan_model->get(array('t_permohonan_bgh.kode_bgh' => $kode))->row();
+            $data['pengajuan'] = $permohonan;
+            $file_bgh = $this->Pengajuan_model->getfilebgh(['id_permohonan_bgh' => $permohonan->id])->result();
+            $data['file_bgh'] = $file_bgh;
+        }
         $data['page_content'] = $this->load->view('recommendedbghbaru', $data, TRUE);
         $this->load->view('layout', $data);
     }
@@ -237,7 +243,7 @@ class Pengajuan extends CI_Controller
         $params = (object) $this->input->post();
 
         $datapemilik = array(
-            'user_id' => $this->session->userdata('loc_user_id'),
+            'user_id' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
             'jns_pemilik' => 2,
             'nm_pemilik' => $params->nm_pemilik,
             'glr_depan' => $params->glr_depan,
@@ -311,9 +317,18 @@ class Pengajuan extends CI_Controller
         $where = array('id' => $id_permohonan);
         $data = array('step' => $step);
 
-        if ($step == 4) {
-            $updatepermohonan = $this->Pengajuan_model->updatepermohonan(['status'=>1], ['id'=>$id_permohonan]);
+        $getpermohonan = $this->Pengajuan_model->get(['t_permohonan_bgh.id' => $id_permohonan])->row();
+
+        if ($getpermohonan->kategori == "mandatory") {
+            if ($step == 4) {
+                $updatepermohonan = $this->Pengajuan_model->updatepermohonan(['status'=>1], ['id'=>$id_permohonan]);
+            }
+        }else{
+            if ($step == 1) {
+                $updatepermohonan = $this->Pengajuan_model->updatepermohonan(['status'=>1], ['id'=>$id_permohonan]);
+            }
         }
+        
         
         $update = $this->Pengajuan_model->updatestep($data, $where);
         
@@ -1073,6 +1088,41 @@ class Pengajuan extends CI_Controller
         }
 
         return $revisi;
+    }
+
+    public function savepengajuanrecommended()
+    {
+        $kode_pbg = $this->input->post('no_pbg');
+
+        $where = array('no_konsultasi' => $kode_pbg);
+        $get = $this->Pengajuan_model->getpbg($where);
+
+        if ($get->num_rows() > 0) {
+            $rand1 = rand(0, 9999);
+            $rand2 = rand(0, 9999);
+            $kodebgh = 'BGH-' . $rand1 . '-' . $rand2;
+            $databangunan = array(
+                'kode_bgh' => $kodebgh,
+                'kode_pbg' => $kode_pbg,
+                'kategori' => "recommended",
+                'status' => 0,
+                'user_id' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'))
+            );
+
+            $insert = $this->Pengajuan_model->insertpermohonan($databangunan);
+
+            $response = array(
+                'code' => 1,
+                'msg' => 'Kode PBG Tersedia. Lanjutkan Upload Dokumen yang dibutuhkan',
+                'id_permohonan' => $insert
+            );
+        }else{
+            $response = array(
+                'code' => 0,
+                'msg' => 'Kode PBG Tidak Ditemukan'
+            );
+        }
+        echo json_encode($response);
     }
 
     // H2M 

@@ -127,7 +127,11 @@
                                                                         }
                                                                     }else{
                                                                         if($this->session->userdata('loc_role_id') == 10){
-                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/mandatorybghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
+                                                                            if ($l->kategori == "mandatory") {
+                                                                                echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/mandatorybghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
+                                                                            }else{
+                                                                                echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/recommendedbghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
+                                                                            }
                                                                         }
                                                                     }
                                                                 ?>

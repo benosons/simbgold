@@ -132,4 +132,11 @@ class Pengajuan_model extends CI_Model
         $query = $this->db->get('t_permohonan_h2m');
         return $query;
     }
+
+    public function getpbg($where)
+    {
+        $this->db->where($where);
+        $query = $this->db->get('tmdatabangunan');
+        return $query;
+    }
 }
