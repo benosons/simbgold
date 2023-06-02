@@ -30,13 +30,13 @@
                         <span>Permohonan BGH</span>
                     </a>
                 </li>
-                <li class="sidebar-item" id="bangunanbaru-menu">
+                <li class="sidebar-item" id="h2m-menu">
                     <a href="<?= base_url('bgh/pengajuan/h2m') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Permohonan BGH H2M</span>
                     </a>
                 </li>
-                <li class="sidebar-item" id="bangunanbaru-menu">
+                <li class="sidebar-item" id="kawasan-menu">
                     <a href="<?= base_url('bgh/pengajuan/kawasanhijau') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Permohonan BGH Kawasan Hijau</span>
