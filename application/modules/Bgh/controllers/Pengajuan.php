@@ -25,31 +25,6 @@ class Pengajuan extends CI_Controller
 
         $this->load->view('layout', $data);
     }
-    public function h2m($kode = null)
-    {
-        if ($kode != null) {
-            $data = array('page' => 'h2m', 'kode' => $kode);
-        } else {
-            $data = array('page' => 'h2m');
-        }
-        $list = $this->Pengajuan_model->get()->result();
-        $data['list'] = $list;
-        $data['page_content'] = $this->load->view('permohonanh2m', $data, TRUE);
-        $this->load->view('layout', $data);
-    }
-    public function kawasanhijau($kode = null)
-    {
-        if ($kode != null) {
-            $data = array('page' => 'kawasanhijau', 'kode' => $kode);
-        } else {
-            $data = array('page' => 'kawasanhijau');
-        }
-        $list = $this->Pengajuan_model->get()->result();
-        $data['list'] = $list;
-        $data['page_content'] = $this->load->view('permohonankawasanhijau', $data, TRUE);
-        
-        $this->load->view('layout', $data);
-    }
 
     public function detailbgh($kode)
     {
