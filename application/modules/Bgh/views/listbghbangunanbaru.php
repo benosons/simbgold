@@ -101,9 +101,6 @@
                                                                             }else if($l->step == 3){
                                                                                 echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen MEP</span>';
                                                                             }
-                                                                            // }else if($l->step == 4){
-                                                                            //     echo '<span class="badge bg-primary p-2">Perlu Verifikasi Melalui Email</span>';
-                                                                            // }
                                                                         }else if ($l->status == 1) {
                                                                             echo '<span class="badge bg-info p-2">Pemeriksaan Dokumen</span>';
                                                                         } else if ($l->status == 2) {
@@ -120,7 +117,7 @@
                                                             <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <i class="bi bi-list dropdown-icon "></i>
                                                             </button>
-                                                            <?php if($l->step >= 1){ ?>
+                                                            <?php if($l->step >= 4){ ?>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
                                                                 <?php 
                                                                         if($this->session->userdata('loc_role_id') == 10){

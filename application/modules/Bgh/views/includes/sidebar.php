@@ -24,35 +24,24 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <?php if($this->session->userdata('loc_role_id') == 10){ ?>
                 <li class="sidebar-item" id="bangunanbaru-menu">
-                    <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>" class="sidebar-link">
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Pengajuan BGH Bangunan Baru</span>
-                    </a>
-                </li>
-                <?php }else if($this->session->userdata('loc_role_id') != 10){ ?>
-                    <li class="sidebar-item <?= $page == 'bangunanbaru' ? 'active' : '' ?>" id="bangunanbaru-menu-">
                     <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Permohonan BGH</span>
                     </a>
-                    <li class="sidebar-item <?= $page == 'h2m' ? 'active' : '' ?>" id="h2m-menu">
+                </li>
+                <li class="sidebar-item" id="bangunanbaru-menu">
                     <a href="<?= base_url('bgh/pengajuan/h2m') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Permohonan BGH H2M</span>
                     </a>
-                    <li class="sidebar-item  <?= $page == 'kawasanhijau' ? 'active' : '' ?>" id="hijau-menu">
+                </li>
+                <li class="sidebar-item" id="bangunanbaru-menu">
                     <a href="<?= base_url('bgh/pengajuan/kawasanhijau') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
-                        <span>Permohonan BGH kawasanan hijau </span>
+                        <span>Permohonan BGH Kawasan Hijau</span>
                     </a>
                 </li>
-                <?php 
-                }
-                ?>
-
-                
                 <li class="sidebar-item" id="informasi-menu">
                     <a href="<?= base_url('bgh/informasi') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>

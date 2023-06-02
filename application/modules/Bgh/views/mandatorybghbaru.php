@@ -40,7 +40,7 @@
                                                 <li id="confirm"><strong>Selesai</strong></li>
                                             </ul>
 
-                                            <fieldset>
+                                            <fieldset id="bangunan">
                                                 <form id="formDataBangunan">
                                                     <div class="row p-3">
                                                         <div class="col-md-6">
@@ -83,6 +83,7 @@
                                                                 <div class="card-body">
                                                                     <div class="row">
                                                                         <div class="col-4">
+                                                                            <input type="text" id="id_pemilik" value="<?= (!empty($pengajuan)) ? $pengajuan->id_pemilik:'0'?>" hidden>
                                                                             <div class="form-group">
                                                                                 <label for="" class="form-control-label">Gelar Depan</label>
                                                                                 <input type="text" class="form-control" name="glr_depan" id="glr_depan" placeholder="Masukan Gelar Depan" value="<?= (!empty($pengajuan)) ? $pengajuan->glr_depan:'' ?>" required>
@@ -162,13 +163,12 @@
                                                 </form>
                                                 <input type="button" name="next" class="next action-button" id="nextdatabangunan" value="Next Step" hidden />
                                             </fieldset>
-                                            <fieldset>
-                                                <form id="formDokbghMandatory" enctype="multipart/form-data">
-                                                    <div class="row p-3">
-                                                        <?php
+                                            <fieldset id="dokbgh">
+                                                <div class="row p-3">
+                                                    <?php
                                                         $i = 1;
                                                         foreach ($syarat as $s) {
-                                                        ?>
+                                                            ?>
                                                             <div class="col-md-6">
                                                                 <div class="card shadow">
                                                                     <div class="card-header">
@@ -177,102 +177,223 @@
                                                                     </div>
                                                                     <div class="card-content">
                                                                         <div class="card-body">
-                                                                            <input type="file" class="with-validation-filepond" name="dokbgh[]" id="dokumen-pembuktian-bgh" <?php 
+                                                                            <form class="formdokbgh" enctype="multipart/form-data">
+                                                                                <input type="text" name="id_syarat_bgh" value="<?= $s->id ?>" hidden>
+                                                                            <?php 
+                                                                            $nilai = 0;
+                                                                            if (!empty($file_bgh)) {
+                                                                                foreach($file_bgh as $fb){
+                                                                                    if ($fb->id_syarat_bgh == $s->id) {
+                                                                                        $nilai = $fb->nilai;
+                                                                                        echo "<strong> Nama File: ".$fb->file.'</strong>';
+                                                                                        echo "</br>";
+                                                                                        break;
+                                                                                    }
+                                                                                }
+                                                                            } ?>
+                                                                            <?php 
+                                                                                if ($i > 1) {
+                                                                            ?>
+                                                                            <div class="form-group">
+                                                                            <label for="nilai" class="form-control-label">Nilai <?=$s->nama?> (<?= $s->satuan?>)</label>
+                                                                            <input type="number" class="form-control" value="<?= $nilai ?>" name="nilai" <?= ($i==2) ? 'max="35"':'' ?>>
+                                                                            </div>
+                                                                            <?php 
+                                                                                }else{
+                                                                            ?>
+                                                                            <div class="form-group">
+                                                                            <input type="number" class="form-control" value="0" name="nilai" hidden>
+                                                                            </div>
+                                                                            <?php
+                                                                                }
+                                                                            ?>
+                                                                            <label for="nilai" class="form-control-label">Upload Dokumen <?=$s->nama?></label>
+                                                                            <input type="file" class="with-validation-filepond" name="file" <?php 
                                                                                 if($i == 1){
                                                                             ?>
                                                                             accept=".pdf"
                                                                             <?php
                                                                                 }else{
                                                                             ?> accept=".xlsx" <?php } ?> required>
+                                                                            <button type="submit" class="btn btn-primary btn-sm">Upload</button>
+                                                                        </form>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         <?php $i++;} ?>
                                                     </div>
-                                                    <button type="submit" class="action-button">Next Step</button>
-                                                </form>
-                                                <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                                                <a href="<?= base_url() ?>bgh/pengajuan/bangunanbaru" type="button" class="action-button bg-warning text-dark simpan" onclick="confirm('Simpan Dahulu Progres Permohonan ?')" >Simpan</a>
+                                                    <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                                    <a href="<?= base_url() ?>bgh/pengajuan/bangunanbaru" type="button" class="action-button bg-warning text-dark simpan" onclick="confirm('Simpan Dahulu Progres Permohonan ?')" >Simpan</a>
+                                                    <button type="button" class="action-button" id="nextstepdokbgh">Next Step</button>
                                                 <input type="button" name="next" class="next action-button" id="nextdokbgh" value="Next Step" hidden />
                                             </fieldset>
-                                            <fieldset>
-                                                <input type="text" id="idpermohonanglobal" value="<?= (!empty($pengajuan)) ? $pengajuan->id:'' ?>" hidden>
-                                                <form id="formDokarsitektur" enctype="multipart/form-data">
-                                                    <div class="row p-3">
-                                                        <?php foreach ($arsitektur as $a) { ?>
-                                                            <div class="col-md-6">
-                                                                <div class="card shadow text-start">
-                                                                    <div class="card-header">
-                                                                        <h5 class="card-title"><?= $a->nama ?></h5>
-                                                                        <small><?= $a->keterangan ?></small>
-                                                                    </div>
-                                                                    <div class="card-content">
-                                                                        <div class="card-body">
-                                                                            <input type="file" class="form-control" name="dokars[]" accept=".pdf" required>
+                                            <fieldset id="dokars">
+                                                <div class="row p-3">
+                                                    <?php $j= 1; foreach ($arsitektur as $a) { ?>
+                                                        <div class="col-md-6">
+                                                            <div class="card shadow text-start">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title"><?= $a->nama ?></h5>
+                                                                    <small><?= $a->keterangan ?></small>
+                                                                </div>
+                                                                <div class="card-content">
+                                                                    <form class="formdokars" enctype="multipart/form-data">
+                                                                    <div class="card-body">
+                                                                            <input type="text" name="id_syarat_bgh" value="<?= $a->id ?>" hidden>
+                                                                            <input type="text" id="idpermohonanglobal" value="<?= (!empty($pengajuan)) ? $pengajuan->id:'0' ?>" hidden>
+                                                                        <?php 
+                                                                            $nilai = 0;
+                                                                            if (!empty($file_arsitektur)) {
+                                                                                foreach($file_arsitektur as $fa){
+                                                                                    if ($fa->id_syarat_bgh == $a->id) {
+                                                                                        $nilai = $fa->nilai;
+                                                                                        echo "<strong> Nama File: ".$fa->file.'</strong>';
+                                                                                        echo "</br>";
+                                                                                        break;
+                                                                                    }
+                                                                                }
+                                                                            } ?>
+                                                                            <div class="form-group">
+                                                                                <label for="nilai" class="form-control-label">Upload Dokumen <?=$a->nama?></label>
+                                                                                <input type="file" class="form-control" name="file" accept=".pdf" required>
+                                                                            </div>
+                                                                            <button type="submit" class="btn btn-primary btn-sm d-block mx-auto">Upload</button>
                                                                         </div>
-                                                                    </div>
+                                                                        </div>
+                                                                    </form>
                                                                 </div>
                                                             </div>
                                                         <?php } ?>
                                                     </div>
-                                                    <button type="submit" class="action-button">Next Step</button>
-                                                </form>
-                                                <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                                                <a href="<?= base_url() ?>bgh/pengajuan/bangunanbaru" type="button" class="action-button bg-warning text-dark simpan" onclick="confirm('Simpan Dahulu Progres Permohonan ?')" >Simpan</a>
+                                                    <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                                    <a href="<?= base_url() ?>bgh/pengajuan/bangunanbaru" type="button" class="action-button bg-warning text-dark simpan" onclick="confirm('Simpan Dahulu Progres Permohonan ?')" >Simpan</a>
+                                                    <button type="button" class="action-button" id="nextstepdokars">Next Step</button>
                                                 <input type="button" name="next" class="next action-button" value="Next Step" id="nextdokarsitektur" hidden />
                                             </fieldset>
-                                            <fieldset>
-                                                <form id="formDokstruktur" enctype="multipart/form-data">
-                                                    <div class="row p-3">
-                                                        <?php foreach ($struktur as $st) { ?>
-                                                            <div class="col-md-6">
-                                                                <div class="card shadow text-start">
-                                                                    <div class="card-header">
-                                                                        <h5 class="card-title"><?= $st->nama ?></h5>
-                                                                        <small><?= $st->keterangan ?></small>
-                                                                    </div>
-                                                                    <div class="card-content">
+                                            <fieldset id="dokstruktur">
+                                                <div class="row p-3">
+                                                    <?php foreach ($struktur as $st) { ?>
+                                                        <div class="col-md-6">
+                                                            <div class="card shadow text-start">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title"><?= $st->nama ?></h5>
+                                                                    <small><?= $st->keterangan ?></small>
+                                                                </div>
+                                                                <div class="card-content">
+                                                                    <form class="formdokstruktur" enctype="multipart/form-data">
                                                                         <div class="card-body">
-                                                                            <input type="file" class="form-control" name="dokstruk[]" accept=".pdf">
+                                                                            <input type="text" name="id_syarat_bgh" value="<?= $st->id ?>" hidden>
+                                                                            <?php 
+                                                                                $nilai = 0;
+                                                                                if (!empty($file_struktur)) {
+                                                                                    foreach($file_struktur as $fs){
+                                                                                        if ($fs->id_syarat_bgh == $st->id) {
+                                                                                            $nilai = $fs->nilai;
+                                                                                            echo "<strong> Nama File: ".$fs->file.'</strong>';
+                                                                                            echo "</br>";
+                                                                                            break;
+                                                                                        }
+                                                                                    }
+                                                                            } ?>
+                                                                            <div class="form-group">
+                                                                                <label for="nilai" class="form-control-label">Upload Dokumen <?=$st->nama?></label>
+                                                                                <input type="file" class="form-control" name="file" accept=".pdf">
+                                                                            </div>
+                                                                            <button type="submit" class="btn btn-primary btn-sm d-block mx-auto">Upload</button>
                                                                         </div>
-                                                                    </div>
+                                                                        </div>
+                                                                    </form>
                                                                 </div>
                                                             </div>
                                                         <?php } ?>
                                                     </div>
-                                                    <button type="submit" class="action-button">Next Step</button>
-                                                </form>
-                                                <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                                                <input type="button" name="make_payment" class="next action-button" id="nextdokstruktur" value="Next Step" hidden />
+                                                    <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                                    <a href="<?= base_url() ?>bgh/pengajuan/bangunanbaru" type="button" class="action-button bg-warning text-dark simpan" onclick="confirm('Simpan Dahulu Progres Permohonan ?')" >Simpan</a>
+                                                    <button type="button" id="nextstepdokstruktur" class="action-button">Next Step</button>
+                                                    <input type="button" name="make_payment" class="next action-button" id="nextdokstruktur" value="Next Step" hidden />
                                             </fieldset>
-                                            <fieldset>
-                                                <form id="formDokmep" enctype="multipart/form-data">
-                                                    <div class="row p-3">
-                                                        <?php foreach ($mep as $m) { ?>
-                                                            <div class="col-md-6">
-                                                                <div class="card shadow text-start">
-                                                                    <div class="card-header">
-                                                                        <h5 class="card-title"><?= $m->nama ?></h5>
-                                                                        <small><?= $m->keterangan ?></small>
-                                                                    </div>
-                                                                    <div class="card-content">
+                                            <fieldset id="dokmep">
+                                                <div class="row p-3">
+                                                    <?php 
+                                                        foreach ($mep as $m) { 
+                                                            if($pengajuan->klas_bangunan != 6 && $m->id != 15){
+                                                        ?>
+                                                        <div class="col-md-6">
+                                                            <div class="card shadow text-start">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title"><?= $m->nama ?></h5>
+                                                                    <small><?= $m->keterangan ?></small>
+                                                                </div>
+                                                                <div class="card-content">
+                                                                    <form class="formdokmep" enctype="multipart/form-data">
                                                                         <div class="card-body">
-                                                                            <input type="file" class="form-control" name="dokmep[]" accept=".pdf">
+                                                                            <input type="text" name="id_syarat_bgh" value="<?= $m->id ?>" hidden>
+                                                                            <?php 
+                                                                                $nilai = 0;
+                                                                                if (!empty($file_mep)) {
+                                                                                    foreach($file_mep as $fm){
+                                                                                        if ($fm->id_syarat_bgh == $m->id) {
+                                                                                            $nilai = $fm->nilai;
+                                                                                            echo "<strong> Nama File: ".$fm->file.'</strong>';
+                                                                                            echo "</br>";
+                                                                                            break;
+                                                                                        }
+                                                                                    }
+                                                                            } ?>
+                                                                            <div class="form-group">
+                                                                                <label for="nilai" class="form-control-label">Upload Dokumen <?=$m->nama?></label>
+                                                                                <input type="file" class="form-control" name="file" accept=".pdf">
+                                                                            </div>
+                                                                            <button type="submit" class="btn btn-primary btn-sm d-block mx-auto">Upload</button>
                                                                         </div>
-                                                                    </div>
+                                                                    </form>
                                                                 </div>
                                                             </div>
-                                                        <?php } ?>
+                                                        </div>
+                                                        <?php }else { ?>
+                                                        <div class="col-md-6">
+                                                            <div class="card shadow text-start">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title"><?= $m->nama ?></h5>
+                                                                    <small><?= $m->keterangan ?></small>
+                                                                </div>
+                                                                <div class="card-content">
+                                                                    <form class="formdokmep" enctype="multipart/form-data">
+                                                                        <div class="card-body">
+                                                                            <input type="text" name="id_syarat_bgh" value="<?= $m->id ?>" hidden>
+                                                                            <?php 
+                                                                                $nilai = 0;
+                                                                                if (!empty($file_mep)) {
+                                                                                    foreach($file_mep as $fm){
+                                                                                        if ($fm->id_syarat_bgh == $m->id) {
+                                                                                            $nilai = $fm->nilai;
+                                                                                            echo "<strong> Nama File: ".$fm->file.'</strong>';
+                                                                                            echo "</br>";
+                                                                                            break;
+                                                                                        }
+                                                                                    }
+                                                                            } ?>
+                                                                            <div class="form-group">
+                                                                                <label for="nilai" class="form-control-label">Upload Dokumen <?=$m->nama?></label>
+                                                                                <input type="file" class="form-control" name="file" accept=".pdf">
+                                                                            </div>
+                                                                            <button type="submit" class="btn btn-primary btn-sm d-block mx-auto">Upload</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <?php }} ?>
                                                     </div>
-                                                    <button type="submit" class="action-button">Next Step</button>
-                                                </form>
                                                 <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                                <a href="<?= base_url() ?>bgh/pengajuan/bangunanbaru" type="button" class="action-button bg-warning text-dark simpan" onclick="confirm('Simpan Dahulu Progres Permohonan ?')" >Simpan</a>
+                                                <button type="button" id="nextstepdokmep" class="action-button">Next Step</button>
                                                 <input type="button" name="make_payment" class="next action-button" value="Confirm" id="nextdokmep" hidden />
                                             </fieldset>
                                             <fieldset>
                                                 <div class="form-card">
-                                                    <h2 class="fs-title text-center">Success !</h2>
+                                                    <h2 class="fs-title text-center">Berhasil Melakukan Permohonan</h2>
                                                     <br><br>
                                                     <div class="row justify-content-center">
                                                         <div class="col-3">
@@ -282,7 +403,7 @@
                                                     <br><br>
                                                     <div class="row justify-content-center">
                                                         <div class="col-7 text-center">
-                                                            <h5>Permohonan BGH anda akan dicek terlebih dahulu</h5>
+                                                            <h5>Dokumen Anda Akan Dilakukan Proses Pengecekkan</h5>
                                                         </div>
                                                     </div>
                                                     <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>">Kembali</a>
@@ -365,6 +486,34 @@
 
         if (step == "0") {
             $('#nextdatabangunan').trigger('click');
+        }else if(step == "1"){
+            $('#nextdatabangunan').trigger('click');
+            $('#nextdokbgh').trigger('click');
+        }else if(step == "2"){
+            $('#nextdatabangunan').trigger('click');
+            $('#nextdokbgh').trigger('click');
+            $('#nextdokarsitektur').trigger('click');
+            $('#dokbgh').addClass('d-none');
+            $('#dokars').css('display:none');
+        }else if(step == "3"){
+            $('#nextdatabangunan').trigger('click');
+            $('#nextdokbgh').trigger('click');
+            $('#nextdokarsitektur').trigger('click');
+            $('#nextdokstruktur').trigger('click');
+            $('#dokbgh').addClass('d-none');
+            $('#dokars').addClass('d-none');
+            $('#dokstruktur').addClass('d-none');
+        }else if(step == "4"){
+            $('#nextdatabangunan').trigger('click');
+            $('#nextdokbgh').trigger('click');
+            $('#dokbgh').addClass('d-none');
+            $('#nextdokarsitektur').trigger('click');
+            $('#dokars').addClass('d-none');
+            $('#nextdokstruktur').trigger('click');
+            $('#dokstruktur').addClass('d-none');
+            $('#nextdokmep').trigger('click');
+            $('#dokmep').addClass('d-none');
+
         }
         $('#bangunanbaru-menu').addClass('active');
 
@@ -373,7 +522,146 @@
             handleprov(id_prov);
         }
 
+        // DOKBGH
 
+        $('.formdokbgh').submit(function(e){
+            e.preventDefault();
+
+            let fd = new FormData(this);
+            fd.append('id_permohonan', $('#idpermohonanglobal').val());
+            $.ajax({
+                url: '<?= base_url() ?>bgh/pengajuan/savedokbgh',
+                type: 'POST',
+                data: fd,
+                processData:false,
+                contentType:false,
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                // Handle the error
+                }
+            });
+        })
+
+        $('#nextstepdokbgh').click(function(){
+            let id_permohonan = $('#idpermohonanglobal').val();
+            $.ajax({
+                type:'post',
+                dataType: 'json',
+                data: {id_permohonan: id_permohonan, step: 1},
+                url: '<?= base_url()?>bgh/pengajuan/updatestep',
+                success:function(response){
+                    location.reload();
+                }
+
+            })
+        })
+
+        // DOK ARSITEKTUR
+        $('.formdokars').submit(function(e){
+            e.preventDefault();
+
+            let fd = new FormData(this);
+            fd.append('id_permohonan', $('#idpermohonanglobal').val());
+            $.ajax({
+                url: '<?= base_url() ?>bgh/pengajuan/savedokars',
+                type: 'POST',
+                data: fd,
+                processData:false,
+                contentType:false,
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                // Handle the error
+                }
+            });
+        })
+
+        $('#nextstepdokars').click(function(){
+            let id_permohonan = $('#idpermohonanglobal').val();
+            $.ajax({
+                type:'post',
+                dataType: 'json',
+                data: {id_permohonan: id_permohonan, step: 2},
+                url: '<?= base_url()?>bgh/pengajuan/updatestep',
+                success:function(response){
+                    location.reload();
+                }
+
+            })
+        })
+
+        // DOK STRUKTUR
+        $('.formdokstruktur').submit(function(e){
+            e.preventDefault();
+
+            let fd = new FormData(this);
+            fd.append('id_permohonan', $('#idpermohonanglobal').val());
+            $.ajax({
+                url: '<?= base_url() ?>bgh/pengajuan/savedokstruktur',
+                type: 'POST',
+                data: fd,
+                processData:false,
+                contentType:false,
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                // Handle the error
+                }
+            });
+        })
+
+        $('#nextstepdokstruktur').click(function(){
+            let id_permohonan = $('#idpermohonanglobal').val();
+            $.ajax({
+                type:'post',
+                dataType: 'json',
+                data: {id_permohonan: id_permohonan, step: 3},
+                url: '<?= base_url()?>bgh/pengajuan/updatestep',
+                success:function(response){
+                    location.reload();
+                }
+
+            })
+        })
+
+        // DOK MEP
+        $('.formdokmep').submit(function(e){
+            e.preventDefault();
+
+            let fd = new FormData(this);
+            fd.append('id_permohonan', $('#idpermohonanglobal').val());
+            $.ajax({
+                url: '<?= base_url() ?>bgh/pengajuan/savedokmep',
+                type: 'POST',
+                data: fd,
+                processData:false,
+                contentType:false,
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                // Handle the error
+                }
+            });
+        })
+
+        $('#nextstepdokmep').click(function(){
+            let id_permohonan = $('#idpermohonanglobal').val();
+            $.ajax({
+                type:'post',
+                dataType: 'json',
+                data: {id_permohonan: id_permohonan, step: 4},
+                url: '<?= base_url()?>bgh/pengajuan/updatestep',
+                success:function(response){
+                    location.reload();
+                }
+
+            })
+        })
         
 
         $("#msform").submit(function(e) {
@@ -496,27 +784,35 @@
 
         $('#formDataBangunan').submit(function(e){
             e.preventDefault();
-            $.ajax({
-                type:'post',
-                dataType:'json',
-                data: new FormData(this),
-                contentType:false,
-                processData:false,
-                url:'<?= base_url('bgh/pengajuan/pengajuanmandatory') ?>',
-                success:function(response)
-                {
-                    if (response.code === 1) {
-                        $('#idpermohonanglobal').val(response.id_permohonan);
-                        $('#nextdatabangunan').trigger('click');
-                    }else{
-                        Swal.fire({
-                            icon:"warning",
-                            title: 'Perhatian !',
-                            text: response.msg
-                        });
-                    }
-                }
-            })
+            var formdata = new FormData();
+            formdata.append('nama_gedung', $('#nama_gedung').val());
+            formdata.append('lantai', $('#lantai').val());
+            formdata.append('luas_bangunan', $('#luas_bangunan').val());
+            formdata.append('klas_bangunan', $('#klas_bangunan').val());
+            formdata.append('glr_depan', $('#glr_depan').val());
+            formdata.append('nm_pemilik', $('#nm_pemilik').val());
+            formdata.append('glr_belakang', $('#glr_belakang').val());
+            formdata.append('no_ktp', $('#no_ktp').val());
+            formdata.append('no_kitas', $('#no_kitas').val());
+            formdata.append('alamat', $('#alamat').val());
+            formdata.append('id_provinsi', $('#id_provinsi').val());
+            formdata.append('id_kabkot', $('#id_kabkot').val());
+            formdata.append('id_kecamatan', $('#id_kecamatan').val());
+            formdata.append('id_kelurahan', $('#id_kelurahan').val());
+            formdata.append('no_hp', $('#no_hp').val());
+            formdata.append('email', $('#email').val());
+            formdata.append('unit_organisasi', $('#unit_organisasi').val());
+            formdata.append('id_permohonan',$('#idpermohonanglobal').val());
+            formdata.append('id_pemilik',$('#id_pemilik').val());
+            
+            savepermohonan(formdata);
+        })
+
+        $(document).on('change','.dokbgh',function(){
+            let id = $(this).data('id');
+            console.log(id);
+            console.log('onchage');
+
         })
 
         $("#formDokbghMandatory").submit(function(e) {
@@ -624,6 +920,39 @@
             })
         })
     })
+
+    // function handledokbgh(id,files)
+    // {
+    //     console.log(id);
+    //     var file = this.files[0];
+    //     var reader = new FileReader();
+    //     console.log(file);
+    // }
+
+    function savepermohonan(formdata)
+    {
+        $.ajax({
+            type:'post',
+            dataType:'json',
+            data: formdata,
+            contentType:false,
+            processData:false,
+            url:'<?= base_url('bgh/pengajuan/pengajuanmandatory') ?>',
+            success:function(response)
+            {
+                if (response.code === 1) {
+                    let url = "<?= base_url()?>bgh/pengajuan/mandatorybghbaru/"+response.nomor_bgh;
+                    window.location.replace(url);
+                }else{
+                    Swal.fire({
+                        icon:"warning",
+                        title: 'Perhatian !',
+                        text: response.msg
+                    });
+                }
+            }
+        })
+    }
 
     var current_fs, next_fs, previous_fs; //fieldsets
         var opacity;
