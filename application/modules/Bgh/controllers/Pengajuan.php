@@ -11,6 +11,7 @@ class Pengajuan extends CI_Controller
 
         $this->load->model('Pengajuan_model');
     }
+
     public function bangunanbaru($kode = null)
     {
         if ($kode != null) {
@@ -137,7 +138,16 @@ class Pengajuan extends CI_Controller
             'klas' => $klas
         );
         if ($kode != NULL) {
-            $data['pengajuan'] = $this->Pengajuan_model->get(array('t_permohonan_bgh.kode_bgh' => $kode))->row();
+            $permohonan = $this->Pengajuan_model->get(array('t_permohonan_bgh.kode_bgh' => $kode))->row();
+            $data['pengajuan'] = $permohonan;
+            $file_bgh = $this->Pengajuan_model->getfilebgh(['id_permohonan_bgh' => $permohonan->id])->result();
+            $data['file_bgh'] = $file_bgh;
+            $file_arsitektur = $this->Pengajuan_model->getfilearsitektur(['id_permohonan_bgh' => $permohonan->id])->result();
+            $data['file_arsitektur'] = $file_arsitektur;
+            $file_struktur = $this->Pengajuan_model->getfilestruktur(['id_permohonan_bgh' => $permohonan->id])->result();
+            $data['file_struktur'] = $file_struktur;
+            $file_mep = $this->Pengajuan_model->getfilemep(['id_permohonan_bgh' => $permohonan->id])->result();
+            $data['file_mep'] = $file_mep;
         }
         $data['page_content'] = $this->load->view('mandatorybghbaru', $data, TRUE);
 
@@ -152,6 +162,7 @@ class Pengajuan extends CI_Controller
         $data['page_content'] = $this->load->view('recommendedbghbaru', $data, TRUE);
         $this->load->view('layout', $data);
     }
+
     public function permohonanbgh()
     {
         $data = array(
@@ -175,6 +186,7 @@ class Pengajuan extends CI_Controller
         $this->load->view('uploadsuccess', $data);
         $this->load->view('includes/footer', $data);
     }
+
     public function peringkatbgh()
     {
         $data = array(
@@ -197,6 +209,7 @@ class Pengajuan extends CI_Controller
         );
         echo json_encode($response);
     }
+    
     public function getkecamatan()
     {
         $id_kabkot = $this->input->post('id_kabkot');
@@ -207,6 +220,7 @@ class Pengajuan extends CI_Controller
         );
         echo json_encode($response);
     }
+
     public function getkelurahan()
     {
         $id_kecamatan = $this->input->post('id_kecamatan');
@@ -223,7 +237,7 @@ class Pengajuan extends CI_Controller
         $params = (object) $this->input->post();
 
         $datapemilik = array(
-            'user_id' => 1,
+            'user_id' => $this->session->userdata('loc_user_id'),
             'jns_pemilik' => 2,
             'nm_pemilik' => $params->nm_pemilik,
             'glr_depan' => $params->glr_depan,
@@ -239,7 +253,7 @@ class Pengajuan extends CI_Controller
             'no_hp' => $params->no_hp,
             'email' => $params->email,
             'post_date' => date('Y-m-d'),
-            'post_by' => 'email@example.com',
+            'post_by' => $this->session->userdata('loc_username'),
             'unit_organisasi' => $params->unit_organisasi,
             'oss_id' => "",
             'oss_id_izin' => "",
@@ -247,35 +261,71 @@ class Pengajuan extends CI_Controller
             'oss_kd_izin' => ""
         );
 
-        $this->db->insert('tmdatapemilik', $datapemilik);
-        $id_pemilik = $this->db->insert_id();
+        if ($params->id_pemilik == 0) {
+            $pemilik = $this->Pengajuan_model->insertdatapemilik($datapemilik);
+        }else{
+            $pemilik = $this->Pengajuan_model->updatedatapemilik($datapemilik, ['id' => $params->id_pemilik]);
+        }
 
         $rand1 = rand(0, 9999);
         $rand2 = rand(0, 9999);
+        $kodebgh = 'BGH-' . $rand1 . '-' . $rand2;
         $databangunan = array(
-            'kode_bgh' => 'BGH-' . $rand1 . '-' . $rand2,
+            'kode_bgh' => $kodebgh,
             'kode_pbg' => '-',
             'kategori' => "mandatory",
-            'id_pemilik' => $id_pemilik,
+            'id_pemilik' => $pemilik,
             'nama_gedung' => $params->nama_gedung,
             'lantai' => $params->lantai,
             'luas_bangunan' => $params->luas_bangunan,
             'klas_bangunan' => $params->klas_bangunan,
             'status' => 0,
-            'step' => 0,
         );
 
-        $this->db->insert('t_permohonan_bgh', $databangunan);
-        $id_permohonan = $this->db->insert_id();
-        if ($id_pemilik > 0 && $id_permohonan > 0) {
+        if ($params->id_permohonan == 0) {
+            $id_permohonan = $this->Pengajuan_model->insertpermohonan($databangunan);
+        }else{
+            $id_permohonan = $this->Pengajuan_model->updatepermohonan($databangunan, ['id' => $params->id_permohonan]);
+        }
+        
+        if ($pemilik > 0 && $id_permohonan > 0) {
             $response = array(
                 'code' => 1,
-                'id_permohonan' => $id_permohonan
+                'nomor_bgh' => $kodebgh
             );
         } else {
             $response = array(
                 'code' => 0,
                 'msg' => 'Input Gagal Silahkan coba kembali '
+            );
+        }
+
+        echo json_encode($response);
+    }
+
+    public function updatestep()
+    {
+        $id_permohonan = $this->input->post('id_permohonan');
+        $step = $this->input->post('step');
+
+        $where = array('id' => $id_permohonan);
+        $data = array('step' => $step);
+
+        if ($step == 4) {
+            $updatepermohonan = $this->Pengajuan_model->updatepermohonan(['status'=>1], ['id'=>$id_permohonan]);
+        }
+        
+        $update = $this->Pengajuan_model->updatestep($data, $where);
+        
+        if ($update) {
+            $response = array(
+                'code' => 1,
+                'msg' => 'berhasil'
+            );
+        }else{
+            $response = array(
+                'code' => 0,
+                'msg' => 'gagal'
             );
         }
 
@@ -324,7 +374,7 @@ class Pengajuan extends CI_Controller
                             'verifikasi' => 0,
                             'update_date' => date('Y-m-d H:i:s')
                         );
-                        $this->db->insert('t_data_file', $data2);
+                        $insert = $this->Pengajuan_model->insertdokbgh($data2);
                     } else {
                         echo $this->upload->display_errors();
                     }
@@ -332,12 +382,208 @@ class Pengajuan extends CI_Controller
             }
         }
         if (!empty($response)) {
-            $this->db->where(array('id' => $id_permohonan));
-            $this->db->update('t_permohonan_bgh', ['step' => 1]);
+            $updatestep = $this->Pengajuan_model->updatestep(['step' => 1], ['id' => $id_permohonan]);
             echo json_encode($response);
         } else {
             echo json_encode(array('code' => 1, 'permohonan' => $id_permohonan));
         }
+    }
+
+    public function savedokbgh()
+    {
+        $params = (object)$this->input->post();
+
+        if (!file_exists('assets/bgh/files/' . $params->id_permohonan)) {
+            mkdir('assets/bgh/files/' . $params->id_permohonan, 0777, true);
+        }
+        if (!file_exists('assets/bgh/files/' . $params->id_permohonan . '/dokbgh')) {
+            mkdir('assets/bgh/files/' . $params->id_permohonan . '/dokbgh', 0777, true);
+        }
+
+        $config['upload_path'] = './assets/bgh/files/' . $params->id_permohonan . '/dokbgh/';
+        $config['allowed_types'] = 'pdf|xlsx';
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('file')) {
+            $get = $this->Pengajuan_model->getfilebgh(['id_permohonan_bgh' => $params->id_permohonan, 'id_syarat_bgh' => $params->id_syarat_bgh]);
+            if ($get->num_rows() > 0) {
+                $filebgh = $get->row();
+                unlink('assets/bgh/files/'.$params->id_permohonan.'/dokbgh/'.$filebgh->file);
+                $delete = $this->Pengajuan_model->deletefilebgh(['id_permohonan_bgh' => $params->id_permohonan, 'id_syarat_bgh' => $params->id_syarat_bgh]);
+            }
+            $uploadData = $this->upload->data();
+            $name = $uploadData['file_name'];
+            $data2 = array(
+                'id_permohonan_bgh' => $params->id_permohonan,
+                'id_syarat_bgh' => $params->id_syarat_bgh,
+                'file' => $name,
+                'verifikasi' => 0,
+                'update_date' => date('Y-m-d H:i:s'),
+                'nilai' => $params->nilai
+            );
+            $insert = $this->Pengajuan_model->insertdokbgh($data2);
+
+            if ($insert) {
+                $response = array(
+                    'code' => 1,
+                    'msg' => 'Berhasi;'
+                );
+            }
+        } else {
+            $response = array(
+                'code' => 1,
+                'msg' => $this->upload->display_errors()
+            );
+        }
+
+        echo json_encode($response);
+    }
+
+    public function savedokars()
+    {
+        $params = (object)$this->input->post();
+
+        if (!file_exists('assets/bgh/files/' . $params->id_permohonan)) {
+            mkdir('assets/bgh/files/' . $params->id_permohonan, 0777, true);
+        }
+        if (!file_exists('assets/bgh/files/' . $params->id_permohonan . '/dokars')) {
+            mkdir('assets/bgh/files/' . $params->id_permohonan . '/dokars', 0777, true);
+        }
+
+        $config['upload_path'] = './assets/bgh/files/' . $params->id_permohonan . '/dokars/';
+        $config['allowed_types'] = 'pdf';
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('file')) {
+            $get = $this->Pengajuan_model->getfilearsitektur(['id_permohonan_bgh' => $params->id_permohonan, 'id_syarat_bgh' => $params->id_syarat_bgh]);
+            if ($get->num_rows() > 0) {
+                $filebgh = $get->row();
+                unlink('assets/bgh/files/'.$params->id_permohonan.'/dokars/'.$filebgh->file);
+                $delete = $this->Pengajuan_model->deletefilears(['id_permohonan_bgh' => $params->id_permohonan, 'id_syarat_bgh' => $params->id_syarat_bgh]);
+            }
+            $uploadData = $this->upload->data();
+            $name = $uploadData['file_name'];
+            $data2 = array(
+                'id_permohonan_bgh' => $params->id_permohonan,
+                'id_syarat_bgh' => $params->id_syarat_bgh,
+                'file' => $name,
+                'verifikasi' => 0,
+                'update_date' => date('Y-m-d H:i:s')
+            );
+            $insert = $this->Pengajuan_model->insertdokars($data2);
+
+            if ($insert) {
+                $response = array(
+                    'code' => 1,
+                    'msg' => 'Berhasil'
+                );
+            }
+        } else {
+            $response = array(
+                'code' => 1,
+                'msg' => $this->upload->display_errors()
+            );
+        }
+
+        echo json_encode($response);
+    }
+
+    public function savedokstruktur()
+    {
+        $params = (object)$this->input->post();
+
+        if (!file_exists('assets/bgh/files/' . $params->id_permohonan)) {
+            mkdir('assets/bgh/files/' . $params->id_permohonan, 0777, true);
+        }
+        if (!file_exists('assets/bgh/files/' . $params->id_permohonan . '/dokstruktur')) {
+            mkdir('assets/bgh/files/' . $params->id_permohonan . '/dokstruktur', 0777, true);
+        }
+
+        $config['upload_path'] = './assets/bgh/files/' . $params->id_permohonan . '/dokstruktur/';
+        $config['allowed_types'] = 'pdf';
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('file')) {
+            $get = $this->Pengajuan_model->getfilestruktur(['id_permohonan_bgh' => $params->id_permohonan, 'id_syarat_bgh' => $params->id_syarat_bgh]);
+            if ($get->num_rows() > 0) {
+                $filebgh = $get->row();
+                unlink('assets/bgh/files/'.$params->id_permohonan.'/dokstruktur/'.$filebgh->file);
+                $delete = $this->Pengajuan_model->deletefilestruktur(['id_permohonan_bgh' => $params->id_permohonan, 'id_syarat_bgh' => $params->id_syarat_bgh]);
+            }
+            $uploadData = $this->upload->data();
+            $name = $uploadData['file_name'];
+            $data2 = array(
+                'id_permohonan_bgh' => $params->id_permohonan,
+                'id_syarat_bgh' => $params->id_syarat_bgh,
+                'file' => $name,
+                'verifikasi' => 0,
+                'update_date' => date('Y-m-d H:i:s')
+            );
+            $insert = $this->Pengajuan_model->insertdokstruktur($data2);
+
+            if ($insert) {
+                $response = array(
+                    'code' => 1,
+                    'msg' => 'Berhasil'
+                );
+            }
+        } else {
+            $response = array(
+                'code' => 1,
+                'msg' => $this->upload->display_errors()
+            );
+        }
+
+        echo json_encode($response);
+    }
+
+    public function savedokmep()
+    {
+        $params = (object)$this->input->post();
+
+        if (!file_exists('assets/bgh/files/' . $params->id_permohonan)) {
+            mkdir('assets/bgh/files/' . $params->id_permohonan, 0777, true);
+        }
+        if (!file_exists('assets/bgh/files/' . $params->id_permohonan . '/dokmep')) {
+            mkdir('assets/bgh/files/' . $params->id_permohonan . '/dokmep', 0777, true);
+        }
+
+        $config['upload_path'] = './assets/bgh/files/' . $params->id_permohonan . '/dokmep/';
+        $config['allowed_types'] = 'pdf';
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('file')) {
+            $get = $this->Pengajuan_model->getfilemep(['id_permohonan_bgh' => $params->id_permohonan, 'id_syarat_bgh' => $params->id_syarat_bgh]);
+            if ($get->num_rows() > 0) {
+                $filebgh = $get->row();
+                unlink('assets/bgh/files/'.$params->id_permohonan.'/dokmep/'.$filebgh->file);
+                $delete = $this->Pengajuan_model->deletefilemep(['id_permohonan_bgh' => $params->id_permohonan, 'id_syarat_bgh' => $params->id_syarat_bgh]);
+            }
+            $uploadData = $this->upload->data();
+            $name = $uploadData['file_name'];
+            $data2 = array(
+                'id_permohonan_bgh' => $params->id_permohonan,
+                'id_syarat_bgh' => $params->id_syarat_bgh,
+                'file' => $name,
+                'verifikasi' => 0,
+                'update_date' => date('Y-m-d H:i:s')
+            );
+            $insert = $this->Pengajuan_model->insertdokmep($data2);
+
+            if ($insert) {
+                $response = array(
+                    'code' => 1,
+                    'msg' => 'Berhasil'
+                );
+            }
+        } else {
+            $response = array(
+                'code' => 1,
+                'msg' => $this->upload->display_errors()
+            );
+        }
+
+        echo json_encode($response);
     }
 
     public function savepengajuan()
@@ -410,6 +656,7 @@ class Pengajuan extends CI_Controller
             echo json_encode(array('code' => 1, 'permohonan' => $insert_id));
         }
     }
+
     public function savearsitektur()
     {
         $permohonan = $this->input->post('idpermohonan');
@@ -444,7 +691,7 @@ class Pengajuan extends CI_Controller
                         'verifikasi' => 0,
                         'update_date' => date('Y-m-d H:i:s')
                     );
-                    $this->db->insert('t_data_file_ars', $data2);
+                    $insert = $this->Pengajuan_model->insertdokars($data2);
                 } else {
                     echo $this->upload->display_errors();
                 }
@@ -454,6 +701,7 @@ class Pengajuan extends CI_Controller
         $this->db->update('t_permohonan_bgh', ['step' => 2]);
         echo json_encode(array('code' => 1));
     }
+
     public function savestruktur()
     {
         $permohonan = $this->input->post('idpermohonan');
@@ -488,7 +736,7 @@ class Pengajuan extends CI_Controller
                         'verifikasi' => 0,
                         'update_date' => date('Y-m-d H:i:s')
                     );
-                    $this->db->insert('t_data_file_struktur', $data2);
+                    $insert = $this->Pengajuan_model->insertstruktur($data2);
                 } else {
                     echo $this->upload->display_errors();
                 }
@@ -532,7 +780,7 @@ class Pengajuan extends CI_Controller
                         'verifikasi' => 0,
                         'update_date' => date('Y-m-d H:i:s')
                     );
-                    $this->db->insert('t_data_file_mep', $data2);
+                    $insert = $this->Pengajuan_model->insertdokmep($data2);
                 } else {
                     echo $this->upload->display_errors();
                 }

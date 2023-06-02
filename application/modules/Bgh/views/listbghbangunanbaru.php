@@ -101,9 +101,6 @@
                                                                             }else if($l->step == 3){
                                                                                 echo '<span class="badge bg-primary p-2">Perlu Mengisi Dokumen MEP</span>';
                                                                             }
-                                                                            // }else if($l->step == 4){
-                                                                            //     echo '<span class="badge bg-primary p-2">Perlu Verifikasi Melalui Email</span>';
-                                                                            // }
                                                                         }else if ($l->status == 1) {
                                                                             echo '<span class="badge bg-info p-2">Pemeriksaan Dokumen</span>';
                                                                         } else if ($l->status == 2) {

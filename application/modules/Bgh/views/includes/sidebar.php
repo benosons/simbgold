@@ -24,24 +24,24 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <?php if($this->session->userdata('loc_role_id') == 10){ ?>
                 <li class="sidebar-item" id="bangunanbaru-menu">
                     <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
-                        <span>Pengajuan BGH Bangunan Baru</span>
+                        <span>Permohonan BGH</span>
                     </a>
                 </li>
-                <?php }else if($this->session->userdata('loc_role_id') != 10){
-                    ?>
-                    <li class="sidebar-item" id="bangunanbaru-menu">
-                    <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>" class="sidebar-link">
+                <li class="sidebar-item" id="bangunanbaru-menu">
+                    <a href="<?= base_url('bgh/pengajuan/h2m') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
-                        <span>List BGH Bangunan Baru</span>
+                        <span>Permohonan BGH H2M</span>
                     </a>
                 </li>
-                <?php 
-                }
-                ?>
+                <li class="sidebar-item" id="bangunanbaru-menu">
+                    <a href="<?= base_url('bgh/pengajuan/kawasanhijau') ?>" class="sidebar-link">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Permohonan BGH Kawasan Hijau</span>
+                    </a>
+                </li>
                 <li class="sidebar-item" id="informasi-menu">
                     <a href="<?= base_url('bgh/informasi') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
