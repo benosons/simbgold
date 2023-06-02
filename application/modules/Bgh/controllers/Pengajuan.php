@@ -1099,4 +1099,45 @@ class Pengajuan extends CI_Controller
 
         return $revisi;
     }
+
+    function generatepdf()
+    {
+        $this->load->library('pdf');
+        
+        // title dari pdf
+        $this->data['title_pdf'] = 'Sertifikat';
+        
+        // filename dari pdf ketika didownload
+        $file_pdf = 'laporan_penjualan_toko_kita';
+        // setting paper
+        $paper = 'legal';
+        //orientasi paper potrait / landscape
+        $orientation = "landscape";
+        $this->data['nomor_sertifikat'] = '12312312312312';
+        $this->data['tanggal'] = '12312312312312';
+        $this->data['nomor_induk_bangunan'] = '12312312312312';
+        $this->data['milik'] = '12312312312312';
+        $this->data['alamat'] = '12312312312312';
+        $this->data['nama'] = '12312312312312';
+        $this->data['nip'] = '12312312312312';
+        
+		$html = $this->load->view('sertif/sertifikat', $this->data, true);	    
+        
+        // run dompdf
+        $this->pdf->generate($html, $file_pdf, $paper, $orientation);
+    }
+
+    public function sertifikat($kode = null)
+    {
+        $data['nomor_sertifikat'] = '12312312312312';
+        $data['tanggal'] = '12312312312312';
+        $data['nomor_induk_bangunan'] = '12312312312312';
+        $data['milik'] = '12312312312312';
+        $data['alamat'] = '12312312312312';
+        $data['nama'] = '12312312312312';
+        $data['nip'] = '12312312312312';
+        $data['page_content'] = $this->load->view('sertif/sertifikat', $data , TRUE);
+
+        $this->load->view('sertif/sertifikat', $data);
+    }
 }
