@@ -31,17 +31,28 @@
                         <span>Pengajuan BGH Bangunan Baru</span>
                     </a>
                 </li>
-                <?php }else if($this->session->userdata('loc_role_id') != 10){
-                    ?>
-                    <li class="sidebar-item" id="bangunanbaru-menu">
+                <?php }else if($this->session->userdata('loc_role_id') != 10){ ?>
+                    <li class="sidebar-item <?= $page == 'bangunanbaru' ? 'active' : '' ?>" id="bangunanbaru-menu-">
                     <a href="<?= base_url('bgh/pengajuan/bangunanbaru') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
-                        <span>List BGH Bangunan Baru</span>
+                        <span>List Permohonan BGH</span>
+                    </a>
+                    <li class="sidebar-item <?= $page == 'h2m' ? 'active' : '' ?>" id="h2m-menu">
+                    <a href="<?= base_url('bgh/pengajuan/h2m') ?>" class="sidebar-link">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>List Permohonan BGH H2M</span>
+                    </a>
+                    <li class="sidebar-item  <?= $page == 'kawasanhijau' ? 'active' : '' ?>" id="hijau-menu">
+                    <a href="<?= base_url('bgh/pengajuan/kawasanhijau') ?>" class="sidebar-link">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>List Permohonan BGH kawasanan hijau </span>
                     </a>
                 </li>
                 <?php 
                 }
                 ?>
+
+                
                 <li class="sidebar-item" id="informasi-menu">
                     <a href="<?= base_url('bgh/informasi') ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
