@@ -1109,19 +1109,22 @@ class Pengajuan extends CI_Controller
         $this->load->view('layout', $data);
     }
 
-    function generatepdf()
+    function generatepdf($nomor = null)
     {
         $this->load->library('pdf');
         
         // title dari pdf
-        $this->data['title_pdf'] = 'Sertifikat';
+        $this->data['title_pdf'] = "Sertifikat BGH Nomor $nomor";
         
         // filename dari pdf ketika didownload
-        $file_pdf = 'laporan_penjualan_toko_kita';
+        $file_pdf = $nomor;
         // setting paper
         $paper = 'legal';
         //orientasi paper potrait / landscape
         $orientation = "landscape";
+
+        $permohonan = $this->db->get_where('t_permohonan_bgh', array('kode_bgh' => $nomor))->row();
+        
         $this->data['nomor_sertifikat'] = '12312312312312';
         $this->data['tanggal'] = '12312312312312';
         $this->data['nomor_induk_bangunan'] = '12312312312312';
@@ -1134,6 +1137,8 @@ class Pengajuan extends CI_Controller
         
         // run dompdf
         $this->pdf->generate($html, $file_pdf, $paper, $orientation);
+
+        redirect('/bgh/pengajuan/bangunanbaru');
     }
 
     public function sertifikat($kode = null)
