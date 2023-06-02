@@ -105,8 +105,10 @@
                                                                             echo '<span class="badge bg-info p-2">Pemeriksaan Dokumen</span>';
                                                                         } else if ($l->status == 2) {
                                                                             echo '<span class="badge bg-warning p-2">Perlu Direvisi</span>';
-                                                                        } else {
+                                                                        } else if ($l->status == 3) {
                                                                             echo '<span class="badge bg-success p-2">Sertifikat Terbit</span>';
+                                                                        } else if ($l->status == 4) {
+                                                                            echo '<span class="badge bg-danger p-2">Proses Banding</span>';
                                                                         }
                                                                     ?>
                                                                     </p>

@@ -32,11 +32,11 @@
                             <span class="float-end">
                                 <?php 
                                 if ($permohonan->kategori == "mandatory") {
-                                    if ($vfile == 0 && $vfilears == 0 && $vfilestruktur == 0 && $vfilemep == 0 && $permohonan->status != 3) {
+                                    if ($vfile == 0 && $vfilears == 0 && $vfilestruktur == 0 && $vfilemep == 0 && ($permohonan->status != 3 && $permohonan->status != 4)) {
                                         echo '<button class="btn btn-primary btn-sm verifikasipermohonan" data-id="' . $permohonan->id . '">Verifikasi Permohonan</button>';
                                     }
                                 } else {
-                                    if ($vfile == 0 && $permohonan->status != 3) {
+                                    if ($vfile == 0 && ($permohonan->status != 3 && $permohonan->status != 4)) {
                                         echo '<button class="btn btn-primary btn-sm verifikasipermohonan" data-id="' . $permohonan->id . '">Verifikasi Permohonan</button>';
                                     }
                                 }
@@ -524,10 +524,12 @@
             Swal.fire({
                 icon: 'info',
                 title: 'Yakin untuk verifikasi Permohonan ini ?',
-                showCancelButton: true,
+                // showCancelButton: true,
+                showDenyButton: true,
                 confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yakin'
+                denyButtonColor: '#d33',
+                confirmButtonText: 'Terima',
+                denyButtonText: 'Tolak'
             }).then((result) => {
                 if (result.isConfirmed) {
                     var id = $(this).data('id');
@@ -543,6 +545,27 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Verifikasi Berhasil'
+                            }).then((response) => {
+                                if (response.isConfirmed) {
+                                    window.location.href = "../bangunanbaru";
+                                }
+                            });
+                        }
+                    })
+                }else if (result.isDenied) {
+                    var id = $(this).data('id');
+                    $.ajax({
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            'id': id,
+                            'status': 4
+                        },
+                        url: '../verifikasipermohonan',
+                        success: function(result) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Permohonan Ditolak'
                             }).then((response) => {
                                 if (response.isConfirmed) {
                                     window.location.href = "../bangunanbaru";

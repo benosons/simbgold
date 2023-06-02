@@ -19,7 +19,17 @@ class Pengajuan extends CI_Controller
         } else {
             $data = array('page' => 'bangunanbaru');
         }
-        $list = $this->Pengajuan_model->get()->result();
+        
+        $role_id = $this->session->userdata('loc_role_id');
+        $kabkot_id = $this->session->userdata('loc_id_kabkot');
+
+        if($role_id == 11){
+            if($kabkot_id){
+                $where = "tmdatapemilik.id_kabkota = $kabkot_id";
+            }
+        }
+        
+        $list = $this->Pengajuan_model->get(@$where)->result();
         $data['list'] = $list;
         $data['page_content'] = $this->load->view('listbghbangunanbaru', $data, TRUE);
 
@@ -1174,13 +1184,14 @@ class Pengajuan extends CI_Controller
         $orientation = "landscape";
 
         $permohonan = $this->db->get_where('t_permohonan_bgh', array('kode_bgh' => $nomor))->row();
+        $pemilik = $this->db->get_where('tmdatapemilik', array('id' => $permohonan->id_pemilik))->row();
         
-        $this->data['nomor_sertifikat'] = '12312312312312';
-        $this->data['tanggal'] = '12312312312312';
+        $this->data['nomor_sertifikat'] = date("d/m/Y").'/BGH-001';
+        $this->data['tanggal'] = date("d/m/Y");
         $this->data['nomor_induk_bangunan'] = '12312312312312';
-        $this->data['milik'] = '12312312312312';
-        $this->data['alamat'] = '12312312312312';
-        $this->data['nama'] = '12312312312312';
+        $this->data['milik'] = $pemilik->nm_pemilik;
+        $this->data['alamat'] = $pemilik->alamat;
+        $this->data['nama'] = 'Pejabat';
         $this->data['nip'] = '12312312312312';
         
 		$html = $this->load->view('sertif/sertifikat', $this->data, true);	    
