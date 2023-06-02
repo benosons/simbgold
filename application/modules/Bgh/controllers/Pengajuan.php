@@ -33,7 +33,7 @@ class Pengajuan extends CI_Controller
         }
         $list = $this->Pengajuan_model->get()->result();
         $data['list'] = $list;
-        $data['page_content'] = $this->load->view('listbghbangunanbaru', $data, TRUE);
+        $data['page_content'] = $this->load->view('permohonanh2m', $data, TRUE);
         $this->load->view('layout', $data);
     }
     public function kawasanhijau($kode = null)
@@ -45,7 +45,7 @@ class Pengajuan extends CI_Controller
         }
         $list = $this->Pengajuan_model->get()->result();
         $data['list'] = $list;
-        $data['page_content'] = $this->load->view('listbghbangunanbaru', $data, TRUE);
+        $data['page_content'] = $this->load->view('permohonankawasanhijau', $data, TRUE);
         
         $this->load->view('layout', $data);
     }
