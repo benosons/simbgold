@@ -36,13 +36,10 @@
                                 if (isset($_GET['k'])) {
                                     $k=$_GET['k'];
                                 }
-
-                                if($permohonan->kategori == "mandatory"){
                             ?>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link <?= $k == 'pemilik' ? 'active' : '' ?>" id="pemilik-tab" data-bs-toggle="tab" href="#pemilik" role="tab" aria-controls="pemilik" aria-selected="true">Data Bangunan dan Pemilik</a>
+                                <a class="nav-link <?= $k == 'pemilik' ? 'active' : '' ?>" id="pemilik-tab" data-bs-toggle="tab" href="#pemilik" role="tab" aria-controls="pemilik" aria-selected="true">Data Bangunan <?= ($permohonan->kategori == "mandatory") ? 'dan Data Pemilik':''?></a>
                             </li>
-                            <?php } ?>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link <?= $k == 'home' ? 'active' : '' ?>" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Dokumen BGH</a>
                             </li>
@@ -156,11 +153,39 @@
                                         </div>
                                     </div>
                                 </div>
+                            <?php }else{ ?>
+                                <div class="tab-pane p-3 fade show <?= $k == 'pemilik' ? 'active' : '' ?>" id="pemilik" role="tabpanel" aria-labelledby="pemilik-tab">
+                                    <div class="row">
+                                        <h5>Data Bangunan </h5>
+                                        <div class="col-md-6">
+                                            <div class="card shadow">
+                                                <div class="card-header">
+                                                    <h6>Data Bangunan</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <table class="table table-borderless">
+                                                        <tr>
+                                                            <td width="40%">Kode BGH</td>
+                                                            <td width="3%">:</td>
+                                                            <td><?= $permohonan->kode_bgh ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="40%">Kode PBG</td>
+                                                            <td width="3%">:</td>
+                                                            <td><?= $permohonan->kode_pbg ?></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             <?php } ?>
                             <div class="tab-pane p-3 fade show <?= $k == 'home' ? 'active' : '' ?>" id="home" role="tabpanel" aria-labelledby="home-tab">
                                 <div class="row">
                                     <h5>Dokumen BGH</h5>
                                     <?php
+                                    $i = 1;
                                     foreach ($syarat as $s) {
                                         foreach ($file as $f) {
                                             if ($f->id_syarat_bgh == $s->id) {
@@ -184,6 +209,12 @@
                                                             <h6><?= $s->nama ?></h6>
                                                             <div class="row">
                                                                 <div class="col-6">
+                                                                    <?php 
+                                                                        if($i != 1){
+                                                                            echo "                                                                    <p>
+                                                                                Nilai : ".$f->nilai." ".$s->satuan."</p>";
+                                                                        }
+                                                                    ?>
                                                                     <a target="_blank" href="<?= base_url('assets/bgh/files/'.$permohonan->id.'/dokbgh/' . $f->file) ?>"><i class="fa fa-download"></i> Lihat File</a>
                                                                 </div>
                                                                 <div class="col-6">
@@ -215,7 +246,7 @@
                                                     </div>
                                                 </div>
                                     <?php }
-                                        }
+                                        $i++;}
                                     } ?>
                                 </div>
                             </div>

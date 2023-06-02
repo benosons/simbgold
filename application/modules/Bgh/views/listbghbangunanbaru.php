@@ -119,21 +119,27 @@
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
                                                                 <?php 
+                                                                if($l->kategori == "mandatory"){
                                                                     if($l->step >= 4){
                                                                         if($this->session->userdata('loc_role_id') == 10){
                                                                             echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbgh/'.$l->kode_bgh.'">Detail</a>';
                                                                         }else{
                                                                             echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbghverifikator/'.$l->kode_bgh.'">Detail</a>';
                                                                         }
-                                                                    }else{
-                                                                        if($this->session->userdata('loc_role_id') == 10){
-                                                                            if ($l->kategori == "mandatory") {
-                                                                                echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/mandatorybghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
-                                                                            }else{
-                                                                                echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/recommendedbghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
-                                                                            }
-                                                                        }
+                                                                    }else if($this->session->userdata('loc_role_id') == 10){
+                                                                        echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/mandatorybghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
                                                                     }
+                                                                }else {
+                                                                    if($l->step > 0){
+                                                                        if($this->session->userdata('loc_role_id') == 10){
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbgh/'.$l->kode_bgh.'">Detail</a>';
+                                                                        }else{
+                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/detailbghverifikator/'.$l->kode_bgh.'">Detail</a>';
+                                                                        }
+                                                                    }else{
+                                                                        echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/recommendedbghbaru/'.$l->kode_bgh.'">Lanjutkan Proses Pendaftaran</a>';
+                                                                    }
+                                                                }
 
                                                                     if($l->status == 3){
                                                                             echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/generatepdf/'.$l->kode_bgh.'">Unduh Sertifikat</a>';
