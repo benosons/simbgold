@@ -32,11 +32,11 @@
                             <span class="float-end">
                                 <?php 
                                 if ($permohonan->kategori == "mandatory") {
-                                    if ($vfile == 0 && $vfilears == 0 && $vfilestruktur == 0 && $vfilemep == 0 && ($permohonan->status != 3 && $permohonan->status != 4)) {
+                                    if ($vfile == 0 && $vfilears == 0 && $vfilestruktur == 0 && $vfilemep == 0 && ($permohonan->status != 3 && $permohonan->status != 4 && $this->session->userdata('loc_id_kabkot'))) {
                                         echo '<button class="btn btn-primary btn-sm verifikasipermohonan" data-id="' . $permohonan->id . '">Verifikasi Permohonan</button>';
                                     }
                                 } else {
-                                    if ($vfile == 0 && ($permohonan->status != 3 && $permohonan->status != 4)) {
+                                    if ($vfile == 0 && ($permohonan->status != 3 && $permohonan->status != 4 && $this->session->userdata('loc_id_kabkot'))) {
                                         echo '<button class="btn btn-primary btn-sm verifikasipermohonan" data-id="' . $permohonan->id . '">Verifikasi Permohonan</button>';
                                     }
                                 }
@@ -70,6 +70,11 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link <?= $k == 'mep' ? 'active' : '' ?>" id="mep-tab" data-bs-toggle="tab" href="#mep" role="tab" aria-controls="mep" aria-selected="false">Dokumen MEP</a>
+                            </li>
+                            <?php } ?>
+                            <?php if($permohonan->status == 4){ ?>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link <?= $k == 'mep' ? 'active' : '' ?>" id="mep-tab" data-bs-toggle="tab" href="#banding" role="tab" aria-controls="mep" aria-selected="false">Data Banding</a>
                             </li>
                             <?php } ?>
                         </ul>
@@ -337,6 +342,59 @@
                             <div class="tab-pane p-3 fade show <?= $k == 'mep' ? 'active' : '' ?>" id="mep" role="tabpanel" aria-labelledby="mep-tab">
                                 <div class="row">
                                     <h5>Dokumen MEP</h5>
+                                    <?php
+                                    foreach ($smep as $sm) {
+                                        foreach ($filemep as $fm) {
+                                            if ($fm->id_syarat_bgh == $sm->id) {
+                                    ?>
+                                                <div class="col-md-4">
+                                                    <div class="card shadow">
+                                                    <div class="card-header">
+                                                        <?php 
+                                                            if ($fm->verifikasi == 1 && $fm->new == 0) {
+                                                                echo '<span class="badge bg-danger p-1" style="white-space:normal !important;">Perlu Revisi</span>';
+                                                            }else if($fm->verifikasi == 1 && $fm->new == 1){
+                                                                echo '<span class="badge bg-warning p-1" style="white-space:normal !important;">Telah Diperbaiki</span>';
+                                                            }else if($fm->verifikasi == 0 && $fm->new == 0){
+                                                                echo '<span class="badge bg-primary p-1" style="white-space:normal !important;">Perlu Tinjauan</span>';
+                                                            } else if($fm->verifikasi == 2){
+                                                                echo '<span class="badge bg-success p-1" style="white-space:normal !important;"><i class="fa fa-check me-1"></i>Terverifikasi</span>';
+                                                            }
+                                                        ?>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <h6><?= $sm->nama ?></h6>
+                                                            <a href="<?= base_url('assets/bgh/files/'.$permohonan->id.'/dokmep/' . $fm->file) ?>" target="_blank"><i class="fa fa-download"></i> Lihat File</a>
+                                                            <small class="text-muted d-block"><em>Last Updated : <?= $fm->update_date ?></em></small>
+                                                        </div>
+                                                        <?php if ($fm->verifikasi == 0) { ?>
+                                                            <div class="card-footer">
+                                                                <a href="javascript:void(0)" class="d-block revisidokumen" data-url="revisidokumen/4/<?= $fm->id ?>/<?= $permohonan->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-edit"></i> Revisi Dokumen ini</a>
+                                                                <a href="javascript:void(0)" class="d-block verifikasidokumen" data-url="verifikasidokumen/4/<?= $fm->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-check"></i> Verifikasi Dokumen ini</a>
+                                                            </div>
+                                                        <?php } else if ($fm->verifikasi == 1) { ?>
+                                                            <div class=" card-footer">
+                                                                <a href="javascript:void(0)" class="d-block verifikasidokumen" data-url="verifikasidokumen/4/<?= $fm->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-check"></i> Verifikasi Dokumen ini</a>
+                                                                <a href="javascript:void(0)" class="d-block revisidokumen" data-url="revisidokumen/4/<?= $fm->id ?>/<?= $permohonan->id ?>/<?= $permohonan->kode_bgh ?>"><i class="fa fa-edit"></i>Edit Revisi</a>
+                                                                Catatan Revisi :
+                                                                <p>
+                                                                    <?= $fm->catatan ?>
+                                                                </p>
+                                                                <small class="text-muted">
+                                                                Waktu Revisi : <?= date('d-m-Y H:i', strtotime($fm->date_catatan)) ?> WIB
+                                                                </small>
+                                                            </div>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                    <?php }
+                                        }
+                                    } ?>
+                                </div>
+                            </div>
+                            <div class="tab-pane p-3 fade show <?= $k == 'banding' ? 'active' : '' ?>" id="banding" role="tabpanel" aria-labelledby="mep-tab">
+                                <div class="row">
+                                    <h5>Data dan Dokumen Banding</h5>
                                     <?php
                                     foreach ($smep as $sm) {
                                         foreach ($filemep as $fm) {
