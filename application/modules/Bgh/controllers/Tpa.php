@@ -15,9 +15,17 @@ class Tpa extends CI_Controller
         $data = array('page' => 'tpa');
         
         $data['tpa'] = $this->Tpa_model->get()->result();
-        $data['page_content'] = $this->load->view('tpa', $data, TRUE);
+        $data['content'] = $this->load->view('tpa/listtpa', $data, TRUE);
 
-        $this->load->view('layout', $data);
+        $this->load->view('layouts', $data);
+    }
+
+    public function gettpa()
+    {
+        $params = $this->input->get();
+        $data = $this->Tpa_model->getdata($params);
+
+        echo json_encode($data);
     }
 
     public function detail()

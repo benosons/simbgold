@@ -10,14 +10,20 @@ class Dashboard extends CI_Controller
 		$this->load->library('mypagination' );
 		$this->load->library('simbg_lib');
 		$this->load->helper(array('form', 'url'));
-		$this->simbg_lib->check_session_login();
+		// $this->simbg_lib->check_session_login();
+        $session_login 	= $this->session->userdata('loc_login');
+        if($session_login != TRUE)
+        {
+            redirect('Front');
+        }
 	}
     
     public function index()
     {
         $data['page'] = 'dashboard';
-        $data['page_content'] = $this->load->view('dashboard', $data, TRUE);
+        $data['content'] = $this->load->view('dashboard', $data, TRUE);
 
-        $this->load->view('layout', $data);
+        $this->load->view('layouts', $data);
+        // $this->load->view('layouts');
     }
 }

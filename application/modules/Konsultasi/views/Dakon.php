@@ -180,7 +180,7 @@
 			<div class="row">
 				<div class="col-md-12">
 				<h4>Data Permohonan PBG Anda Memerlukan Permohonan BGH <br> Terlebih Dahulu</h4>
-				<a href="https://bios-studio.com/bgh/pengajuan/mandatorybghbaru" class="btn btn-primary">AJukan Permohonan BGH</a>
+				<a href="<?= base_url()?>bgh/pengajuan/mandatorybghbaru" class="btn btn-primary">AJukan Permohonan BGH</a>
 				</div>
 			</div>
 		</div>

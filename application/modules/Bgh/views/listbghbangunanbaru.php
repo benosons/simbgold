@@ -143,9 +143,11 @@
                                                                     }
                                                                 }
 
-                                                                    if($l->status == 3){
-                                                                            echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/generatepdf/'.$l->kode_bgh.'">Unduh Sertifikat</a>';
-                                                                    }
+                                                                if($l->status == 3){
+                                                                        echo '<a class="dropdown-item" href="'.base_url().'bgh/pengajuan/generatepdf/'.$l->kode_bgh.'">Unduh Sertifikat</a>';
+                                                                }else if($l->status == 4){
+                                                                    echo '<a class="dropdown-item banding" href="javascript:;">Lakukan Banding</a>';
+                                                                }
                                                                 ?>
                                                             </div>
                                                         </td>
@@ -484,5 +486,9 @@
     $(function(){
         $('#bangunanbaru-menu').addClass('active');
         $('#table1').DataTable();
+
+        $(document).on('click','.banding', function(){
+            $('#border-less').modal('show');
+        })
     })
 </script>
