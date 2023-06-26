@@ -385,24 +385,21 @@ class BangunanBaru extends CI_Controller
 
     // public function coba()
     // {
-    //     $permohonan = $this->bgbarumodel->get(array('t_permohonan_bgh.id' => 26))->row();
-    //     echo $permohonan->id;
-    //     $dok = $this->db->get_where('t_checklist_dokumen', array('id'=>5))->row();
-    //     print_r($dok);
-    //     $dataa = array(
-    //         'id_permohonan' => 26,
-    //         'id_sub' => 0,
-    //         'id_sub_sub' => 1,
-    //         'id_dokumen' => 5,
+    //     $data = array(
+    //         'id_permohonan' =>26,
+    //         'id_sub_upload'=> 0,
+    //         'id_sub_sub_upload'=> 1,
+    //         'id_dokumen'=> 1,
     //         'nama_file' => "43634634634.pdf",
     //         'path' => './assets/bgh/files/perencanaan/',
     //         'sesuai' => 0,
-    //         'catatan' => "0",
+    //         'catatan' => 0,
     //         'poin_assesment' => 0,
     //         'assesment_by' => 0,
-    //         'create_by' =>1,
+    //         'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
     //     );
-    //     echo $this->db->insert('t_checklist_file',$dataa);
+    //     print_r($data);
+    //     $cek = $this->db->insert('t_checklist_upload',$data);
     // }
 
     public function getkabkot()
