@@ -366,7 +366,6 @@ class BangunanBaru extends CI_Controller
         );
         print_r($data);
         $cek = $this->db->insert('t_checklist_upload',$data);
-        echo $cek;
     }
 
     public function getkabkot()
