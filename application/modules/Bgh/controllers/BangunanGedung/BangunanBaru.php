@@ -364,7 +364,8 @@ class BangunanBaru extends CI_Controller
             if ($saveupload) {
                 $response = array(
                     'code' => 1,
-                    'msg' => 'Upload File Berhasil'
+                    'msg' => 'Upload File Berhasil',
+                    'accord' => $params->head
                 );
                 echo json_encode($response);
             }else{

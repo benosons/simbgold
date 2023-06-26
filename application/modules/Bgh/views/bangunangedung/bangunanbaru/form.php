@@ -35,7 +35,7 @@
                                     <strong><?= $alp[$i] . '. ' . $checklist[$i]['nama'] ?> | Poin Tersedia : <?= $checklist[$i]['poin'] ?> | Poin Diajukan : <?= $poindiajukan ?> </strong>
                                 </button>
                             </h2>
-                            <div id="collapse-<?= $checklist[$i]['id'] ?>" class="accordion-collapse collapse <?= ($i > 0) ? '' : 'show' ?>" data-bs-parent="#accordion-example">
+                            <div id="collapse-<?= $checklist[$i]['id'] ?>" class="accordion-collapse collapse <?php if(isset($_GET['accord'])){ if($_GET['accord'] == $alp[$i]){ echo 'show'; } } ?>" data-bs-parent="#accordion-example">
                                 <div class="accordion-body pt-0">
                                     <?php 
                                         for ($j = 0; $j < count($checklist[$i]['main']); $j++) { 
@@ -102,7 +102,7 @@
                                                                                             <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
                                                                                         </svg>
                                                                                     <?php }else{ ?>
-                                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsub ?>,<?= $idsub?>, 0)" title="Upload">
+                                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsub ?>,<?= $idsub?>, 0, '<?= $alp[$i] ?>')" title="Upload">
                                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
                                                                                             <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
                                                                                         </svg>
@@ -184,7 +184,7 @@
                                                                                             <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
                                                                                         </svg>
                                                                                     <?php }else{ ?>
-                                                                                        <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>, 0, <?= $idsubsub?>)" title="Upload" data-id="<?= $iddok ?>">
+                                                                                        <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>, 0, <?= $idsubsub?>,'<?= $alp[$i] ?>')" title="Upload" data-id="<?= $iddok ?>">
                                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
                                                                                                 <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
                                                                                             </svg>
@@ -235,6 +235,7 @@
                 <input type="text" id="poin_diajukan" hidden>
                 <input type="text" id="id_sub" hidden>
                 <input type="text" id="id_sub_sub" hidden>
+                <input type="text" id="head" hidden>
                 <button type="button" id="subm" class="btn btn-success">Upload
                     <div class="spinner-border spinner-border-sm text-white d-none ms-3" id="loaderupload" role="status"></div>
                 </button>
@@ -474,6 +475,7 @@
                 formData.append('id_dokumen', $('#id_dokumen').val());
                 formData.append('id_sub', $('#id_sub').val());
                 formData.append('id_sub_sub', $('#id_sub_sub').val());
+                formData.append('head', $('#head').val());
                 uploading(formData);
             }
         });
@@ -555,11 +557,12 @@
 
     }
 
-    function openmodal(id_dokumen, poin_diajukan, id_sub, id_sub_sub) {
+    function openmodal(id_dokumen, poin_diajukan, id_sub, id_sub_sub, head) {
         $('#id_dokumen').val(id_dokumen);
         $('#poin_diajukan').val(poin_diajukan);
         $('#id_sub').val(id_sub);
         $('#id_sub_sub').val(id_sub_sub);
+        $('#head').val(head);
         var myModal = new bootstrap.Modal(document.getElementById('modal-small'), {
             keyboard: false,
             backdrop: false
@@ -582,7 +585,7 @@
             success: function(response) {
                 $('#loaderupload').addClass('d-none');
                 if (response.code === 1) {
-                    location.reload();
+                    window.location.href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/penilaian/<?= $permohonan->kode_bgh ?>?accord="+response.accord;
                 }
             },
             error: function(xhr, status, error) {
