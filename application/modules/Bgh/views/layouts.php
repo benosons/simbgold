@@ -25,7 +25,7 @@
     <script src="<?= base_url() ?>assets/bgh/dist/js/demo.min.js" defer></script>
 
   </head>
-  <body >
+  <body class="layout-fluid">
     <script src="<?= base_url() ?>assets/bgh/dist/js/demo-theme.min.js"></script>
     <div class="page">
       <?= $this->load->view('static/header') ?> 
