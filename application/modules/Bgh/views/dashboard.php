@@ -91,8 +91,246 @@
               </div>
             </div>
           </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M18 11l-6 -6" /><path d="M6 11l6 -6" /></svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium">
+                    <?= number_format(rand(99999999,2)) ?>
+                      <span class="float-right font-weight-medium text-green">+4%</span>
+                    </div>
+                    <div class="text-muted">
+                      Penghematan Energi
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M18 11l-6 -6" /><path d="M6 11l6 -6" /></svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium">
+                    <?= number_format(rand(99999999,2)) ?>
+                      <span class="float-right font-weight-medium text-green">+4%</span>
+                    </div>
+                    <div class="text-muted">
+                      Penghematan Air
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="bg-green-lt avatar"><!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M18 11l-6 -6" /><path d="M6 11l6 -6" /></svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium">
+                    <?= number_format(rand(99999999,2)) ?>
+                      <span class="float-right font-weight-medium text-green">+4%</span>
+                    </div>
+                    <div class="text-muted">
+                      Pengurangan Emisi CO2
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <?php 
+            if($this->session->userdata('loc_role_id') != 10){
+          ?>
+      <div class="col-12">
+        <div class="row row-cards">
+          <h4>Rekapitulasi Permohonan BGH Bangunan Gedung</h4>
+          <div class="col-md-6 col-xl-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="bg-success text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
+                        <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+                        <path d="M10 14h4"></path>
+                        <path d="M12 12v4"></path>
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium">
+                      <?= rand(100, 555) ?>
+                    </div>
+                    <div class="text-muted">
+                      Jumlah Permohonan Yang Masuk
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="bg-warning text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
+                          <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+                          <path d="M9 14l2 2l4 -4"></path>
+                        </svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium">
+                      <?= rand(50, 400) ?>
+                    </div>
+                    <div class="text-muted">
+                      Jumlah Permohonan Yang Diverifikasi
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="bg-secondary text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
+                          <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+                          <path d="M9 14l2 2l4 -4"></path>
+                        </svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium">
+                      <?= rand(50, 400) ?>
+                    </div>
+                    <div class="text-muted">
+                      Jumlah Permohonan Yang Ditolak
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="row row-cards">
+          <h4>Rekapitulasi Permohonan BGH Lingkungan (Hunian Hijau Masyarakat dan Kawasan Hijau)</h4>
+          <div class="col-md-6 col-xl-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="bg-success text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
+                        <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+                        <path d="M10 14h4"></path>
+                        <path d="M12 12v4"></path>
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium">
+                      <?= rand(100, 555) ?>
+                    </div>
+                    <div class="text-muted">
+                      Jumlah Permohonan Yang Masuk
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="bg-warning text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
+                          <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+                          <path d="M9 14l2 2l4 -4"></path>
+                        </svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium">
+                      <?= rand(50, 400) ?>
+                    </div>
+                    <div class="text-muted">
+                      Jumlah Permohonan Yang Diverifikasi
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="card card-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="bg-secondary text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
+                          <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+                          <path d="M9 14l2 2l4 -4"></path>
+                        </svg>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <div class="font-weight-medium">
+                      <?= rand(50, 400) ?>
+                    </div>
+                    <div class="text-muted">
+                      Jumlah Permohonan Yang Ditolak
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <?php } ?>
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">

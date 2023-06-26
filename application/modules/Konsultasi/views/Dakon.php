@@ -159,7 +159,7 @@
 					</div>
 					<div class="col-sm-12">
 						<div class="top-news">
-							<a href="https://bios-studio.com/bgh/pengajuan/recommendedbghbaru" class="btn blue">
+							<a href="<?= base_url() ?>Bgh/Dashboard" class="btn blue">
 								<span>Permohonan Bangunan Gedung Hijau</span>
 							</a>
 						</div>
@@ -174,14 +174,23 @@
 	</div>
 </div>
 
-<div class="modal fade" id="modal-bgh" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-body">
-			<div class="row">
-				<div class="col-md-12">
-				<h4>Data Permohonan PBG Anda Memerlukan Permohonan BGH <br> Terlebih Dahulu</h4>
-				<a href="<?= base_url()?>bgh/pengajuan/mandatorybghbaru" class="btn btn-primary">AJukan Permohonan BGH</a>
+<div class="modal fade modal-lg" id="modal-bgh" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 500px !important;">
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-12">
+				<h4>
+					Data yang anda masukan memerlukan sertifikasi BGH
+				</h4>
+				<div class="form-group">
+					<label for="" class="form-control-label">Silahkan Masukan Nomor Sertifikat BGH Anda</label>
+					<input type="text" class="form-control">
 				</div>
+				<button class="btn btn-primary btn-sm" id="btn-sub-bgh" data-dismiss="modal">Submit</button>
+				<h6 class="text-center">Atau</h6>
+				<div class="text-center">
+					<a href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/permohonan" class="link-primary text-primary">AJukan Permohonan BGH</a>
+				</div>
+				
 			</div>
 		</div>
 	</div>
