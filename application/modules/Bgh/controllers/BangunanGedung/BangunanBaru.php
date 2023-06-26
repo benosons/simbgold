@@ -12,7 +12,7 @@ class BangunanBaru extends CI_Controller
         $this->load->helper(array('form', 'url'));
         // $this->simbg_lib->check_session_login();
         $this->load->model('checklist_model');
-        $this->load->model('bgbarumodelgit ');
+        $this->load->model('bgbarumodel');
         $session_login     = $this->session->userdata('loc_login');
         if ($session_login != TRUE) {
             redirect('Front');
@@ -152,6 +152,7 @@ class BangunanBaru extends CI_Controller
             $row['kode'] = (!empty($h->kode) ? $h->kode : "");
             $row['nama'] = (!empty($h->nama) ? $h->nama : "");
             $row['poin'] = (!empty($h->poin) ? $h->poin : "");
+            $row['poindiajukan'] = 0;
 
             $getmain = $this->checklist_model->getmain(array('id_head' => $h->id))->result();
             $main = array();
@@ -173,7 +174,6 @@ class BangunanBaru extends CI_Controller
                     $row2['poin'] = (!empty($s->poin) ? $s->poin : "");
                     $row2['pilihan'] = (!empty($s->pilihan) ? $s->pilihan : "0");
                     $row2['dokumen'] = (!empty($s->dokumen) ? $s->dokumen : "0");
-
                     if ($s->dokumen == 0) {
                         $getsubsub = $this->checklist_model->getsubsub(array('id_sub' => $s->id))->result();
                         $subsub = array();
@@ -186,13 +186,30 @@ class BangunanBaru extends CI_Controller
                             $row3['pilihan'] = (!empty($ss->pilihan) ? $ss->pilihan : "0");
                             $row3['poin'] = (!empty($ss->poin) ? $ss->poin : "");
                             $row3['dokumen'] = (!empty($ss->dokumen) ? $ss->dokumen : "0");
-
+                            $getambils = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_sub_sub' => $ss->id))->num_rows();
+                            if ($getambils > 0) {
+                                $row3['ambil'] = 1;
+                            }else{
+                                $row3['ambil'] = 0;
+                            }
                             $getdok = $this->checklist_model->getdok(array('id_sub_sub_dok' => $ss->id))->result();
+                            if ((count($getdok) == $getambils) && (!empty($getdok))) {
+                                $row3['poinambil'] = $ss->poin;
+                                $row['poindiajukan'] += $ss->poin;
+                            }else{
+                                $row3['poinambil'] = 0;
+                            }
                             $dok = array();
                             foreach ($getdok as $d) {
                                 $row4 = array();
                                 $row4['id'] = (!empty($d->id) ? $d->id : "");
                                 $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
+                                $getfile = $this->checklist_model->getfile(array('id_dokumen'=>$d->id))->row();
+                                if (!empty($getfile)) {
+                                    $row4['isupload'] = 1;
+                                }else{
+                                    $row4['isupload'] = 0;
+                                }
 
                                 array_push($dok, $row4);
                             }
@@ -202,13 +219,31 @@ class BangunanBaru extends CI_Controller
                         }
                         $row2['subsub'] = $subsub;
                     } else {
-                        $getdok = $this->checklist_model->getdok(array('id_sub' => $s->id))->result();
+                        $getambil = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_sub' => $s->id))->num_rows();
+                        if ($getambil > 0) {
+                            $row2['ambil'] = 1;
+                        }else{
+                            $row2['ambil'] = 0;
+                        }
+                        $getdok = $this->checklist_model->getdok(array('id_sub_dok' => $s->id))->result();
+
+                        if ((count($getdok) == $getambil) && (!empty($getdok))) {
+                            $row2['poinambil'] = $s->poin;
+                            $row['poindiajukan'] += $s->poin;
+                        }else{
+                            $row2['poinambil'] = 0;
+                        }
                         $dok = array();
                         foreach ($getdok as $d) {
                             $row4 = array();
                             $row4['id'] = (!empty($d->id) ? $d->id : "");
                             $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
-
+                            $getfile = $this->checklist_model->getfile(array('id_permohonan'=> $permohonan->id,'id_dokumen'=>$d->id))->row();
+                            if (!empty($getfile)) {
+                                $row4['isupload'] = 1;
+                            }else{
+                                $row4['isupload'] = 0;
+                            }
                             array_push($dok, $row4);
                         }
                         $row2['dok'] = $dok;
@@ -324,21 +359,21 @@ class BangunanBaru extends CI_Controller
                 'path' => $destination,
                 'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
             );
-            echo json_encode($this->bgbarumodel->saveuploading($data));
+            $saveupload = $this->bgbarumodel->savingupload($data);
 
-            // if ($saveupload) {
-            //     $response = array(
-            //         'code' => 1,
-            //         'msg' => 'Upload File Berhasil'
-            //     );
-            //     echo json_encode($response);
-            // }else{
-            //     $response = array(
-            //         'code' => 0,
-            //         'msg' => 'Gagal Menyimpan Data, Silahkan Coba Lagi Nanti'
-            //     );
-            //     echo json_encode($data);
-            // }
+            if ($saveupload) {
+                $response = array(
+                    'code' => 1,
+                    'msg' => 'Upload File Berhasil'
+                );
+                echo json_encode($response);
+            }else{
+                $response = array(
+                    'code' => 0,
+                    'msg' => 'Gagal Menyimpan Data, Silahkan Coba Lagi Nanti'
+                );
+                echo json_encode($data);
+            }
         } else {
             $response = array(
                 'code' => 0,
@@ -348,25 +383,27 @@ class BangunanBaru extends CI_Controller
         }
     }
 
-    public function coba()
-    {
-        $data = array(
-            'id_permohonan' => 26,
-            'id_sub_upload' => 0,
-            'id_sub_sub_upload' => 1,
-            'id_dokumen' => 1,
-            'nama_file' => "43634634634.pdf",
-            'path' => './assets/bgh/files/perencanaan/',
-            'sesuai' => 0,
-            'catatan' => 0,
-            'poin_assesment' => 0,
-            'assesment_by' => 0,
-            'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
-        );
-        print_r($data);
-        $cek = $this->db->insert('t_checklist_upload', $data);
-        echo $cek;
-    }
+    // public function coba()
+    // {
+    //     $permohonan = $this->bgbarumodel->get(array('t_permohonan_bgh.id' => 26))->row();
+    //     echo $permohonan->id;
+    //     $dok = $this->db->get_where('t_checklist_dokumen', array('id'=>5))->row();
+    //     print_r($dok);
+    //     $dataa = array(
+    //         'id_permohonan' => 26,
+    //         'id_sub' => 0,
+    //         'id_sub_sub' => 1,
+    //         'id_dokumen' => 5,
+    //         'nama_file' => "43634634634.pdf",
+    //         'path' => './assets/bgh/files/perencanaan/',
+    //         'sesuai' => 0,
+    //         'catatan' => "0",
+    //         'poin_assesment' => 0,
+    //         'assesment_by' => 0,
+    //         'create_by' =>1,
+    //     );
+    //     echo $this->db->insert('t_checklist_file',$dataa);
+    // }
 
     public function getkabkot()
     {

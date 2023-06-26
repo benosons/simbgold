@@ -205,9 +205,8 @@ class Bgbarumodel extends CI_Model
         return $where['id'];
     }
 
-    public function saveuploading($data)
+    public function savingupload($data)
     {
-        $query = $this->db->insert('t_checklist_upload', $data);
-        return $query;
+        return $this->db->insert('t_checklist_file',$data);
     }
 }

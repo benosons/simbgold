@@ -36,4 +36,11 @@ class Checklist_model extends CI_Model
         $q = $this->db->get('t_checklist_dokumen');
         return $q;
     }
+
+    public function getfile($where)
+    {
+        $this->db->where($where);
+        $q = $this->db->get('t_checklist_file');
+        return $q;
+    }
 }
