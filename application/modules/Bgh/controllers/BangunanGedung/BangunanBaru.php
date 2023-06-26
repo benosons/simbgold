@@ -6,19 +6,18 @@ class BangunanBaru extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-		$this->load->helper('utility');
-		$this->load->library('mypagination' );
-		$this->load->library('simbg_lib');
-		$this->load->helper(array('form', 'url'));
-		// $this->simbg_lib->check_session_login();
+        $this->load->helper('utility');
+        $this->load->library('mypagination');
+        $this->load->library('simbg_lib');
+        $this->load->helper(array('form', 'url'));
+        // $this->simbg_lib->check_session_login();
         $this->load->model('checklist_model');
-        $session_login 	= $this->session->userdata('loc_login');
-        if($session_login != TRUE)
-        {
+        $session_login     = $this->session->userdata('loc_login');
+        if ($session_login != TRUE) {
             redirect('Front');
         }
-	}
-    
+    }
+
     public function index()
     {
         $data['page'] = 'dashboard';
@@ -43,7 +42,7 @@ class BangunanBaru extends CI_Controller
 
             $getmain = $this->checklist_model->getmain(array('id_head' => $h->id))->result();
             $main = array();
-            foreach($getmain as $m){
+            foreach ($getmain as $m) {
                 $row1 = array();
                 $row1['id'] = (!empty($m->id) ? $m->id : "");
                 $row1['kode'] = (!empty($m->kode) ? $m->kode : "");
@@ -78,14 +77,14 @@ class BangunanBaru extends CI_Controller
                                 $row4['id'] = (!empty($d->id) ? $d->id : "");
                                 $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
 
-                                array_push($dok,$row4);
+                                array_push($dok, $row4);
                             }
                             $row3['dok'] = $dok;
 
-                            array_push($subsub,$row3);
+                            array_push($subsub, $row3);
                         }
                         $row2['subsub'] = $subsub;
-                    }else{
+                    } else {
                         $getdok = $this->checklist_model->getdok(array('id_sub' => $s->id))->result();
                         $dok = array();
                         foreach ($getdok as $d) {
@@ -93,16 +92,16 @@ class BangunanBaru extends CI_Controller
                             $row4['id'] = (!empty($d->id) ? $d->id : "");
                             $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
 
-                            array_push($dok,$row4);
+                            array_push($dok, $row4);
                         }
                         $row2['dok'] = $dok;
                     }
 
-                    array_push($sub,$row2);
+                    array_push($sub, $row2);
                 }
                 $row1['sub'] = $sub;
 
-                array_push($main,$row1);
+                array_push($main, $row1);
             }
 
             $row['main'] = $main;
