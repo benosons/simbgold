@@ -152,7 +152,15 @@ class Bgbarumodel extends CI_Model
         //         $query = $this->db->query("select * from $param $where order by id desc LIMIT " . $length . " OFFSET " . $start)->result();
         //     }
         // }
-        $query = $this->db->query("select * from t_permohonan_bgh order by id desc LIMIT " . $length . " OFFSET " . $start)->result();
+        if($this->session->userdata('loc_role_id') == 10)
+        {
+            $where = 'WHERE t_permohonan_bgh.create_by="'.$this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')).'"';
+        }else if($this->session->userdata('loc_role_id') == 11){
+            $where = 'WHERE t_permohonan_bgh.status > 0';
+        }else if($this->session->userdata('loc_role_id') == 17){
+            $where = 'WHERE t_permohonan_bgh.id_tpa LIKE "%'.$this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')).'%"';
+        }
+        $query = $this->db->query("select *, t_permohonan_bgh.id as id_permohonan, tmdatapemilik.id as id_pemilik from t_permohonan_bgh JOIN tmdatapemilik ON t_permohonan_bgh.id_pemilik = tmdatapemilik.id $where order by t_permohonan_bgh.id desc LIMIT " . $length . " OFFSET " . $start)->result();
         return $query;
     }
 
@@ -170,6 +178,13 @@ class Bgbarumodel extends CI_Model
         return $query->num_rows();
     }
 
+    public function gettpa($where)
+    {
+        $this->db->where($where);
+        $q = $this->db->get('t_tpa');
+        return $q;
+    }
+
     public function insertpermohonan($data)
     {
         $this->db->insert('t_permohonan_bgh', $data);
@@ -181,6 +196,13 @@ class Bgbarumodel extends CI_Model
         $this->db->where($where);
         $query = $this->db->update('t_permohonan_bgh', $data);
         return $where['id'];
+    }
+
+    public function updatestatuspermohonan($data, $where)
+    {
+        $this->db->where($where);
+        $query = $this->db->update('t_permohonan_bgh', $data);
+        return $query;
     }
 
 
@@ -209,4 +231,33 @@ class Bgbarumodel extends CI_Model
     {
         return $this->db->insert('t_checklist_file',$data);
     }
+
+    public function updatefile($data,$where)
+    {
+        $this->db->where($where);
+        $q = $this->db->update('t_checklist_file', $data);
+        return $q;
+    }
+
+    public function getambil($where)
+    {
+        $this->db->where($where);
+        $q = $this->db->get('t_checklist_ambil');
+        return $q;
+    }
+
+    public function insertambil($data)
+    {
+        $q = $this->db->insert('t_checklist_ambil', $data);
+        return $q;
+    }
+
+    public function updateambil($data, $where)
+    {
+        $this->db->where($where);
+        $q = $this->db->update('t_checklist_ambil', $data);
+        return $q;
+    }
+    
 }
+

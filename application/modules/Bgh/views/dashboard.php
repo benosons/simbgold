@@ -103,7 +103,7 @@
                   <div class="col">
                     <div class="font-weight-medium">
                     <?= number_format(rand(99999999,2)) ?>
-                      <span class="float-right font-weight-medium text-green">+4%</span>
+                      <span class="float-right font-weight-medium text-green">kWh/Tahun</span>
                     </div>
                     <div class="text-muted">
                       Penghematan Energi
@@ -125,7 +125,7 @@
                   <div class="col">
                     <div class="font-weight-medium">
                     <?= number_format(rand(99999999,2)) ?>
-                      <span class="float-right font-weight-medium text-green">+4%</span>
+                      <span class="float-right font-weight-medium text-green">m<sup>3</sup>/Tahun</span>
                     </div>
                     <div class="text-muted">
                       Penghematan Air
@@ -147,10 +147,10 @@
                   <div class="col">
                     <div class="font-weight-medium">
                     <?= number_format(rand(99999999,2)) ?>
-                      <span class="float-right font-weight-medium text-green">+4%</span>
+                      <span class="float-right font-weight-medium text-green">Ton/Tahun</span>
                     </div>
                     <div class="text-muted">
-                      Pengurangan Emisi CO2
+                      Pengurangan Emisi CO<sub>2</sub>
                     </div>
                   </div>
                 </div>

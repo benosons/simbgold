@@ -17,6 +17,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
+                    <?php if($this->session->userdata('loc_role_id') == 10){ ?>
                     <a href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan" class="btn btn-teal btn-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-rounded-plus-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -24,9 +25,10 @@
                         </svg>
                         Ajukan Permohonan
                     </a>
+                    <?php } ?>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <!-- <div class="table-responsive"> -->
                         <table class="table card-table table-vcenter text-nowrap datatable" id="table">
                             <thead>
                                 <tr>
@@ -41,7 +43,7 @@
                                 
                             </tbody>
                         </table>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>
@@ -49,15 +51,173 @@
   </div>
 </div>
 
+<div class="modal modal-blur fade" id="modalpenugasan" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="table-tpa">
+                        <thead>
+                            <th></th>
+                            <th>Nama</th>
+                            <th>Alamat</th>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
+                <input type="text" id="id_permohonan" hidden>
+                <button type="button" id="subm" class="btn btn-success">Simpan
+                    <div class="spinner-border spinner-border-sm text-white d-none ms-3" id="loaderupload" role="status"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="<?= base_url() ?>assets/bgh/dist/libs/jQuery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="<?= base_url() ?>assets/bgh/dist/libs/DataTables-1.13.4/js/datatables.min.js"></script>
 
 <script>
+    let role = "<?= $role ?>";
     $(() => {
         $('#menu-bangunan').addClass('active');
         $('#table').DataTable();
 
         loaddata();
+
+        $(document).on('click','.penugasantpa', function()
+        {
+            var id_permohonan = $(this).data('permohonan');
+            var provinsi = $(this).data('provinsi');
+            var kabkota = $(this).data('kabkota');
+            penugasantpa(id_permohonan, provinsi, kabkota);
+        })
+
+        $('#subm').click(function(){
+            var pilihantpa = [];
+            
+            if ($('input[type="checkbox"]:checked').length > 0) {
+                $('input[type="checkbox"]:checked').each(function(){
+                    pilihantpa.push($(this).val());
+                })
+    
+                $.ajax({
+                    type:'post',
+                    dataType:'json',
+                    data:{pilihantpa:pilihantpa, id_permohonan:$('#id_permohonan').val()},
+                    url:'<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/penugasantpa',
+                    success:function(response){
+                        alert('Berhasil');
+                        location.reload();
+                    }
+                    
+                })
+            }else{
+                alert('Tidak Ada Yang Dipilih');
+            }
+
+        })
+
+        function penugasantpa(id_permohonan,id_provinsi, id_kabkota)
+        {
+            var myModal = new bootstrap.Modal(document.getElementById('modalpenugasan'), {
+                keyboard: false,
+                backdrop: false
+            })
+            myModal.show();
+            $('#id_permohonan').val(id_permohonan);
+            gettpa(id_provinsi, id_kabkota);
+        }
+
+        function gettpa(id_provinsi, id_kabkota) {
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/gettpa",
+                data: {
+                    id_provinsi: id_provinsi,
+                    id_kabkota : id_kabkota
+                },
+                success: function (result) {
+                    let data = result.data;
+                    var dt = $("#table-tpa").DataTable({
+                        destroy: true,
+                        paging: true,
+                        lengthChange: false,
+                        searching: true,
+                        ordering: true,
+                        info: true,
+                        autoWidth: false,
+                        responsive: false,
+                        pageLength: 10,
+                        aaData: data,
+                        aoColumns: [
+                            {
+                                mDataProp: "id",
+                                width: "10px",
+                            },
+                            {
+                                mDataProp: "nm_tpa",
+                            },
+                            {
+                                mDataProp: "alamat",
+                            },
+                        ],
+                        order: [[0, "ASC"]],
+                        fixedColumns: true,
+                        aoColumnDefs: [
+                            {
+                                mRender: function (data, type, row) {
+                                    
+                                    var el = `
+                                        <input type="checkbox" value="${row.id_user}">
+                                    `;
+
+                                    return el;
+                                },
+                                aTargets: [0],
+                            },
+                            {
+                                mRender: function (data, type, row) {
+                                    
+                                    var el = `
+                                        ${row.glr_depan} ${row.nm_tpa} ${row.glr_blkg}
+                                    `;
+
+                                    return el;
+                                },
+                                aTargets: [1],
+                            },
+                        ],
+                        fnRowCallback: function (
+                            nRow,
+                            aData,
+                            iDisplayIndex,
+                            iDisplayIndexFull
+                        ) {
+                            // var index = iDisplayIndexFull + 1;
+                            // $("td:eq(0)", nRow).html("#" + index);
+                            // return index;
+                        },
+                        fnInitComplete: function () {
+                            var that = this;
+                            var td;
+                            var tr;
+                            this.$("td").click(function () {
+                                td = this;
+                            });
+                            this.$("tr").click(function () {
+                                tr = this;
+                            });
+                        },
+                    });
+                },
+            });
+        }
     })
 
     function loaddata() {
@@ -94,7 +254,15 @@
                         var $rowData = "";
                         var $stat = ''; 
                         if (row.status == "0") {
-                            $stat += '<span class="badge bg-azure">Pengisian Checklist</span>';
+                            $stat += '<span class="badge bg-azure">Pengisian Daftar Simak</span>';
+                        }else if(row.status == "1"){
+                            $stat += '<span class="badge bg-primary">Proses Assesment / Penugasan TPA</span>';
+                        }else if(row.status == "2"){
+                            $stat += '<span class="badge bg-warning">Perlu Revisi Dokumen</span>';
+                        }else if(row.status == "3"){
+                            $stat += '<span class="badge bg-google">Perlu Verifikasi Dinas Teknis</span>';
+                        }else if(row.status == "4"){
+                            $stat += '<span class="badge bg-success">Permohonan Diverifikasi</span>';
                         }
                         $rowData +=
                             `<div class="card">
@@ -114,12 +282,119 @@
                     data: "id",
                     render: function(data, type, row, meta){
                         var $rowData = "";
-                        $continuechecklist = "";
-                        if (row.status < 3) {
-                            $continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/penilaian/${row.kode_bgh}">
+                        let continuechecklist = "";
+                        let databangunanpemilik = "";
+                        let penugasantpa = "";
+                        let menu = "";
+                        if (role == "10") {
+                            let downloadsertifikat = '';
+                            if (row.status == 0) {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Edit Data Bangunan & Pemilik
+                                </a>`;
+                                continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/penilaian/${row.kode_bgh}">
                                 Lanjutkan Pengisian Checklist
-                            </a>`;
+                                </a>`;
+                            }else if(row.status == 1){
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan & Pemilik
+                                </a>`;
+                                continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/detailform/${row.kode_bgh}">
+                                Detail Hasil Pengisian Daftar Simak
+                                </a>`;
+                            }else if(row.status == 2){
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan & Pemilik
+                                </a>`;
+                                continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/penilaian/${row.kode_bgh}">
+                                Revisi Pengisian Checklist
+                                </a>`;
+                            }else if(row.status == 3){
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan & Pemilik
+                                </a>`;
+                                continuechecklist +=``;
+                            }else if(row.status == 4){
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan & Pemilik
+                                </a>`;
+                                continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                Lihat Hasil Assesmen
+                                </a>`;
+                                downloadsertifikat +=`<a class="dropdown-item" href="javascript:;">
+                                Download Sertifikat
+                                </a>`;
+                            }
+
+                            menu = `${continuechecklist}${databangunanpemilik}${downloadsertifikat}`;
+                        }else if(role == "11"){
+                            if (row.status == 1) {
+                                continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/assesment/${row.kode_bgh}">
+                                    Assesment Permohonan
+                                </a>`;
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan & Pemilik
+                                </a>`;
+                                if (row.id_tpa == "0") {
+                                    penugasantpa = `<a class="dropdown-item penugasantpa" data-permohonan="${row.id_permohonan}" data-provinsi="${row.id_provinsi}" data-kabkota="${row.id_kabkota}" href="javascript:void(0)">
+                                        Penugasan TPA
+                                    </a>`;
+                                }else{
+                                    penugasantpa = '';
+                                }
+
+                            }else if(row.status == 3){
+                                continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                    Verifikasi Assesment Permohonan
+                                </a>`;
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan & Pemilik
+                                </a>`;
+                                penugasantpa = '';
+                            }else if(row.status == 4 || row.status == 2){
+                                continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                Lihat Hasil Assesmen
+                                </a>`;
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan & Pemilik
+                                </a>`;
+                                penugasantpa = '';
+                            }
+                            menu = `${continuechecklist}${databangunanpemilik}${penugasantpa}`;
+                        }else if(role == "17"){
+                            if (row.status == 3 || row.status == 2 || row.status == 4) {
+                                continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                Lihat Hasil Assesmen
+                                </a>`;
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan & Pemilik
+                                </a>`;
+                            }else if(row.status == 1){
+                                continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/assesment/${row.kode_bgh}">
+                                    Assesment Permohonan
+                                </a>`;
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan & Pemilik
+                                </a>`;
+                            }
+
+                                menu = `${continuechecklist}${databangunanpemilik}`;
                         }
+                        // if (row.status < 3) {
+                            // $continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/penilaian/${row.kode_bgh}">
+                            //     Lanjutkan Pengisian Checklist
+                            // </a>`;
+                            
+                            // continuechecklist +=`<a class="dropdown-item" href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/assesment/${row.kode_bgh}">
+                            //     Assesment Permohonan
+                            // </a>`;
+                            // databangunanpemilik ++ `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                            //             Edit Data Bangunan & Pemilik
+                            //         </a>`;
+                            // databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                            //     Lihat Data Bangunan & Pemilik
+                            // </a>`;
+                        // }else if(row.status )
                         $rowData +=
                             `
                             <div class="dropdown">
@@ -128,15 +403,12 @@
                                         <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
                                     </svg>
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-demo" aria-labelledby="dropdownMenuButton1">
-                                    <a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
-                                        Edit Data Bangunan & Pemilik
-                                    </a>
-                                    ${$continuechecklist}
+                                <div class="dropdown-menu dropdown-menu-demo" style="z-index:9" aria-labelledby="dropdownMenuButton1">
+                                    ${menu}
                                 </div>
                             </div>`;
                 
-                    return $rowData
+                        return $rowData
                     }
                 },
                 // {
@@ -461,4 +733,6 @@
             },
         });
     }
+
+
 </script>

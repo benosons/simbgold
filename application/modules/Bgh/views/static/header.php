@@ -105,7 +105,9 @@
                         <?php 
                             if ($this->session->userdata('loc_role_id') == 10) {
                                echo "Pemohon";
-                            }else{
+                            }else if($this->session->userdata('loc_role_id') == 17){
+                                echo "TPA";
+                            }else if($this->session->userdata('loc_role_id') == 11){
                                 echo "Dinas Teknis";
                             }
                         ?>

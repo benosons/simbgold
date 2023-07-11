@@ -14,6 +14,17 @@
 <!-- Page body -->
 <div class="page-body">
     <div class="container-xl">
+        <div class="card mb-3">
+            <div class="card-body">
+                <ul class="steps steps-green steps-counter my-4">
+                    <li class="step-item active">Pengisian Formulir Data Bangunan & Data Pemilik</li>
+                    <li class="step-item">Pengisian Daftar Simak</li>
+                    <li class="step-item">Proses Assesment Oleh TPA</li>
+                    <li class="step-item">Revisi Ketidaksesuaian Dokumen Pembuktian (Jika Terdapat Kesalahan Dokumen)</li>
+                    <li class="step-item">Proses Verifikasi Permohonan Untuk Penerbitan Sertifikat BGH</li>
+                </ul>
+            </div>
+        </div>
         <div class="card">
             <div class="card-header">
                 <h3>Formulir Data Bangunan dan Data Pemilik</h3>
@@ -69,7 +80,7 @@
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Gelar Depan</label>
-                                        <input type="text" class="form-control" name="glr_depan" id="glr_depan" placeholder="Masukan Gelar Depan" value="<?= (!empty($permohonan)) ? $permohonan->glr_depan:'' ?>" required>
+                                        <input type="text" class="form-control" name="glr_depan" id="glr_depan" placeholder="Masukan Gelar Depan" value="<?= (!empty($permohonan)) ? $permohonan->glr_depan:'' ?>">
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
@@ -81,7 +92,7 @@
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Gelar Belakang</label>
-                                        <input type="text" class="form-control" name="glr_belakang" id="glr_belakang" placeholder="Masukan Gelar Belakang" value="<?= (!empty($permohonan)) ? $permohonan->glr_belakang:'' ?>" required>
+                                        <input type="text" class="form-control" name="glr_belakang" id="glr_belakang" placeholder="Masukan Gelar Belakang" value="<?= (!empty($permohonan)) ? $permohonan->glr_belakang:'' ?>">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -161,7 +172,21 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-success float-end">Simpan</button>
+                    <?php 
+                        if($permohonan->status == 0 &&  $this->session->userdata('loc_role_id') == 10){
+                    ?>
+                            <button class="btn btn-success float-end">Simpan</button>
+                    <?php
+                        }else if($permohonan->status == 1 &&  $this->session->userdata('loc_role_id') != 10){
+                    ?>
+                            <a href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/assesment/<?= $permohonan->kode_bgh ?>" class="btn btn-success float-end">Lakukan Assesmen Permohonan</a>
+                            <?php
+                        }else if($permohonan->status == 3 &&  $this->session->userdata('loc_role_id') == 11){
+                            ?>
+                            <a href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/assesment/<?= $permohonan->kode_bgh ?>" class="btn btn-success float-end">Lakukan Verifikasi Assesmen Permohonan</a>
+                    <?php
+                        }
+                    ?>
                 </form>
             </div>
         </div>
@@ -216,6 +241,20 @@
         var id_kabkot = "<?= $permohonan->id_kabkota ?>";
         var id_kec = "<?= $permohonan->id_kecamatan ?>";
         var id_kel = "<?= $permohonan->id_kelurahan ?>";
+        var status = "<?= $permohonan->status ?>";
+
+        if (parseInt(status) > 0) {
+            $('input').each(function(){
+                $(this).attr('disabled','disabled');
+                $(this).attr('placeholder','');
+            });
+            $('select').each(function(){
+                $(this).attr('disabled','disabled');
+            });
+            console.log('sada');
+        }else{
+            console.log("0")
+        }
     </script>
 <?php
 }else {
@@ -253,7 +292,7 @@
                 type:'post',
                 dataType:'json',
                 data:{id_provinsi:id_prov},
-                url:"<?= base_url('bgh/pengajuan/getkabkot') ?>",
+                url:"<?= base_url('Bgh/pengajuan/getkabkot') ?>",
                 success:function(response){
                     let html = '<option value="">PILIH</option>';
                     response.data.forEach(e => {
@@ -288,7 +327,7 @@
                     type:'post',
                     dataType:'json',
                     data:{id_kabkot:id},
-                    url:"<?= base_url('bgh/pengajuan/getkecamatan') ?>",
+                    url:"<?= base_url('Bgh/pengajuan/getkecamatan') ?>",
                     success:function(response){
                         let html = '<option value="">PILIH</option>';
                         response.data.forEach(e => {
@@ -315,7 +354,7 @@
                     type:'post',
                     dataType:'json',
                     data:{id_kecamatan:id},
-                    url:"<?= base_url('bgh/pengajuan/getkelurahan') ?>",
+                    url:"<?= base_url('Bgh/pengajuan/getkelurahan') ?>",
                     success:function(response){
                         let html = '<option value="">PILIH</option>';
                         response.data.forEach(e => {
@@ -369,8 +408,8 @@
                 success:function(response)
                 {
                     if (response.code === 1) {
-                        // let url = "<?= base_url()?>bgh/pengajuan/mandatorybghbaru/"+response.nomor_bgh;
-                        // window.location.replace(url);
+                        let url = "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/penilaian/"+response.nomor_bgh;
+                        window.location.href=url;
                         alert('Berhasil !');
                     }else{
                         Swal.fire({
