@@ -54,6 +54,38 @@ class BangunanBaru extends CI_Controller
     {
         $params = (object) $this->input->post();
 
+        if (isset($_FILES['file'])) {
+            $file = $_FILES['file'];
+
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                // $response = array(
+                //     'code' => 0,
+                //     'msg' => 'File upload failed with error code: ' . $file['error']
+                // );
+                // echo json_encode($response);
+                // exit;
+                $filename = "-";
+                $destination = "-";
+            } else {
+                $fileName = $file['name'];
+                $fileTmpPath = $file['tmp_name'];
+                $fileSize = $file['size'];
+                $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                if (!in_array($fileExtension, ['pdf'])) {
+                    $response = array(
+                        'code' => 0,
+                        'msg' => 'Ekstensi File Tidak Sesuai: ' . $file['error']
+                    );
+                    echo json_encode($response);
+                    exit;
+                }
+            }
+        } else {
+            $filename = "-";
+            $destination = "-";
+        }
+
         $datapemilik = array(
             'user_id' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
             'jns_pemilik' => 2,
@@ -85,6 +117,7 @@ class BangunanBaru extends CI_Controller
             $pemilik = $this->bgbarumodel->updatedatapemilik($datapemilik, ['id' => $params->id_pemilik]);
         }
 
+
         if ($params->id_permohonan == 0) {
             $rand1 = date('Ymd');
             $rand2 = rand(0, 999999);
@@ -98,7 +131,7 @@ class BangunanBaru extends CI_Controller
                 'lantai' => $params->lantai,
                 'luas_bangunan' => $params->luas_bangunan,
                 'klas_bangunan' => $params->klas_bangunan,
-                'status' => 0,
+                'status' => 2,
                 'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'))
             );
             $id_permohonan = $this->bgbarumodel->insertpermohonan($databangunan);
@@ -112,10 +145,85 @@ class BangunanBaru extends CI_Controller
                 'luas_bangunan' => $params->luas_bangunan,
                 'klas_bangunan' => $params->klas_bangunan,
             );
+            $kodebgh = $params->kode_bgh;
             $id_permohonan = $this->bgbarumodel->updatepermohonan($databangunan, ['id' => $params->id_permohonan]);
         }
 
-        if ($pemilik > 0 && $id_permohonan > 0) {
+        if (isset($_FILES['file'])) {
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                // $response = array(
+                //     'code' => 0,
+                //     'msg' => 'File upload failed with error code: ' . $file['error']
+                // );
+                // echo json_encode($response);
+                // exit;
+                $filename = "-";
+                $destination = "-";
+            } else {
+                if (!file_exists('assets/bgh/files/' . $id_permohonan . '/penyediajasa/')) {
+                    mkdir('assets/bgh/files/' . $id_permohonan . '/penyediajasa/', 0777, true);
+                }
+
+                // Move the uploaded file to the desired location
+                $filename = uniqid() . '.' . $fileExtension;
+                $destination = './assets/bgh/files/' . $id_permohonan . '/penyediajasa/' . $filename;
+                if (!move_uploaded_file($fileTmpPath, $destination)) {
+                    $response = array(
+                        'code' => 0,
+                        'msg' => 'Gagal Memindahkan File : ' . $file['error']
+                    );
+                    echo json_encode($response);
+                    exit;
+                }
+                if ($params->idfile != 0) {
+                    $wherefile = array('id' => $params->idfile);
+                    $getfile = $this->checklist_model->getfile($wherefile);
+                    if ($getfile->num_rows() > 0) {
+                        $item = $getfile->row();
+                        if (file_exists('assets/bgh/files/' . $id_permohonan . '/penyediajasa/' . $item->nama_file)) {
+                            unlink('assets/bgh/files/' . $id_permohonan . '/penyediajasa/' . $item->nama_file);
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($params->idpenyedia == 0) {
+            $datapenyedia = array(
+                'id_permohonan' => $id_permohonan,
+                'nama' => $params->nama_penyedia,
+                'alamat' => $params->alamat_penyedia,
+                'no_ktp' => $params->no_ktp_penyedia,
+                'no_hp' => $params->no_hp_penyedia,
+                'no_sertifikat' => $params->no_sertifikat,
+                'nama_file' => $filename,
+                'path' => $destination,
+                'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'))
+            );
+
+            $penyedia = $this->bgbarumodel->savepenyedia($datapenyedia);
+        } else {
+            $datapenyedia = array(
+                'id_permohonan' => $id_permohonan,
+                'nama' => $params->nama_penyedia,
+                'alamat' => $params->alamat_penyedia,
+                'no_ktp' => $params->no_ktp_penyedia,
+                'no_sertifikat' => $params->no_sertifikat,
+                'no_hp' => $params->no_hp_penyedia,
+                'update_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
+                'update_date' => date('Y-m-d')
+            );
+
+            if ($filename != "-" && $destination != "-") {
+                $datapenyedia['nama_file'] = $filename;
+                $datapenyedia['path'] = $destination;
+            }
+            $wherepenyedia = array('id' => $params->idpenyedia);
+
+            $penyedia = $this->bgbarumodel->editpenyedia($datapenyedia, $wherepenyedia);
+        }
+
+        if ($pemilik > 0 && $id_permohonan > 0 && $penyedia) {
             $response = array(
                 'code' => 1,
                 'nomor_bgh' => $kodebgh
@@ -143,7 +251,7 @@ class BangunanBaru extends CI_Controller
             'status' => $params->status
         );
 
-        $update = $this->bgbarumodel->updatestatuspermohonan($data,$where);
+        $update = $this->bgbarumodel->updatestatuspermohonan($data, $where);
         if ($update) {
             $response = array(
                 'code' => 1,
@@ -182,7 +290,6 @@ class BangunanBaru extends CI_Controller
         $data['poinhead'] = 0;
         $data['poinall'] = 0;
         foreach ($head as $h) {
-            $x++;
             $row = array();
             $row['id'] = (!empty($h->id) ? $h->id : "");
             $row['kode'] = (!empty($h->kode) ? $h->kode : "");
@@ -224,13 +331,13 @@ class BangunanBaru extends CI_Controller
                             $row3['pilihan'] = (!empty($ss->pilihan) ? $ss->pilihan : "0");
                             $row3['poin'] = (!empty($ss->poin) ? $ss->poin : "");
                             $row3['dokumen'] = (!empty($ss->dokumen) ? $ss->dokumen : "0");
-                            $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil'=> $permohonan->id, 'id_sub_sub_ambil' => $ss->id));
+                            $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil' => $permohonan->id, 'id_sub_sub_ambil' => $ss->id));
                             if ($getambil->num_rows() > 0) {
                                 $row3['ambil'] = 1;
                                 $itemambil = $getambil->row();
                                 $row3['poinambil'] = $itemambil->poin_diajukan;
                                 $row2['terpilih'] = 1;
-                            }else{
+                            } else {
                                 $row3['ambil'] = 0;
                                 $row3['poinambil'] = 0;
                             }
@@ -249,18 +356,18 @@ class BangunanBaru extends CI_Controller
                                 $row4 = array();
                                 $row4['id'] = (!empty($d->id) ? $d->id : "");
                                 $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
-                                $getfile = $this->checklist_model->getfile(array('id_permohonan'=> $permohonan->id,'id_dokumen'=>$d->id))->row();
+                                $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
                                 if (!empty($getfile)) {
                                     $row4['idfile'] = $getfile->id;
                                     $row4['sesuai'] = $getfile->sesuai;
                                     if ($getfile->sesuai == 2) {
                                         $data['tidak_sesuai'] += 1;
-                                        $counttidaksesuai +=1;
+                                        // $counttidaksesuai += 1;
                                     }
                                     $row4['catatan'] = $getfile->catatan;
                                     $row4['isupload'] = 1;
-                                    $countupload+=1;
-                                }else{
+                                    $countupload += 1;
+                                } else {
                                     $row4['isupload'] = 0;
                                 }
 
@@ -272,7 +379,7 @@ class BangunanBaru extends CI_Controller
                                 $row['poindiajukan'] += $ss->poin;
                                 $data['poinall'] += $ss->poin;
                                 $data['poinhead'] += $ss->poin;
-                            }else{
+                            } else {
                                 $row3['isallfile'] = 0;
                             }
 
@@ -288,31 +395,31 @@ class BangunanBaru extends CI_Controller
                             $itemambil = $getambil->row();
                             $row2['poinambil'] = $itemambil->poin_diajukan;
                             $row2['terpilih'] = 1;
-                        }else{
+                        } else {
                             $row2['ambil'] = 0;
                             $row2['poinambil'] = 0;
                         }
 
                         $getdok = $this->checklist_model->getdok(array('id_sub_dok' => $s->id))->result();
-                        
+
                         $dok = array();
                         $countupload = 0;
                         foreach ($getdok as $d) {
                             $row4 = array();
                             $row4['id'] = (!empty($d->id) ? $d->id : "");
                             $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
-                            $getfile = $this->checklist_model->getfile(array('id_permohonan'=> $permohonan->id,'id_dokumen'=>$d->id))->row();
+                            $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
                             if (!empty($getfile)) {
                                 $row4['idfile'] = $getfile->id;
                                 $row4['sesuai'] = $getfile->sesuai;
                                 if ($getfile->sesuai == 2) {
                                     $data['tidak_sesuai'] += 1;
-                                    $counttidaksesuai +=1;
+                                    // $counttidaksesuai += 1;
                                 }
                                 $row4['catatan'] = $getfile->catatan;
                                 $row4['isupload'] = 1;
                                 $countupload += 1;
-                            }else{
+                            } else {
                                 $row4['isupload'] = 0;
                             }
                             array_push($dok, $row4);
@@ -322,7 +429,7 @@ class BangunanBaru extends CI_Controller
                             $row['poindiajukan'] += $s->poin;
                             $data['poinall'] += $s->poin;
                             $data['poinhead'] += $s->poin;
-                        }else{
+                        } else {
                             $row2['isallfile'] = 0;
                         }
                         $row2['dok'] = $dok;
@@ -340,8 +447,8 @@ class BangunanBaru extends CI_Controller
             array_push($checklist, $row);
         }
         $data['checklist'] = $checklist;
-        $hasil = (float) ($data['poinall']*100)/$data['poin_maksimal'];
-        $data['hasil_assesment'] = number_format($hasil,2);
+        $hasil = (float) ($data['poinall'] * 100) / $data['poin_maksimal'];
+        $data['hasil_assesment'] = number_format($hasil, 2);
         $data['checklist'] = $checklist;
         // $data['head'] = ;
         $data['content'] = $this->load->view('bangunangedung/bangunanbaru/form', $data, TRUE);
@@ -372,7 +479,6 @@ class BangunanBaru extends CI_Controller
         $data['poinhead'] = 0;
         $data['poinall'] = 0;
         foreach ($head as $h) {
-            $x++;
             $row = array();
             $row['id'] = (!empty($h->id) ? $h->id : "");
             $row['kode'] = (!empty($h->kode) ? $h->kode : "");
@@ -414,13 +520,13 @@ class BangunanBaru extends CI_Controller
                             $row3['pilihan'] = (!empty($ss->pilihan) ? $ss->pilihan : "0");
                             $row3['poin'] = (!empty($ss->poin) ? $ss->poin : "");
                             $row3['dokumen'] = (!empty($ss->dokumen) ? $ss->dokumen : "0");
-                            $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil'=> $permohonan->id, 'id_sub_sub_ambil' => $ss->id));
+                            $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil' => $permohonan->id, 'id_sub_sub_ambil' => $ss->id));
                             if ($getambil->num_rows() > 0) {
                                 $row3['ambil'] = 1;
                                 $itemambil = $getambil->row();
                                 $row3['poinambil'] = $itemambil->poin_diajukan;
                                 $row2['terpilih'] = 1;
-                            }else{
+                            } else {
                                 $row3['ambil'] = 0;
                                 $row3['poinambil'] = 0;
                             }
@@ -439,18 +545,18 @@ class BangunanBaru extends CI_Controller
                                 $row4 = array();
                                 $row4['id'] = (!empty($d->id) ? $d->id : "");
                                 $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
-                                $getfile = $this->checklist_model->getfile(array('id_permohonan'=> $permohonan->id,'id_dokumen'=>$d->id))->row();
+                                $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
                                 if (!empty($getfile)) {
                                     $row4['idfile'] = $getfile->id;
                                     $row4['sesuai'] = $getfile->sesuai;
                                     if ($getfile->sesuai == 2) {
                                         $data['tidak_sesuai'] += 1;
-                                        $counttidaksesuai +=1;
+                                        // $counttidaksesuai += 1;
                                     }
                                     $row4['catatan'] = $getfile->catatan;
                                     $row4['isupload'] = 1;
-                                    $countupload+=1;
-                                }else{
+                                    $countupload += 1;
+                                } else {
                                     $row4['isupload'] = 0;
                                 }
 
@@ -462,7 +568,7 @@ class BangunanBaru extends CI_Controller
                                 $row['poindiajukan'] += $ss->poin;
                                 $data['poinall'] += $ss->poin;
                                 $data['poinhead'] += $ss->poin;
-                            }else{
+                            } else {
                                 $row3['isallfile'] = 0;
                             }
 
@@ -478,31 +584,31 @@ class BangunanBaru extends CI_Controller
                             $itemambil = $getambil->row();
                             $row2['poinambil'] = $itemambil->poin_diajukan;
                             $row2['terpilih'] = 1;
-                        }else{
+                        } else {
                             $row2['ambil'] = 0;
                             $row2['poinambil'] = 0;
                         }
 
                         $getdok = $this->checklist_model->getdok(array('id_sub_dok' => $s->id))->result();
-                        
+
                         $dok = array();
                         $countupload = 0;
                         foreach ($getdok as $d) {
                             $row4 = array();
                             $row4['id'] = (!empty($d->id) ? $d->id : "");
                             $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
-                            $getfile = $this->checklist_model->getfile(array('id_permohonan'=> $permohonan->id,'id_dokumen'=>$d->id))->row();
+                            $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
                             if (!empty($getfile)) {
                                 $row4['idfile'] = $getfile->id;
                                 $row4['sesuai'] = $getfile->sesuai;
                                 if ($getfile->sesuai == 2) {
                                     $data['tidak_sesuai'] += 1;
-                                    $counttidaksesuai +=1;
+                                    // $counttidaksesuai += 1;
                                 }
                                 $row4['catatan'] = $getfile->catatan;
                                 $row4['isupload'] = 1;
                                 $countupload += 1;
-                            }else{
+                            } else {
                                 $row4['isupload'] = 0;
                             }
                             array_push($dok, $row4);
@@ -512,7 +618,7 @@ class BangunanBaru extends CI_Controller
                             $row['poindiajukan'] += $s->poin;
                             $data['poinall'] += $s->poin;
                             $data['poinhead'] += $s->poin;
-                        }else{
+                        } else {
                             $row2['isallfile'] = 0;
                         }
                         $row2['dok'] = $dok;
@@ -530,8 +636,8 @@ class BangunanBaru extends CI_Controller
             array_push($checklist, $row);
         }
         $data['checklist'] = $checklist;
-        $hasil = (float) ($data['poinall']*100)/$data['poin_maksimal'];
-        $data['hasil_assesment'] = number_format($hasil,2);
+        $hasil = (float) ($data['poinall'] * 100) / $data['poin_maksimal'];
+        $data['hasil_assesment'] = number_format($hasil, 2);
         $data['checklist'] = $checklist;
         // $data['head'] = ;
         $data['content'] = $this->load->view('bangunangedung/bangunanbaru/detailform', $data, TRUE);
@@ -562,7 +668,6 @@ class BangunanBaru extends CI_Controller
         $data['poinhead'] = 0;
         $data['poinallassesment'] = 0;
         foreach ($head as $h) {
-            $x++;
             $row = array();
             $row['id'] = (!empty($h->id) ? $h->id : "");
             $row['kode'] = (!empty($h->kode) ? $h->kode : "");
@@ -604,11 +709,11 @@ class BangunanBaru extends CI_Controller
                             $row3['pilihan'] = (!empty($ss->pilihan) ? $ss->pilihan : "0");
                             $row3['poin'] = (!empty($ss->poin) ? $ss->poin : "");
                             $row3['dokumen'] = (!empty($ss->dokumen) ? $ss->dokumen : "0");
-                            $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil'=> $permohonan->id, 'id_sub_sub_ambil' => $ss->id));
+                            $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil' => $permohonan->id, 'id_sub_sub_ambil' => $ss->id));
                             if ($getambil->num_rows() > 0) {
                                 $data['poinhead'] += $ss->poin;
                                 $row['poindiajukan'] += $ss->poin;
-                                
+
                                 $itemambil = $getambil->row();
                                 $row3['ambil'] = 1;
                                 $row3['id_ambil'] = $itemambil->id;
@@ -628,23 +733,24 @@ class BangunanBaru extends CI_Controller
                                 $row4['id'] = (!empty($d->id) ? $d->id : "");
                                 $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
 
-                                $getfile = $this->checklist_model->getfile(array('id_permohonan'=>$permohonan->id, 'id_dokumen'=>$d->id))->row();
+                                $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
 
                                 if (!empty($getfile)) {
                                     $row4['id_file'] = $getfile->id;
                                     $row4['sesuai'] = $getfile->sesuai;
                                     if ($getfile->sesuai == 2) {
                                         $data['tidak_sesuai'] += 1;
-                                        $counttidaksesuai +=1;
+                                    } else if ($getfile->sesuai == 0) {
+                                        $counttidaksesuai += 1;
                                     }
                                     $row4['catatan'] = $getfile->catatan;
                                     $row4['path'] = $getfile->path;
                                     $row4['extension'] = $getfile->extension;
                                     $row4['isupload'] = 1;
                                     // if ($getfile->sesuai == 1) {
-                                        $countdok += 1;
+                                    $countdok += 1;
                                     // }
-                                }else{
+                                } else {
                                     $row4['isupload'] = 0;
                                 }
 
@@ -652,10 +758,10 @@ class BangunanBaru extends CI_Controller
                             }
                             if (count($getdok) == $countdok) {
                                 $row3['allassesment'] = 1;
-                            }else{
+                            } else {
                                 $row3['allassesment'] = 0;
                             }
-                            $row3['tidaksesuai'] = $counttidaksesuai;
+                            $row3['belumasses'] = $counttidaksesuai;
                             $row3['dok'] = $dok;
 
                             array_push($subsub, $row3);
@@ -673,12 +779,12 @@ class BangunanBaru extends CI_Controller
                             $row2['poin_assesment'] = $itemambil->poin_assesment;
                             $data['poinallassesment'] += $itemambil->poin_assesment;
                             $row2['assesment_by'] = $itemambil->assesment_by;
-                        }else{
+                        } else {
                             $row2['ambil'] = 0;
                         }
 
                         $getdok = $this->checklist_model->getdok(array('id_sub_dok' => $s->id))->result();
-                        
+
                         $dok = array();
                         $countdok = 0;
                         $counttidaksesuai = 0;
@@ -687,32 +793,34 @@ class BangunanBaru extends CI_Controller
                             $row4['id'] = (!empty($d->id) ? $d->id : "");
                             $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
 
-                            $getfile = $this->checklist_model->getfile(array('id_permohonan'=> $permohonan->id,'id_dokumen'=>$d->id))->row();
+                            $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
                             if (!empty($getfile)) {
                                 $row4['id_file'] = $getfile->id;
                                 $row4['sesuai'] = $getfile->sesuai;
                                 if ($getfile->sesuai == 2) {
                                     $data['tidak_sesuai'] += 1;
-                                    $counttidaksesuai +=1;
+                                    $counttidaksesuai += 1;
+                                } else if ($getfile->sesuai == 0) {
+                                    $counttidaksesuai += 1;
                                 }
                                 $row4['catatan'] = $getfile->catatan;
                                 $row4['path'] = $getfile->path;
                                 $row4['extension'] = $getfile->extension;
                                 $row4['isupload'] = 1;
                                 // if ($getfile->sesuai == 1) {
-                                    $countdok += 1;
+                                $countdok += 1;
                                 // }
-                            }else{
+                            } else {
                                 $row4['isupload'] = 0;
                             }
                             array_push($dok, $row4);
                         }
                         if (count($getdok) == $countdok) {
                             $row2['allassesment'] = 1;
-                        }else{
+                        } else {
                             $row2['allassesment'] = 0;
                         }
-                        $row2['tidaksesuai'] = $counttidaksesuai;
+                        $row2['belumasses'] = $counttidaksesuai;
                         $row2['dok'] = $dok;
                     }
 
@@ -728,21 +836,21 @@ class BangunanBaru extends CI_Controller
             array_push($checklist, $row);
         }
         $data['checklist'] = $checklist;
-        $hasil = (float) ($data['poinallassesment']*100)/$data['poin_maksimal'];
-        $data['hasil_assesment'] = number_format($hasil,2);
-        
+        $hasil = (float) ($data['poinallassesment'] * 100) / $data['poin_maksimal'];
+        $data['hasil_assesment'] = number_format($hasil, 2);
+
         if ($hasil < 65 || $hasil <= 45) {
             if ($hasil == 0) {
                 $ketentuan = '-';
-            }else{
+            } else {
                 $ketentuan = 'PRATAMA';
             }
-        }else if($hasil == 65 || $hasil < 80){
+        } else if ($hasil == 65 || $hasil < 80) {
             $ketentuan = "MADYA";
-        }else if($hasil == 80 || $hasil <= 100){
+        } else if ($hasil == 80 || $hasil <= 100) {
             $ketentuan = "UTAMA";
         }
-        $data['ketentuan'] = $ketentuan ;
+        $data['ketentuan'] = $ketentuan;
         $data['content'] = $this->load->view('bangunangedung/bangunanbaru/formassesment', $data, TRUE);
 
         $this->load->view('layouts', $data);
@@ -770,7 +878,6 @@ class BangunanBaru extends CI_Controller
         $data['poinhead'] = 0;
         $data['poinallassesment'] = 0;
         foreach ($head as $h) {
-            $x++;
             $row = array();
             $row['id'] = (!empty($h->id) ? $h->id : "");
             $row['kode'] = (!empty($h->kode) ? $h->kode : "");
@@ -812,11 +919,11 @@ class BangunanBaru extends CI_Controller
                             $row3['pilihan'] = (!empty($ss->pilihan) ? $ss->pilihan : "0");
                             $row3['poin'] = (!empty($ss->poin) ? $ss->poin : "");
                             $row3['dokumen'] = (!empty($ss->dokumen) ? $ss->dokumen : "0");
-                            $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil'=> $permohonan->id, 'id_sub_sub_ambil' => $ss->id));
+                            $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil' => $permohonan->id, 'id_sub_sub_ambil' => $ss->id));
                             if ($getambil->num_rows() > 0) {
                                 $data['poinhead'] += $ss->poin;
                                 $row['poindiajukan'] += $ss->poin;
-                                
+
                                 $itemambil = $getambil->row();
                                 $row3['ambil'] = 1;
                                 $row3['id_ambil'] = $itemambil->id;
@@ -835,7 +942,7 @@ class BangunanBaru extends CI_Controller
                                 $row4['id'] = (!empty($d->id) ? $d->id : "");
                                 $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
 
-                                $getfile = $this->checklist_model->getfile(array('id_permohonan'=>$permohonan->id, 'id_dokumen'=>$d->id))->row();
+                                $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
 
                                 if (!empty($getfile)) {
                                     $row4['id_file'] = $getfile->id;
@@ -847,7 +954,7 @@ class BangunanBaru extends CI_Controller
                                     if ($getfile->sesuai == 1) {
                                         $countdok += 1;
                                     }
-                                }else{
+                                } else {
                                     $row4['isupload'] = 0;
                                 }
 
@@ -855,7 +962,7 @@ class BangunanBaru extends CI_Controller
                             }
                             if (count($getdok) == $countdok) {
                                 $row3['allassesment'] = 1;
-                            }else{
+                            } else {
                                 $row3['allassesment'] = 0;
                             }
                             $row3['dok'] = $dok;
@@ -875,12 +982,12 @@ class BangunanBaru extends CI_Controller
                             $row2['poin_assesment'] = $itemambil->poin_assesment;
                             $data['poinallassesment'] += $itemambil->poin_assesment;
                             $row2['assesment_by'] = $itemambil->assesment_by;
-                        }else{
+                        } else {
                             $row2['ambil'] = 0;
                         }
 
                         $getdok = $this->checklist_model->getdok(array('id_sub_dok' => $s->id))->result();
-                        
+
                         $dok = array();
                         $countdok = 0;
                         foreach ($getdok as $d) {
@@ -888,7 +995,7 @@ class BangunanBaru extends CI_Controller
                             $row4['id'] = (!empty($d->id) ? $d->id : "");
                             $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
 
-                            $getfile = $this->checklist_model->getfile(array('id_permohonan'=> $permohonan->id,'id_dokumen'=>$d->id))->row();
+                            $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
                             if (!empty($getfile)) {
                                 $row4['id_file'] = $getfile->id;
                                 $row4['sesuai'] = $getfile->sesuai;
@@ -899,14 +1006,14 @@ class BangunanBaru extends CI_Controller
                                 if ($getfile->sesuai == 1) {
                                     $countdok += 1;
                                 }
-                            }else{
+                            } else {
                                 $row4['isupload'] = 0;
                             }
                             array_push($dok, $row4);
                         }
                         if (count($getdok) == $countdok) {
                             $row2['allassesment'] = 1;
-                        }else{
+                        } else {
                             $row2['allassesment'] = 0;
                         }
                         $row2['dok'] = $dok;
@@ -924,17 +1031,17 @@ class BangunanBaru extends CI_Controller
             array_push($checklist, $row);
         }
         $data['checklist'] = $checklist;
-        $hasil = (float) ($data['poinallassesment']*100)/$data['poin_maksimal'];
-        $data['hasil_assesment'] = number_format($hasil,2);
-        
+        $hasil = (float) ($data['poinallassesment'] * 100) / $data['poin_maksimal'];
+        $data['hasil_assesment'] = number_format($hasil, 2);
+
         if ($hasil < 65 || $hasil <= 45) {
             $ketentuan = 'PRATAMA';
-        }else if($hasil == 65 || $hasil < 80){
+        } else if ($hasil == 65 || $hasil < 80) {
             $ketentuan = "MADYA";
-        }else if($hasil == 80 || $hasil <= 100){
+        } else if ($hasil == 80 || $hasil <= 100) {
             $ketentuan = "UTAMA";
         }
-        $data['ketentuan'] = $ketentuan ;
+        $data['ketentuan'] = $ketentuan;
         $data['content'] = $this->load->view('bangunangedung/bangunanbaru/hasilassesment', $data, TRUE);
 
         $this->load->view('layouts', $data);
@@ -988,7 +1095,7 @@ class BangunanBaru extends CI_Controller
         if ($params->id_sub_ambil != 0) {
             $s = $this->checklist_model->getsub(array('id' => $params->id_sub_ambil))->row();
             $sub = $s->id;
-        }else if($params->id_sub_sub_ambil != 0){
+        } else if ($params->id_sub_sub_ambil != 0) {
             $ss = $this->checklist_model->getsubsub(array('id' => $params->id_sub_sub_ambil))->row();
             $subsub = $ss->id;
         }
@@ -1000,19 +1107,19 @@ class BangunanBaru extends CI_Controller
             'poin_diajukan' => $params->poin_diajukan,
             'poin_assesment' => 0,
             'assesment_by' => 0,
-            'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'))      
+            'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'))
         );
 
         $insertambil = $this->bgbarumodel->insertambil($data);
         if ($insertambil) {
             $response = array(
                 'code' => 1,
-                'msg' => 'Poin Berhasil Diambil' 
+                'msg' => 'Poin Berhasil Diambil'
             );
-        }else{
+        } else {
             $response = array(
                 'code' => 0,
-                'msg' => 'Poin Gagal Diambil' 
+                'msg' => 'Poin Gagal Diambil'
             );
         }
         echo json_encode($response);
@@ -1021,7 +1128,7 @@ class BangunanBaru extends CI_Controller
     public function updateambil()
     {
         $params = (object) $this->input->post();
-        $where = array('id'=> $params->id_ambil);
+        $where = array('id' => $params->id_ambil);
         $data = array(
             'poin_assesment' => $params->poin,
             'assesment_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
@@ -1034,12 +1141,12 @@ class BangunanBaru extends CI_Controller
         if ($update) {
             $response = array(
                 'code' => 1,
-                'msg' => 'Berhasil' 
+                'msg' => 'Berhasil'
             );
-        }else{
+        } else {
             $response = array(
                 'code' => 0,
-                'msg' => 'Gagal' 
+                'msg' => 'Gagal'
             );
         }
         echo json_encode($response);
@@ -1122,7 +1229,7 @@ class BangunanBaru extends CI_Controller
                     'elnow' => $params->elnow
                 );
                 echo json_encode($response);
-            }else{
+            } else {
                 $response = array(
                     'code' => 0,
                     'msg' => 'Gagal Menyimpan Data, Silahkan Coba Lagi Nanti'
@@ -1148,16 +1255,16 @@ class BangunanBaru extends CI_Controller
             'catatan' => ""
         );
 
-        $update = $this->bgbarumodel->updatefile($data,$where);
+        $update = $this->bgbarumodel->updatefile($data, $where);
         if ($update) {
             $response = array(
                 'code' => 1,
-                'msg' => 'Berhasil' 
+                'msg' => 'Berhasil'
             );
-        }else{
+        } else {
             $response = array(
                 'code' => 0,
-                'msg' => 'Berhasil' 
+                'msg' => 'Berhasil'
             );
         }
         echo json_encode($response);
@@ -1170,16 +1277,16 @@ class BangunanBaru extends CI_Controller
         $where = array('id' => $params->id_file);
         $data = array('catatan' => $params->catatan);
 
-        $update = $this->bgbarumodel->updatefile($data,$where);
+        $update = $this->bgbarumodel->updatefile($data, $where);
         if ($update) {
             $response = array(
                 'code' => 1,
-                'msg' => 'Berhasil' 
+                'msg' => 'Berhasil'
             );
-        }else{
+        } else {
             $response = array(
                 'code' => 0,
-                'msg' => 'Berhasil' 
+                'msg' => 'Berhasil'
             );
         }
         echo json_encode($response);
@@ -1206,7 +1313,7 @@ class BangunanBaru extends CI_Controller
                 'code' => 1,
                 'msg' => "Berhasil"
             );
-        }else {
+        } else {
             $response = array(
                 'code' => 0,
                 'msg' => "Gagal"
@@ -1215,7 +1322,7 @@ class BangunanBaru extends CI_Controller
 
         echo json_encode($response);
     }
-    
+
     public function verifikasiassesment()
     {
         $params = (object) $this->input->post();
@@ -1235,7 +1342,7 @@ class BangunanBaru extends CI_Controller
                 'code' => 1,
                 'msg' => "Berhasil"
             );
-        }else {
+        } else {
             $response = array(
                 'code' => 0,
                 'msg' => "Gagal"
@@ -1247,11 +1354,11 @@ class BangunanBaru extends CI_Controller
 
     public function viewPdf()
     {
-        $pdfFile = base_url().'assets/bgh/files/27/perencanaan/649c086d3634c.pdf';
+        $pdfFile = base_url() . 'assets/bgh/files/27/perencanaan/649c086d3634c.pdf';
         $data['pdfFile'] = $pdfFile;
 
         $this->load->view('pdf_modal', $data);
-    }   
+    }
 
     public function gettpa()
     {
@@ -1275,7 +1382,7 @@ class BangunanBaru extends CI_Controller
                 'code' => 1,
                 'data' => $getprov->result()
             );
-        }else {
+        } else {
             $response = array(
                 'code' => 1,
                 'data' => $get->result()
@@ -1289,11 +1396,15 @@ class BangunanBaru extends CI_Controller
     {
         $pilihantpa = $this->input->post('pilihantpa');
         $id_permohonan = $this->input->post('id_permohonan');
+        $tanggal_mulai = $this->input->post('tanggal_mulai');
+        $tanggal_selesai = $this->input->post('tanggal_selesai');
 
         $tpa = json_encode($pilihantpa);
 
         $data = array(
-            'id_tpa' => $tpa
+            'id_tpa' => $tpa,
+            'tanggal_mulai' => $tanggal_mulai,
+            'tanggal_selesai' => $tanggal_selesai
         );
         $where = array(
             'id' => $id_permohonan
@@ -1306,7 +1417,7 @@ class BangunanBaru extends CI_Controller
                 'code' => 1,
                 'msg' => "Berhasil"
             );
-        }else {
+        } else {
             $response = array(
                 'code' => 0,
                 'msg' => "Gagal"

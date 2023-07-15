@@ -18,11 +18,11 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <ul class="steps steps-green steps-counter my-4">
-                      <li class="step-item">Pengisian Formulir Data Bangunan & Data Pemilik</li>
-                      <li class="step-item">Pengisian Daftar Simak</li>
-                      <li class="step-item active">Proses Assesment Oleh TPA</li>
-                      <li class="step-item">Revisi Ketidaksesuaian Dokumen Pembuktian (Jika Terdapat Kesalahan Dokumen)</li>
-                      <li class="step-item">Proses Verifikasi Permohonan Untuk Penerbitan Sertifikat BGH</li>
+                        <li class="step-item">Pengisian Formulir Data Bangunan & Data Pemilik</li>
+                        <li class="step-item">Pengisian Daftar Simak</li>
+                        <li class="step-item active">Proses Assesment Oleh TPA</li>
+                        <li class="step-item">Revisi Ketidaksesuaian Dokumen Pembuktian (Jika Terdapat Kesalahan Dokumen)</li>
+                        <li class="step-item">Proses Verifikasi Permohonan Untuk Penerbitan Sertifikat BGH</li>
                     </ul>
                 </div>
             </div>
@@ -32,12 +32,12 @@
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-patch-exclamation-fill" viewBox="0 0 16 16">
-                                    <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                    <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                                 </svg>
                             </div>
                             <div class="col">
                                 <div class="fw-bold">
-                                <?= $poinhead ?> Poin
+                                    <?= $poinhead ?> Poin
                                 </div>
                                 <div class="text-white">
                                     Jumlah Poin Yang Diajukan
@@ -45,12 +45,12 @@
                             </div>
                             <div class="col-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-percent" viewBox="0 0 16 16">
-                                    <path d="M13.442 2.558a.625.625 0 0 1 0 .884l-10 10a.625.625 0 1 1-.884-.884l10-10a.625.625 0 0 1 .884 0zM4.5 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm7 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+                                    <path d="M13.442 2.558a.625.625 0 0 1 0 .884l-10 10a.625.625 0 1 1-.884-.884l10-10a.625.625 0 0 1 .884 0zM4.5 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm7 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
                                 </svg>
                             </div>
                             <div class="col">
                                 <div class="fw-bold">
-                                <?= $hasil_assesment ?> %
+                                    <?= $hasil_assesment ?> %
                                 </div>
                                 <div class="text-white">
                                     Jumlah Persentase Poin Yang Diajukan
@@ -61,19 +61,19 @@
                 </div>
             </div>
             <div class="col-md-4 col-xl-4">
-                <div class="card card-sm bg-orange text-white">
+                <div class="card card-sm bg-success text-white">
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col">
                                 <div class="fw-bold">
-                                Ketentuan Peringkat
+                                    Ketentuan Peringkat
                                 </div>
                                 <div class="text-white">
                                     <table class="table table-borderless">
                                         <tr>
                                             <td>I</td>
                                             <td>80% - 100%</td>
-                                            <td >
+                                            <td>
                                                 <strong>
                                                     UTAMA
                                                 </strong>
@@ -106,14 +106,14 @@
             </div>
         </div>
 
-        <?php if($tidak_sesuai > 0){
+        <?php if ($tidak_sesuai > 0) {
         ?>
 
-        <div class="card bg-info mb-2">
-            <div class="card-body text-white">
-                <h4>Dokumen Yang Perlu Direvisi : <?= $tidak_sesuai ?> Dokumen Pembuktian</h4>
+            <div class="card bg-info mb-2">
+                <div class="card-body text-white">
+                    <h4>Dokumen Yang Perlu Direvisi : <?= $tidak_sesuai ?> Dokumen Pembuktian</h4>
+                </div>
             </div>
-        </div>
         <?php
         } ?>
         <div class="card">
@@ -137,12 +137,17 @@
                                     <strong><?= $alp[$i] . '. ' . $checklist[$i]['nama'] ?> | Poin Tersedia : <?= $checklist[$i]['poin'] ?> | Poin Diajukan : <?= $poindiajukan ?> </strong>
                                 </button>
                             </h2>
-                            <div id="collapse-<?= $checklist[$i]['id'] ?>" class="accordion-collapse collapse <?php if(isset($_GET['accord'])){ if($_GET['accord'] == $alp[$i]){ echo 'show'; } } ?>" data-bs-parent="#accordion-example">
+                            <div id="collapse-<?= $checklist[$i]['id'] ?>" class="accordion-collapse collapse 
+                            <?php if (isset($_GET['accord'])) {
+                                if ($_GET['accord'] == $alp[$i]) {
+                                    echo 'show';
+                                }
+                            } ?>" data-bs-parent="#accordion-example">
                                 <div class="accordion-body pt-0">
-                                    <?php 
-                                        for ($j = 0; $j < count($checklist[$i]['main']); $j++) { 
-                                            $namamain = $checklist[$i]['main'][$j]['nama'];
-                                            $poinmain = $checklist[$i]['main'][$j]['poin'];
+                                    <?php
+                                    for ($j = 0; $j < count($checklist[$i]['main']); $j++) {
+                                        $namamain = $checklist[$i]['main'][$j]['nama'];
+                                        $poinmain = $checklist[$i]['main'][$j]['poin'];
                                     ?>
                                         <div class="table-responsive">
                                             <table class="table table-bordered">
@@ -169,42 +174,42 @@
                                                     $isallfilesub = $checklist[$i]['main'][$j]['sub'][$k]['isallfile'];
                                                     if ($pilihansub == 1) {
                                                         $terpilihsub = $checklist[$i]['main'][$j]['sub'][$k]['terpilih'];
-                                                    }else{
+                                                    } else {
                                                         $terpilihsub = 0;
                                                     }
                                                     if ($dokumensub == 1) {
                                                         $dok = $checklist[$i]['main'][$j]['sub'][$k]['dok'];
-                                                        
+
                                                 ?>
                                                         <tr>
-                                                            <td rowspan="<?=  count($checklist[$i]['main'][$j]['sub'][$k]['dok']) ?>"></td>
-                                                            <td rowspan="<?=  count($checklist[$i]['main'][$j]['sub'][$k]['dok']) ?>"><?= $namasub ?></td>
-                                                            <td class="text-center" rowspan="<?=  count($checklist[$i]['main'][$j]['sub'][$k]['dok']) ?>"><?= $poinsub ?></td>
-                                                            <td rowspan="<?=  count($checklist[$i]['main'][$j]['sub'][$k]['dok']) ?>">
-                                                                <?= ($ambilsub == 1) ? 'Ambil':'Tidak' ?>
+                                                            <td rowspan="<?= count($checklist[$i]['main'][$j]['sub'][$k]['dok']) ?>"></td>
+                                                            <td rowspan="<?= count($checklist[$i]['main'][$j]['sub'][$k]['dok']) ?>"><?= $namasub ?></td>
+                                                            <td class="text-center" rowspan="<?= count($checklist[$i]['main'][$j]['sub'][$k]['dok']) ?>"><?= $poinsub ?></td>
+                                                            <td rowspan="<?= count($checklist[$i]['main'][$j]['sub'][$k]['dok']) ?>">
+                                                                <?= ($ambilsub == 1) ? 'Ambil' : 'Tidak' ?>
                                                             </td>
-                                                            <?php 
-                                                                $o=0; 
-                                                                $iddok = $dok[$o]['id']; 
+                                                            <?php
+                                                            $o = 0;
+                                                            $iddok = $dok[$o]['id'];
                                                             ?>
                                                             <td>
                                                                 <?= $dok[$o]['nama'] ?>
                                                             </td>
-                                                            <?php 
-                                                                if($ambilsub == 0){
-                                                                    echo "<td></td>";
-                                                                }else{
+                                                            <?php
+                                                            if ($ambilsub == 0) {
+                                                                echo "<td></td>";
+                                                            } else {
                                                             ?>
-                                                            <td class="text-center align-middle <?= 'upload_' . $elparent ?> <?= $ambilsub == 1 ? '':'d-none' ?>" >
-                                                            <?php 
-                                                                            if($dok[$o]['isupload'] == 1){
-                                                                                if ($sesuai == 1 || $sesuai == 0) {
-                                                                        ?>
+                                                                <td class="text-center align-middle <?= 'upload_' . $elparent ?> <?= $ambilsub == 1 ? '' : 'd-none' ?>">
+                                                                    <?php
+                                                                    if ($dok[$o]['isupload'] == 1) {
+                                                                        if ($sesuai == 1 || $sesuai == 0) {
+                                                                    ?>
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                                                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                                                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
                                                                             </svg>
                                                                         <?php
-                                                                                }else if($sesuai == 2){
+                                                                        } else if ($sesuai == 2) {
                                                                         ?>
                                                                             <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
@@ -212,58 +217,59 @@
                                                                                 </svg>
                                                                             </button>
                                                                         <?php
-                                                                                }
+                                                                        }
                                                                         ?>
-                                                                <?php }else{ ?>
-                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsub ?>,<?= $idsub?>, 0, '<?= $alp[$i] ?>','<?= $elparent ?>',<?= $idfile ?>)" title="Upload">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
-                                                                        <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
-                                                                    </svg>
-                                                                </button>
-                                                                <?php } ?>
-                                                            </td>
-                                                            <?php }$o++; ?>
-                                                            <td rowspan="<?= count($dok) ?>" class="text-center" id="<?= 'poin_' . $elparent ?>"><?= $isallfilesub == 1 ? $poinambilsub:0 ?></td>    
+                                                                    <?php } else { ?>
+                                                                        <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsub ?>,<?= $idsub ?>, 0, '<?= $alp[$i] ?>','<?= $elparent ?>',<?= $idfile ?>)" title="Upload">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                            </svg>
+                                                                        </button>
+                                                                    <?php } ?>
+                                                                </td>
+                                                            <?php }
+                                                            $o++; ?>
+                                                            <td rowspan="<?= count($dok) ?>" class="text-center" id="<?= 'poin_' . $elparent ?>"><?= $isallfilesub == 1 ? $poinambilsub : 0 ?></td>
                                                         </tr>
-                                                        <?php 
-                                                            for($o; $o<count($dok); $o++){
-                                                                $iddok = $dok[$o]['id'];  
+                                                        <?php
+                                                        for ($o; $o < count($dok); $o++) {
+                                                            $iddok = $dok[$o]['id'];
 
                                                         ?>
                                                             <tr>
                                                                 <td><?= $dok[$o]['nama'] ?></td>
-                                                                <?php 
-                                                                    if($ambilsub == 0){
-                                                                        echo "<td></td>";
-                                                                    }else{
+                                                                <?php
+                                                                if ($ambilsub == 0) {
+                                                                    echo "<td></td>";
+                                                                } else {
                                                                 ?>
-                                                                <td class="text-center align-middle <?= 'upload_' . $elparent ?> <?= $ambilsub == 1 ? '':'d-none' ?>">
-                                                                    <?php 
-                                                                            if($dok[$o]['isupload'] == 1){
-                                                                                if ($sesuai == 1 || $sesuai == 0) {
-                                                                        ?>
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                                                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
-                                                                            </svg>
+                                                                    <td class="text-center align-middle <?= 'upload_' . $elparent ?> <?= $ambilsub == 1 ? '' : 'd-none' ?>">
                                                                         <?php
-                                                                                }else if($sesuai == 2){
+                                                                        if ($dok[$o]['isupload'] == 1) {
+                                                                            if ($sesuai == 1 || $sesuai == 0) {
                                                                         ?>
-                                                                            <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                </svg>
+                                                                            <?php
+                                                                            } else if ($sesuai == 2) {
+                                                                            ?>
+                                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                        <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                    </svg>
+                                                                                </button>
+                                                                            <?php
+                                                                            }
+                                                                            ?>
+                                                                        <?php } else { ?>
+                                                                            <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsub ?>,<?= $idsub ?>, 0, '<?= $alp[$i] ?>', '<?= $elparent ?>',<?= $idfile ?>)" title="Upload">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
                                                                                     <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
                                                                                 </svg>
                                                                             </button>
-                                                                        <?php
-                                                                                }
-                                                                        ?>
-                                                                    <?php }else{ ?>
-                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsub ?>,<?= $idsub?>, 0, '<?= $alp[$i] ?>', '<?= $elparent ?>',<?= $idfile ?>)" title="Upload">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
-                                                                            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
-                                                                        </svg>
-                                                                    </button>
-                                                                    <?php } ?>
-                                                                </td>
+                                                                        <?php } ?>
+                                                                    </td>
                                                                 <?php } ?>
                                                             </tr>
                                                         <?php
@@ -297,88 +303,89 @@
                                                                 <td rowspan="<?= count($dok) ?>"><?= $namasubsub ?></td>
                                                                 <td rowspan="<?= count($dok) ?>" class="text-center"><?= $poinsubsub ?></td>
                                                                 <td rowspan="<?= count($dok) ?>">
-                                                                <?= ($ambilsubsub == 1) ? 'Ambil':'Tidak' ?>
+                                                                    <?= ($ambilsubsub == 1) ? 'Ambil' : 'Tidak' ?>
                                                                 </td>
-                                                                <?php 
-                                                                    $o=0; 
-                                                                    $iddok = $dok[$o]['id'];  
+                                                                <?php
+                                                                $o = 0;
+                                                                $iddok = $dok[$o]['id'];
                                                                 ?>
                                                                 <td>
                                                                     <?= $dok[$o]['nama'] ?>
                                                                 </td>
-                                                                <?php 
-                                                                    if($ambilsubsub == 0){
-                                                                        echo "<td></td>";
-                                                                    }else{
+                                                                <?php
+                                                                if ($ambilsubsub == 0) {
+                                                                    echo "<td></td>";
+                                                                } else {
                                                                 ?>
-                                                                <td class="text-center align-middle <?= $elchild ?> ">
-                                                                <?php 
-                                                                            if($dok[$o]['isupload'] == 1){
-                                                                                if ($sesuai == 1 || $sesuai == 0) {
-                                                                        ?>
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                                                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
-                                                                            </svg>
+                                                                    <td class="text-center align-middle <?= $elchild ?> ">
                                                                         <?php
-                                                                                }else if($sesuai == 2){
+                                                                        if ($dok[$o]['isupload'] == 1) {
+                                                                            if ($sesuai == 1 || $sesuai == 0) {
                                                                         ?>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                </svg>
+                                                                            <?php
+                                                                            } else if ($sesuai == 2) {
+                                                                            ?>
+                                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                        <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                    </svg>
+                                                                                </button>
+                                                                            <?php
+                                                                            }
+                                                                            ?>
+                                                                        <?php } else { ?>
                                                                             <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
                                                                                     <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
                                                                                 </svg>
                                                                             </button>
-                                                                        <?php
-                                                                                }
-                                                                        ?>
-                                                                        <?php }else{ ?>
-                                                                        <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
-                                                                                <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
-                                                                            </svg>
-                                                                        </button>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <?php }$o++; ?>
-                                                                <td rowspan="<?= count($dok) ?>" class="text-center" id="<?= 'poin_' . $elchild ?>"><?= $isallfilesubsub == 1 ? $poinambilsubsub:0 ?></td>
+                                                                        <?php } ?>
+                                                                    </td>
+                                                                <?php }
+                                                                $o++; ?>
+                                                                <td rowspan="<?= count($dok) ?>" class="text-center" id="<?= 'poin_' . $elchild ?>"><?= $isallfilesubsub == 1 ? $poinambilsubsub : 0 ?></td>
                                                             </tr>
-                                                            <?php 
-                                                            for($o; $o<count($dok); $o++){
+                                                            <?php
+                                                            for ($o; $o < count($dok); $o++) {
                                                                 $iddok = $dok[$o]['id'];
                                                             ?>
                                                                 <tr>
                                                                     <td><?= $dok[$o]['nama'] ?></td>
-                                                                    <?php 
-                                                                        if($ambilsubsub == 0){
-                                                                            echo "<td></td>";
-                                                                        }else{
+                                                                    <?php
+                                                                    if ($ambilsubsub == 0) {
+                                                                        echo "<td></td>";
+                                                                    } else {
                                                                     ?>
-                                                                    <td class="text-center align-middle <?= $elchild ?> <?= $ambilsubsub == 1 ? '':'d-none' ?>">
-                                                                        <?php 
-                                                                            if($dok[$o]['isupload'] == 1){
+                                                                        <td class="text-center align-middle <?= $elchild ?> <?= $ambilsubsub == 1 ? '' : 'd-none' ?>">
+                                                                            <?php
+                                                                            if ($dok[$o]['isupload'] == 1) {
                                                                                 if ($sesuai == 1 || $sesuai == 0) {
-                                                                        ?>
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                                                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
-                                                                            </svg>
-                                                                        <?php
-                                                                                }else if($sesuai == 2){
-                                                                        ?>
-                                                                            <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
-                                                                                    <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
-                                                                                </svg>
-                                                                            </button>
-                                                                        <?php
+                                                                            ?>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                    </svg>
+                                                                                <?php
+                                                                                } else if ($sesuai == 2) {
+                                                                                ?>
+                                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                <?php
                                                                                 }
-                                                                        ?>
-                                                                        <?php }else{ ?>
-                                                                        <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
-                                                                                <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
-                                                                            </svg>
-                                                                        </button>
-                                                                        <?php } ?>
-                                                                    </td>
+                                                                                ?>
+                                                                            <?php } else { ?>
+                                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                        <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                    </svg>
+                                                                                </button>
+                                                                            <?php } ?>
+                                                                        </td>
                                                                     <?php } ?>
                                                                 </tr>
                                                             <?php
@@ -403,15 +410,15 @@
 <script src="<?= base_url() ?>assets/bgh/dist/libs/jQuery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="<?= base_url() ?>assets/bgh/dist/libs/DataTables-1.13.4/js/datatables.min.js"></script>
 
-<?php 
-    if(isset($_GET['elnow'])){
-?>
-<script>
-    let elementnow = document.getElementById("<?= $_GET['elnow']?>");
-    elementnow.scrollIntoView();
-</script>
 <?php
-    }
+if (isset($_GET['elnow'])) {
+?>
+    <script>
+        let elementnow = document.getElementById("<?= $_GET['elnow'] ?>");
+        elementnow.scrollIntoView();
+    </script>
+<?php
+}
 ?>
 
 <script>
