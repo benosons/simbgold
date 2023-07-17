@@ -54,6 +54,38 @@ class BangunanBaru extends CI_Controller
     {
         $params = (object) $this->input->post();
 
+        if (isset($_FILES['file'])) {
+            $file = $_FILES['file'];
+
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                // $response = array(
+                //     'code' => 0,
+                //     'msg' => 'File upload failed with error code: ' . $file['error']
+                // );
+                // echo json_encode($response);
+                // exit;
+                $filename = "-";
+                $destination = "-";
+            } else {
+                $fileName = $file['name'];
+                $fileTmpPath = $file['tmp_name'];
+                $fileSize = $file['size'];
+                $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                if (!in_array($fileExtension, ['pdf'])) {
+                    $response = array(
+                        'code' => 0,
+                        'msg' => 'Ekstensi File Tidak Sesuai: ' . $file['error']
+                    );
+                    echo json_encode($response);
+                    exit;
+                }
+            }
+        } else {
+            $filename = "-";
+            $destination = "-";
+        }
+
         $datapemilik = array(
             'user_id' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
             'jns_pemilik' => 2,
@@ -85,6 +117,7 @@ class BangunanBaru extends CI_Controller
             $pemilik = $this->bgbarumodel->updatedatapemilik($datapemilik, ['id' => $params->id_pemilik]);
         }
 
+
         if ($params->id_permohonan == 0) {
             $rand1 = date('Ymd');
             $rand2 = rand(0, 999999);
@@ -98,7 +131,7 @@ class BangunanBaru extends CI_Controller
                 'lantai' => $params->lantai,
                 'luas_bangunan' => $params->luas_bangunan,
                 'klas_bangunan' => $params->klas_bangunan,
-                'status' => 0,
+                'status' => 2,
                 'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'))
             );
             $id_permohonan = $this->bgbarumodel->insertpermohonan($databangunan);
@@ -112,10 +145,85 @@ class BangunanBaru extends CI_Controller
                 'luas_bangunan' => $params->luas_bangunan,
                 'klas_bangunan' => $params->klas_bangunan,
             );
+            $kodebgh = $params->kode_bgh;
             $id_permohonan = $this->bgbarumodel->updatepermohonan($databangunan, ['id' => $params->id_permohonan]);
         }
 
-        if ($pemilik > 0 && $id_permohonan > 0) {
+        if (isset($_FILES['file'])) {
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                // $response = array(
+                //     'code' => 0,
+                //     'msg' => 'File upload failed with error code: ' . $file['error']
+                // );
+                // echo json_encode($response);
+                // exit;
+                $filename = "-";
+                $destination = "-";
+            } else {
+                if (!file_exists('assets/bgh/files/' . $id_permohonan . '/penyediajasa/')) {
+                    mkdir('assets/bgh/files/' . $id_permohonan . '/penyediajasa/', 0777, true);
+                }
+
+                // Move the uploaded file to the desired location
+                $filename = uniqid() . '.' . $fileExtension;
+                $destination = './assets/bgh/files/' . $id_permohonan . '/penyediajasa/' . $filename;
+                if (!move_uploaded_file($fileTmpPath, $destination)) {
+                    $response = array(
+                        'code' => 0,
+                        'msg' => 'Gagal Memindahkan File : ' . $file['error']
+                    );
+                    echo json_encode($response);
+                    exit;
+                }
+                if ($params->idfile != 0) {
+                    $wherefile = array('id' => $params->idfile);
+                    $getfile = $this->checklist_model->getfile($wherefile);
+                    if ($getfile->num_rows() > 0) {
+                        $item = $getfile->row();
+                        if (file_exists('assets/bgh/files/' . $id_permohonan . '/penyediajasa/' . $item->nama_file)) {
+                            unlink('assets/bgh/files/' . $id_permohonan . '/penyediajasa/' . $item->nama_file);
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($params->idpenyedia == 0) {
+            $datapenyedia = array(
+                'id_permohonan' => $id_permohonan,
+                'nama' => $params->nama_penyedia,
+                'alamat' => $params->alamat_penyedia,
+                'no_ktp' => $params->no_ktp_penyedia,
+                'no_hp' => $params->no_hp_penyedia,
+                'no_sertifikat' => $params->no_sertifikat,
+                'nama_file' => $filename,
+                'path' => $destination,
+                'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'))
+            );
+
+            $penyedia = $this->bgbarumodel->savepenyedia($datapenyedia);
+        } else {
+            $datapenyedia = array(
+                'id_permohonan' => $id_permohonan,
+                'nama' => $params->nama_penyedia,
+                'alamat' => $params->alamat_penyedia,
+                'no_ktp' => $params->no_ktp_penyedia,
+                'no_sertifikat' => $params->no_sertifikat,
+                'no_hp' => $params->no_hp_penyedia,
+                'update_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
+                'update_date' => date('Y-m-d')
+            );
+
+            if ($filename != "-" && $destination != "-") {
+                $datapenyedia['nama_file'] = $filename;
+                $datapenyedia['path'] = $destination;
+            }
+            $wherepenyedia = array('id' => $params->idpenyedia);
+
+            $penyedia = $this->bgbarumodel->editpenyedia($datapenyedia, $wherepenyedia);
+        }
+
+        if ($pemilik > 0 && $id_permohonan > 0 && $penyedia) {
             $response = array(
                 'code' => 1,
                 'nomor_bgh' => $kodebgh
@@ -632,6 +740,7 @@ class BangunanBaru extends CI_Controller
                                     $row4['sesuai'] = $getfile->sesuai;
                                     if ($getfile->sesuai == 2) {
                                         $data['tidak_sesuai'] += 1;
+                                    } else if ($getfile->sesuai == 0) {
                                         $counttidaksesuai += 1;
                                     }
                                     $row4['catatan'] = $getfile->catatan;
@@ -652,7 +761,7 @@ class BangunanBaru extends CI_Controller
                             } else {
                                 $row3['allassesment'] = 0;
                             }
-                            $row3['tidaksesuai'] = $counttidaksesuai;
+                            $row3['belumasses'] = $counttidaksesuai;
                             $row3['dok'] = $dok;
 
                             array_push($subsub, $row3);
@@ -691,6 +800,8 @@ class BangunanBaru extends CI_Controller
                                 if ($getfile->sesuai == 2) {
                                     $data['tidak_sesuai'] += 1;
                                     $counttidaksesuai += 1;
+                                } else if ($getfile->sesuai == 0) {
+                                    $counttidaksesuai += 1;
                                 }
                                 $row4['catatan'] = $getfile->catatan;
                                 $row4['path'] = $getfile->path;
@@ -709,7 +820,7 @@ class BangunanBaru extends CI_Controller
                         } else {
                             $row2['allassesment'] = 0;
                         }
-                        $row2['tidaksesuai'] = $counttidaksesuai;
+                        $row2['belumasses'] = $counttidaksesuai;
                         $row2['dok'] = $dok;
                     }
 
@@ -1285,11 +1396,15 @@ class BangunanBaru extends CI_Controller
     {
         $pilihantpa = $this->input->post('pilihantpa');
         $id_permohonan = $this->input->post('id_permohonan');
+        $tanggal_mulai = $this->input->post('tanggal_mulai');
+        $tanggal_selesai = $this->input->post('tanggal_selesai');
 
         $tpa = json_encode($pilihantpa);
 
         $data = array(
-            'id_tpa' => $tpa
+            'id_tpa' => $tpa,
+            'tanggal_mulai' => $tanggal_mulai,
+            'tanggal_selesai' => $tanggal_selesai
         );
         $where = array(
             'id' => $id_permohonan

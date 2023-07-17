@@ -5,10 +5,12 @@ class Bgbarumodel extends CI_Model
 {
     public function get($where = NULL)
     {
-        $this->db->select('t_permohonan_bgh.*, tmdatapemilik.id as id_pemilik, tmdatapemilik.glr_depan,tmdatapemilik.glr_belakang, tmdatapemilik.nm_pemilik, t_klas_bangunan.klas, tmdatapemilik.no_hp,tmdatapemilik.no_ktp,tmdatapemilik.no_kitas, tmdatapemilik.alamat, tmdatapemilik.id_provinsi, tmdatapemilik.id_kabkota, tmdatapemilik.id_kecamatan, tmdatapemilik.id_kelurahan, tmdatapemilik.email, tmdatapemilik.unit_organisasi');
+        $this->db->select('t_permohonan_bgh.*, tmdatapemilik.id as id_pemilik, tmdatapemilik.glr_depan,tmdatapemilik.glr_belakang, tmdatapemilik.nm_pemilik, t_klas_bangunan.klas, tmdatapemilik.no_hp,tmdatapemilik.no_ktp,tmdatapemilik.no_kitas, tmdatapemilik.alamat, tmdatapemilik.id_provinsi, tmdatapemilik.id_kabkota, tmdatapemilik.id_kecamatan, tmdatapemilik.id_kelurahan, tmdatapemilik.email, tmdatapemilik.unit_organisasi, t_penyedia_jasa.id as idpenyedia, t_penyedia_jasa.nama as nama_penyedia, t_penyedia_jasa.alamat as alamat_penyedia, t_penyedia_jasa.no_ktp as no_ktp_penyedia, t_penyedia_jasa.no_hp as no_hp_penyedia, t_penyedia_jasa.nama_file, t_penyedia_jasa.path,t_penyedia_jasa.no_sertifikat, t_status_permohonan.nama as nama_status, t_status_permohonan.nomor as nomor_status');
         $this->db->from('t_permohonan_bgh');
         $this->db->join('tmdatapemilik', 'tmdatapemilik.id = t_permohonan_bgh.id_pemilik', 'LEFT');
+        $this->db->join('t_penyedia_jasa', 't_penyedia_jasa.id_permohonan = t_permohonan_bgh.id', 'LEFT');
         $this->db->join('t_klas_bangunan', 't_permohonan_bgh.klas_bangunan = t_klas_bangunan.id', 'LEFT');
+        $this->db->join('t_status_permohonan', 't_status_permohonan.nomor = t_permohonan_bgh.status', 'LEFT');
         $this->db->order_by('t_permohonan_bgh.id', 'DESC');
         if ($where != NULL) {
             $this->db->where($where);
@@ -152,15 +154,14 @@ class Bgbarumodel extends CI_Model
         //         $query = $this->db->query("select * from $param $where order by id desc LIMIT " . $length . " OFFSET " . $start)->result();
         //     }
         // }
-        if($this->session->userdata('loc_role_id') == 10)
-        {
-            $where = 'WHERE t_permohonan_bgh.create_by="'.$this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')).'"';
-        }else if($this->session->userdata('loc_role_id') == 11){
-            $where = 'WHERE t_permohonan_bgh.status > 0';
-        }else if($this->session->userdata('loc_role_id') == 17){
-            $where = 'WHERE t_permohonan_bgh.id_tpa LIKE "%'.$this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')).'%"';
+        if ($this->session->userdata('loc_role_id') == 10) {
+            $where = 'WHERE t_permohonan_bgh.create_by="' . $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')) . '"';
+        } else if ($this->session->userdata('loc_role_id') == 11) {
+            $where = 'WHERE t_permohonan_bgh.status >= 0';
+        } else if ($this->session->userdata('loc_role_id') == 17) {
+            $where = 'WHERE t_permohonan_bgh.id_tpa LIKE "%' . $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')) . '%"';
         }
-        $query = $this->db->query("select *, t_permohonan_bgh.id as id_permohonan, tmdatapemilik.id as id_pemilik from t_permohonan_bgh JOIN tmdatapemilik ON t_permohonan_bgh.id_pemilik = tmdatapemilik.id $where order by t_permohonan_bgh.id desc LIMIT " . $length . " OFFSET " . $start)->result();
+        $query = $this->db->query("select *, t_permohonan_bgh.id as id_permohonan, tmdatapemilik.id as id_pemilik, t_status_permohonan.nama as nama_status, t_status_permohonan.nomor as nomor_status from t_permohonan_bgh JOIN tmdatapemilik ON t_permohonan_bgh.id_pemilik = tmdatapemilik.id JOIN t_status_permohonan ON t_permohonan_bgh.status = t_status_permohonan.nomor $where order by t_permohonan_bgh.id desc LIMIT " . $length . " OFFSET " . $start)->result();
         return $query;
     }
 
@@ -227,12 +228,25 @@ class Bgbarumodel extends CI_Model
         return $where['id'];
     }
 
-    public function savingupload($data)
+    public function savepenyedia($data)
     {
-        return $this->db->insert('t_checklist_file',$data);
+        $q = $this->db->insert('t_penyedia_jasa', $data);
+        return $q;
     }
 
-    public function updatefile($data,$where)
+    public function editpenyedia($data, $where)
+    {
+        $this->db->where($where);
+        $q = $this->db->update('t_penyedia_jasa', $data);
+        return $q;
+    }
+
+    public function savingupload($data)
+    {
+        return $this->db->insert('t_checklist_file', $data);
+    }
+
+    public function updatefile($data, $where)
     {
         $this->db->where($where);
         $q = $this->db->update('t_checklist_file', $data);
@@ -258,6 +272,4 @@ class Bgbarumodel extends CI_Model
         $q = $this->db->update('t_checklist_ambil', $data);
         return $q;
     }
-    
 }
-
