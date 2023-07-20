@@ -5,6 +5,7 @@ class BangunanBaru extends CI_Controller
 {
     public function __construct()
     {
+        date_default_timezone_set("Asia/Bangkok");
         parent::__construct();
         $this->load->helper('utility');
         $this->load->library('mypagination');
@@ -88,7 +89,7 @@ class BangunanBaru extends CI_Controller
 
         $datapemilik = array(
             'user_id' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
-            'jns_pemilik' => 2,
+            'jns_pemilik' => $params->jns_pemilik,
             'nm_pemilik' => $params->nm_pemilik,
             'glr_depan' => $params->glr_depan,
             'glr_belakang' => $params->glr_belakang,
@@ -238,6 +239,44 @@ class BangunanBaru extends CI_Controller
         echo json_encode($response);
     }
 
+    public function updateverifikasidata()
+    {
+        $params = (object)$this->input->post();
+
+
+        $now = date('Y-m-d H:i:s');
+        $date = new DateTime($now);
+        $date->modify('+1 day');
+        $formatdate = $date->format('Y-m-d H:i:s');
+
+        $end = $formatdate;
+
+        $where = array(
+            'id' => $params->id_permohonan
+        );
+
+        $data = array(
+            'tanggal_mulai_verifikasi' => $now,
+            'tanggal_selesai_verifikasi' => $end,
+            'status' => $params->status
+        );
+
+        $update = $this->bgbarumodel->updatestatuspermohonan($data, $where);
+        if ($update) {
+            $response = array(
+                'code' => 1,
+                'mgs' => "Berhasil"
+            );
+        } else {
+            $response = array(
+                'code' => 0,
+                'msg' => 'Input Gagal Silahkan coba kembali '
+            );
+        }
+
+        echo json_encode($response);
+    }
+
     public function updatestatuspermohonan()
     {
         $params = (object)$this->input->post();
@@ -248,6 +287,35 @@ class BangunanBaru extends CI_Controller
 
         $data = array(
             'poin_diajukan' => $params->poinhead,
+            'status' => $params->status
+        );
+
+        $update = $this->bgbarumodel->updatestatuspermohonan($data, $where);
+        if ($update) {
+            $response = array(
+                'code' => 1,
+                'mgs' => "Berhasil"
+            );
+        } else {
+            $response = array(
+                'code' => 0,
+                'msg' => 'Input Gagal Silahkan coba kembali '
+            );
+        }
+
+        echo json_encode($response);
+    }
+
+    public function updatejadwalsidang()
+    {
+        $params = (object)$this->input->post();
+
+        $where = array(
+            'id' => $params->id_permohonan
+        );
+
+        $data = array(
+            'tanggal_sidang' => $params->tanggal_sidang,
             'status' => $params->status
         );
 
@@ -283,7 +351,11 @@ class BangunanBaru extends CI_Controller
         $data['page'] = 'permohonan';
         $klas = $this->db->get('t_klas_bangunan')->result();
         $data['klas'] = $klas;
-        $head = $this->checklist_model->gethead()->result();
+        $where = array(
+            'kategori' => 1,
+            'tahap' => 'perencanaan'
+        );
+        $head = $this->checklist_model->gethead($where)->result();
         $checklist = array();
         $data['tidak_sesuai'] = 0;
         $data['poin_maksimal'] = 0;
@@ -335,6 +407,7 @@ class BangunanBaru extends CI_Controller
                             if ($getambil->num_rows() > 0) {
                                 $row3['ambil'] = 1;
                                 $itemambil = $getambil->row();
+                                $row3['lengkap'] = $itemambil->lengkap;
                                 $row3['poinambil'] = $itemambil->poin_diajukan;
                                 $row2['terpilih'] = 1;
                             } else {
@@ -393,6 +466,7 @@ class BangunanBaru extends CI_Controller
                         if ($getambil->num_rows() > 0) {
                             $row2['ambil'] = 1;
                             $itemambil = $getambil->row();
+                            $row2['lengkap'] = $itemambil->lengkap;
                             $row2['poinambil'] = $itemambil->poin_diajukan;
                             $row2['terpilih'] = 1;
                         } else {
@@ -472,7 +546,11 @@ class BangunanBaru extends CI_Controller
         $data['page'] = 'permohonan';
         $klas = $this->db->get('t_klas_bangunan')->result();
         $data['klas'] = $klas;
-        $head = $this->checklist_model->gethead()->result();
+        $where = array(
+            'kategori' => 1,
+            'tahap' => 'perencanaan'
+        );
+        $head = $this->checklist_model->gethead($where)->result();
         $checklist = array();
         $data['tidak_sesuai'] = 0;
         $data['poin_maksimal'] = 0;
@@ -662,7 +740,11 @@ class BangunanBaru extends CI_Controller
         $data['tidak_sesuai'] = 0;
         $klas = $this->db->get('t_klas_bangunan')->result();
         $data['klas'] = $klas;
-        $head = $this->checklist_model->gethead()->result();
+        $where = array(
+            'kategori' => 1,
+            'tahap' => 'perencanaan'
+        );
+        $head = $this->checklist_model->gethead($where)->result();
         $checklist = array();
         $data['poin_maksimal'] = 0;
         $data['poinhead'] = 0;
@@ -856,6 +938,253 @@ class BangunanBaru extends CI_Controller
         $this->load->view('layouts', $data);
     }
 
+    public function kelengkapan()
+    {
+        $no_permohonan = $this->uri->segment(5);
+        if (isset($no_permohonan)) {
+            $permohonan = $this->bgbarumodel->get(array('t_permohonan_bgh.kode_bgh' => $no_permohonan))->row();
+            if (empty($permohonan)) {
+                redirect('Bgh/BangunanGedung/BangunanBaru');
+            } else {
+                $data['permohonan'] = $permohonan;
+            }
+        } else {
+            redirect('Bgh/BangunanGedung/BangunanBaru');
+        }
+        $data['page'] = 'permohonan';
+        $data['tidak_sesuai'] = 0;
+        $data['tidak_lengkap'] = 0;
+        $data['verifikasi'] = 0;
+        $data['countambil'] = 0;
+        $klas = $this->db->get('t_klas_bangunan')->result();
+        $data['klas'] = $klas;
+        $where = array(
+            'kategori' => 1,
+            'tahap' => 'perencanaan'
+        );
+        $head = $this->checklist_model->gethead($where)->result();
+        $checklist = array();
+        $data['poin_maksimal'] = 0;
+        $data['poinhead'] = 0;
+        $data['poinallassesment'] = 0;
+        foreach ($head as $h) {
+            $row = array();
+            $row['id'] = (!empty($h->id) ? $h->id : "");
+            $row['kode'] = (!empty($h->kode) ? $h->kode : "");
+            $row['nama'] = (!empty($h->nama) ? $h->nama : "");
+            $row['poin'] = (!empty($h->poin) ? $h->poin : "");
+            $row['poindiajukan'] = 0;
+
+            $getmain = $this->checklist_model->getmain(array('id_head' => $h->id))->result();
+            $main = array();
+            foreach ($getmain as $m) {
+                $row1 = array();
+                $row1['id'] = (!empty($m->id) ? $m->id : "");
+                $row1['kode'] = (!empty($m->kode) ? $m->kode : "");
+                $row1['nama'] = (!empty($m->nama) ? $m->nama : "");
+                $row1['poin'] = (!empty($m->poin) ? $m->poin : "");
+                $data['poin_maksimal'] += $m->poin;
+
+                $getsub = $this->checklist_model->getsub(array('id_main' => $m->id))->result();
+                $sub = array();
+
+                foreach ($getsub as $s) {
+                    $row2 = array();
+                    $row2['id'] = (!empty($s->id) ? $s->id : "");
+                    $row2['kode'] = (!empty($s->kode) ? $s->kode : "");
+                    $row2['nama'] = (!empty($s->nama) ? $s->nama : "");
+                    $row2['poin'] = (!empty($s->poin) ? $s->poin : "");
+                    $row2['pilihan'] = (!empty($s->pilihan) ? $s->pilihan : "0");
+                    $row2['dokumen'] = (!empty($s->dokumen) ? $s->dokumen : "0");
+                    $row2['terpilih'] = 0;
+                    if ($s->dokumen == 0) {
+                        $getsubsub = $this->checklist_model->getsubsub(array('id_sub' => $s->id))->result();
+                        $subsub = array();
+                        foreach ($getsubsub as $ss) {
+
+                            $row3 = array();
+                            $row3['id'] = (!empty($ss->id) ? $ss->id : "");
+                            $row3['kode'] = (!empty($ss->kode) ? $ss->kode : "");
+                            $row3['nama'] = (!empty($ss->nama) ? $ss->nama : "");
+                            $row3['pilihan'] = (!empty($ss->pilihan) ? $ss->pilihan : "0");
+                            $row3['poin'] = (!empty($ss->poin) ? $ss->poin : "");
+                            $row3['dokumen'] = (!empty($ss->dokumen) ? $ss->dokumen : "0");
+                            $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil' => $permohonan->id, 'id_sub_sub_ambil' => $ss->id));
+                            if ($getambil->num_rows() > 0) {
+                                $data['poinhead'] += $ss->poin;
+                                $row['poindiajukan'] += $ss->poin;
+                                $data['countambil'] += 1;
+                                $itemambil = $getambil->row();
+                                $row3['ambil'] = 1;
+                                $row3['id_ambil'] = $itemambil->id;
+                                $row3['poin_diajukan'] = $itemambil->poin_diajukan;
+                                $row3['poin_assesment'] = $itemambil->poin_assesment;
+                                $data['poinallassesment'] += $itemambil->poin_assesment;
+                                $row3['lengkap'] = $itemambil->lengkap;
+                                if ($itemambil->lengkap == 2) {
+                                    $data['tidak_lengkap'] += 1;
+                                    $data['verifikasi'] += 1;
+                                } else if ($itemambil->lengkap == 1) {
+                                    $data['verifikasi'] += 1;
+                                }
+                                $row3['assesment_by'] = $itemambil->assesment_by;
+                            }
+
+                            $getdok = $this->checklist_model->getdok(array('id_sub_sub_dok' => $ss->id))->result();
+
+                            $dok = array();
+                            $countdok = 0;
+                            $countupload = 0;
+                            $counttidaksesuai = 0;
+                            foreach ($getdok as $d) {
+                                $row4 = array();
+                                $row4['id'] = (!empty($d->id) ? $d->id : "");
+                                $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
+
+                                $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
+
+                                if (!empty($getfile)) {
+                                    $row4['id_file'] = $getfile->id;
+                                    $row4['sesuai'] = $getfile->sesuai;
+                                    if ($getfile->sesuai == 2) {
+                                        $data['tidak_sesuai'] += 1;
+                                    } else if ($getfile->sesuai == 0) {
+                                        $counttidaksesuai += 1;
+                                    }
+                                    $row4['catatan'] = $getfile->catatan;
+                                    $row4['path'] = $getfile->path;
+                                    $row4['extension'] = $getfile->extension;
+                                    $row4['isupload'] = 1;
+                                    $countupload += 1;
+                                    // if ($getfile->sesuai == 1) {
+                                    $countdok += 1;
+                                    // }
+                                } else {
+                                    $row4['isupload'] = 0;
+                                }
+
+                                array_push($dok, $row4);
+                            }
+                            if (count($getdok) == $countupload && !empty($getdok)) {
+                                $row3['isallfile'] = 1;
+                            } else {
+                                $row3['isallfile'] = 0;
+                            }
+                            if (count($getdok) == $countdok) {
+                                $row3['allassesment'] = 1;
+                            } else {
+                                $row3['allassesment'] = 0;
+                            }
+                            $row3['belumasses'] = $counttidaksesuai;
+                            $row3['dok'] = $dok;
+
+                            array_push($subsub, $row3);
+                        }
+                        $row2['subsub'] = $subsub;
+                    } else {
+                        $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil' => $permohonan->id, 'id_sub_ambil' => $s->id));
+                        if ($getambil->num_rows() > 0) {
+                            $itemambil = $getambil->row();
+                            $data['countambil'] += 1;
+                            if ($itemambil->lengkap == 2) {
+                                $data['tidak_lengkap'] += 1;
+                                $data['verifikasi'] += 1;
+                            } else if ($itemambil->lengkap == 1) {
+                                $data['verifikasi'] += 1;
+                            }
+                            $row2['ambil'] = 1;
+                            $row2['id_ambil'] = $itemambil->id;
+                            $row2['poin_diajukan'] = $itemambil->poin_diajukan;
+                            $data['poinhead'] += $s->poin;
+                            $row['poindiajukan'] += $s->poin;
+                            $row2['poin_assesment'] = $itemambil->poin_assesment;
+                            $data['poinallassesment'] += $itemambil->poin_assesment;
+                            $row2['lengkap'] = $itemambil->lengkap;
+                            $row2['assesment_by'] = $itemambil->assesment_by;
+                        } else {
+                            $row2['ambil'] = 0;
+                        }
+
+                        $getdok = $this->checklist_model->getdok(array('id_sub_dok' => $s->id))->result();
+
+                        $dok = array();
+                        $countdok = 0;
+                        $countupload = 0;
+                        $counttidaksesuai = 0;
+                        foreach ($getdok as $d) {
+                            $row4 = array();
+                            $row4['id'] = (!empty($d->id) ? $d->id : "");
+                            $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
+
+                            $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
+                            if (!empty($getfile)) {
+                                $row4['id_file'] = $getfile->id;
+                                $row4['sesuai'] = $getfile->sesuai;
+                                if ($getfile->sesuai == 2) {
+                                    $data['tidak_sesuai'] += 1;
+                                    $counttidaksesuai += 1;
+                                } else if ($getfile->sesuai == 0) {
+                                    $counttidaksesuai += 1;
+                                }
+                                $row4['catatan'] = $getfile->catatan;
+                                $row4['path'] = $getfile->path;
+                                $row4['extension'] = $getfile->extension;
+                                $row4['isupload'] = 1;
+                                $countupload += 1;
+                                // if ($getfile->sesuai == 1) {
+                                $countdok += 1;
+                                // }
+                            } else {
+                                $row4['isupload'] = 0;
+                            }
+                            array_push($dok, $row4);
+                        }
+                        if (count($getdok) == $countupload && !empty($getdok)) {
+                            $row2['isallfile'] = 1;
+                        } else {
+                            $row2['isallfile'] = 0;
+                        }
+                        if (count($getdok) == $countdok) {
+                            $row2['allassesment'] = 1;
+                        } else {
+                            $row2['allassesment'] = 0;
+                        }
+                        $row2['belumasses'] = $counttidaksesuai;
+                        $row2['dok'] = $dok;
+                    }
+
+                    array_push($sub, $row2);
+                }
+                $row1['sub'] = $sub;
+
+                array_push($main, $row1);
+            }
+
+            $row['main'] = $main;
+
+            array_push($checklist, $row);
+        }
+        $data['checklist'] = $checklist;
+        $hasil = (float) ($data['poinallassesment'] * 100) / $data['poin_maksimal'];
+        $data['hasil_assesment'] = number_format($hasil, 2);
+
+        if ($hasil < 65 || $hasil <= 45) {
+            if ($hasil == 0) {
+                $ketentuan = '-';
+            } else {
+                $ketentuan = 'PRATAMA';
+            }
+        } else if ($hasil == 65 || $hasil < 80) {
+            $ketentuan = "MADYA";
+        } else if ($hasil == 80 || $hasil <= 100) {
+            $ketentuan = "UTAMA";
+        }
+        $data['ketentuan'] = $ketentuan;
+        $data['content'] = $this->load->view('bangunangedung/bangunanbaru/formkelengkapan', $data, TRUE);
+
+        $this->load->view('layouts', $data);
+    }
+
     public function hasil()
     {
         $no_permohonan = $this->uri->segment(5);
@@ -872,7 +1201,11 @@ class BangunanBaru extends CI_Controller
         $data['page'] = 'hasil assesment';
         $klas = $this->db->get('t_klas_bangunan')->result();
         $data['klas'] = $klas;
-        $head = $this->checklist_model->gethead()->result();
+        $where = array(
+            'kategori' => 1,
+            'tahap' => 'perencanaan'
+        );
+        $head = $this->checklist_model->gethead($where)->result();
         $checklist = array();
         $data['poin_maksimal'] = 0;
         $data['poinhead'] = 0;
@@ -1152,6 +1485,32 @@ class BangunanBaru extends CI_Controller
         echo json_encode($response);
     }
 
+    public function updatelengkap()
+    {
+        $params = (object) $this->input->post();
+        $where = array('id' => $params->idambil);
+        $data = array(
+            'lengkap' => $params->lengkap,
+            'update_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
+            'update_date' => date('Y-m-d H:i:s')
+        );
+
+        $update = $this->bgbarumodel->updateambil($data, $where);
+
+        if ($update) {
+            $response = array(
+                'code' => 1,
+                'msg' => 'Berhasil'
+            );
+        } else {
+            $response = array(
+                'code' => 0,
+                'msg' => 'Gagal'
+            );
+        }
+        echo json_encode($response);
+    }
+
     public function uploading()
     {
         $params = (object)$this->input->post();
@@ -1292,6 +1651,29 @@ class BangunanBaru extends CI_Controller
         echo json_encode($response);
     }
 
+    public function uploadimagecatatan()
+    {
+        $id_permohonan = $this->input->post('idpermohonan');
+        if (!file_exists('assets/bgh/files/' . $id_permohonan . '/catatan/')) {
+            mkdir('assets/bgh/files/' . $id_permohonan . '/catatan/', 0777, true);
+        }
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $config['upload_path'] = './assets/bgh/files/' . $id_permohonan . '/catatan/'; // Ubah sesuai dengan folder penyimpanan gambar Anda
+            $config['allowed_types'] = 'gif|jpg|jpeg|png';
+            $config['max_size'] = 2048; // Ukuran maksimum gambar (dalam kilobita). Sesuaikan dengan kebutuhan Anda.
+            $config['encrypt_name'] = TRUE; // Mengenkripsi nama gambar untuk menghindari konflik nama file
+
+            $this->load->library('upload', $config);
+
+            if (!$this->upload->do_upload('image')) {
+                echo "Error: " . $this->upload->display_errors();
+            } else {
+                $data = $this->upload->data();
+                echo base_url('assets/bgh/files/' . $id_permohonan . '/catatan/' . $data['file_name']);
+            }
+        }
+    }
+
     public function selesaiassesment()
     {
         $params = (object) $this->input->post();
@@ -1324,6 +1706,35 @@ class BangunanBaru extends CI_Controller
     }
 
     public function verifikasiassesment()
+    {
+        $params = (object) $this->input->post();
+
+        $where = array(
+            'id' => $params->id_permohonan
+        );
+
+        $data = array(
+            'status' => $params->status
+        );
+
+        $update = $this->bgbarumodel->updatepermohonan($data, $where);
+
+        if ($update > 0) {
+            $response = array(
+                'code' => 1,
+                'msg' => "Berhasil"
+            );
+        } else {
+            $response = array(
+                'code' => 0,
+                'msg' => "Gagal"
+            );
+        }
+
+        echo json_encode($response);
+    }
+
+    public function verifikasikelengkapan()
     {
         $params = (object) $this->input->post();
 

@@ -88,9 +88,30 @@
     </div>
 </div>
 
+<div class="modal modal-blur fade" id="modal-jadwalsidang" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="" class="form-control-label">Tanggal Jadwal Sidang</label>
+                        <input type="date" class="form-control" id="tanggal_sidang" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
+                <input type="text" id="id_permohonan_jadwal" hidden>
+                <button type="button" id="submit-jadwal" class="btn btn-success">Simpan
+                    <div class="spinner-border spinner-border-sm text-white d-none ms-3" id="loaderupload" role="status"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="<?= base_url() ?>assets/bgh/dist/libs/jQuery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="<?= base_url() ?>assets/bgh/dist/libs/DataTables-1.13.4/js/datatables.min.js"></script>
-
 <script>
     let role = "<?= $role ?>";
     $(() => {
@@ -104,6 +125,58 @@
             var provinsi = $(this).data('provinsi');
             var kabkota = $(this).data('kabkota');
             penugasantpa(id_permohonan, provinsi, kabkota);
+        })
+
+        $(document).on('click', '.batalkan', function() {
+            var id_permohonan = $(this).data('permohonan');
+            var poin_diajukan = $(this).data('poindiajukan');
+            var status = 0;
+            batalkan(id_permohonan, status, poin_diajukan);
+        })
+
+        $(document).on('click', '.ajukansidang', function() {
+            var id_permohonan = $(this).data('permohonan');
+            var poin_diajukan = $(this).data('poindiajukan');
+            var status = 43;
+            ajukansidang(id_permohonan, status, poin_diajukan);
+        })
+
+        $(document).on('click', '.jadwalsidang', function() {
+            var id_permohonan = $(this).data('permohonan');
+            $('#id_permohonan_jadwal').val(id_permohonan);
+
+            var myModal = new bootstrap.Modal(document.getElementById('modal-jadwalsidang'), {
+                keyboard: false,
+                backdrop: false
+            })
+            myModal.show();
+        })
+
+        $(document).on('click', '.cek-kelengkapan', function() {
+            if (confirm('Cek Kelengkapan Data Pada Permohonan ini ? ')) {
+                let urlredirect = $(this).data('url');
+                let form = new FormData();
+
+                form.append('id_permohonan', $(this).data('idpermohonan'));
+                form.append('status', 31);
+
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: form,
+                    processData: false,
+                    contentType: false,
+                    url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updateverifikasidata',
+                    success: function(response) {
+                        if (response.code === 1) {
+                            window.location.href = urlredirect;
+                            // console.log('berhgasi0');
+                        } else {
+                            alert('gagal');
+                        }
+                    }
+                })
+            }
         })
 
         $('#subm').click(function() {
@@ -135,6 +208,76 @@
             }
 
         })
+
+        $('#submit-jadwal').click(function() {
+            let formdata = new FormData();
+            formdata.append('id_permohonan', $('#id_permohonan_jadwal').val());
+            formdata.append('tanggal_sidang', $('#tanggal_sidang').val());
+            formdata.append('status', 5);
+
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatejadwalsidang',
+                success: function(response) {
+                    if (response.code === 1) {
+                        alert('Berhasil !');
+                        location.reload();
+                    }
+                }
+            })
+        })
+
+        function batalkan(id_permohonan, status, poin_diajukan) {
+            if (confirm('Batalkan Permohonan Ini ?')) {
+                let fd = new FormData();
+                fd.append('id_permohonan', id_permohonan);
+                fd.append('status', status);
+                fd.append('poinhead', poin_diajukan);
+
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatestatuspermohonan',
+                    success: function(response) {
+                        if (response.code === 1) {
+                            alert('Berhasil!');
+                            window.location.href = '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/';
+                        }
+                    }
+                })
+            }
+        }
+
+        function ajukansidang(id_permohonan, status, poin_diajukan) {
+            if (confirm('Ajukan Sidang Untuk Permohonan Ini ?')) {
+                let fd = new FormData();
+                fd.append('id_permohonan', id_permohonan);
+                fd.append('status', status);
+                fd.append('poinhead', poin_diajukan);
+
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatestatuspermohonan',
+                    success: function(response) {
+                        if (response.code === 1) {
+                            alert('Berhasil!');
+                            window.location.href = '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/';
+                        }
+                    }
+                })
+            }
+        }
 
         function penugasantpa(id_permohonan, id_provinsi, id_kabkota) {
             var myModal = new bootstrap.Modal(document.getElementById('modalpenugasan'), {
@@ -274,6 +417,28 @@
                         var $rowData = "";
                         var $stat = '';
                         var $asses = '';
+                        var mulaiasses = '';
+                        var selesaiasses = '';
+                        var tanggalsidang = '';
+
+                        if (row.tanggal_mulai === null) {
+                            mulaiasses += 'Belum Tersedia';
+                        } else {
+                            mulaiasses = row.tanggal_mulai;
+                        }
+
+                        if (row.tanggal_selesai === null) {
+                            selesaiasses += 'Belum Tersedia';
+                        } else {
+                            selesaiasses = row.tanggal_selesai;
+                        }
+
+                        if (row.tanggal_sidang === null) {
+                            tanggalsidang = 'Menunggu Jadwal Sidang';
+                        } else {
+                            tanggalsidang = row.tanggal_sidang;
+                        }
+
                         if (row.nomor_status == "0") {
                             $stat += `<span class="badge bg-danger">${row.nama_status}</span>`;
                         } else if (row.nomor_status == "1") {
@@ -284,34 +449,54 @@
                             $stat += `<span class="badge bg-cyan">${row.nama_status}</span>`;
                         } else if (row.nomor_status == "31") {
                             $stat += `<span class="badge bg-cyan">${row.nama_status}</span>`;
+                            $asses += `
+                                <p>
+                                    Tanggal Mulai Verifikasi : ${row.tanggal_mulai_verifikasi}
+                                </p>
+                                <p> 
+                                    Estimasi Selesai Verifikasi : ${row.tanggal_selesai_verifikasi}
+                                </p>
+                            `;
                         } else if (row.nomor_status == "32") {
+                            $stat += `<span class="badge bg-cyan">${row.nama_status}</span>`;
+                        } else if (row.nomor_status == "33") {
                             $stat += `<span class="badge bg-cyan">${row.nama_status}</span>`;
                         } else if (row.nomor_status == "4") {
                             $stat += `<span class="badge bg-blue">${row.nama_status}</span>`;
                             $asses += `
                                 <p>
-                                    Tanggal Mulai : ${row.tanggal_mulai}
+                                    Tanggal Mulai : ${mulaiasses}
                                 </p>
                                 <p> 
-                                    Estimasi Selesai : ${row.tanggal_selesai}
+                                    Estimasi Selesai : ${selesaiasses}
                                 </p>
                             `;
                         } else if (row.nomor_status == "41") {
                             $stat += `<span class="badge bg-orange">${row.nama_status}</span>`;
                             $asses += `
                                 <p>
-                                    Tanggal Mulai : ${row.tanggal_mulai}
+                                    Tanggal Mulai Konsultasi/Assesment : <strong>${mulaiasses}</strong>
                                 </p>
                                 <p> 
-                                    Estimasi Selesai : ${row.tanggal_selesai}
+                                    Estimasi Selesai Konsultasi/Assesment : <strong>${selesaiasses}</strong>
                                 </p>
                             `;
                         } else if (row.nomor_status == "42") {
-                            $stat += `<span class="badge bg-blue">${row.nama_status}</span>`;
+                            $stat += `<span class="badge bg-blue text-wrap">${row.nama_status}</span>`;
                         } else if (row.nomor_status == "43") {
                             $stat += `<span class="badge bg-blue">${row.nama_status}</span>`;
+                            $asses += `
+                                <p>
+                                    Tanggal Sidang : <strong>${tanggalsidang}</strong>
+                                </p>
+                            `;
                         } else if (row.nomor_status == "5") {
                             $stat += `<span class="badge bg-azure">${row.nama_status}</span>`;
+                            $asses += `
+                                <p>
+                                    Tanggal Sidang : <strong>${tanggalsidang}</strong>
+                                </p>
+                            `;
                         } else if (row.nomor_status == "6") {
                             $stat += `<span class="badge bg-azure">${row.nama_status}</span>`;
                         }
@@ -335,28 +520,29 @@
                         let continuechecklist = "";
                         let databangunanpemilik = "";
                         let batalkan = "";
+                        let sidang = "";
                         let penugasantpa = "";
                         let menu = "";
 
                         if (role == "10") {
-                            if (row.nomor_status == "1") {
+                            if (row.status == "1") {
                                 banding += `<a class="dropdown-item" href="javascript:;">
                                     Ajukan Banding
                                 </a>`;
                                 menu += `${banding}`;
-                            } else if (row.nomor_status == "2") {
+                            } else if (row.status == "2") {
                                 continuechecklist = `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/penilaian/${row.kode_bgh}">
                                     Lanjutkan Pengisian Daftar Simak
                                 </a>`;
                                 databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
                                     Edit Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
-                                batalkan += `<a class="dropdown-item" href="javascript:;">
+                                batalkan += `<a class="dropdown-item batalkan" data-permohonan="${row.id_permohonan}" data-poindiajukan="${row.poin_diajukan}" href="javascript:void(0)">
                                     Batalkan Permohonan
                                 </a>`;
 
                                 menu += `${databangunanpemilik} ${continuechecklist} ${batalkan}`;
-                            } else if (row.nomor_status == "3") {
+                            } else if (row.status == "3") {
                                 databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
                                     Lihat Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
@@ -365,14 +551,154 @@
                                 </a>`;
 
                                 menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "32") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/penilaian/${row.kode_bgh}">
+                                Revisi Pengisian Daftar Simak
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "33") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/detailform/${row.kode_bgh}">
+                                Detail Hasil Pengisian Daftar Simak
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "4") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/detailform/${row.kode_bgh}">
+                                Detail Hasil Pengisian Daftar Simak
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "41") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/penilaian/${row.kode_bgh}">
+                                Revisi Daftar Simak
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "42") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                Lihat Hasil Assesmen
+                                </a>`;
+                                sidang += `<a class="dropdown-item ajukansidang" data-permohonan="${row.id_permohonan}" data-poindiajukan="${row.poin_diajukan}" href="javascript:void(0)">
+                                Ajukan Sidang
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist} ${sidang}`;
+                            } else if (row.status == "43") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                Lihat Hasil Assesmen
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
                             }
                         } else if (role == "11") {
-                            if (row.nomor_status == "3") {
+                            if (row.status == "3") {
                                 databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
                                 Lihat Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
-                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/detailform/${row.kode_bgh}">
+                                continuechecklist += `<a class="dropdown-item cek-kelengkapan" href="javascript:;" data-url="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/kelengkapan/${row.kode_bgh}" data-idpermohonan="${row.id_permohonan}" data-poindiajukan="${row.poin_diajukan}">
                                 Cek Kelengkapan Data Daftar Simak
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "31") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/kelengkapan/${row.kode_bgh}">
+                                Lanjutkan Cek Kelengkapan Data Daftar Simak
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "32" || row.status == "33") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/kelengkapan/${row.kode_bgh}">
+                                Detail Hasil Verifikasi Kelengkapan Data Daftar Simak
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "4") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/kelengkapan/${row.kode_bgh}">
+                                Detail Hasil Verifikasi Kelengkapan Data Daftar Simak
+                                </a>`;
+                                if (row.id_tpa === "0") {
+                                    penugasantpa = `<a class="dropdown-item penugasantpa" data-permohonan="${row.id_permohonan}" data-provinsi="${row.id_provinsi}" data-kabkota="${row.id_kabkota}" href="javascript:void(0)">Penugasan TPA</a>`;
+                                } else {
+                                    penugasantpa = '';
+                                }
+
+                                menu += `${databangunanpemilik} ${continuechecklist} ${penugasantpa}`;
+                            } else if (row.status == "43") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                Lihat Hasil Assesmen
+                                </a>`;
+                                sidang += `<a class="dropdown-item jadwalsidang" data-permohonan="${row.id_permohonan}" href="javascript:void(0)">
+                                Tentukan Jadwal Sidang
+                                </a>`;
+
+
+                                menu += `${databangunanpemilik} ${continuechecklist} ${sidang}`;
+                            }
+                        } else if (role == "17") {
+                            if (row.status == "4") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/assesment/${row.kode_bgh}">
+                                     Assesment Permohonan
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "42") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                Lihat Hasil Assesmen
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "43") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                Lihat Hasil Assesmen
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "5") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                Lihat Hasil Assesmen
                                 </a>`;
 
                                 menu += `${databangunanpemilik} ${continuechecklist}`;
@@ -489,8 +815,7 @@
                         // </a>`;
                         // }else if(row.status )
                         $rowData +=
-                            `
-                            <div class="dropdown">
+                            `<div class="dropdown">
                                 <button class="btn btn-facebook w-100 btn-icon dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-label="Facebook">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>

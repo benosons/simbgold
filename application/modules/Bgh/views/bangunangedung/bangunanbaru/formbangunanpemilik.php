@@ -109,8 +109,16 @@
                                     <div class="mb-3">
                                         <label for="" class="form-label">Upload SKA/SKK/Sertifikat Pelatihan BGH</label>
                                         <p>
-                                            <?= !empty($permohonan) ? $permohonan->nama_file : '' ?>
-                                            <a href="javascript:;" id="openmodal" data-path="<?= $permohonan->path ?>">Lihat</a>
+                                            <?php
+                                            if (!empty($permohonan)) {
+                                                if ($permohonan->nama_file != "") {
+                                                    echo $permohonan->nama_file;
+                                            ?>
+                                                    <a href="javascript:;" id="openmodal" data-path="<?= $permohonan->path ?>">Lihat</a>
+                                            <?php
+                                                }
+                                            }
+                                            ?>
                                         </p>
                                         <input type="file" class="form-control" name="file" id="file">
                                     </div>
@@ -127,47 +135,59 @@
                             <h3>Data Pemilik</h3>
                             <input type="text" id="id_pemilik" name="id_pemilik" value="<?= (!empty($permohonan)) ? $permohonan->id_pemilik : 0 ?>" hidden>
                             <div class="row row-cards">
-                                <div class="col-md-4">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Status Kepemilikan</label>
+                                        <select name="jns_pemilik" id="jns_pemilik" class="form-select" required>
+                                            <option value="0">PILIH</option>
+                                            <option value="1">Badan Usaha</option>
+                                            <option value="2">Pemerintah</option>
+                                            <option value="3">Perorangan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 perorangan">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Gelar Depan</label>
                                         <input type="text" class="form-control" name="glr_depan" id="glr_depan" placeholder="Masukan Gelar Depan" value="<?= (!empty($permohonan)) ? $permohonan->glr_depan : '' ?>">
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Nama</label>
-                                        <input type="text" class="form-control" name="nm_pemilik" id="nm_pemilik" value="<?= (!empty($permohonan)) ? $permohonan->nm_pemilik : '' ?>" placeholder="Masukan Nama Pemilik" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6 perorangan">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Gelar Belakang</label>
                                         <input type="text" class="form-control" name="glr_belakang" id="glr_belakang" placeholder="Masukan Gelar Belakang" value="<?= (!empty($permohonan)) ? $permohonan->glr_belakang : '' ?>">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 perorangan badanusaha">
                                     <div class="mb-3">
-                                        <label for="" class="form-label">No KTP</label>
-                                        <input type="text" maxlength="16" class="form-control" name="no_ktp" id="no_ktp" placeholder="Masukan No KTP" value="<?= (!empty($permohonan)) ? $permohonan->no_ktp : '' ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">No Kitas</label>
-                                        <input type="text" class="form-control" name="no_kitas" id="no_kitas" value="<?= (!empty($permohonan)) ? $permohonan->no_kitas : '' ?>" placeholder="(Optional)">
+                                        <label for="" class="form-label">Nama</label>
+                                        <input type="text" class="form-control" name="nm_pemilik" id="nm_pemilik" value="<?= (!empty($permohonan)) ? $permohonan->nm_pemilik : '' ?>" placeholder="Masukan Nama Pemilik Lengkap">
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6 perorangan">
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">No KTP</label>
+                                        <input type="text" maxlength="16" class="form-control" name="no_ktp" id="no_ktp" placeholder="Masukan No KTP" value="<?= (!empty($permohonan)) ? $permohonan->no_ktp : '' ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 perorangan badanusaha">
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">No Kitas</label>
+                                        <input type="text" class="form-control" name="no_kitas" id="no_kitas" value="<?= (!empty($permohonan)) ? $permohonan->no_kitas : '' ?>" placeholder="No Kitas">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 perorangan badanusaha pemerintah">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Alamat</label>
                                         <input type="text" class="form-control" name="alamat" id="alamat" value="<?= (!empty($permohonan)) ? $permohonan->alamat : '' ?>" placeholder="Masukan Alamat">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 perorangan badanusaha pemerintah">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Provinsi</label>
-                                        <select name="id_provinsi" id="id_provinsi" class="form-select" required>
+                                        <select name="id_provinsi" id="id_provinsi" class="form-select">
                                             <option value="">PILIH</option>
                                             <?php
                                             foreach ($provinsi as $p) {
@@ -177,43 +197,43 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 perorangan badanusaha pemerintah">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Kota/Kabupaten</label>
-                                        <select name="id_kabkot" id="id_kabkot" class="form-select" required>
+                                        <select name="id_kabkot" id="id_kabkot" class="form-select">
                                             <option value="">PILIH</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 perorangan badanusaha pemerintah">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Kecamatan</label>
-                                        <select name="id_kecamatan" id="id_kecamatan" class="form-select" required>
+                                        <select name="id_kecamatan" id="id_kecamatan" class="form-select">
                                             <option value="">PILIH</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 perorangan badanusaha pemerintah">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Kelurahan</label>
-                                        <select name="id_kelurahan" id="id_kelurahan" class="form-select" required>
+                                        <select name="id_kelurahan" id="id_kelurahan" class="form-select">
                                             <option value="">PILIH</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 perorangan badanusaha pemerintah">
                                     <div class="mb-3">
                                         <label for="" class="form-label">No HP</label>
                                         <input type="text" class="form-control" maxlength="12" name="no_hp" id="no_hp" value="<?= (!empty($permohonan)) ? $permohonan->no_hp : '' ?>" placeholder="Masukan Nomor HP Aktif">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 perorangan badanusaha pemerintah">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Email</label>
                                         <input type="email" class="form-control" name="email" id="email" value="<?= (!empty($permohonan)) ? $permohonan->email : '' ?>" placeholder="Masukan Email">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 pemerintah">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Unit Organisasi</label>
                                         <input type="text" class="form-control" name="unit_organisasi" id="unit_organisasi" value="<?= (!empty($permohonan)) ? $permohonan->unit_organisasi : '' ?>" placeholder="Masukan Unit Organisasi">
@@ -339,6 +359,55 @@
 <?php } ?>
 <script>
     $(() => {
+        $('.perorangan').each(function() {
+            $(this).addClass('d-none');
+        })
+        $('.pemerintah').each(function() {
+            $(this).addClass('d-none');
+        })
+        $('.badanusaha').each(function() {
+            $(this).addClass('d-none');
+        })
+        $('#jns_pemilik').val(<?= $permohonan->jns_pemilik ?>);
+
+
+        $('#jns_pemilik').change(function() {
+            let jns = $(this).val();
+            console.log(jns);
+            if (jns == "3") {
+                $('.pemerintah').each(function() {
+                    $(this).addClass('d-none');
+                })
+                $('.badanusaha').each(function() {
+                    $(this).addClass('d-none');
+                })
+                $('.perorangan').each(function() {
+                    $(this).removeClass('d-none');
+                })
+            } else if (jns == "2") {
+                $('.badanusaha').each(function() {
+                    $(this).addClass('d-none');
+                })
+                $('.perorangan').each(function() {
+                    $(this).addClass('d-none');
+                })
+                $('.pemerintah').each(function() {
+                    $(this).removeClass('d-none');
+                })
+            } else if (jns == "1") {
+                $('.perorangan').each(function() {
+                    $(this).addClass('d-none');
+                })
+                $('.pemerintah').each(function() {
+                    $(this).addClass('d-none');
+                })
+                $('.badanusaha').each(function() {
+                    $(this).removeClass('d-none');
+                })
+            }
+        })
+        $('#jns_pemilik').trigger('change');
+
         $('#menu-bangunan').addClass('active');
 
         if (id_prov !== "0") {
@@ -473,8 +542,14 @@
             // formdata.append('idpenyedia', $('#idpenyedia').val());
             // formdata.append('idfile', $('#idfile').val());
             if (confirm("Simpan Data Bangunan , Data Pemilik dan Data Penyedia Jasa ?")) {
-                var formdata = new FormData(this);
-                savepermohonan(formdata);
+                let status_pemilik = $('jns_pemilik').val();
+
+                if (status_pemilik == 0) {
+                    alert('Status Kepemilikan belum dipilih !');
+                } else {
+                    var formdata = new FormData(this);
+                    savepermohonan(formdata);
+                }
             }
         })
 

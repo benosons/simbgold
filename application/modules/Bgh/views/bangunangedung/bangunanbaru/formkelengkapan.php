@@ -9,9 +9,9 @@
             </div>
             <div class="col-4">
                 <?php
-                if ($permohonan->status == 4) {
+                if ($verifikasi == $countambil && $permohonan->status == 31) {
                 ?>
-                    <button class="btn btn-success float-end" id="btn-selesai" onclick="selesai(<?= $permohonan->id ?>, <?= $poinallassesment ?>, <?= $hasil_assesment ?>, <?= $tidak_sesuai ?>)">
+                    <button class="btn btn-success float-end" id="btn-selesai" onclick="selesai(<?= $permohonan->id ?>,<?= $tidak_lengkap ?> )">
                         <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
                             <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
                         </svg>
@@ -34,20 +34,10 @@
                         <ul class="steps steps-green steps-counter my-4">
                             <li class="step-item">Pengisian Formulir Data Bangunan & Data Pemilik</li>
                             <li class="step-item">Pengisian Daftar Simak</li>
-                            <li class="step-item <?= ($permohonan->status == 3 || $permohonan->status == 31 || $permohonan->status == 32 || $permohonan->status == 33) ? 'active' : '' ?>">Proses Verifikasi Kelengkapan Dokumen</li>
-                            <li class="step-item <?= ($permohonan->status == 4 || $permohonan->status == 41 || $permohonan->status == 42 || $permohonan->status == 43) ? 'active' : '' ?>">Proses Assesment Oleh TPA/TPT</li>
+                            <li class="step-item active">Proses Verifikasi Kelengkapan Dokumen</li>
+                            <li class="step-item">Proses Assesment Oleh TPA/TPT</li>
                             <li class="step-item">Proses Penerbitan Sertifikat/Banding (Apabila diajukan)</li>
                         </ul>
-                    </div>
-                </div>
-                <div class="card card-sm bg-success text-white">
-                    <div class="card-body text-center">
-                        <h4>
-                            Nilai Hasil Asesmen : <strong><?= $hasil_assesment ?> %</strong>
-                        </h4>
-                        <h4>
-                            Peringkat Hasil Asesmen : <h2><strong><?= $ketentuan ?></strong></h2>
-                        </h4>
                     </div>
                 </div>
             </div>
@@ -70,27 +60,6 @@
                                 </div>
                                 <div class="text-white">
                                     Jumlah Poin Yang Diajukan
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-6">
-                <div class="card card-sm bg-warning text-white">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-patch-exclamation-fill" viewBox="0 0 16 16">
-                                    <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                                </svg>
-                            </div>
-                            <div class="col">
-                                <div class="fw-bold">
-                                    <?= $poinallassesment ?>
-                                </div>
-                                <div class="text-white">
-                                    Jumlah Poin Hasil Assesment
                                 </div>
                             </div>
                         </div>
@@ -141,9 +110,7 @@
                                                     <td width="20%">Dokumen Pembuktian</td>
                                                     <td width="5%">File</td>
                                                     <td width="2%">Poin Diajukan</td>
-                                                    <td width="12%">Kesesuaian Dokumen</td>
-                                                    <td width="10%">Catatan</td>
-                                                    <td width="3%">Poin Assesmen</td>
+                                                    <td width="10%">Kelengkapan Dokumen</td>
                                                 </tr>
                                                 <?php
                                                 for ($k = 0; $k < count($checklist[$i]['main'][$j]['sub']); $k++) {
@@ -158,9 +125,12 @@
                                                     $poindiajukansub = $checklist[$i]['main'][$j]['sub'][$k]['poin_diajukan'];
                                                     $poinassesmentsub = $checklist[$i]['main'][$j]['sub'][$k]['poin_assesment'];
                                                     $allassesmentsub = $checklist[$i]['main'][$j]['sub'][$k]['allassesment'];
+                                                    $poinambilsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['poinambil'];
                                                     $idambilsub = $checklist[$i]['main'][$j]['sub'][$k]['id_ambil'];
                                                     $tidaksesuaisub = $checklist[$i]['main'][$j]['sub'][$k]['tidaksesuai'];
                                                     $belumassessub = $checklist[$i]['main'][$j]['sub'][$k]['belumasses'];
+                                                    $lengkapsub = $checklist[$i]['main'][$j]['sub'][$k]['lengkap'];
+                                                    $isallfilesub = $checklist[$i]['main'][$j]['sub'][$k]['isallfile'];
                                                     if ($dokumensub == 1) {
                                                         $dok = $checklist[$i]['main'][$j]['sub'][$k]['dok'];
                                                 ?>
@@ -206,38 +176,41 @@
                                                                     <?php } ?>
                                                                 </td>
                                                             <?php } ?>
-                                                            <td rowspan="<?= count($dok) ?>" class="text-center" id="<?= 'poin_' . $elparent ?>"><?= $poindiajukansub ?></td>
+                                                            <td rowspan="<?= count($dok) ?>" class="text-center" id="<?= 'poin_' . $elparent ?>"><?= $isallfilesub == 1 ? $poindiajukansub : 0 ?></td>
                                                             <?php
                                                             if ($dok[$o]['isupload'] == 1) {
                                                                 $idfilesub = $dok[$o]['id_file'];
-                                                                $sesuaisub = $dok[$o]['sesuai'];
+                                                                $sesuaisub = $dok[$o]['lengkap'];
                                                                 $catatansub = $dok[$o]['catatan'];
+
+                                                                if ($permohonan->status == 31) {
                                                             ?>
-                                                                <td>
-                                                                    <select name="" class="form-select" id="<?= $elparent ?>" onchange="sesuai('<?= $elparent ?>', event, <?= $idfilesub ?>,'<?= $alp[$i] ?>')" <?= ($sesuaisub == 1) ? 'disabled="disabled"' : '' ?>>
-                                                                        <option value="">Verifikasi</option>
-                                                                        <option value="2" <?= $sesuaisub == 2 ? 'selected' : '' ?>>Tidak</option>
-                                                                        <option value="1" <?= $sesuaisub == 1 ? 'selected' : '' ?>>Sesuai</option>
-                                                                    </select>
-                                                                </td>
-                                                                <td>
-                                                                    <?php if ($catatansub == "") { ?>
-                                                                        <button class="btn btn-success btn-sm <?= ($sesuaisub == 1 || $sesuaisub == 0) ? 'd-none' : '' ?>" onclick="catatan('<?= $elaprent ?>', <?= $idfilesub ?>,'<?= $alp[$i] ?>')">Catatan</button>
-                                                                    <?php } else { ?>
-                                                                        <a href="javacript:;" class="btn btn-success btn-sm" onclick="catatan('<?= $elparent ?>', <?= $idfilesub ?>,'<?= $alp[$i] ?>','<?= htmlspecialchars($catatansub) ?>')" title="Edit Catatan">Lihat/edit Catatan</a>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td rowspan="<?= count($dok) ?>">
-                                                                    <select name="" id="poin_<?= $elparent ?>" class="form-select <?= $allassesmentsub == 1 ? '' : 'd-none' ?>" onchange="poinassesment('poin_<?= $elparent ?>', <?= $idambilsub ?>, event, '<?= $alp[$i] ?>')" <?= $poinassesmentsub > 0 ? 'disabled="disabled"' : '' ?>>
-                                                                        <option value="0">0</option>
-                                                                        <?php if ($tidaksesuaisub == 0 && $belumassessub == 0) { ?>
-                                                                            <option value="<?= $poinsub ?>" <?= $poinassesmentsub > 0 ? 'selected' : '' ?>><?= $poinsub ?></option>
-                                                                        <?php } ?>
-                                                                    </select>
-                                                                </td>
+                                                                    <td rowspan="<?= count($checklist[$i]['main'][$j]['sub'][$k]['dok']) ?>">
+                                                                        <select class="form-select" id="lengkap_<?= $elparent ?>" onchange="lengkap(<?= $lengkapsub ?>,'<?= $elparent ?>', event, <?= $idambilsub ?>,'<?= $alp[$i] ?>')">
+                                                                            <option value="0">Verifikasi</option>
+                                                                            <option value="2" <?= $lengkapsub == 2 ? 'selected' : '' ?>>Tidak</option>
+                                                                            <option value="1" <?= $lengkapsub == 1 ? 'selected' : '' ?>>Lengkap</option>
+                                                                        </select>
+                                                                    </td>
+                                                                <?php
+                                                                } else if ($permohonan->status == 32 || $permohonan->status == 33 || $permohonan->status == 4) {
+                                                                ?>
+                                                                    <td rowspan="<?= count($dok) ?>">
+                                                                        <?php
+                                                                        if ($lengkapsub == 1) {
+                                                                            echo "<strong>Lengkap</strong>";
+                                                                        } else if ($lengkapsub == 2) {
+                                                                            echo "<strong>Tidak Lengkap</strong>";
+                                                                        }
+                                                                        ?>
+                                                                    </td>
+                                                                <?php
+                                                                }
+                                                                ?>
+
                                                             <?php
                                                             } else {
-                                                                echo "<td></td><td></td><td></td>";
+                                                                echo "<td rowspan='" . count($checklist[$i]['main'][$j]['sub'][$k]['dok']) . "'></td>";
                                                             }
                                                             $o++;
                                                             ?>
@@ -271,32 +244,7 @@
                                                                             </svg>
                                                                         <?php } ?>
                                                                     </td>
-                                                                <?php
-
-                                                                }
-                                                                if ($dok[$o]['isupload'] == 1) {
-                                                                    $idfilesub = $dok[$o]['id_file'];
-                                                                    $sesuaisub = $dok[$o]['sesuai'];
-                                                                    $sesuaisub = $dok[$o]['sesuai'];
-                                                                    $catatansub = $dok[$o]['catatan'];
-                                                                ?>
-                                                                    <td>
-                                                                        <select name="" class="form-select" id="<?= $elparent ?>" onchange="sesuai('<?= $elparent ?>', event, <?= $idfilesub ?>,'<?= $alp[$i] ?>')" <?= ($sesuaisub == 1) ? 'disabled="disabled"' : '' ?>>
-                                                                            <option value="">Verifikasi</option>
-                                                                            <option value="2" <?= $sesuaisub == 2 ? 'selected' : '' ?>>Tidak</option>
-                                                                            <option value="1" <?= $sesuaisub == 1 ? 'selected' : '' ?>>Sesuai</option>
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <?php if ($catatansub == "") { ?>
-                                                                            <button class="btn btn-success btn-sm <?= ($sesuaisub == 1 || $sesuaisub == 0) ? 'd-none' : '' ?>" onclick="catatan('<?= $elaprent ?>', <?= $idfilesub ?>,'<?= $alp[$i] ?>')">Catatan</button>
-                                                                        <?php } else { ?>
-                                                                            <a href="javacript:;" class="btn btn-success btn-sm" onclick="catatan('<?= $elparent ?>', <?= $idfilesub ?>,'<?= $alp[$i] ?>','<?= htmlspecialchars($catatansub) ?>')" title="Edit Catatan">Lihat/edit Catatan</a>
-                                                                        <?php } ?>
-                                                                    </td>
-                                                                <?php } else {
-                                                                    echo "<td></td><td></td><td></td>";
-                                                                } ?>
+                                                                <?php } ?>
                                                             </tr>
                                                         <?php
                                                         }
@@ -306,8 +254,6 @@
                                                             <td></td>
                                                             <td><?= $namasub ?></td>
                                                             <td><?= $poinsub ?></td>
-                                                            <td></td>
-                                                            <td></td>
                                                             <td></td>
                                                             <td></td>
                                                             <td></td>
@@ -330,6 +276,8 @@
                                                             $dok = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['dok'];
                                                             $tidaksesuaisubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['tidaksesuai'];
                                                             $belumassessubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['belumasses'];
+                                                            $lengkapsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['lengkap'];
+                                                            $isallfilesubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['isallfile'];
                                                         ?>
 
                                                             <tr>
@@ -372,38 +320,39 @@
                                                                         <?php } ?>
                                                                     </td>
                                                                 <?php } ?>
-                                                                <td rowspan="<?= count($dok) ?>" class="text-center" id="<?= 'poin_' . $elchild ?>"><?= $poindiajukansubsub ?></td>
+                                                                <td rowspan="<?= count($dok) ?>" class="text-center" id="<?= 'poin_' . $elchild ?>"><?= $isallfilesubsub == 1 ? $poindiajukansubsub : 0 ?></td>
                                                                 <?php
                                                                 if ($dok[$o]['isupload'] == 1) {
                                                                     $idfilesubsub = $dok[$o]['id_file'];
                                                                     $sesuaisubsub = $dok[$o]['sesuai'];
                                                                     $catatansubsub = $dok[$o]['catatan'];
+                                                                    if ($permohonan->status == 31) {
                                                                 ?>
-                                                                    <td class="align-middle">
-                                                                        <select name="" class="form-select" id="<?= $elchild ?>" onchange="sesuai('<?= $elchild ?>', event, <?= $idfilesubsub ?>,'<?= $alp[$i] ?>')" <?= ($sesuaisubsub == 1) ? 'disabled="disabled"' : '' ?>>
-                                                                            <option value="">Verifikasi</option>
-                                                                            <option value="2" <?= ($sesuaisubsub == 2) ? 'selected' : '' ?>>Tidak</option>
-                                                                            <option value="1" <?= ($sesuaisubsub == 1) ? 'selected' : '' ?>>Sesuai</option>
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <?php if ($catatansubsub == "") { ?>
-                                                                            <button class="btn btn-success btn-sm <?= ($sesuaisubsub == 1 || $sesuaisubsub == 0) ? 'd-none' : '' ?>" onclick="catatan('<?= $elchild ?>', <?= $idfilesubsub ?>,'<?= $alp[$i] ?>','')">Catatan</button>
-                                                                        <?php } else { ?>
-                                                                            <a href="javacript:;" class="btn btn-success btn-sm" onclick="catatan(' <?= $elchild ?>', <?= $idfilesubsub ?>,'<?= $alp[$i] ?>','<?= htmlspecialchars($catatansubsub) ?>')" title="Edit Catatan">Lihat/edit Catatan</a>
-                                                                        <?php } ?>
-                                                                    </td>
-                                                                    <td rowspan="<?= count($dok) ?>">
-                                                                        <select name="" id="poin_<?= $elchild ?>" class="form-select <?= $allassesmentsubsub == 1 ? '' : 'd-none' ?>" onchange="poinassesment('poin_<?= $elchild ?>', <?= $idambilsubsub ?>, event, '<?= $alp[$i] ?>')" <?= $poinassesmentsubsub > 0 ? 'disabled="disabled"' : '' ?>>
-                                                                            <option value="0">0</option>
-                                                                            <?php if ($tidaksesuaisubsub == 0 && $belumassessubsub == 0) { ?>
-                                                                                <option value="<?= $poinsubsub ?>" <?= $poinassesmentsubsub > 0 ? 'selected' : '' ?>><?= $poinsubsub ?></option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                    </td>
+                                                                        <td rowspan="<?= count($dok) ?>">
+                                                                            <select class="form-select" id="lengkap_<?= $elchild ?>" onchange="lengkap(<?= $lengkapsubsub ?>,'<?= $elchild ?>', event, <?= $idambilsubsub ?>,'<?= $alp[$i] ?>')">
+                                                                                <option value="0">Verifikasi</option>
+                                                                                <option value="2" <?= $lengkapsubsub == 2 ? 'selected' : '' ?>>Tidak</option>
+                                                                                <option value="1" <?= $lengkapsubsub == 1 ? 'selected' : '' ?>>Lengkap</option>
+                                                                            </select>
+                                                                        </td>
+                                                                    <?php
+                                                                    } else if ($permohonan->status == 32 || $permohonan->status == 33 || $permohonan->status == 4) {
+                                                                    ?>
+                                                                        <td rowspan="<?= count($dok) ?>">
+                                                                            <?php
+                                                                            if ($lengkapsubsub == 1) {
+                                                                                echo "<strong>Lengkap</strong>";
+                                                                            } else if ($lengkapsubsub == 2) {
+                                                                                echo "<strong>Tidak Lengkap</strong>";
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
                                                                 <?php
                                                                 } else {
-                                                                    echo "<td></td><td></td><td></td>";
+                                                                    echo "<td rowspan='" . count($dok) . "'></td>";
                                                                 }
                                                                 $o++;
                                                                 ?>
@@ -437,31 +386,6 @@
                                                                             <?php } ?>
                                                                         </td>
                                                                     <?php } ?>
-                                                                    <?php
-                                                                    if ($dok[$o]['isupload'] == 1) {
-                                                                        $idfilesubsub = $dok[$o]['id_file'];
-                                                                        $sesuaisubsub = $dok[$o]['sesuai'];
-                                                                        $catatansubsub = $dok[$o]['catatan'];
-                                                                    ?>
-                                                                        <td class="align-middle">
-                                                                            <select name="" class="form-select" id="<?= $elchild ?>" onchange="sesuai('<?= $elchild ?>', event, <?= $idfilesubsub ?>,'<?= $alp[$i] ?>')" <?= ($sesuaisubsub == 1) ? 'disabled="disabled"' : '' ?>>
-                                                                                <option value="">Verifikasi</option>
-                                                                                <option value="2" <?= ($sesuaisubsub == 2) ? 'selected' : '' ?>>Tidak</option>
-                                                                                <option value="1" <?= ($sesuaisubsub == 1) ? 'selected' : '' ?>>Sesuai</option>
-                                                                            </select>
-                                                                        </td>
-                                                                        <td>
-                                                                            <?php if ($catatansubsub == "") { ?>
-                                                                                <button class="btn btn-success btn-sm <?= ($sesuaisubsub == 1 || $sesuaisubsub == 0) ? 'd-none' : '' ?>" onclick="catatan('<?= $elchild ?>', <?= $idfilesubsub ?>,'<?= $alp[$i] ?>','')">Catatan</button>
-                                                                            <?php } else { ?>
-                                                                                <a href="javacript:;" class="btn btn-success btn-sm" onclick="catatan('<?= $elchild ?>', <?= $idfilesubsub ?>,'<?= $alp[$i] ?>','<?= htmlspecialchars($catatansubsub) ?>')" title="Edit Catatan">Lihat/edit Catatan</a>
-                                                                            <?php } ?>
-                                                                        </td>
-                                                                    <?php
-                                                                    } else {
-                                                                        echo "<td></td><td></td><td></td>";
-                                                                    }
-                                                                    ?>
                                                                 </tr>
                                                             <?php
                                                             }
@@ -561,38 +485,12 @@ if (isset($_GET['elnow'])) {
             height: 400,
             toolbar: [
                 ['style', ['bold', 'italic', 'underline', 'clear']],
-                ['para', ['ul', 'ol']],
+                ['para', ['ul', 'ol', 'paragraph']],
                 ['insert', ['picture', 'link']],
                 ['font', ['strikethrough', 'superscript', 'subscript']],
-            ],
-            callbacks: {
-                onImageUpload: function(files) {
-                    // Upload gambar saat dipilih dari file dialog
-                    sendFile(files[0]);
-                }
-            }
+                ['height', ['height']],
+            ]
         });
-
-        function sendFile(file) {
-            var formData = new FormData();
-            formData.append("image", file);
-            formData.append('idpermohonan', <?= $permohonan->id ?>);
-
-            $.ajax({
-                url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/uploadimagecatatan",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(data) {
-                    // Set URL gambar yang diunggah sebagai sumber untuk gambar dalam editor
-                    $('.summernote').summernote('insertImage', data);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error(textStatus + " " + errorThrown);
-                }
-            });
-        }
 
 
         $('#fileinput').change(function() {
@@ -602,7 +500,7 @@ if (isset($_GET['elnow'])) {
         $('#simpancatatan').click(function() {
             var formData = new FormData();
             formData.append('id_file', $('#id_file_catatan').val());
-            formData.append('catatan', $('#catatan').val());
+            formData.append('catatan', tinyMCE.activeEditor.getContent());
             savecatatan(formData);
         });
 
@@ -611,25 +509,29 @@ if (isset($_GET['elnow'])) {
         // })
     })
 
-    function sesuai(el, event, idfile, accord) {
+    function lengkap(oldlengkap, el, event, idambil, accord) {
         let elambil = event.target;
         let select = elambil.value;
 
         if (select == "1") {
-            if (confirm('Dokumen ini telah Sesuai ?')) {
-                updatefile(el, 1, idfile, accord);
+            if (confirm('Dokumen Pada Parameter Pertanyaan ini telah Lengkap ?')) {
+                updatelengkap(el, 1, idambil, accord);
+            } else {
+                $('#lengkap_' + el).val(oldlengkap);
             }
         } else {
-            if (confirm('Dokumen ini Tidak Sesuai ?')) {
-                updatefile(el, 2, idfile, accord);
+            if (confirm('Dokumen Pada Parameter Pertanyaan ini Tidak Lengkap ?')) {
+                updatelengkap(el, 2, idambil, accord);
+            } else {
+                $('#lengkap_' + el).val(oldlengkap);
             }
         }
     }
 
-    function updatefile(el, status, idfile, accord) {
+    function updatelengkap(el, lengkap, idambil, accord) {
         let fd = new FormData();
-        fd.append('id_file', idfile);
-        fd.append('sesuai', status);
+        fd.append('idambil', idambil);
+        fd.append('lengkap', lengkap);
 
         $.ajax({
             type: 'post',
@@ -637,147 +539,9 @@ if (isset($_GET['elnow'])) {
             data: fd,
             processData: false,
             contentType: false,
-            url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatefile",
+            url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatelengkap",
             success: function(response) {
-                window.location.href = "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/assesment/<?= $permohonan->kode_bgh ?>?elnow=" + el + "&accord=" + accord;
-            }
-        })
-    }
-
-    function poinassesment(el, idambil, event, accord) {
-        let elempoin = event.target;
-        let selectpoin = elempoin.value;
-
-        if (confirm('Berikan Assesment Poin Pada Daftar ini ?')) {
-            let fdassesment = new FormData();
-            fdassesment.append('id_ambil', idambil);
-            fdassesment.append('poin', selectpoin);
-
-            $.ajax({
-                type: 'post',
-                dataType: 'json',
-                data: fdassesment,
-                processData: false,
-                contentType: false,
-                url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updateambil',
-                success: function(response) {
-                    window.location.href = "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/assesment/<?= $permohonan->kode_bgh ?>?elnow=" + el + "&accord=" + accord;
-                }
-            })
-        }
-    }
-
-    function catatan(el, idfile, accord, content) {
-        $('#id_file_catatan').val(idfile);
-        var myModal = new bootstrap.Modal(document.getElementById('modal-catatan'), {
-            keyboard: false,
-            backdrop: false
-        })
-        myModal.show();
-        $('#catatan').summernote('code', content)
-    }
-
-    function savecatatan(formdata) {
-        $.ajax({
-            type: 'post',
-            dataType: 'json',
-            data: formdata,
-            processData: false,
-            contentType: false,
-            url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/savecatatan",
-            success: function(response) {
-                alert('berhasil');
-                location.reload();
-            }
-        })
-    }
-
-    function claimpoin(elparent, elchild, pilihan, event, elpoin, id_permohonan, id_sub, id_sub_sub) {
-        let selectelement = event.target;
-        let selected = selectelement.value;
-        if (pilihan === 1 && selected === "1") {
-            if (confirm('Ambil Poin Pertanyaan ini ?')) {
-                let el = document.querySelectorAll('.' + elchild);
-                let idel = elchild.substr(0, 4);
-                [].forEach.call(el, function(elem) {
-                    elem.classList.remove('d-none');
-                });
-                // let poinelement = document.getElementById('poin_'+elchild);
-                // poinelement.innerHTML = elpoin;
-                let parent = document.querySelectorAll('.' + elparent);
-                [].forEach.call(parent, function(e) {
-                    let elementid = e.getAttribute("id");
-                    if (elementid !== elchild) {
-                        e.setAttribute('disabled', 'disabled');
-                    }
-                })
-                ambilpoin(id_permohonan, id_sub, id_sub_sub, elpoin);
-            } else {
-                $('#' + elchild).val(0);
-            }
-
-        } else if (pilihan === 1 && selected === "0") {
-            if (confirm('Hapus Poin Pertanyaan ini ?')) {
-                let el = document.querySelectorAll('.' + elchild);
-                [].forEach.call(el, function(elem) {
-                    elem.classList.add('d-none');
-                })
-
-                // let poinelement = document.getElementById('poin_'+elchild);
-                // poinelement.innerHTML = 0;
-
-                let parent = document.querySelectorAll('.' + elparent);
-                [].forEach.call(parent, function(e) {
-                    let elementid = e.getAttribute("id");
-                    if (elementid !== elchild) {
-                        e.removeAttribute('disabled', 'disabled');
-                    }
-                })
-            } else {
-                $('#' + elchild).val(1);
-            }
-        } else if (pilihan === 0 && selected === "1") {
-            if (confirm('Ambil Poin Pertanyaan ini ?')) {
-                let el = document.querySelectorAll('.upload_' + elparent);
-                [].forEach.call(el, function(elem) {
-                    elem.classList.remove('d-none');
-                });
-                ambilpoin(id_permohonan, id_sub, id_sub_sub, elpoin);
-                // let poinelement = document.getElementById('poin_'+elparent);
-                // poinelement.innerHTML = elpoin;
-            } else {
-                $('#' + elparent).val(0);
-            }
-        } else if ((pilihan === 0 && selected === "0") || selected === "0") {
-            if (confirm('Hapus Poin Pertanyaan ini ?')) {
-                let el = document.querySelectorAll('.upload_' + elparent);
-                [].forEach.call(el, function(elem) {
-                    elem.classList.add('d-none');
-                });
-                // let poinelement = document.getElementById('poin_'+elparent);
-                // poinelement.innerHTML = 0;
-            } else {
-                $('#' + elparent).val(1);
-            }
-        }
-    }
-
-    function ambilpoin(id_permohonan, id_sub, id_sub_sub, poin_diajukan) {
-        let fd = new FormData();
-        fd.append('id_permohonan_ambil', id_permohonan);
-        fd.append('id_sub_ambil', id_sub);
-        fd.append('id_sub_sub_ambil', id_sub_sub);
-        fd.append('poin_diajukan', poin_diajukan);
-
-        $.ajax({
-            type: 'post',
-            dataTyoe: 'json',
-            data: fd,
-            processData: false,
-            contentType: false,
-            url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/ambilpoin',
-            success: function(response) {
-                alert('berhasil');
+                window.location.href = "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/kelengkapan/<?= $permohonan->kode_bgh ?>?elnow=lengkap_" + el + "&accord=" + accord;
             }
         })
     }
@@ -801,21 +565,20 @@ if (isset($_GET['elnow'])) {
         modals.show();
     }
 
-    function selesai(id_permohonan, poinassesment, presentase, tidaksesuai) {
-        if (tidaksesuai == 0) {
-            if (confirm('Selesaikan Proses Assesment ?')) {
+    function selesai(id_permohonan, tidaklengkap) {
+        if (tidaklengkap == 0) {
+            if (confirm('Selesaikan Proses Verifikasi Kelengkapan Data ?')) {
                 let formdata = new FormData();
                 formdata.append('id_permohonan', id_permohonan);
-                formdata.append('poinassesment', poinassesment);
-                formdata.append('presentase', presentase);
-                formdata.append('status', 42);
+                // formdata.append('presentase', presentase);
+                formdata.append('status', 33);
                 $.ajax({
                     type: 'post',
                     dataType: 'json',
                     data: formdata,
                     processData: false,
                     contentType: false,
-                    url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/selesaiassesment',
+                    url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/verifikasikelengkapan',
                     success: function(response) {
                         alert('berhasil');
                         window.location.href = "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/";
@@ -823,19 +586,17 @@ if (isset($_GET['elnow'])) {
                 })
             }
         } else {
-            if (confirm('Permohonan ini perlu direvisi oleh pemohon, Kirimkan ke Pemohon ? ')) {
+            if (confirm('Terdapat Dokumen yang tidak lengkap, Teruskan Ke Pemohon ? ')) {
                 let formdata = new FormData();
                 formdata.append('id_permohonan', id_permohonan);
-                formdata.append('poinassesment', poinassesment);
-                formdata.append('presentase', presentase);
-                formdata.append('status', 41);
+                formdata.append('status', 32);
                 $.ajax({
                     type: 'post',
                     dataType: 'json',
                     data: formdata,
                     processData: false,
                     contentType: false,
-                    url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/selesaiassesment',
+                    url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/verifikasikelengkapan',
                     success: function(response) {
                         alert('berhasil');
                         window.location.href = "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/";
@@ -856,35 +617,5 @@ if (isset($_GET['elnow'])) {
             backdrop: false
         })
         myModal.show();
-    }
-
-    function uploading(formdata) {
-
-        $.ajax({
-            type: 'post',
-            dataType: 'json',
-            data: formdata,
-            processData: false,
-            contentType: false,
-            url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/uploading",
-            beforeSend: function() {
-                $('#loaderupload').removeClass('d-none');
-            },
-            success: function(response) {
-                $('#loaderupload').addClass('d-none');
-                if (response.code === 1) {
-                    window.location.href = "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/penilaian/<?= $permohonan->kode_bgh ?>?accord=" + response.accord;
-                }
-            },
-            error: function(xhr, status, error) {
-                console.log(xhr.responseText);
-            }
-        })
-    }
-
-    function validateFileExtension(fileName) {
-        var allowedExtensions = ['pdf', 'xlx', 'xlsx', 'jpg', 'png'];
-        var fileExtension = fileName.split('.').pop().toLowerCase();
-        return allowedExtensions.indexOf(fileExtension) > -1;
     }
 </script>

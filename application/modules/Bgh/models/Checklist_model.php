@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Checklist_model extends CI_Model
 {
-    public function gethead()
+    public function gethead($where)
     {
         $q = $this->db->get('t_checklist_head');
         return $q;
@@ -22,14 +22,14 @@ class Checklist_model extends CI_Model
         $q = $this->db->get('t_checklist_sub');
         return $q;
     }
-    
+
     public function getsubsub($where)
     {
         $this->db->where($where);
         $q = $this->db->get('t_checklist_sub_sub');
         return $q;
     }
-    
+
     public function getdok($where)
     {
         $this->db->where($where);
@@ -60,6 +60,4 @@ class Checklist_model extends CI_Model
         $q = $this->db->get();
         return $q;
     }
-
-    
 }

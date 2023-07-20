@@ -2,11 +2,31 @@
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="row g-2 align-items-center">
-            <div class="col-8">
+            <div class="col-6">
                 <h2 class="page-title">
                     Pengisian Daftar Simak
                 </h2>
             </div>
+            <?php
+            if ($permohonan->status == 33 && $this->session->userdata('loc_role_id') == 10) {
+            ?>
+                <div class="col-6">
+                    <button class="btn btn-success ms-2 float-end" id="btn-selesai" onclick="konsultasi(<?= $permohonan->id ?>)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
+                            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
+                        </svg>
+                        Ajukan Proses Konsultasi
+                    </button>
+                    <button class="btn btn-primary float-end" id="btn-sidang" onclick="sidang(<?= $permohonan->id ?>, <?= $poinhead ?>)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+                            <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z" />
+                        </svg>
+                        Ajukkan Sidang
+                    </button>
+                </div>
+            <?php
+            }
+            ?>
         </div>
     </div>
 </div>
@@ -20,13 +40,13 @@
                     <ul class="steps steps-green steps-counter my-4">
                         <li class="step-item">Pengisian Formulir Data Bangunan & Data Pemilik</li>
                         <li class="step-item">Pengisian Daftar Simak</li>
-                        <li class="step-item active">Proses Assesment Oleh TPA</li>
-                        <li class="step-item">Revisi Ketidaksesuaian Dokumen Pembuktian (Jika Terdapat Kesalahan Dokumen)</li>
-                        <li class="step-item">Proses Verifikasi Permohonan Untuk Penerbitan Sertifikat BGH</li>
+                        <li class="step-item <?= ($permohonan->status == 3 || $permohonan->status == 31 || $permohonan->status == 32 || $permohonan->status == 33) ? 'active' : '' ?>">Proses Verifikasi Kelengkapan Dokumen</li>
+                        <li class="step-item <?= ($permohonan->status == 4 || $permohonan->status == 41 || $permohonan->status == 42 || $permohonan->status == 43) ? 'active' : '' ?>">Proses Assesment Oleh TPA/TPT</li>
+                        <li class="step-item">Proses Penerbitan Sertifikat/Banding (Apabila diajukan)</li>
                     </ul>
                 </div>
             </div>
-            <div class="col-md-8 col-xl-8">
+            <div class="col-md-9 col-xl-9">
                 <div class="card card-sm bg-success text-white">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -60,7 +80,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-xl-4">
+            <div class="col-md-3 col-xl-3">
                 <div class="card card-sm bg-success text-white">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -69,7 +89,7 @@
                                     Ketentuan Peringkat
                                 </div>
                                 <div class="text-white">
-                                    <table class="table table-borderless">
+                                    <table class="table table-sm table-borderless">
                                         <tr>
                                             <td>I</td>
                                             <td>80% - 100%</td>
@@ -220,11 +240,14 @@
                                                                         }
                                                                         ?>
                                                                     <?php } else { ?>
-                                                                        <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsub ?>,<?= $idsub ?>, 0, '<?= $alp[$i] ?>','<?= $elparent ?>',<?= $idfile ?>)" title="Upload">
+                                                                        <!-- <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsub ?>,<?= $idsub ?>, 0, '<?= $alp[$i] ?>','<?= $elparent ?>',<?= $idfile ?>)" title="Upload">
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
                                                                                 <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
                                                                             </svg>
-                                                                        </button>
+                                                                        </button> -->
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="text-danger" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                                                                        </svg>
                                                                     <?php } ?>
                                                                 </td>
                                                             <?php }
@@ -263,11 +286,14 @@
                                                                             }
                                                                             ?>
                                                                         <?php } else { ?>
-                                                                            <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsub ?>,<?= $idsub ?>, 0, '<?= $alp[$i] ?>', '<?= $elparent ?>',<?= $idfile ?>)" title="Upload">
+                                                                            <!-- <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsub ?>,<?= $idsub ?>, 0, '<?= $alp[$i] ?>', '<?= $elparent ?>',<?= $idfile ?>)" title="Upload">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
                                                                                     <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
                                                                                 </svg>
-                                                                            </button>
+                                                                            </button> -->
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" class="text-danger" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                                                                            </svg>
                                                                         <?php } ?>
                                                                     </td>
                                                                 <?php } ?>
@@ -462,4 +488,48 @@ if (isset($_GET['elnow'])) {
         //     $('#loaderupload').removeClass('d-none');
         // })
     })
+
+    function konsultasi(id_permohonan) {
+        if (confirm('Ajukan Proses Konsultasi ?')) {
+            let formdataselesai = new FormData();
+            formdataselesai.append('id_permohonan', id_permohonan);
+            formdataselesai.append('status', 4);
+            formdataselesai.append('poinhead', <?= $permohonan->poin_diajukan ?>);
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data: formdataselesai,
+                processData: false,
+                contentType: false,
+                url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatestatuspermohonan',
+                success: function(response) {
+                    window.location.href = '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/';
+                }
+            })
+        }
+    }
+
+    function sidang(id_permohonan, poin_diajukan) {
+        if (confirm('Ajukan Sidang Untuk Permohonan Ini ?')) {
+            let fd = new FormData();
+            fd.append('id_permohonan', id_permohonan);
+            fd.append('status', 43);
+            fd.append('poinhead', poin_diajukan);
+
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data: fd,
+                processData: false,
+                contentType: false,
+                url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatestatuspermohonan',
+                success: function(response) {
+                    if (response.code === 1) {
+                        alert('Berhasil!');
+                        window.location.href = '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/';
+                    }
+                }
+            })
+        }
+    }
 </script>

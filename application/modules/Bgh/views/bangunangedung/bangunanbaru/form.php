@@ -8,12 +8,27 @@
                 </h2>
             </div>
             <div class="col-6">
-                <button class="btn btn-success ms-2 float-end" id="btn-selesai" onclick="selesai(<?= $permohonan->id ?>, 3, <?= $poinhead ?>)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
-                        <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
-                    </svg>
-                    Ajukan Permohonan
-                </button>
+                <?php
+                if ($permohonan->status == 2 || $permohonan->status == 32) {
+                ?>
+                    <button class="btn btn-success ms-2 float-end" id="btn-selesai" onclick="selesai(<?= $permohonan->id ?>, 3, <?= $poinhead ?>)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
+                            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
+                        </svg>
+                        Ajukan Permohonan
+                    </button>
+                <?php
+                } else if ($permohonan->status == 41) {
+                ?>
+                    <button class="btn btn-success ms-2 float-end" id="btn-selesai" onclick="selesai(<?= $permohonan->id ?>, 4, <?= $poinhead ?>)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
+                            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
+                        </svg>
+                        Ajukan Revisi Permohonan
+                    </button>
+                <?php
+                }
+                ?>
                 <!-- <button class="btn btn-primary float-end" id="btn-sidang" onclick="sidang(<?= $permohonan->id ?>, 1, <?= $poinhead ?>)">
                     <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
                         <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z" />
@@ -40,7 +55,7 @@
                                 <li class="step-item">Proses Assesment Oleh TPA/TPT</li>
                                 <li class="step-item">Proses Penerbitan Sertifikat/Banding (Apabila diajukan)</li>
                             </ul>
-                        <?php } else if ($permohonan->status == 4) { ?>
+                        <?php } else if ($permohonan->status == 4 || $permohonan->status == 41) { ?>
                             <ul class="steps steps-green steps-counter my-4">
                                 <li class="step-item">Pengisian Formulir Data Bangunan & Data Pemilik</li>
                                 <li class="step-item">Pengisian Daftar Simak</li>
@@ -52,7 +67,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-8 col-xl-8">
+            <div class="col-md-9 col-xl-9">
                 <div class="card card-sm bg-success text-white">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -86,7 +101,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-xl-4">
+            <div class="col-md-3 col-xl-3">
                 <div class="card card-sm bg-success text-white">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -95,7 +110,7 @@
                                     Ketentuan Peringkat
                                 </div>
                                 <div class="text-white">
-                                    <table class="table table-borderless">
+                                    <table class="table table-sm table-borderless">
                                         <tr>
                                             <td>I</td>
                                             <td>80% - 100%</td>
@@ -163,11 +178,12 @@
                                     <strong><?= $alp[$i] . '. ' . $checklist[$i]['nama'] ?> | Poin Tersedia : <?= $checklist[$i]['poin'] ?> | Poin Diajukan : <?= $poindiajukan ?> </strong>
                                 </button>
                             </h2>
-                            <div id="collapse-<?= $checklist[$i]['id'] ?>" class="accordion-collapse collapse <?php if (isset($_GET['accord'])) {
-                                                                                                                    if ($_GET['accord'] == $alp[$i]) {
-                                                                                                                        echo 'show';
-                                                                                                                    }
-                                                                                                                } ?>" data-bs-parent="#accordion-example">
+                            <div id="collapse-<?= $checklist[$i]['id'] ?>" class="accordion-collapse collapse 
+                            <?php if (isset($_GET['accord'])) {
+                                if ($_GET['accord'] == $alp[$i]) {
+                                    echo 'show';
+                                }
+                            } ?>" data-bs-parent="#accordion-example">
                                 <div class="accordion-body pt-0">
                                     <?php
                                     for ($j = 0; $j < count($checklist[$i]['main']); $j++) {
@@ -188,6 +204,13 @@
                                                         <td width="5%">Kesesuaian Dokumen</td>
                                                         <td width="15%">Catatan</td>
                                                     <?php } ?>
+                                                    <?php
+                                                    if ($permohonan->status == 32) {
+                                                    ?>
+                                                        <td width="5%">Kelengkapan Dokumen</td>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </tr>
                                                 <?php
                                                 for ($k = 0; $k < count($checklist[$i]['main'][$j]['sub']); $k++) {
@@ -201,6 +224,7 @@
                                                     $poinambilsub = $checklist[$i]['main'][$j]['sub'][$k]['poinambil'];
                                                     $ambilsub = $checklist[$i]['main'][$j]['sub'][$k]['ambil'];
                                                     $isallfilesub = $checklist[$i]['main'][$j]['sub'][$k]['isallfile'];
+                                                    $lengkapsub = $checklist[$i]['main'][$j]['sub'][$k]['lengkap'];
                                                     if ($pilihansub == 1) {
                                                         $terpilihsub = $checklist[$i]['main'][$j]['sub'][$k]['terpilih'];
                                                     } else {
@@ -241,20 +265,61 @@
                                                                 <td class="text-center align-middle <?= 'upload_' . $elparent ?> <?= $ambilsub == 1 ? '' : 'd-none' ?>">
                                                                     <?php
                                                                     if ($dok[$o]['isupload'] == 1) {
-                                                                        if ($sesuai == 1 || $sesuai == 0) {
+                                                                        if ($permohonan->status == 32) {
+                                                                            if ($lengkapsub == 2) {
                                                                     ?>
-                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                                                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
-                                                                            </svg>
-                                                                        <?php
-                                                                        } else if ($sesuai == 2) {
-                                                                        ?>
-                                                                            <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
-                                                                                    <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                        <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                    </svg>
+                                                                                </button>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
                                                                                 </svg>
-                                                                            </button>
+                                                                            <?php
+                                                                            } else if ($lengkapsub == 1) {
+                                                                            ?>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                </svg>
+                                                                            <?php
+                                                                            }
+                                                                            ?>
+
+                                                                            <?php
+                                                                        } else if ($permohonan->status == 33 || $permohonan->status == 41) {
+
+                                                                            if ($sesuai == 1 || $sesuai == 0) {
+                                                                            ?>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                </svg>
+                                                                            <?php
+                                                                            } else if ($sesuai == 2) {
+                                                                            ?>
+                                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                        <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                    </svg>
+                                                                                </button>
+                                                                            <?php
+                                                                            }
+                                                                        } else {
+                                                                            if ($sesuai == 1 || $sesuai == 0) {
+                                                                            ?>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                </svg>
+                                                                            <?php
+                                                                            } else if ($sesuai == 2) {
+                                                                            ?>
+                                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                        <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                    </svg>
+                                                                                </button>
                                                                         <?php
+                                                                            }
                                                                         }
                                                                         ?>
                                                                     <?php } else { ?>
@@ -281,9 +346,30 @@
                                                                     ?>
                                                                 </td>
                                                                 <td>
-                                                                    <?= $catatan ?>
+                                                                    <?php
+                                                                    if ($catatan != "") {
+                                                                    ?>
+                                                                        <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="lihatcatatan('<?= htmlspecialchars($catatan) ?>')">Lihat Catatan</a>
+                                                                    <?php
+                                                                    }
+                                                                    ?>
                                                                 </td>
-                                                            <?php } ?>
+                                                            <?php }
+                                                            if ($permohonan->status == 32) {
+                                                            ?>
+                                                                <td width="5%" rowspan="<?= count($dok) ?>">
+                                                                    <?php if ($lengkapsub == 1) {
+                                                                        echo "<strong>Lengkap</strong>";
+                                                                    } else if ($lengkapsub == 2) {
+                                                                        echo "<strong>Tidak Lengkap</strong>";
+                                                                    } else if ($lengkapsub == 0) {
+                                                                        echo "";
+                                                                    }
+                                                                    ?>
+                                                                </td>
+                                                            <?php
+                                                            }
+                                                            ?>
                                                             <!-- <td></td>
                                                             <td></td>
                                                             <td>0</td> -->
@@ -309,20 +395,60 @@
                                                                     <td class="text-center align-middle <?= 'upload_' . $elparent ?> <?= $ambilsub == 1 ? '' : 'd-none' ?>">
                                                                         <?php
                                                                         if ($dok[$o]['isupload'] == 1) {
-                                                                            if ($sesuai == 1 || $sesuai == 0) {
+                                                                            if ($permohonan->status == 32) {
+                                                                                if ($lengkapsub == 2) {
                                                                         ?>
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
-                                                                                </svg>
-                                                                            <?php
-                                                                            } else if ($sesuai == 2) {
-                                                                            ?>
-                                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
-                                                                                        <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
                                                                                     </svg>
-                                                                                </button>
+                                                                                <?php
+                                                                                } else if ($lengkapsub == 1) {
+                                                                                ?>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                    </svg>
+                                                                                <?php
+                                                                                }
+                                                                                ?>
+
+                                                                                <?php
+                                                                            } else if ($permohonan->status == 33 || $permohonan->status == 41) {
+                                                                                if ($sesuai == 1 || $sesuai == 0) {
+                                                                                ?>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                    </svg>
+                                                                                <?php
+                                                                                } else if ($sesuai == 2) {
+                                                                                ?>
+                                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                <?php
+                                                                                }
+                                                                            } else {
+                                                                                if ($sesuai == 1 || $sesuai == 0) {
+                                                                                ?>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                    </svg>
+                                                                                <?php
+                                                                                } else if ($sesuai == 2) {
+                                                                                ?>
+                                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                        </svg>
+                                                                                    </button>
                                                                             <?php
+                                                                                }
                                                                             }
                                                                             ?>
                                                                         <?php } else { ?>
@@ -347,7 +473,13 @@
                                                                         ?>
                                                                     </td>
                                                                     <td>
-                                                                        <?= $catatan ?>
+                                                                        <?php
+                                                                        if ($catatan != "") {
+                                                                        ?>
+                                                                            <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="lihatcatatan('<?= htmlspecialchars($catatan) ?>')">Lihat Catatan</a>
+                                                                        <?php
+                                                                        }
+                                                                        ?>
                                                                     </td>
                                                                 <?php } ?>
                                                             </tr>
@@ -366,7 +498,13 @@
                                                             <?php if ($tidak_sesuai > 0) { ?>
                                                                 <td></td>
                                                                 <td></td>
-                                                            <?php } ?>
+                                                            <?php }
+                                                            if ($permohonan->status == 32) {
+                                                            ?>
+                                                                <td></td>
+                                                            <?php
+                                                            }
+                                                            ?>
                                                         </tr>
                                                         <?php $jmlsubsub = count($checklist[$i]['main'][$j]['sub'][$k]['subsub']);
                                                         for ($l = 0; $l < $jmlsubsub; $l++) {
@@ -378,6 +516,7 @@
                                                             $ambilsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['ambil'];
                                                             $poinambilsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['poinambil'];
                                                             $isallfilesubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['isallfile'];
+                                                            $lengkapsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['lengkap'];
                                                             $dok = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['dok'];
                                                         ?>
 
@@ -412,20 +551,60 @@
                                                                     <td class="text-center align-middle <?= $elchild ?> ">
                                                                         <?php
                                                                         if ($dok[$o]['isupload'] == 1) {
-                                                                            if ($sesuai == 1 || $sesuai == 0) {
+                                                                            if ($permohonan->status == 32) {
+                                                                                if ($lengkapsub == 2) {
                                                                         ?>
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
-                                                                                </svg>
-                                                                            <?php
-                                                                            } else if ($sesuai == 2) {
-                                                                            ?>
-                                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
-                                                                                        <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
                                                                                     </svg>
-                                                                                </button>
+                                                                                <?php
+                                                                                } else if ($lengkapsub == 1) {
+                                                                                ?>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                    </svg>
+                                                                                <?php
+                                                                                }
+                                                                                ?>
+
+                                                                                <?php
+                                                                            } else if ($permohonan->status == 33 || $permohonan->status == 41) {
+                                                                                if ($sesuai == 1 || $sesuai == 0) {
+                                                                                ?>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                    </svg>
+                                                                                <?php
+                                                                                } else if ($sesuai == 2) {
+                                                                                ?>
+                                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                <?php
+                                                                                }
+                                                                            } else {
+                                                                                if ($sesuai == 1 || $sesuai == 0) {
+                                                                                ?>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                    </svg>
+                                                                                <?php
+                                                                                } else if ($sesuai == 2) {
+                                                                                ?>
+                                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                        </svg>
+                                                                                    </button>
                                                                             <?php
+                                                                                }
                                                                             }
                                                                             ?>
                                                                         <?php } else { ?>
@@ -452,9 +631,30 @@
                                                                         ?>
                                                                     </td>
                                                                     <td>
-                                                                        <?= $catatan ?>
+                                                                        <?php
+                                                                        if ($catatan != "") {
+                                                                        ?>
+                                                                            <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="lihatcatatan('<?= htmlspecialchars($catatan) ?>')">Lihat Catatan</a>
+                                                                        <?php
+                                                                        }
+                                                                        ?>
                                                                     </td>
-                                                                <?php } ?>
+                                                                <?php }
+                                                                if ($permohonan->status == 32) {
+                                                                ?>
+                                                                    <td width="5%" rowspan="<?= count($dok) ?>">
+                                                                        <?php if ($lengkapsubsub == 1) {
+                                                                            echo "<strong>Lengkap</strong>";
+                                                                        } else if ($lengkapsubsub == 2) {
+                                                                            echo "<strong>Tidak Lengkap</strong>";
+                                                                        } else if ($lengkapsubsub == 0) {
+                                                                            echo "";
+                                                                        }
+                                                                        ?>
+                                                                    </td>
+                                                                <?php
+                                                                }
+                                                                ?>
                                                             </tr>
                                                             <?php
                                                             for ($o; $o < count($dok); $o++) {
@@ -476,20 +676,60 @@
                                                                         <td class="text-center align-middle <?= $elchild ?> <?= $ambilsubsub == 1 ? '' : 'd-none' ?>">
                                                                             <?php
                                                                             if ($dok[$o]['isupload'] == 1) {
-                                                                                if ($sesuai == 1 || $sesuai == 0) {
+                                                                                if ($permohonan->status == 32) {
+                                                                                    if ($lengkapsub == 2) {
                                                                             ?>
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
-                                                                                    </svg>
-                                                                                <?php
-                                                                                } else if ($sesuai == 2) {
-                                                                                ?>
-                                                                                    <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
-                                                                                            <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                        <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                                <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                            </svg>
+                                                                                        </button>
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
                                                                                         </svg>
-                                                                                    </button>
+                                                                                    <?php
+                                                                                    } else if ($lengkapsub == 1) {
+                                                                                    ?>
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                        </svg>
+                                                                                    <?php
+                                                                                    }
+                                                                                    ?>
+
+                                                                                    <?php
+                                                                                } else if ($permohonan->status == 33 || $permohonan->status == 41) {
+                                                                                    if ($sesuai == 1 || $sesuai == 0) {
+                                                                                    ?>
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                        </svg>
+                                                                                    <?php
+                                                                                    } else if ($sesuai == 2) {
+                                                                                    ?>
+                                                                                        <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                                <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                            </svg>
+                                                                                        </button>
+                                                                                    <?php
+                                                                                    }
+                                                                                } else {
+                                                                                    if ($sesuai == 1 || $sesuai == 0) {
+                                                                                    ?>
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                                                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                                                                                        </svg>
+                                                                                    <?php
+                                                                                    } else if ($sesuai == 2) {
+                                                                                    ?>
+                                                                                        <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
+                                                                                                <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
+                                                                                            </svg>
+                                                                                        </button>
                                                                                 <?php
+                                                                                    }
                                                                                 }
                                                                                 ?>
                                                                             <?php } else { ?>
@@ -514,7 +754,13 @@
                                                                             ?>
                                                                         </td>
                                                                         <td>
-                                                                            <?= $catatan ?>
+                                                                            <?php
+                                                                            if ($catatan != "") {
+                                                                            ?>
+                                                                                <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="lihatcatatan('<?= htmlspecialchars($catatan) ?>')">Lihat Catatan</a>
+                                                                            <?php
+                                                                            }
+                                                                            ?>
                                                                         </td>
                                                                     <?php } ?>
                                                                 </tr>
@@ -557,6 +803,21 @@
                 <button type="button" id="subm" class="btn btn-success">Upload
                     <div class="spinner-border spinner-border-sm text-white d-none ms-3" id="loaderupload" role="status"></div>
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal-blur fade" id="modal-catatan" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pdfModalLabel">Lihat Catatan</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="catatan-body">
+
             </div>
         </div>
     </div>
@@ -816,6 +1077,16 @@ if (isset($_GET['elnow'])) {
         // })
     })
 
+    function lihatcatatan(content) {
+        var myModal = new bootstrap.Modal(document.getElementById('modal-catatan'), {
+            keyboard: false,
+            backdrop: false
+        })
+        myModal.show();
+
+        $('#catatan-body').html(content);
+    }
+
     function claimpoin(elparent, elchild, pilihan, event, elpoin, id_permohonan, id_sub, id_sub_sub, accord) {
         let selectelement = event.target;
         let selected = selectelement.value;
@@ -966,7 +1237,7 @@ if (isset($_GET['elnow'])) {
     }
 
     function selesai(id_permohonan, status, poinhead) {
-        if (confirm('Selesaikan Permohonan ini ? ')) {
+        if (confirm('Selesaikan Permohonan ini ? Pastikan dokumen telah diupload seluruhnya pada poin yang diambil ')) {
             let formdataselesai = new FormData();
             formdataselesai.append('id_permohonan', id_permohonan);
             formdataselesai.append('status', status);
