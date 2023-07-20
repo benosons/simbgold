@@ -111,6 +111,7 @@
                                                     <td width="5%">File</td>
                                                     <td width="2%">Poin Diajukan</td>
                                                     <td width="10%">Kelengkapan Dokumen</td>
+                                                    <td width="5%">Catatan</td>
                                                 </tr>
                                                 <?php
                                                 for ($k = 0; $k < count($checklist[$i]['main'][$j]['sub']); $k++) {
@@ -129,6 +130,7 @@
                                                     $idambilsub = $checklist[$i]['main'][$j]['sub'][$k]['id_ambil'];
                                                     $tidaksesuaisub = $checklist[$i]['main'][$j]['sub'][$k]['tidaksesuai'];
                                                     $belumassessub = $checklist[$i]['main'][$j]['sub'][$k]['belumasses'];
+                                                    $catatansub = $checklist[$i]['main'][$j]['sub'][$k]['catatan'];
                                                     $lengkapsub = $checklist[$i]['main'][$j]['sub'][$k]['lengkap'];
                                                     $isallfilesub = $checklist[$i]['main'][$j]['sub'][$k]['isallfile'];
                                                     if ($dokumensub == 1) {
@@ -181,7 +183,6 @@
                                                             if ($dok[$o]['isupload'] == 1) {
                                                                 $idfilesub = $dok[$o]['id_file'];
                                                                 $sesuaisub = $dok[$o]['lengkap'];
-                                                                $catatansub = $dok[$o]['catatan'];
 
                                                                 if ($permohonan->status == 31) {
                                                             ?>
@@ -192,6 +193,13 @@
                                                                             <option value="1" <?= $lengkapsub == 1 ? 'selected' : '' ?>>Lengkap</option>
                                                                         </select>
                                                                     </td>
+                                                                    <td>
+                                                                        <?php if ($lengkapsub == 2 && $catatansub == "") { ?>
+                                                                            <button class="btn btn-success btn-sm" onclick="catatan('<?= $elprent ?>', <?= $idambilsub ?>,'<?= $alp[$i] ?>')">Catatan</button>
+                                                                        <?php } else if ($lengkapsub == 2 && $catatansub != "") { ?>
+                                                                            <a href="javacript:;" class="btn btn-success btn-sm" onclick="catatan('<?= $elparent ?>', <?= $idambilsub ?>,'<?= $alp[$i] ?>','<?= htmlspecialchars($catatansub) ?>')" title="Edit Catatan">Lihat/edit Catatan</a>
+                                                                        <?php } ?>
+                                                                    </td>
                                                                 <?php
                                                                 } else if ($permohonan->status == 32 || $permohonan->status == 33 || $permohonan->status == 4) {
                                                                 ?>
@@ -201,6 +209,15 @@
                                                                             echo "<strong>Lengkap</strong>";
                                                                         } else if ($lengkapsub == 2) {
                                                                             echo "<strong>Tidak Lengkap</strong>";
+                                                                        }
+                                                                        ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?php
+                                                                        if ($catatansub != "") {
+                                                                        ?>
+                                                                            <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="lihatcatatan('<?= htmlspecialchars($catatansub) ?>')">Lihat Catatan</a>
+                                                                        <?php
                                                                         }
                                                                         ?>
                                                                     </td>
@@ -259,6 +276,7 @@
                                                             <td></td>
                                                             <td></td>
                                                             <td></td>
+                                                            <td></td>
                                                         </tr>
                                                         <?php $jmlsubsub = count($checklist[$i]['main'][$j]['sub'][$k]['subsub']);
                                                         for ($l = 0; $l < $jmlsubsub; $l++) {
@@ -276,6 +294,7 @@
                                                             $dok = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['dok'];
                                                             $tidaksesuaisubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['tidaksesuai'];
                                                             $belumassessubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['belumasses'];
+                                                            $catatansubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['catatan'];
                                                             $lengkapsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['lengkap'];
                                                             $isallfilesubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['isallfile'];
                                                         ?>
@@ -325,7 +344,6 @@
                                                                 if ($dok[$o]['isupload'] == 1) {
                                                                     $idfilesubsub = $dok[$o]['id_file'];
                                                                     $sesuaisubsub = $dok[$o]['sesuai'];
-                                                                    $catatansubsub = $dok[$o]['catatan'];
                                                                     if ($permohonan->status == 31) {
                                                                 ?>
                                                                         <td rowspan="<?= count($dok) ?>">
@@ -334,6 +352,13 @@
                                                                                 <option value="2" <?= $lengkapsubsub == 2 ? 'selected' : '' ?>>Tidak</option>
                                                                                 <option value="1" <?= $lengkapsubsub == 1 ? 'selected' : '' ?>>Lengkap</option>
                                                                             </select>
+                                                                        </td>
+                                                                        <td rowspan="<?= count($dok) ?>">
+                                                                            <?php if ($lengkapsubsub == 2 && $catatansubsub == "") { ?>
+                                                                                <button class="btn btn-success btn-sm" onclick="catatan('<?= $elchild ?>', <?= $idambilsubsub ?>,'<?= $alp[$i] ?>')">Catatan</button>
+                                                                            <?php } else if ($lengkapsubsub == 2 && $catatansubsub != "") { ?>
+                                                                                <a href="javacript:;" class="btn btn-success btn-sm" onclick="catatan('<?= $elchild ?>', <?= $idambilsubsub ?>,'<?= $alp[$i] ?>','<?= htmlspecialchars($catatansubsub) ?>')" title="Edit Catatan">Lihat/edit Catatan</a>
+                                                                            <?php } ?>
                                                                         </td>
                                                                     <?php
                                                                     } else if ($permohonan->status == 32 || $permohonan->status == 33 || $permohonan->status == 4) {
@@ -344,6 +369,15 @@
                                                                                 echo "<strong>Lengkap</strong>";
                                                                             } else if ($lengkapsubsub == 2) {
                                                                                 echo "<strong>Tidak Lengkap</strong>";
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if ($catatansubsub != "") {
+                                                                            ?>
+                                                                                <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="lihatcatatan('<?= htmlspecialchars($catatansubsub) ?>')">Lihat Catatan</a>
+                                                                            <?php
                                                                             }
                                                                             ?>
                                                                         </td>
@@ -436,7 +470,7 @@
                 <textarea id="catatan" class="form-control summernote"></textarea>
             </div>
             <div class="modal-footer">
-                <input type="text" id="id_file_catatan" hidden>
+                <input type="text" id="id_ambil_catatan" hidden>
                 <button type="button" id="simpancatatan" class="btn btn-success">Simpan
                     <div class="spinner-border spinner-border-sm text-white d-none ms-3" id="loaderupload" role="status"></div>
                 </button>
@@ -445,6 +479,21 @@
     </div>
 </div>
 <!-- Endmodal -->
+<div class="modal modal-blur fade" id="modal-viewcatatan" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pdfModalLabel">Lihat Catatan</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="catatan-body">
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="<?= base_url() ?>assets/bgh/dist/libs/jQuery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="<?= base_url() ?>assets/bgh/dist/libs/DataTables-1.13.4/js/datatables.min.js"></script>
@@ -485,12 +534,38 @@ if (isset($_GET['elnow'])) {
             height: 400,
             toolbar: [
                 ['style', ['bold', 'italic', 'underline', 'clear']],
-                ['para', ['ul', 'ol', 'paragraph']],
+                ['para', ['ul', 'ol']],
                 ['insert', ['picture', 'link']],
                 ['font', ['strikethrough', 'superscript', 'subscript']],
-                ['height', ['height']],
-            ]
+            ],
+            callbacks: {
+                onImageUpload: function(files) {
+                    // Upload gambar saat dipilih dari file dialog
+                    sendFile(files[0]);
+                }
+            }
         });
+
+        function sendFile(file) {
+            var formData = new FormData();
+            formData.append("image", file);
+            formData.append('idpermohonan', <?= $permohonan->id ?>);
+
+            $.ajax({
+                url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/uploadimagecatatankelengkapan",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    // Set URL gambar yang diunggah sebagai sumber untuk gambar dalam editor
+                    $('.summernote').summernote('insertImage', data);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus + " " + errorThrown);
+                }
+            });
+        }
 
 
         $('#fileinput').change(function() {
@@ -499,8 +574,8 @@ if (isset($_GET['elnow'])) {
 
         $('#simpancatatan').click(function() {
             var formData = new FormData();
-            formData.append('id_file', $('#id_file_catatan').val());
-            formData.append('catatan', tinyMCE.activeEditor.getContent());
+            formData.append('id_ambil', $('#id_ambil_catatan    ').val());
+            formData.append('catatan', $('#catatan').val());
             savecatatan(formData);
         });
 
@@ -606,6 +681,31 @@ if (isset($_GET['elnow'])) {
         }
     }
 
+    function catatan(el, idambil, accord, content) {
+        $('#id_ambil_catatan').val(idambil);
+        var myModal = new bootstrap.Modal(document.getElementById('modal-catatan'), {
+            keyboard: false,
+            backdrop: false
+        })
+        myModal.show();
+        $('#catatan').summernote('code', content)
+    }
+
+    function savecatatan(formdata) {
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            data: formdata,
+            processData: false,
+            contentType: false,
+            url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/savecatatankelengkapan",
+            success: function(response) {
+                alert('berhasil');
+                location.reload();
+            }
+        })
+    }
+
     function openmodal(id_dokumen, poin_diajukan, id_sub, id_sub_sub, head) {
         $('#id_dokumen').val(id_dokumen);
         $('#poin_diajukan').val(poin_diajukan);
@@ -617,5 +717,15 @@ if (isset($_GET['elnow'])) {
             backdrop: false
         })
         myModal.show();
+    }
+
+    function lihatcatatan(content) {
+        var myModal = new bootstrap.Modal(document.getElementById('modal-viewcatatan'), {
+            keyboard: false,
+            backdrop: false
+        })
+        myModal.show();
+
+        $('#catatan-body').html(content);
     }
 </script>

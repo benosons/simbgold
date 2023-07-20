@@ -89,7 +89,7 @@
 </div>
 
 <div class="modal modal-blur fade" id="modal-jadwalsidang" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered" id="modal-size" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <div class="row mb-3">
@@ -97,11 +97,16 @@
                         <label for="" class="form-control-label">Tanggal Jadwal Sidang</label>
                         <input type="date" class="form-control" id="tanggal_sidang" required>
                     </div>
+
+                    <div class="col-md-12" id="body-sidangtpa">
+
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Cancel</button>
                 <input type="text" id="id_permohonan_jadwal" hidden>
+                <input type="text" id="statustpa" hidden>
                 <button type="button" id="submit-jadwal" class="btn btn-success">Simpan
                     <div class="spinner-border spinner-border-sm text-white d-none ms-3" id="loaderupload" role="status"></div>
                 </button>
@@ -143,13 +148,41 @@
 
         $(document).on('click', '.jadwalsidang', function() {
             var id_permohonan = $(this).data('permohonan');
+            var tpa = $(this).data('tpa');
+            var id_provinsi = $(this).data('provinsi');
+            var id_kabkota = $(this).data('kabkota');
             $('#id_permohonan_jadwal').val(id_permohonan);
+            var contentTpa = "";
+            if (tpa == "0") {
+                $('#modal-size').addClass('modal-lg');
+                contentTpa += `
+                <div class="table-responsive mt-3">
+                    <table class="table table-bordered" id="table-sidangtpa">
+                        <thead>
+                            <th></th>
+                            <th>Nama</th>
+                            <th>Alamat</th>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                `;
+                $('#statustpa').val(0);
+            } else {
+                $('#modal-size').addClass('modal-sm');
+                $('#statustpa').val(1);
+            }
+
+            $('#body-sidangtpa').html(contentTpa);
 
             var myModal = new bootstrap.Modal(document.getElementById('modal-jadwalsidang'), {
                 keyboard: false,
                 backdrop: false
             })
             myModal.show();
+
+            gettpasidang(id_provinsi, id_kabkota);
         })
 
         $(document).on('click', '.cek-kelengkapan', function() {
@@ -210,25 +243,64 @@
         })
 
         $('#submit-jadwal').click(function() {
-            let formdata = new FormData();
-            formdata.append('id_permohonan', $('#id_permohonan_jadwal').val());
-            formdata.append('tanggal_sidang', $('#tanggal_sidang').val());
-            formdata.append('status', 5);
+            var pilihantpa = [];
 
-            $.ajax({
-                type: 'post',
-                dataType: 'json',
-                data: formdata,
-                processData: false,
-                contentType: false,
-                url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatejadwalsidang',
-                success: function(response) {
-                    if (response.code === 1) {
-                        alert('Berhasil !');
-                        location.reload();
-                    }
+            if ($('#statustpa').val() == "1") {
+                if ($('#tanggal_sidang').val() != "") {
+                    let formdata = new FormData();
+
+                    $.ajax({
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            pilihantpa: "0",
+                            id_permohonan: $('#id_permohonan_jadwal').val(),
+                            tanggal_sidang: $('#tanggal_sidang').val(),
+                            status: 5
+                        },
+                        url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatejadwalsidang',
+                        success: function(response) {
+                            if (response.code === 1) {
+                                alert('Berhasil !');
+                                location.reload();
+                            }
+                        }
+                    })
+                } else {
+                    alert('Jadwal Belum Diisi');
                 }
-            })
+            } else {
+                if ($('input[type="checkbox"]:checked').length > 0) {
+                    $('input[type="checkbox"]:checked').each(function() {
+                        pilihantpa.push($(this).val());
+                    })
+                    if ($('#tanggal_sidang').val() != "") {
+
+                        $.ajax({
+                            type: 'post',
+                            dataType: 'json',
+                            data: {
+                                pilihantpa: pilihantpa,
+                                id_permohonan: $('#id_permohonan_jadwal').val(),
+                                tanggal_sidang: $('#tanggal_sidang').val(),
+                                status: 5
+                            },
+                            url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatejadwalsidang',
+                            success: function(response) {
+                                if (response.code === 1) {
+                                    alert('Berhasil !');
+                                    location.reload();
+                                }
+                            }
+                        })
+                    } else {
+                        alert('Jadwal Belum Diisi');
+                    }
+                } else {
+                    alert('TPA Belum Dipilih');
+                }
+            }
+
         })
 
         function batalkan(id_permohonan, status, poin_diajukan) {
@@ -301,6 +373,92 @@
                 success: function(result) {
                     let data = result.data;
                     var dt = $("#table-tpa").DataTable({
+                        destroy: true,
+                        paging: true,
+                        lengthChange: false,
+                        searching: true,
+                        ordering: true,
+                        info: true,
+                        autoWidth: false,
+                        responsive: false,
+                        pageLength: 10,
+                        aaData: data,
+                        aoColumns: [{
+                                mDataProp: "id",
+                                width: "10px",
+                            },
+                            {
+                                mDataProp: "nm_tpa",
+                            },
+                            {
+                                mDataProp: "alamat",
+                            },
+                        ],
+                        order: [
+                            [0, "ASC"]
+                        ],
+                        fixedColumns: true,
+                        aoColumnDefs: [{
+                                mRender: function(data, type, row) {
+
+                                    var el = `
+                                        <input type="checkbox" value="${row.id_user}">
+                                    `;
+
+                                    return el;
+                                },
+                                aTargets: [0],
+                            },
+                            {
+                                mRender: function(data, type, row) {
+
+                                    var el = `
+                                        ${row.glr_depan} ${row.nm_tpa} ${row.glr_blkg}
+                                    `;
+
+                                    return el;
+                                },
+                                aTargets: [1],
+                            },
+                        ],
+                        fnRowCallback: function(
+                            nRow,
+                            aData,
+                            iDisplayIndex,
+                            iDisplayIndexFull
+                        ) {
+                            // var index = iDisplayIndexFull + 1;
+                            // $("td:eq(0)", nRow).html("#" + index);
+                            // return index;
+                        },
+                        fnInitComplete: function() {
+                            var that = this;
+                            var td;
+                            var tr;
+                            this.$("td").click(function() {
+                                td = this;
+                            });
+                            this.$("tr").click(function() {
+                                tr = this;
+                            });
+                        },
+                    });
+                },
+            });
+        }
+
+        function gettpasidang(id_provinsi, id_kabkota) {
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/gettpa",
+                data: {
+                    id_provinsi: id_provinsi,
+                    id_kabkota: id_kabkota
+                },
+                success: function(result) {
+                    let data = result.data;
+                    var dt = $("#table-sidangtpa").DataTable({
                         destroy: true,
                         paging: true,
                         lengthChange: false,
@@ -658,7 +816,7 @@
                                 continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
                                 Lihat Hasil Assesmen
                                 </a>`;
-                                sidang += `<a class="dropdown-item jadwalsidang" data-permohonan="${row.id_permohonan}" href="javascript:void(0)">
+                                sidang += `<a class="dropdown-item jadwalsidang" data-permohonan="${row.id_permohonan}" data-tpa="${row.id_tpa}" data-provinsi="${row.id_provinsi}" data-kabkota="${row.id_kabkota}" href="javascript:void(0)">
                                 Tentukan Jadwal Sidang
                                 </a>`;
 

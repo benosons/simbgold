@@ -208,6 +208,7 @@
                                                     if ($permohonan->status == 32) {
                                                     ?>
                                                         <td width="5%">Kelengkapan Dokumen</td>
+                                                        <td width="5%">Catatan</td>
                                                     <?php
                                                     }
                                                     ?>
@@ -224,6 +225,7 @@
                                                     $poinambilsub = $checklist[$i]['main'][$j]['sub'][$k]['poinambil'];
                                                     $ambilsub = $checklist[$i]['main'][$j]['sub'][$k]['ambil'];
                                                     $isallfilesub = $checklist[$i]['main'][$j]['sub'][$k]['isallfile'];
+                                                    $catatansub = $checklist[$i]['main'][$j]['sub'][$k]['catatan'];
                                                     $lengkapsub = $checklist[$i]['main'][$j]['sub'][$k]['lengkap'];
                                                     if ($pilihansub == 1) {
                                                         $terpilihsub = $checklist[$i]['main'][$j]['sub'][$k]['terpilih'];
@@ -268,7 +270,7 @@
                                                                         if ($permohonan->status == 32) {
                                                                             if ($lengkapsub == 2) {
                                                                     ?>
-                                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
+                                                                                <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elparent ?>',<?= $idfile ?>)" title="Upload">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
                                                                                         <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2z" />
                                                                                     </svg>
@@ -364,6 +366,15 @@
                                                                         echo "<strong>Tidak Lengkap</strong>";
                                                                     } else if ($lengkapsub == 0) {
                                                                         echo "";
+                                                                    }
+                                                                    ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php
+                                                                    if ($catatansub != "") {
+                                                                    ?>
+                                                                        <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="lihatcatatan('<?= htmlspecialchars($catatansub) ?>')">Lihat Catatan</a>
+                                                                    <?php
                                                                     }
                                                                     ?>
                                                                 </td>
@@ -516,6 +527,7 @@
                                                             $ambilsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['ambil'];
                                                             $poinambilsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['poinambil'];
                                                             $isallfilesubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['isallfile'];
+                                                            $catatansubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['catatan'];
                                                             $lengkapsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['lengkap'];
                                                             $dok = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['dok'];
                                                         ?>
@@ -552,7 +564,7 @@
                                                                         <?php
                                                                         if ($dok[$o]['isupload'] == 1) {
                                                                             if ($permohonan->status == 32) {
-                                                                                if ($lengkapsub == 2) {
+                                                                                if ($lengkapsubsub == 2) {
                                                                         ?>
                                                                                     <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
                                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
@@ -563,7 +575,7 @@
                                                                                         <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
                                                                                     </svg>
                                                                                 <?php
-                                                                                } else if ($lengkapsub == 1) {
+                                                                                } else if ($lengkapsubsub == 1) {
                                                                                 ?>
                                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
                                                                                         <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
@@ -652,6 +664,15 @@
                                                                         }
                                                                         ?>
                                                                     </td>
+                                                                    <td>
+                                                                        <?php
+                                                                        if ($catatansubsub != "") {
+                                                                        ?>
+                                                                            <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="lihatcatatan('<?= htmlspecialchars($catatansubsub) ?>')">Lihat Catatan</a>
+                                                                        <?php
+                                                                        }
+                                                                        ?>
+                                                                    </td>
                                                                 <?php
                                                                 }
                                                                 ?>
@@ -677,7 +698,7 @@
                                                                             <?php
                                                                             if ($dok[$o]['isupload'] == 1) {
                                                                                 if ($permohonan->status == 32) {
-                                                                                    if ($lengkapsub == 2) {
+                                                                                    if ($lengkapsubsub == 2) {
                                                                             ?>
                                                                                         <button class="btn btn-success btn-sm" onclick="openmodal(<?= $iddok ?>, <?= $poinsubsub ?>,0, <?= $idsubsub ?>, '<?= $alp[$i] ?>','<?= $elchild ?>',<?= $idfile ?>)" title="Upload">
                                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up-fill" viewBox="0 0 16 16">
@@ -688,7 +709,7 @@
                                                                                             <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
                                                                                         </svg>
                                                                                     <?php
-                                                                                    } else if ($lengkapsub == 1) {
+                                                                                    } else if ($lengkapsubsub == 1) {
                                                                                     ?>
                                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
                                                                                             <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />

@@ -308,15 +308,22 @@ class BangunanBaru extends CI_Controller
 
     public function updatejadwalsidang()
     {
-        $params = (object)$this->input->post();
+        $tanggal_sidang = $this->input->post('tanggal_sidang');
+        $status = $this->input->post('status');
+        $id_permohonan = $this->input->post('id_permohonan');
+        $id_tpa = $this->input->post('pilihantpa');
+        if ($id_tpa != "0") {
+            $tpa = json_encode($id_tpa);
+        }
 
         $where = array(
-            'id' => $params->id_permohonan
+            'id' => $id_permohonan
         );
 
         $data = array(
-            'tanggal_sidang' => $params->tanggal_sidang,
-            'status' => $params->status
+            'tanggal_sidang' => $tanggal_sidang,
+            'id_tpa' => $tpa,
+            'status' => $status
         );
 
         $update = $this->bgbarumodel->updatestatuspermohonan($data, $where);
@@ -407,6 +414,7 @@ class BangunanBaru extends CI_Controller
                             if ($getambil->num_rows() > 0) {
                                 $row3['ambil'] = 1;
                                 $itemambil = $getambil->row();
+                                $row3['catatan'] = $itemambil->catatan;
                                 $row3['lengkap'] = $itemambil->lengkap;
                                 $row3['poinambil'] = $itemambil->poin_diajukan;
                                 $row2['terpilih'] = 1;
@@ -466,6 +474,7 @@ class BangunanBaru extends CI_Controller
                         if ($getambil->num_rows() > 0) {
                             $row2['ambil'] = 1;
                             $itemambil = $getambil->row();
+                            $row2['catatan'] = $itemambil->catatan;
                             $row2['lengkap'] = $itemambil->lengkap;
                             $row2['poinambil'] = $itemambil->poin_diajukan;
                             $row2['terpilih'] = 1;
@@ -1020,6 +1029,7 @@ class BangunanBaru extends CI_Controller
                                 $row3['poin_diajukan'] = $itemambil->poin_diajukan;
                                 $row3['poin_assesment'] = $itemambil->poin_assesment;
                                 $data['poinallassesment'] += $itemambil->poin_assesment;
+                                $row3['catatan'] = $itemambil->catatan;
                                 $row3['lengkap'] = $itemambil->lengkap;
                                 if ($itemambil->lengkap == 2) {
                                     $data['tidak_lengkap'] += 1;
@@ -1099,6 +1109,7 @@ class BangunanBaru extends CI_Controller
                             $row['poindiajukan'] += $s->poin;
                             $row2['poin_assesment'] = $itemambil->poin_assesment;
                             $data['poinallassesment'] += $itemambil->poin_assesment;
+                            $row2['catatan'] = $itemambil->catatan;
                             $row2['lengkap'] = $itemambil->lengkap;
                             $row2['assesment_by'] = $itemambil->assesment_by;
                         } else {
@@ -1651,6 +1662,28 @@ class BangunanBaru extends CI_Controller
         echo json_encode($response);
     }
 
+    public function savecatatankelengkapan()
+    {
+        $params = (object)$this->input->post();
+
+        $where = array('id' => $params->id_ambil);
+        $data = array('catatan' => $params->catatan);
+
+        $update = $this->bgbarumodel->updateambil($data, $where);
+        if ($update) {
+            $response = array(
+                'code' => 1,
+                'msg' => 'Berhasil'
+            );
+        } else {
+            $response = array(
+                'code' => 0,
+                'msg' => 'Berhasil'
+            );
+        }
+        echo json_encode($response);
+    }
+
     public function uploadimagecatatan()
     {
         $id_permohonan = $this->input->post('idpermohonan');
@@ -1670,6 +1703,29 @@ class BangunanBaru extends CI_Controller
             } else {
                 $data = $this->upload->data();
                 echo base_url('assets/bgh/files/' . $id_permohonan . '/catatan/' . $data['file_name']);
+            }
+        }
+    }
+
+    public function uploadimagecatatankelengkapan()
+    {
+        $id_permohonan = $this->input->post('idpermohonan');
+        if (!file_exists('assets/bgh/files/' . $id_permohonan . '/catatankelengkapan/')) {
+            mkdir('assets/bgh/files/' . $id_permohonan . '/catatankelengkapan/', 0777, true);
+        }
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $config['upload_path'] = './assets/bgh/files/' . $id_permohonan . '/catatankelengkapan/'; // Ubah sesuai dengan folder penyimpanan gambar Anda
+            $config['allowed_types'] = 'gif|jpg|jpeg|png';
+            $config['max_size'] = 2048; // Ukuran maksimum gambar (dalam kilobita). Sesuaikan dengan kebutuhan Anda.
+            $config['encrypt_name'] = TRUE; // Mengenkripsi nama gambar untuk menghindari konflik nama file
+
+            $this->load->library('upload', $config);
+
+            if (!$this->upload->do_upload('image')) {
+                echo "Error: " . $this->upload->display_errors();
+            } else {
+                $data = $this->upload->data();
+                echo base_url('assets/bgh/files/' . $id_permohonan . '/catatankelengkapan/' . $data['file_name']);
             }
         }
     }

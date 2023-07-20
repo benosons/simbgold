@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="en" class="no-js">
+
 <head>
   <meta charset="utf-8" />
   <title>SIMBG</title>
@@ -18,9 +19,9 @@
   <!-- END GLOBAL MANDATORY STYLES -->
 
   <!-- END PAGE STYLES -->
-  <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/global/plugins/select2/select2.css"/>
-  <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
-  <link href="<?php echo base_url(); ?>assets/admin/pages/css/profile.css" rel="stylesheet" type="text/css"/>
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/global/plugins/select2/select2.css" />
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css" />
+  <link href="<?php echo base_url(); ?>assets/admin/pages/css/profile.css" rel="stylesheet" type="text/css" />
   <!-- END PAGE DATATABLE -->
 
   <!-- BEGIN THEME STYLES -->
@@ -30,8 +31,8 @@
   <link href="<?php echo base_url(); ?>assets/admin/layout3/css/layout.css" rel="stylesheet" type="text/css" />
   <link href="<?php echo base_url(); ?>assets/admin/layout3/css/themes/blue-steel.css" rel="stylesheet" type="text/css" id="style_color" />
   <link href="<?php echo base_url(); ?>assets/admin/layout3/css/custom.css" rel="stylesheet" type="text/css" />
-  <link href="<?php echo base_url(); ?>assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>
-  <link href="<?php echo base_url(); ?>assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+  <link href="<?php echo base_url(); ?>assets/global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css" />
+  <link href="<?php echo base_url(); ?>assets/global/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css" />
   <!-- END THEME STYLES -->
 
   <script src="<?php echo base_url(); ?>assets/global/plugins/jquery.min.js" type="text/javascript"></script>
@@ -50,7 +51,7 @@
   <script src="<?php echo base_url(); ?>assets/global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
   <script src="<?php echo base_url(); ?>assets/global/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
   <!-- END PAGE LEVEL PLUGINS -->
-  
+
   <!-- BEGIN PAGE LEVEL SCRIPTS -->
   <script src="<?php echo base_url(); ?>assets/global/scripts/metronic.js" type="text/javascript"></script>
   <script src="<?php echo base_url(); ?>assets/admin/pages/scripts/index.js" type="text/javascript"></script>
@@ -68,48 +69,49 @@
 
 <body class="page-header-menu-fixed">
   <div class="page-header">
-    <?php $this->load->view('headermenu'); ?> 
+    <?php $this->load->view('headermenu'); ?>
   </div>
 
-    <div class="page-content">
-      <div class="container">
-        <?php echo $content; ?>
-      </div>
+  <div class="page-content">
+    <div class="container">
+      <?php echo $content; ?>
     </div>
+  </div>
 
 
-    <?php $this->load->view('footer'); ?>
+  <?php $this->load->view('footer'); ?>
 
 
-    <script>
+  <script>
+    function reloadata() {
+      location.reload();
+    }
 
-      function reloadata() {
-        location.reload();
-      }
-
-      $(document).ready(function() {
-        $('a[data-confirm]').click(function(ev) {
-          var href = $(this).attr('data-href');
-          if (!$('#dataConfirmModal').length) {
-            $('body').append('<div id="dataConfirmModal" class="modal" role="dialog" data-backdrop="static" aria-labelledby="dataConfirmLabel" aria-hidden="true"><div class="modal-body"></div><div class="modal-footer"><button class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Tidak</button><a class="btn btn-primary btn-sm" id="dataConfirmOK"><i class="fa fa-check"></i> Ya</a></div></div>');
-          } 
-          $('#dataConfirmModal').find('.modal-body').text($(this).attr('data-confirm'));
-          $('#dataConfirmOK').attr('href', href);
-          $('#dataConfirmModal').modal({show:true});
-          return false;
+    $(document).ready(function() {
+      $('a[data-confirm]').click(function(ev) {
+        var href = $(this).attr('data-href');
+        if (!$('#dataConfirmModal').length) {
+          $('body').append('<div id="dataConfirmModal" class="modal" role="dialog" data-backdrop="static" aria-labelledby="dataConfirmLabel" aria-hidden="true"><div class="modal-body"></div><div class="modal-footer"><button class="btn btn-danger btn-sm" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Tidak</button><a class="btn btn-primary btn-sm" id="dataConfirmOK"><i class="fa fa-check"></i> Ya</a></div></div>');
+        }
+        $('#dataConfirmModal').find('.modal-body').text($(this).attr('data-confirm'));
+        $('#dataConfirmOK').attr('href', href);
+        $('#dataConfirmModal').modal({
+          show: true
         });
+        return false;
       });
+    });
 
-      jQuery(document).ready(function() {
-        Metronic.init(); // init metronic core components
-        Layout.init(); // init current layout
-        Demo.init(); // init demo features
-        Index.init(); // init index page
-        UIBlockUI.init();
-    //TableManaged.init();
-      });
-    </script>
-    <!-- END JAVASCRIPTS -->
+    jQuery(document).ready(function() {
+      Metronic.init(); // init metronic core components
+      Layout.init(); // init current layout
+      Demo.init(); // init demo features
+      Index.init(); // init index page
+      UIBlockUI.init();
+      //TableManaged.init();
+    });
+  </script>
+  <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->
 
