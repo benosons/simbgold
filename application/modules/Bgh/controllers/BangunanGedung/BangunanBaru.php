@@ -322,7 +322,7 @@ class BangunanBaru extends CI_Controller
 
         $data = array(
             'tanggal_sidang' => $tanggal_sidang,
-            'id_tpa' => $tpa,
+            'tpa_sidang' => $tpa,
             'status' => $status
         );
 

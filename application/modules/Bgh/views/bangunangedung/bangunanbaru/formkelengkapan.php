@@ -193,7 +193,7 @@
                                                                             <option value="1" <?= $lengkapsub == 1 ? 'selected' : '' ?>>Lengkap</option>
                                                                         </select>
                                                                     </td>
-                                                                    <td>
+                                                                    <td rowspan="<?= count($checklist[$i]['main'][$j]['sub'][$k]['dok']) ?>">
                                                                         <?php if ($lengkapsub == 2 && $catatansub == "") { ?>
                                                                             <button class="btn btn-success btn-sm" onclick="catatan('<?= $elprent ?>', <?= $idambilsub ?>,'<?= $alp[$i] ?>')">Catatan</button>
                                                                         <?php } else if ($lengkapsub == 2 && $catatansub != "") { ?>
@@ -212,7 +212,7 @@
                                                                         }
                                                                         ?>
                                                                     </td>
-                                                                    <td>
+                                                                    <td rowspan="<?= count($dok) ?>">
                                                                         <?php
                                                                         if ($catatansub != "") {
                                                                         ?>
@@ -227,6 +227,7 @@
 
                                                             <?php
                                                             } else {
+                                                                echo "<td rowspan='" . count($checklist[$i]['main'][$j]['sub'][$k]['dok']) . "'></td>";
                                                                 echo "<td rowspan='" . count($checklist[$i]['main'][$j]['sub'][$k]['dok']) . "'></td>";
                                                             }
                                                             $o++;
@@ -372,7 +373,7 @@
                                                                             }
                                                                             ?>
                                                                         </td>
-                                                                        <td>
+                                                                        <td rowspan="<?= count($dok) ?>">
                                                                             <?php
                                                                             if ($catatansubsub != "") {
                                                                             ?>
@@ -386,6 +387,7 @@
                                                                     ?>
                                                                 <?php
                                                                 } else {
+                                                                    echo "<td rowspan='" . count($dok) . "'></td>";
                                                                     echo "<td rowspan='" . count($dok) . "'></td>";
                                                                 }
                                                                 $o++;

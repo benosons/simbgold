@@ -159,7 +159,7 @@ class Bgbarumodel extends CI_Model
         } else if ($this->session->userdata('loc_role_id') == 11) {
             $where = 'WHERE t_permohonan_bgh.status >= 0';
         } else if ($this->session->userdata('loc_role_id') == 17) {
-            $where = 'WHERE t_permohonan_bgh.id_tpa LIKE "%' . $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')) . '%"';
+            $where = 'WHERE (t_permohonan_bgh.id_tpa LIKE "%' . $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')) . '%" OR t_permohonan_bgh.tpa_sidang LIKE "%' . $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')) . '%")';
         }
         $query = $this->db->query("select *, t_permohonan_bgh.id as id_permohonan, tmdatapemilik.id as id_pemilik, t_status_permohonan.nama as nama_status, t_status_permohonan.nomor as nomor_status from t_permohonan_bgh JOIN tmdatapemilik ON t_permohonan_bgh.id_pemilik = tmdatapemilik.id JOIN t_status_permohonan ON t_permohonan_bgh.status = t_status_permohonan.nomor $where order by t_permohonan_bgh.id desc LIMIT " . $length . " OFFSET " . $start)->result();
         return $query;

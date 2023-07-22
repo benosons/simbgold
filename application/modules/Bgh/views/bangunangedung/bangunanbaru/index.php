@@ -119,6 +119,7 @@
 <script src="<?= base_url() ?>assets/bgh/dist/libs/DataTables-1.13.4/js/datatables.min.js"></script>
 <script>
     let role = "<?= $role ?>";
+    let user_id = "<?= $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')) ?>";
     $(() => {
         $('#menu-bangunan').addClass('active');
         $('#table').DataTable();
@@ -153,9 +154,9 @@
             var id_kabkota = $(this).data('kabkota');
             $('#id_permohonan_jadwal').val(id_permohonan);
             var contentTpa = "";
-            if (tpa == "0") {
-                $('#modal-size').addClass('modal-lg');
-                contentTpa += `
+            // if (tpa == "0") {
+            $('#modal-size').addClass('modal-lg');
+            contentTpa += `
                 <div class="table-responsive mt-3">
                     <table class="table table-bordered" id="table-sidangtpa">
                         <thead>
@@ -168,11 +169,11 @@
                     </table>
                 </div>
                 `;
-                $('#statustpa').val(0);
-            } else {
-                $('#modal-size').addClass('modal-sm');
-                $('#statustpa').val(1);
-            }
+            $('#statustpa').val(0);
+            // } else {
+            //     $('#modal-size').addClass('modal-sm');
+            //     $('#statustpa').val(1);
+            // }
 
             $('#body-sidangtpa').html(contentTpa);
 
@@ -245,15 +246,42 @@
         $('#submit-jadwal').click(function() {
             var pilihantpa = [];
 
-            if ($('#statustpa').val() == "1") {
+            // if ($('#statustpa').val() == "1") {
+            //     if ($('#tanggal_sidang').val() != "") {
+            //         let formdata = new FormData();
+
+            //         $.ajax({
+            //             type: 'post',
+            //             dataType: 'json',
+            //             data: {
+            //                 pilihantpa: "0",
+            //                 id_permohonan: $('#id_permohonan_jadwal').val(),
+            //                 tanggal_sidang: $('#tanggal_sidang').val(),
+            //                 status: 5
+            //             },
+            //             url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatejadwalsidang',
+            //             success: function(response) {
+            //                 if (response.code === 1) {
+            //                     alert('Berhasil !');
+            //                     location.reload();
+            //                 }
+            //             }
+            //         })
+            //     } else {
+            //         alert('Jadwal Belum Diisi');
+            //     }
+            // } else {
+            if ($('input[type="checkbox"]:checked').length > 0) {
+                $('input[type="checkbox"]:checked').each(function() {
+                    pilihantpa.push($(this).val());
+                })
                 if ($('#tanggal_sidang').val() != "") {
-                    let formdata = new FormData();
 
                     $.ajax({
                         type: 'post',
                         dataType: 'json',
                         data: {
-                            pilihantpa: "0",
+                            pilihantpa: pilihantpa,
                             id_permohonan: $('#id_permohonan_jadwal').val(),
                             tanggal_sidang: $('#tanggal_sidang').val(),
                             status: 5
@@ -270,36 +298,9 @@
                     alert('Jadwal Belum Diisi');
                 }
             } else {
-                if ($('input[type="checkbox"]:checked').length > 0) {
-                    $('input[type="checkbox"]:checked').each(function() {
-                        pilihantpa.push($(this).val());
-                    })
-                    if ($('#tanggal_sidang').val() != "") {
-
-                        $.ajax({
-                            type: 'post',
-                            dataType: 'json',
-                            data: {
-                                pilihantpa: pilihantpa,
-                                id_permohonan: $('#id_permohonan_jadwal').val(),
-                                tanggal_sidang: $('#tanggal_sidang').val(),
-                                status: 5
-                            },
-                            url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/updatejadwalsidang',
-                            success: function(response) {
-                                if (response.code === 1) {
-                                    alert('Berhasil !');
-                                    location.reload();
-                                }
-                            }
-                        })
-                    } else {
-                        alert('Jadwal Belum Diisi');
-                    }
-                } else {
-                    alert('TPA Belum Dipilih');
-                }
+                alert('TPA Belum Dipilih');
             }
+            // }
 
         })
 
@@ -700,7 +701,7 @@
                                 </a>`;
 
                                 menu += `${databangunanpemilik} ${continuechecklist} ${batalkan}`;
-                            } else if (row.status == "3") {
+                            } else if (row.status == "3" || row.status == "31") {
                                 databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
                                     Lihat Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
@@ -750,7 +751,7 @@
                                     Lihat Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
                                 continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
-                                Lihat Hasil Assesmen
+                                Lihat Hasil Konsultasi
                                 </a>`;
                                 sidang += `<a class="dropdown-item ajukansidang" data-permohonan="${row.id_permohonan}" data-poindiajukan="${row.poin_diajukan}" href="javascript:void(0)">
                                 Ajukan Sidang
@@ -762,7 +763,16 @@
                                     Lihat Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
                                 continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
-                                Lihat Hasil Assesmen
+                                Lihat Hasil Konsultasi
+                                </a>`;
+
+                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                            } else if (row.status == "5") {
+                                databangunanpemilik += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/permohonan/${row.kode_bgh}">
+                                    Lihat Data Bangunan, Pemilik dan Penyedia Jasa
+                                </a>`;
+                                continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                Lihat Hasil Konsultasi
                                 </a>`;
 
                                 menu += `${databangunanpemilik} ${continuechecklist}`;
@@ -814,7 +824,7 @@
                                 Lihat Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
                                 continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
-                                Lihat Hasil Assesmen
+                                Lihat Hasil Konsultasi
                                 </a>`;
                                 sidang += `<a class="dropdown-item jadwalsidang" data-permohonan="${row.id_permohonan}" data-tpa="${row.id_tpa}" data-provinsi="${row.id_provinsi}" data-kabkota="${row.id_kabkota}" href="javascript:void(0)">
                                 Tentukan Jadwal Sidang
@@ -829,7 +839,7 @@
                                 Lihat Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
                                 continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/assesment/${row.kode_bgh}">
-                                     Assesment Permohonan
+                                     Lakukan Konsultasi
                                 </a>`;
 
                                 menu += `${databangunanpemilik} ${continuechecklist}`;
@@ -838,7 +848,7 @@
                                     Lihat Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
                                 continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
-                                Lihat Hasil Assesmen
+                                Lihat Hasil Konsultasi
                                 </a>`;
 
                                 menu += `${databangunanpemilik} ${continuechecklist}`;
@@ -847,7 +857,7 @@
                                     Lihat Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
                                 continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
-                                Lihat Hasil Assesmen
+                                Lihat Hasil Konsultasi
                                 </a>`;
 
                                 menu += `${databangunanpemilik} ${continuechecklist}`;
@@ -856,10 +866,19 @@
                                     Lihat Data Bangunan, Pemilik dan Penyedia Jasa
                                 </a>`;
                                 continuechecklist += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
-                                Lihat Hasil Assesmen
+                                Lihat Hasil Konsultasi
                                 </a>`;
 
-                                menu += `${databangunanpemilik} ${continuechecklist}`;
+                                var sidangtpa = JSON.parse(row.tpa_sidang);
+                                if (sidangtpa.includes(user_id)) {
+                                    sidang += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                    Lakukan Proses Sidang
+                                    </a>`;
+                                } else {
+                                    sidang = ``;
+                                }
+
+                                menu += `${databangunanpemilik} ${continuechecklist} ${sidang}`;
                             }
                         }
 

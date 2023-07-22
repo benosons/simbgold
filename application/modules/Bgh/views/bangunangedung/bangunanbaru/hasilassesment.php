@@ -214,7 +214,7 @@
                                                                         } else if ($sesuaisub == 2) {
                                                                             echo "Tidak";
                                                                         } else if ($sesuaisub == 0) {
-                                                                            echo "Tidak Terassesmen";
+                                                                            echo "Tidak Ada Hasil Konsultasi";
                                                                         }
                                                                         ?>
                                                                     </strong>
@@ -282,7 +282,7 @@
                                                                             } else if ($sesuaisub == 2) {
                                                                                 echo "Tidak";
                                                                             } else if ($sesuaisub == 0) {
-                                                                                echo "Tidak Terassesmen";
+                                                                                echo "Tidak Ada Hasil Konsultasi";
                                                                             }
                                                                             ?>
                                                                         </strong>
@@ -386,7 +386,7 @@
                                                                             } else if ($sesuaisubsub == 2) {
                                                                                 echo "Tidak";
                                                                             } else if ($sesuaisubsub == 0) {
-                                                                                echo "Tidak Terassesmen";
+                                                                                echo "Tidak Ada Hasil Konsultasi";
                                                                             }
                                                                             ?>
                                                                         </strong>
@@ -452,7 +452,7 @@
                                                                                 } else if ($sesuaisubsub2 == 1) {
                                                                                     echo "Tidak";
                                                                                 } else if ($sesuaisubsub == 0) {
-                                                                                    echo "Tidak Terassesmen";
+                                                                                    echo "Tidak Ada Hasil Konsultasi";
                                                                                 }
                                                                                 ?>
                                                                             </strong>
