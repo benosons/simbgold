@@ -208,7 +208,7 @@
                                                     if ($permohonan->status == 32) {
                                                     ?>
                                                         <td width="5%">Kelengkapan Dokumen</td>
-                                                        <td width="5%">Catatan</td>
+                                                        <td width="15%">Catatan</td>
                                                     <?php
                                                     }
                                                     ?>
@@ -369,7 +369,7 @@
                                                                     }
                                                                     ?>
                                                                 </td>
-                                                                <td>
+                                                                <td rowspan="<?= count($dok) ?>">
                                                                     <?php
                                                                     if ($catatansub != "") {
                                                                     ?>
@@ -512,6 +512,7 @@
                                                             <?php }
                                                             if ($permohonan->status == 32) {
                                                             ?>
+                                                                <td></td>
                                                                 <td></td>
                                                             <?php
                                                             }
@@ -664,7 +665,7 @@
                                                                         }
                                                                         ?>
                                                                     </td>
-                                                                    <td>
+                                                                    <td rowspan="<?= count($dok) ?>">
                                                                         <?php
                                                                         if ($catatansubsub != "") {
                                                                         ?>

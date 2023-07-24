@@ -4,7 +4,7 @@
         <div class="row g-2 align-items-center">
             <div class="col-8">
                 <h2 class="page-title">
-                    Assesment Kinerja BGH
+                    Konsultasi Kinerja BGH
                 </h2>
             </div>
             <div class="col-4">
@@ -15,7 +15,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
                             <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
                         </svg>
-                        Selesaikan Assesment
+                        Selesaikan Konsultasi
                     </button>
                 <?php } ?>
             </div>
@@ -43,10 +43,10 @@
                 <div class="card card-sm bg-success text-white">
                     <div class="card-body text-center">
                         <h4>
-                            Nilai Hasil Asesmen : <strong><?= $hasil_assesment ?> %</strong>
+                            Nilai Hasil Konsultasi : <strong><?= $hasil_assesment ?> %</strong>
                         </h4>
                         <h4>
-                            Peringkat Hasil Asesmen : <h2><strong><?= $ketentuan ?></strong></h2>
+                            Peringkat Hasil Konsultasi : <h2><strong><?= $ketentuan ?></strong></h2>
                         </h4>
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                                     <?= $poinallassesment ?>
                                 </div>
                                 <div class="text-white">
-                                    Jumlah Poin Hasil Assesment
+                                    Jumlah Poin Hasil Konsultasi
                                 </div>
                             </div>
                         </div>

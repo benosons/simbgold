@@ -870,8 +870,8 @@
                                 </a>`;
 
                                 var sidangtpa = JSON.parse(row.tpa_sidang);
-                                if (sidangtpa.includes(user_id)) {
-                                    sidang += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/hasil/${row.kode_bgh}">
+                                if (row.tpa_sidang != "0" && sidangtpa.includes(user_id)) {
+                                    sidang += `<a class="dropdown-item" href="<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/prosessidang/${row.kode_bgh}">
                                     Lakukan Proses Sidang
                                     </a>`;
                                 } else {

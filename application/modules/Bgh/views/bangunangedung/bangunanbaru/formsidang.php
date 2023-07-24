@@ -8,12 +8,14 @@
                 </h2>
             </div>
             <div class="col-4">
-                <?php if ($permohonan->status == 3 && $this->session->userdata('loc_role_id') == 11) { ?>
-                    <button class="btn btn-success float-end" id="btn-selesai" onclick="verifikasi(<?= $permohonan->id ?>, 4)">
+                <?php
+                if ($permohonan->status == 5) {
+                ?>
+                    <button class="btn btn-success float-end" id="btn-selesai" onclick="selesai(<?= $permohonan->id ?>, <?= $poinallassesment ?>, <?= $hasil_assesment ?>, <?= $tidak_sesuai ?>)">
                         <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
                             <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
                         </svg>
-                        Verifikasi Hasil Assesment
+                        Selesaikan Assesment
                     </button>
                 <?php } ?>
             </div>
@@ -41,10 +43,10 @@
                 <div class="card card-sm bg-success text-white">
                     <div class="card-body text-center">
                         <h4>
-                            Nilai Hasil Asesmen : <strong><?= $hasil_assesment ?> %</strong>
+                            Nilai Hasil Assesment / Sidang : <strong><?= $hasil_assesment ?> %</strong>
                         </h4>
                         <h4>
-                            Peringkat Hasil Asesmen : <h2><strong><?= $ketentuan ?></strong></h2>
+                            Peringkat Hasil Assesment / Sidang : <h2><strong><?= $ketentuan ?></strong></h2>
                         </h4>
                     </div>
                 </div>
@@ -88,7 +90,7 @@
                                     <?= $poinallassesment ?>
                                 </div>
                                 <div class="text-white">
-                                    Jumlah Poin Hasil Konsultasi
+                                    Jumlah Poin Hasil Assesment / Sidang
                                 </div>
                             </div>
                         </div>
@@ -114,7 +116,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header " id="heading-<?= $checklist[$i]['id'] ?>">
                                 <button class="accordion-button <?= ($i > 0) ? 'collapsed' : '' ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-<?= $checklist[$i]['id'] ?>" aria-expanded="true">
-                                    <strong><?= $alp[$i] . '. ' . $checklist[$i]['nama'] ?> | Poin Tersedia : <?= $checklist[$i]['poin'] ?> </strong>
+                                    <strong><?= $alp[$i] . '. ' . $checklist[$i]['nama'] ?> | Poin Tersedia : <?= $checklist[$i]['poin'] ?> | Poin Diajukan : <?= $poindiajukan ?> </strong>
                                 </button>
                             </h2>
                             <div id="collapse-<?= $checklist[$i]['id'] ?>" class="accordion-collapse collapse 
@@ -139,9 +141,9 @@
                                                     <td width="20%">Dokumen Pembuktian</td>
                                                     <td width="5%">File</td>
                                                     <td width="2%">Poin Diajukan</td>
-                                                    <td width="8%">Kesesuaian Dokumen</td>
-                                                    <td width="12%">Catatan</td>
-                                                    <td width="5%">Poin Estimasi </td>
+                                                    <td width="12%">Kesesuaian Dokumen</td>
+                                                    <td width="10%">Catatan</td>
+                                                    <td width="3%">Poin Assesmen</td>
                                                 </tr>
                                                 <?php
                                                 for ($k = 0; $k < count($checklist[$i]['main'][$j]['sub']); $k++) {
@@ -157,6 +159,8 @@
                                                     $poinassesmentsub = $checklist[$i]['main'][$j]['sub'][$k]['poin_assesment'];
                                                     $allassesmentsub = $checklist[$i]['main'][$j]['sub'][$k]['allassesment'];
                                                     $idambilsub = $checklist[$i]['main'][$j]['sub'][$k]['id_ambil'];
+                                                    $tidaksesuaisub = $checklist[$i]['main'][$j]['sub'][$k]['tidaksesuai'];
+                                                    $belumassessub = $checklist[$i]['main'][$j]['sub'][$k]['belumasses'];
                                                     if ($dokumensub == 1) {
                                                         $dok = $checklist[$i]['main'][$j]['sub'][$k]['dok'];
                                                 ?>
@@ -187,6 +191,7 @@
                                                                     if ($dok[$o]['isupload'] == 1) {
                                                                         $path = $dok[$o]['path'];
                                                                         $extension = $dok[$o]['extension'];
+
                                                                     ?>
                                                                         <button class="btn btn-success btn-sm" onclick="openmodalfile('<?= $path ?>', '<?= $extension ?>')" title="Upload">
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
@@ -209,28 +214,26 @@
                                                                 $catatansub = $dok[$o]['catatan'];
                                                             ?>
                                                                 <td>
-                                                                    <strong>
-                                                                        <?php if ($sesuaisub == 1) {
-                                                                            echo "Sesuai";
-                                                                        } else if ($sesuaisub == 2) {
-                                                                            echo "Tidak";
-                                                                        } else if ($sesuaisub == 0) {
-                                                                            echo "Tidak Ada Hasil Konsultasi";
-                                                                        }
-                                                                        ?>
-                                                                    </strong>
+                                                                    <select name="" class="form-select" id="<?= $elparent ?>" onchange="sesuai('<?= $elparent ?>', event, <?= $idfilesub ?>,'<?= $alp[$i] ?>')" <?= ($sesuaisub == 1) ? 'disabled="disabled"' : '' ?>>
+                                                                        <option value="">Verifikasi</option>
+                                                                        <option value="2" <?= $sesuaisub == 2 ? 'selected' : '' ?>>Tidak</option>
+                                                                        <option value="1" <?= $sesuaisub == 1 ? 'selected' : '' ?>>Sesuai</option>
+                                                                    </select>
                                                                 </td>
                                                                 <td>
-                                                                    <?php if ($catatansub == "" || $catatansubsub == 0) {
-                                                                        echo ""; ?>
+                                                                    <?php if ($catatansub == "") { ?>
+                                                                        <button class="btn btn-success btn-sm <?= ($sesuaisub == 1 || $sesuaisub == 0) ? 'd-none' : '' ?>" onclick="catatan('<?= $elaprent ?>', <?= $idfilesub ?>,'<?= $alp[$i] ?>')">Catatan</button>
                                                                     <?php } else { ?>
-                                                                        <div class="fw-bold">
-                                                                            <?= $catatansub ?>
-                                                                        </div>
+                                                                        <a href="javacript:;" class="btn btn-success btn-sm" onclick="catatan('<?= $elparent ?>', <?= $idfilesub ?>,'<?= $alp[$i] ?>','<?= htmlspecialchars($catatansub) ?>')" title="Edit Catatan">Lihat/edit Catatan</a>
                                                                     <?php } ?>
                                                                 </td>
                                                                 <td rowspan="<?= count($dok) ?>">
-                                                                    <?= $poinassesmentsub ?>
+                                                                    <select name="" id="poin_<?= $elparent ?>" class="form-select <?= $allassesmentsub == 1 ? '' : 'd-none' ?>" onchange="poinassesment('poin_<?= $elparent ?>', <?= $idambilsub ?>, event, '<?= $alp[$i] ?>')" <?= $poinassesmentsub > 0 ? 'disabled="disabled"' : '' ?>>
+                                                                        <option value="0">0</option>
+                                                                        <?php if ($tidaksesuaisub == 0 && $belumassessub == 0) { ?>
+                                                                            <option value="<?= $poinsub ?>" <?= $poinassesmentsub > 0 ? 'selected' : '' ?>><?= $poinsub ?></option>
+                                                                        <?php } ?>
+                                                                    </select>
                                                                 </td>
                                                             <?php
                                                             } else {
@@ -274,27 +277,21 @@
                                                                 if ($dok[$o]['isupload'] == 1) {
                                                                     $idfilesub = $dok[$o]['id_file'];
                                                                     $sesuaisub = $dok[$o]['sesuai'];
-                                                                    $catatansub = $dok[$o]['sesuai'];
+                                                                    $sesuaisub = $dok[$o]['sesuai'];
+                                                                    $catatansub = $dok[$o]['catatan'];
                                                                 ?>
                                                                     <td>
-                                                                        <strong>
-                                                                            <?php if ($sesuaisub == 1) {
-                                                                                echo "Sesuai";
-                                                                            } else if ($sesuaisub == 2) {
-                                                                                echo "Tidak";
-                                                                            } else if ($sesuaisub == 0) {
-                                                                                echo "Tidak Ada Hasil Konsultasi";
-                                                                            }
-                                                                            ?>
-                                                                        </strong>
+                                                                        <select name="" class="form-select" id="<?= $elparent ?>" onchange="sesuai('<?= $elparent ?>', event, <?= $idfilesub ?>,'<?= $alp[$i] ?>')" <?= ($sesuaisub == 1) ? 'disabled="disabled"' : '' ?>>
+                                                                            <option value="">Verifikasi</option>
+                                                                            <option value="2" <?= $sesuaisub == 2 ? 'selected' : '' ?>>Tidak</option>
+                                                                            <option value="1" <?= $sesuaisub == 1 ? 'selected' : '' ?>>Sesuai</option>
+                                                                        </select>
                                                                     </td>
                                                                     <td>
-                                                                        <?php if ($catatansub == "" || $catatansubsub == 0) {
-                                                                            echo ""; ?>
+                                                                        <?php if ($catatansub == "") { ?>
+                                                                            <button class="btn btn-success btn-sm <?= ($sesuaisub == 1 || $sesuaisub == 0) ? 'd-none' : '' ?>" onclick="catatan('<?= $elaprent ?>', <?= $idfilesub ?>,'<?= $alp[$i] ?>')">Catatan</button>
                                                                         <?php } else { ?>
-                                                                            <div class="fw-bold">
-                                                                                <?= $catatansub ?>
-                                                                            </div>
+                                                                            <a href="javacript:;" class="btn btn-success btn-sm" onclick="catatan('<?= $elparent ?>', <?= $idfilesub ?>,'<?= $alp[$i] ?>','<?= htmlspecialchars($catatansub) ?>')" title="Edit Catatan">Lihat/edit Catatan</a>
                                                                         <?php } ?>
                                                                     </td>
                                                                 <?php } else {
@@ -331,6 +328,8 @@
                                                             $poinassesmentsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['poin_assesment'];
                                                             $allassesmentsubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['allassesment'];
                                                             $dok = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['dok'];
+                                                            $tidaksesuaisubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['tidaksesuai'];
+                                                            $belumassessubsub = $checklist[$i]['main'][$j]['sub'][$k]['subsub'][$l]['belumasses'];
                                                         ?>
 
                                                             <tr>
@@ -381,28 +380,26 @@
                                                                     $catatansubsub = $dok[$o]['catatan'];
                                                                 ?>
                                                                     <td class="align-middle">
-                                                                        <strong>
-                                                                            <?php if ($sesuaisubsub == 1) {
-                                                                                echo "Sesuai";
-                                                                            } else if ($sesuaisubsub == 2) {
-                                                                                echo "Tidak";
-                                                                            } else if ($sesuaisubsub == 0) {
-                                                                                echo "Tidak Ada Hasil Konsultasi";
-                                                                            }
-                                                                            ?>
-                                                                        </strong>
+                                                                        <select name="" class="form-select" id="<?= $elchild ?>" onchange="sesuai('<?= $elchild ?>', event, <?= $idfilesubsub ?>,'<?= $alp[$i] ?>')" <?= ($sesuaisubsub == 1) ? 'disabled="disabled"' : '' ?>>
+                                                                            <option value="">Verifikasi</option>
+                                                                            <option value="2" <?= ($sesuaisubsub == 2) ? 'selected' : '' ?>>Tidak</option>
+                                                                            <option value="1" <?= ($sesuaisubsub == 1) ? 'selected' : '' ?>>Sesuai</option>
+                                                                        </select>
                                                                     </td>
                                                                     <td>
-                                                                        <?php if ($catatansubsub == "" || $catatansubsub == 0) {
-                                                                            echo ""; ?>
+                                                                        <?php if ($catatansubsub == "") { ?>
+                                                                            <button class="btn btn-success btn-sm <?= ($sesuaisubsub == 1 || $sesuaisubsub == 0) ? 'd-none' : '' ?>" onclick="catatan('<?= $elchild ?>', <?= $idfilesubsub ?>,'<?= $alp[$i] ?>','')">Catatan</button>
                                                                         <?php } else { ?>
-                                                                            <div class="fw-bold">
-                                                                                <?= $catatansubsub ?>
-                                                                            </div>
+                                                                            <a href="javacript:;" class="btn btn-success btn-sm" onclick="catatan(' <?= $elchild ?>', <?= $idfilesubsub ?>,'<?= $alp[$i] ?>','<?= htmlspecialchars($catatansubsub) ?>')" title="Edit Catatan">Lihat/edit Catatan</a>
                                                                         <?php } ?>
                                                                     </td>
                                                                     <td rowspan="<?= count($dok) ?>">
-                                                                        <?= $poinassesmentsubsub ?>
+                                                                        <select name="" id="poin_<?= $elchild ?>" class="form-select <?= $allassesmentsubsub == 1 ? '' : 'd-none' ?>" onchange="poinassesment('poin_<?= $elchild ?>', <?= $idambilsubsub ?>, event, '<?= $alp[$i] ?>')" <?= $poinassesmentsubsub > 0 ? 'disabled="disabled"' : '' ?>>
+                                                                            <option value="0">0</option>
+                                                                            <?php if ($tidaksesuaisubsub == 0 && $belumassessubsub == 0) { ?>
+                                                                                <option value="<?= $poinsubsub ?>" <?= $poinassesmentsubsub > 0 ? 'selected' : '' ?>><?= $poinsubsub ?></option>
+                                                                            <?php } ?>
+                                                                        </select>
                                                                     </td>
                                                                 <?php
                                                                 } else {
@@ -447,29 +444,22 @@
                                                                         $catatansubsub = $dok[$o]['catatan'];
                                                                     ?>
                                                                         <td class="align-middle">
-                                                                            <strong>
-                                                                                <?php if ($sesuaisubsub == 1) {
-                                                                                    echo "Sesuai";
-                                                                                } else if ($sesuaisubsub2 == 1) {
-                                                                                    echo "Tidak";
-                                                                                } else if ($sesuaisubsub == 0) {
-                                                                                    echo "Tidak Ada Hasil Konsultasi";
-                                                                                }
-                                                                                ?>
-                                                                            </strong>
+                                                                            <select name="" class="form-select" id="<?= $elchild ?>" onchange="sesuai('<?= $elchild ?>', event, <?= $idfilesubsub ?>,'<?= $alp[$i] ?>')" <?= ($sesuaisubsub == 1) ? 'disabled="disabled"' : '' ?>>
+                                                                                <option value="">Verifikasi</option>
+                                                                                <option value="2" <?= ($sesuaisubsub == 2) ? 'selected' : '' ?>>Tidak</option>
+                                                                                <option value="1" <?= ($sesuaisubsub == 1) ? 'selected' : '' ?>>Sesuai</option>
+                                                                            </select>
                                                                         </td>
                                                                         <td>
-                                                                            <?php if ($catatansubsub == "" || $catatansubsub == 0) {
-                                                                                echo ""; ?>
+                                                                            <?php if ($catatansubsub == "") { ?>
+                                                                                <button class="btn btn-success btn-sm <?= ($sesuaisubsub == 1 || $sesuaisubsub == 0) ? 'd-none' : '' ?>" onclick="catatan('<?= $elchild ?>', <?= $idfilesubsub ?>,'<?= $alp[$i] ?>','')">Catatan</button>
                                                                             <?php } else { ?>
-                                                                                <div class="fw-bold">
-                                                                                    <?= $catatansubsub ?>
-                                                                                </div>
+                                                                                <a href="javacript:;" class="btn btn-success btn-sm" onclick="catatan('<?= $elchild ?>', <?= $idfilesubsub ?>,'<?= $alp[$i] ?>','<?= htmlspecialchars($catatansubsub) ?>')" title="Edit Catatan">Lihat/edit Catatan</a>
                                                                             <?php } ?>
                                                                         </td>
                                                                     <?php
                                                                     } else {
-                                                                        echo "<td></td><td></td>";
+                                                                        echo "<td></td><td></td><td></td>";
                                                                     }
                                                                     ?>
                                                                 </tr>
@@ -508,9 +498,33 @@
     </div>
 </div>
 <!-- Endmodal -->
+<!-- Modal -->
+<div class="modal modal-blur fade" id="modal-catatan" tabindex="-1" role="dialog" aria-labelledby="pdfModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pdfModalLabel">Berikan Catatan</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="bodyview">
+                <textarea id="catatan" class="form-control summernote"></textarea>
+            </div>
+            <div class="modal-footer">
+                <input type="text" id="id_file_catatan" hidden>
+                <button type="button" id="simpancatatan" class="btn btn-success">Simpan
+                    <div class="spinner-border spinner-border-sm text-white d-none ms-3" id="loaderupload" role="status"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Endmodal -->
 
 <script src="<?= base_url() ?>assets/bgh/dist/libs/jQuery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="<?= base_url() ?>assets/bgh/dist/libs/DataTables-1.13.4/js/datatables.min.js"></script>
+<script src="<?= base_url() ?>assets/bgh/dist/libs/summernote/summernote-bs4.min.js" defer></script>
 <?php
 if (isset($_GET['elnow'])) {
 ?>
@@ -527,35 +541,69 @@ if (isset($_GET['elnow'])) {
     $(() => {
         $('#menu-bangunan').addClass('active');
 
+        // let options = {
+        //     selector: '#tinymce-mytextarea',
+        //     height: 300,
+        //     menubar: false,
+        //     statusbar: false,
+        //     plugins: 'lists image',
+        //     toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist | image | removeformat',
+        //     content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; -webkit-font-smoothing: antialiased; }'
+        // }
+        // if (localStorage.getItem("tablerTheme") === 'dark') {
+        //     options.skin = 'oxide-dark';
+        //     options.content_css = 'dark';
+        // }
+        // tinyMCE.init(options);
+
+        $('.summernote').summernote({
+            tabsize: 2,
+            height: 400,
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['para', ['ul', 'ol']],
+                ['insert', ['picture', 'link']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+            ],
+            callbacks: {
+                onImageUpload: function(files) {
+                    // Upload gambar saat dipilih dari file dialog
+                    sendFile(files[0]);
+                }
+            }
+        });
+
+        function sendFile(file) {
+            var formData = new FormData();
+            formData.append("image", file);
+            formData.append('idpermohonan', <?= $permohonan->id ?>);
+
+            $.ajax({
+                url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/uploadimagecatatan",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    // Set URL gambar yang diunggah sebagai sumber untuk gambar dalam editor
+                    $('.summernote').summernote('insertImage', data);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error(textStatus + " " + errorThrown);
+                }
+            });
+        }
+
+
         $('#fileinput').change(function() {
             $('#fileinput').removeClass('is-invalid');
         })
-        $('#subm').click(function() {
 
-            let fileinput = $('#fileinput');
-
-            if (!fileinput.val()) {
-                fileinput.addClass('is-invalid');
-            } else {
-                console.log(fileinput);
-                console.log(fileinput.val());
-                let file = fileinput[0].files[0]
-
-                if (!validateFileExtension(file.name)) {
-                    fileinput.addClass('is-invalid');
-                    $('#invalid-feedback').html('Error, Pastikan Ekstensi File Anda .pdf, .xlx, .xlsx, .jpg, .png');
-                    return;
-                }
-
-                var formData = new FormData();
-                formData.append('file', file);
-                formData.append('id_permohonan', $('#id_permohonan').val());
-                formData.append('id_dokumen', $('#id_dokumen').val());
-                formData.append('id_sub', $('#id_sub').val());
-                formData.append('id_sub_sub', $('#id_sub_sub').val());
-                formData.append('head', $('#head').val());
-                uploading(formData);
-            }
+        $('#simpancatatan').click(function() {
+            var formData = new FormData();
+            formData.append('id_file', $('#id_file_catatan').val());
+            formData.append('catatan', $('#catatan').val());
+            savecatatan(formData);
         });
 
         // $('#subm').click(function(){
@@ -569,7 +617,11 @@ if (isset($_GET['elnow'])) {
 
         if (select == "1") {
             if (confirm('Dokumen ini telah Sesuai ?')) {
-                updatefile(el, select, idfile, accord);
+                updatefile(el, 1, idfile, accord);
+            }
+        } else {
+            if (confirm('Dokumen ini Tidak Sesuai ?')) {
+                updatefile(el, 2, idfile, accord);
             }
         }
     }
@@ -613,6 +665,31 @@ if (isset($_GET['elnow'])) {
                 }
             })
         }
+    }
+
+    function catatan(el, idfile, accord, content) {
+        $('#id_file_catatan').val(idfile);
+        var myModal = new bootstrap.Modal(document.getElementById('modal-catatan'), {
+            keyboard: false,
+            backdrop: false
+        })
+        myModal.show();
+        $('#catatan').summernote('code', content)
+    }
+
+    function savecatatan(formdata) {
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            data: formdata,
+            processData: false,
+            contentType: false,
+            url: "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/savecatatan",
+            success: function(response) {
+                alert('berhasil');
+                location.reload();
+            }
+        })
     }
 
     function claimpoin(elparent, elchild, pilihan, event, elpoin, id_permohonan, id_sub, id_sub_sub) {
@@ -724,23 +801,47 @@ if (isset($_GET['elnow'])) {
         modals.show();
     }
 
-    function verifikasi(id_permohonan, status) {
-        if (confirm('Verifikasi dan Terbitkan Sertifikat BGH ?')) {
-            let formdata = new FormData();
-            formdata.append('id_permohonan', id_permohonan);
-            formdata.append('status', status);
-            $.ajax({
-                type: 'post',
-                dataType: 'json',
-                data: formdata,
-                processData: false,
-                contentType: false,
-                url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/verifikasiassesment',
-                success: function(response) {
-                    alert('berhasil');
-                    window.location.href = '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/';
-                }
-            })
+    function selesai(id_permohonan, poinassesment, presentase, tidaksesuai) {
+        if (tidaksesuai == 0) {
+            if (confirm('Selesaikan Proses Assesment ?')) {
+                let formdata = new FormData();
+                formdata.append('id_permohonan', id_permohonan);
+                formdata.append('poinassesment', poinassesment);
+                formdata.append('presentase', presentase);
+                formdata.append('status', 42);
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/selesaiassesment',
+                    success: function(response) {
+                        alert('berhasil');
+                        window.location.href = "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/";
+                    }
+                })
+            }
+        } else {
+            if (confirm('Permohonan ini perlu direvisi oleh pemohon, Kirimkan ke Pemohon ? ')) {
+                let formdata = new FormData();
+                formdata.append('id_permohonan', id_permohonan);
+                formdata.append('poinassesment', poinassesment);
+                formdata.append('presentase', presentase);
+                formdata.append('status', 41);
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    url: '<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/selesaiassesment',
+                    success: function(response) {
+                        alert('berhasil');
+                        window.location.href = "<?= base_url() ?>Bgh/BangunanGedung/BangunanBaru/";
+                    }
+                })
+            }
         }
     }
 

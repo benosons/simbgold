@@ -157,7 +157,7 @@ class Bgbarumodel extends CI_Model
         if ($this->session->userdata('loc_role_id') == 10) {
             $where = 'WHERE t_permohonan_bgh.create_by="' . $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')) . '"';
         } else if ($this->session->userdata('loc_role_id') == 11) {
-            $where = 'WHERE t_permohonan_bgh.status >= 0';
+            $where = 'WHERE tmdatapemilik.id_kabkota ="' . $this->session->userdata("loc_id_kabkot") . '" AND t_permohonan_bgh.status >= 0';
         } else if ($this->session->userdata('loc_role_id') == 17) {
             $where = 'WHERE (t_permohonan_bgh.id_tpa LIKE "%' . $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')) . '%" OR t_permohonan_bgh.tpa_sidang LIKE "%' . $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')) . '%")';
         }
