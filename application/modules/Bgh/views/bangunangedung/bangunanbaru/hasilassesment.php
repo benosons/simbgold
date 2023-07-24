@@ -234,7 +234,7 @@
                                                                 </td>
                                                             <?php
                                                             } else {
-                                                                echo "<td></td><td></td><td></td>";
+                                                                echo "<td></td><td></td><td rowspan='" . count($dok) . "'></td>";
                                                             }
                                                             $o++;
                                                             ?>
@@ -298,7 +298,7 @@
                                                                         <?php } ?>
                                                                     </td>
                                                                 <?php } else {
-                                                                    echo "<td></td><td></td><td></td>";
+                                                                    echo "<td></td><td></td>";
                                                                 } ?>
                                                             </tr>
                                                         <?php
@@ -406,7 +406,7 @@
                                                                     </td>
                                                                 <?php
                                                                 } else {
-                                                                    echo "<td></td><td></td><td></td>";
+                                                                    echo "<td></td><td></td><td rowspan='" . count($dok) . "'></td>";
                                                                 }
                                                                 $o++;
                                                                 ?>

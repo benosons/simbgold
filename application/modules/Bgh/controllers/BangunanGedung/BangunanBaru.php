@@ -1028,8 +1028,8 @@ class BangunanBaru extends CI_Controller
                                 $row3['ambil'] = 1;
                                 $row3['id_ambil'] = $itemambil->id;
                                 $row3['poin_diajukan'] = $itemambil->poin_diajukan;
-                                $row3['poin_assesment'] = $itemambil->poin_assesment;
-                                $data['poinallassesment'] += $itemambil->poin_assesment;
+                                $row3['poin_assesment'] = $itemambil->poin_assesmen_sidang;
+                                $data['poinallassesment'] += $itemambil->poin_assesmen_sidang;
                                 $row3['assesment_by'] = $itemambil->assesment_by;
                             }
 
@@ -1047,17 +1047,17 @@ class BangunanBaru extends CI_Controller
 
                                 if (!empty($getfile)) {
                                     $row4['id_file'] = $getfile->id;
-                                    $row4['sesuai'] = $getfile->sesuai;
-                                    if ($getfile->sesuai == 2) {
+                                    $row4['sesuai'] = $getfile->sesuai_sidang;
+                                    if ($getfile->sesuai_sidang == 2) {
                                         $data['tidak_sesuai'] += 1;
-                                    } else if ($getfile->sesuai == 0) {
+                                    } else if ($getfile->sesuai_sidang == 0) {
                                         $counttidaksesuai += 1;
                                     }
-                                    $row4['catatan'] = $getfile->catatan;
+                                    $row4['catatan'] = $getfile->catatan_sidang;
                                     $row4['path'] = $getfile->path;
                                     $row4['extension'] = $getfile->extension;
                                     $row4['isupload'] = 1;
-                                    // if ($getfile->sesuai == 1) {
+                                    // if ($getfile->sesuai_sidang == 1) {
                                     $countdok += 1;
                                     // }
                                 } else {
@@ -1086,8 +1086,8 @@ class BangunanBaru extends CI_Controller
                             $row2['poin_diajukan'] = $itemambil->poin_diajukan;
                             $data['poinhead'] += $s->poin;
                             $row['poindiajukan'] += $s->poin;
-                            $row2['poin_assesment'] = $itemambil->poin_assesment;
-                            $data['poinallassesment'] += $itemambil->poin_assesment;
+                            $row2['poin_assesment'] = $itemambil->poin_assesmen_sidang;
+                            $data['poinallassesment'] += $itemambil->poin_assesmen_sidang;
                             $row2['assesment_by'] = $itemambil->assesment_by;
                         } else {
                             $row2['ambil'] = 0;
@@ -1106,14 +1106,14 @@ class BangunanBaru extends CI_Controller
                             $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
                             if (!empty($getfile)) {
                                 $row4['id_file'] = $getfile->id;
-                                $row4['sesuai'] = $getfile->sesuai;
-                                if ($getfile->sesuai == 2) {
+                                $row4['sesuai'] = $getfile->sesuai_sidang;
+                                if ($getfile->sesuai_sidang == 2) {
                                     $data['tidak_sesuai'] += 1;
                                     $counttidaksesuai += 1;
-                                } else if ($getfile->sesuai == 0) {
+                                } else if ($getfile->sesuai_sidang == 0) {
                                     $counttidaksesuai += 1;
                                 }
-                                $row4['catatan'] = $getfile->catatan;
+                                $row4['catatan'] = $getfile->catatan_sidang;
                                 $row4['path'] = $getfile->path;
                                 $row4['extension'] = $getfile->extension;
                                 $row4['isupload'] = 1;
@@ -1610,6 +1610,207 @@ class BangunanBaru extends CI_Controller
         $this->load->view('layouts', $data);
     }
 
+    public function hasilsidang()
+    {
+        $no_permohonan = $this->uri->segment(5);
+        if (isset($no_permohonan)) {
+            $permohonan = $this->bgbarumodel->get(array('t_permohonan_bgh.kode_bgh' => $no_permohonan))->row();
+            if (empty($permohonan)) {
+                redirect('Bgh/BangunanGedung/BangunanBaru');
+            } else {
+                if ($permohonan->status != 6 && $permohonan->status != 1) {
+                    redirect('Bgh/BangunanGedung/BangunanBaru');
+                } else {
+                    $data['permohonan'] = $permohonan;
+                    $sidang = $this->bgbarumodel->getsidang(['id_permohonan' => $permohonan->id])->row();
+                    $data['sidang'] = $sidang;
+                }
+            }
+        } else {
+            redirect('Bgh/BangunanGedung/BangunanBaru');
+        }
+        $data['page'] = 'hasil assesment';
+        $klas = $this->db->get('t_klas_bangunan')->result();
+        $data['klas'] = $klas;
+        $where = array(
+            'kategori' => 1,
+            'tahap' => 'perencanaan'
+        );
+        $head = $this->checklist_model->gethead($where)->result();
+        $checklist = array();
+        $data['poin_maksimal'] = 0;
+        $data['poinhead'] = 0;
+        $data['poinallassesment'] = 0;
+        foreach ($head as $h) {
+            $row = array();
+            $row['id'] = (!empty($h->id) ? $h->id : "");
+            $row['kode'] = (!empty($h->kode) ? $h->kode : "");
+            $row['nama'] = (!empty($h->nama) ? $h->nama : "");
+            $row['poin'] = (!empty($h->poin) ? $h->poin : "");
+            $row['poindiajukan'] = 0;
+
+            $getmain = $this->checklist_model->getmain(array('id_head' => $h->id))->result();
+            $main = array();
+            foreach ($getmain as $m) {
+                $row1 = array();
+                $row1['id'] = (!empty($m->id) ? $m->id : "");
+                $row1['kode'] = (!empty($m->kode) ? $m->kode : "");
+                $row1['nama'] = (!empty($m->nama) ? $m->nama : "");
+                $row1['poin'] = (!empty($m->poin) ? $m->poin : "");
+                $data['poin_maksimal'] += $m->poin;
+
+                $getsub = $this->checklist_model->getsub(array('id_main' => $m->id))->result();
+                $sub = array();
+
+                foreach ($getsub as $s) {
+                    $row2 = array();
+                    $row2['id'] = (!empty($s->id) ? $s->id : "");
+                    $row2['kode'] = (!empty($s->kode) ? $s->kode : "");
+                    $row2['nama'] = (!empty($s->nama) ? $s->nama : "");
+                    $row2['poin'] = (!empty($s->poin) ? $s->poin : "");
+                    $row2['pilihan'] = (!empty($s->pilihan) ? $s->pilihan : "0");
+                    $row2['dokumen'] = (!empty($s->dokumen) ? $s->dokumen : "0");
+                    $row2['terpilih'] = 0;
+                    if ($s->dokumen == 0) {
+                        $getsubsub = $this->checklist_model->getsubsub(array('id_sub' => $s->id))->result();
+                        $subsub = array();
+                        foreach ($getsubsub as $ss) {
+
+                            $row3 = array();
+                            $row3['id'] = (!empty($ss->id) ? $ss->id : "");
+                            $row3['kode'] = (!empty($ss->kode) ? $ss->kode : "");
+                            $row3['nama'] = (!empty($ss->nama) ? $ss->nama : "");
+                            $row3['pilihan'] = (!empty($ss->pilihan) ? $ss->pilihan : "0");
+                            $row3['poin'] = (!empty($ss->poin) ? $ss->poin : "");
+                            $row3['dokumen'] = (!empty($ss->dokumen) ? $ss->dokumen : "0");
+                            $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil' => $permohonan->id, 'id_sub_sub_ambil' => $ss->id));
+                            if ($getambil->num_rows() > 0) {
+                                $data['poinhead'] += $ss->poin;
+                                $row['poindiajukan'] += $ss->poin;
+
+                                $itemambil = $getambil->row();
+                                $row3['ambil'] = 1;
+                                $row3['id_ambil'] = $itemambil->id;
+                                $row3['poin_diajukan'] = $itemambil->poin_diajukan;
+                                $row3['poin_assesment'] = $itemambil->poin_assesmen_sidang;
+                                $data['poinallassesment'] += $itemambil->poin_assesmen_sidang;
+                                $row3['assesment_by'] = $itemambil->assesment_by;
+                            }
+
+                            $getdok = $this->checklist_model->getdok(array('id_sub_sub_dok' => $ss->id))->result();
+
+                            $dok = array();
+                            $countdok = 0;
+                            foreach ($getdok as $d) {
+                                $row4 = array();
+                                $row4['id'] = (!empty($d->id) ? $d->id : "");
+                                $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
+
+                                $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
+
+                                if (!empty($getfile)) {
+                                    $row4['id_file'] = $getfile->id;
+                                    $row4['sesuai'] = $getfile->sesuai_sidang;
+                                    $row4['catatan'] = $getfile->catatan_sidang;
+                                    $row4['path'] = $getfile->path;
+                                    $row4['extension'] = $getfile->extension;
+                                    $row4['isupload'] = 1;
+                                    if ($getfile->sesuai == 1) {
+                                        $countdok += 1;
+                                    }
+                                } else {
+                                    $row4['isupload'] = 0;
+                                }
+
+                                array_push($dok, $row4);
+                            }
+                            if (count($getdok) == $countdok) {
+                                $row3['allassesment'] = 1;
+                            } else {
+                                $row3['allassesment'] = 0;
+                            }
+                            $row3['dok'] = $dok;
+
+                            array_push($subsub, $row3);
+                        }
+                        $row2['subsub'] = $subsub;
+                    } else {
+                        $getambil = $this->bgbarumodel->getambil(array('id_permohonan_ambil' => $permohonan->id, 'id_sub_ambil' => $s->id));
+                        if ($getambil->num_rows() > 0) {
+                            $itemambil = $getambil->row();
+                            $row2['ambil'] = 1;
+                            $row2['id_ambil'] = $itemambil->id;
+                            $row2['poin_diajukan'] = $itemambil->poin_diajukan;
+                            $data['poinhead'] += $s->poin;
+                            $row['poindiajukan'] += $s->poin;
+                            $row2['poin_assesment'] = $itemambil->poin_assesmen_sidang;
+                            $data['poinallassesment'] += $itemambil->poin_assesmen_sidang;
+                            $row2['assesment_by'] = $itemambil->assesment_by;
+                        } else {
+                            $row2['ambil'] = 0;
+                        }
+
+                        $getdok = $this->checklist_model->getdok(array('id_sub_dok' => $s->id))->result();
+
+                        $dok = array();
+                        $countdok = 0;
+                        foreach ($getdok as $d) {
+                            $row4 = array();
+                            $row4['id'] = (!empty($d->id) ? $d->id : "");
+                            $row4['nama'] = (!empty($d->nama) ? $d->nama : "");
+
+                            $getfile = $this->checklist_model->getfile(array('id_permohonan' => $permohonan->id, 'id_dokumen' => $d->id))->row();
+                            if (!empty($getfile)) {
+                                $row4['id_file'] = $getfile->id;
+                                $row4['sesuai'] = $getfile->sesuai_sidang;
+                                $row4['catatan'] = $getfile->catatan_sidang;
+                                $row4['path'] = $getfile->path;
+                                $row4['extension'] = $getfile->extension;
+                                $row4['isupload'] = 1;
+                                if ($getfile->sesuai == 1) {
+                                    $countdok += 1;
+                                }
+                            } else {
+                                $row4['isupload'] = 0;
+                            }
+                            array_push($dok, $row4);
+                        }
+                        if (count($getdok) == $countdok) {
+                            $row2['allassesment'] = 1;
+                        } else {
+                            $row2['allassesment'] = 0;
+                        }
+                        $row2['dok'] = $dok;
+                    }
+
+                    array_push($sub, $row2);
+                }
+                $row1['sub'] = $sub;
+
+                array_push($main, $row1);
+            }
+
+            $row['main'] = $main;
+
+            array_push($checklist, $row);
+        }
+        $data['checklist'] = $checklist;
+        $hasil = (float) ($data['poinallassesment'] * 100) / $data['poin_maksimal'];
+        $data['hasil_assesment'] = number_format($hasil, 2);
+
+        if ($hasil < 65 || $hasil <= 45) {
+            $ketentuan = 'PRATAMA';
+        } else if ($hasil == 65 || $hasil < 80) {
+            $ketentuan = "MADYA";
+        } else if ($hasil == 80 || $hasil <= 100) {
+            $ketentuan = "UTAMA";
+        }
+        $data['ketentuan'] = $ketentuan;
+        $data['content'] = $this->load->view('bangunangedung/bangunanbaru/hasilsidang', $data, TRUE);
+
+        $this->load->view('layouts', $data);
+    }
+
     public function loadbangunanbaru()
     {
         try {
@@ -1715,6 +1916,63 @@ class BangunanBaru extends CI_Controller
         echo json_encode($response);
     }
 
+    public function updateambilsidang()
+    {
+        $params = (object) $this->input->post();
+        $where = array('id' => $params->id_ambil);
+        $data = array(
+            'poin_assesmen_sidang' => $params->poin,
+            'assesmen_sidang_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
+            'update_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
+            'update_date' => date('Y-m-d H:i:s')
+        );
+
+        $update = $this->bgbarumodel->updateambil($data, $where);
+
+        if ($update) {
+            $response = array(
+                'code' => 1,
+                'msg' => 'Berhasil'
+            );
+        } else {
+            $response = array(
+                'code' => 0,
+                'msg' => 'Gagal'
+            );
+        }
+        echo json_encode($response);
+    }
+
+    public function terbitkansertifikat()
+    {
+        $params = (object)$this->input->post();
+        $permohonan = $this->bgbarumodel->get(['t_permohonan_bgh.id' => $params->id_permohonan])->row();
+        $rand1 = date('Ymd');
+        $rand2 = rand(0, 999999);
+        $kodebgh = 'BGH-' . $rand1 . '-' . $rand2;
+        $data = array(
+            'id_permohonan' => $permohonan->id,
+            'nomor_bgh' => $kodebgh,
+            'tahap' => $params->tahap,
+            'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
+        );
+
+        $insertsertifikat = $this->bgbarumodel->savesertifikat($data);
+        $updatepermohonan = $this->bgbarumodel->updatestatuspermohonan(['status' => 7], ['id' => $permohonan->id]);
+        if ($insertsertifikat && $updatepermohonan) {
+            $response = array(
+                'code' => 1,
+                'msg' => 'Berhasil'
+            );
+        } else {
+            $response = array(
+                'code' => 0,
+                'msg' => 'Gagal'
+            );
+        }
+        echo json_encode($response);
+    }
+
     public function updatelengkap()
     {
         $params = (object) $this->input->post();
@@ -1774,7 +2032,7 @@ class BangunanBaru extends CI_Controller
                 mkdir('assets/bgh/files/' . $params->id_permohonan . '/perencanaan/', 0777, true);
             }
 
-            // Move the uploaded file to the desired location
+            // Pindahkan File Ke lokasi asset bgh
             $filename = uniqid() . '.' . $fileExtension;
             $destination = './assets/bgh/files/' . $params->id_permohonan . '/perencanaan/' . $filename;
             if (!move_uploaded_file($fileTmpPath, $destination)) {
@@ -1794,21 +2052,30 @@ class BangunanBaru extends CI_Controller
                     if (file_exists($item->path)) {
                         unlink($item->path);
                     }
-                    $del = $this->checklist_model->deletefile(array('id' => $params->idfile));
                 }
-            }
+                $data = array(
+                    'sesuai' => 0,
+                    'nama_file' => $filename,
+                    'path' => $destination,
+                    'extension' => $fileExtension,
+                    'update_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
+                    'update_date' => date('Y-m-d')
+                );
+                $saveupload = $this->bgbarumodel->updatefile($data, $wherefile);
+            } else {
 
-            $data = array(
-                'id_permohonan' => $params->id_permohonan,
-                'id_sub' => $params->id_sub,
-                'id_sub_sub' => $params->id_sub_sub,
-                'id_dokumen' => $params->id_dokumen,
-                'nama_file' => $filename,
-                'path' => $destination,
-                'extension' => $fileExtension,
-                'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
-            );
-            $saveupload = $this->bgbarumodel->savingupload($data);
+                $data = array(
+                    'id_permohonan' => $params->id_permohonan,
+                    'id_sub' => $params->id_sub,
+                    'id_sub_sub' => $params->id_sub_sub,
+                    'id_dokumen' => $params->id_dokumen,
+                    'nama_file' => $filename,
+                    'path' => $destination,
+                    'extension' => $fileExtension,
+                    'create_by' => $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id')),
+                );
+                $saveupload = $this->bgbarumodel->savingupload($data);
+            }
 
             if ($saveupload) {
                 $response = array(
@@ -1859,6 +2126,31 @@ class BangunanBaru extends CI_Controller
         echo json_encode($response);
     }
 
+    public function updatefilesidang()
+    {
+        $params = (object)$this->input->post();
+
+        $where = array('id' => $params->id_file);
+        $data = array(
+            'sesuai_sidang' => $params->sesuai,
+            'catatan_sidang' => ""
+        );
+
+        $update = $this->bgbarumodel->updatefile($data, $where);
+        if ($update) {
+            $response = array(
+                'code' => 1,
+                'msg' => 'Berhasil'
+            );
+        } else {
+            $response = array(
+                'code' => 0,
+                'msg' => 'Berhasil'
+            );
+        }
+        echo json_encode($response);
+    }
+
     public function savecatatan()
     {
         $params = (object)$this->input->post();
@@ -1878,6 +2170,70 @@ class BangunanBaru extends CI_Controller
                 'msg' => 'Berhasil'
             );
         }
+        echo json_encode($response);
+    }
+
+    public function savecatatansidangfile()
+    {
+        $params = (object)$this->input->post();
+
+        $where = array('id' => $params->id_file);
+        $data = array('catatan_sidang' => $params->catatan);
+
+        $update = $this->bgbarumodel->updatefile($data, $where);
+        if ($update) {
+            $response = array(
+                'code' => 1,
+                'msg' => 'Berhasil'
+            );
+        } else {
+            $response = array(
+                'code' => 0,
+                'msg' => 'Berhasil'
+            );
+        }
+        echo json_encode($response);
+    }
+
+    public function savesidang()
+    {
+        $params = (object)$this->input->post();
+        $permohonan = $this->bgbarumodel->get(['t_permohonan_bgh.id' => $params->id_permohonan])->row();
+        $datasidang = array(
+            'id_permohonan' => $permohonan->id,
+            'poin_sidang' => $params->poin_assesmen_sidang,
+            'persentase_sidang' => $params->persentase_sidang,
+            'catatan_sidang' => $params->catatan_sidang,
+            'status_sidang' => $params->status_sidang,
+        );
+        $insertsidang = $this->bgbarumodel->savesidang($datasidang);
+
+        $where = array(
+            'id' => $permohonan->id
+        );
+        if ($params->status_sidang == "2") {
+            $data = array(
+                'status' => 1
+            );
+        } else if ($params->status_sidang == "1") {
+            $data = array(
+                'status' => 6
+            );
+        }
+        $updatestatus = $this->bgbarumodel->updatestatuspermohonan($data, $where);
+
+        if ($insertsidang && $updatestatus) {
+            $response = array(
+                'code' => 1,
+                'msg' => 'Berhasil'
+            );
+        } else {
+            $response = array(
+                'code' => 0,
+                'msg' => 'Gagal'
+            );
+        }
+
         echo json_encode($response);
     }
 

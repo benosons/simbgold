@@ -19,6 +19,13 @@ class Bgbarumodel extends CI_Model
         return $q;
     }
 
+    public function getsidang($where)
+    {
+        $this->db->where($where);
+        $query = $this->db->get('t_checklist_sidang');
+        return $query;
+    }
+
     public function getdata($length, $start, $search = null)
     {
         // $where = '';
@@ -203,6 +210,18 @@ class Bgbarumodel extends CI_Model
     {
         $this->db->where($where);
         $query = $this->db->update('t_permohonan_bgh', $data);
+        return $query;
+    }
+
+    public function savesertifikat($data)
+    {
+        $query = $this->db->insert('t_sertifikat_bgh', $data);
+        return $query;
+    }
+
+    public function savesidang($data)
+    {
+        $query = $this->db->insert('t_checklist_sidang', $data);
         return $query;
     }
 
