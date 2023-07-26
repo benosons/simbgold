@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html style="margin: 0;padding: 0;">
    <head>
+     <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+
       <style type="text/css">
             #sidebar {
             position: absolute;
@@ -354,33 +363,105 @@
    </head>
    <body>
       <!-- <div id="page-container"> -->
-         <div class="w0 h0" data-page-no="1" style="background-image: url('<?= base_url()  ?>/assets/bgh/sertif/bg.png');background-position: center;background-size: 100%;background-repeat: no-repeat;">
-            <table>
-                <tr>
-                  <th style="padding-top: 138px;padding-left: 53rem;" ><?= $nomor_sertifikat ?></th>
-                  <th style="padding-top: 135px;padding-left: 115px;"><?= $tanggal ?></th>
-                </tr>
-                <tr>
-                  <th style="padding-top: 23px;padding-left: 53rem;" ><?= $nomor_induk_bangunan ?></th>
-                </tr>
-            </table> 
-            <table>
-                <tr>
-                  <th style="padding-top: 192px;padding-left: 30rem;" ><?= $milik ?></th>
-                </tr>
-                <tr>
-                  <th style="padding-top: 66px;padding-left: 30rem;" ><?= $alamat ?></th>
-                </tr>
-            </table> 
-            <table>
-                <tr>
-                  <th style="padding-top: 22px;padding-left: 71rem;" ><?= $nama ?></th>
-                </tr>
-                <tr>
-                  <th style="padding-top: 0px;padding-left: 71rem;" ><?= $nip ?></th>
-                </tr>
-            </table> 
+         <div class="w0 h0" data-page-no="1" style="background-image: url('<?= base_url()  ?>/assets/bgh/sertif/sertifik.png');background-size: 100%;background-repeat: no-repeat;">
+            <div class="row">
+                <div class="col-sm-8">
+                    <table style="width:100%;margin:16% 0 10% 3%;">
+                        <tr>
+                            <th class="text-center" ><img width="8%" src="<?= base_url()  ?>/assets/bgh/sertif/garuda.png" /></th>
+                            <th class="text-center">
+                                <p style="font-size: 18px;text-decoration: underline;">-----</p>
+                                <p style="font-size: 18px;text-decoration: underline;">-----</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">
+                                <span style="font-size: 38px;"><b style="color: #126f21;font-weight: bolder;">S E R T I F I K A T</b></span>
+                                <p style="font-size: 22px;margin-top: -10px;font-weight: bolder;">BANGUNAN GEDUNG HIJAU</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">
+                                <p style="font-size: 18px;">PEMERINTAH KABUPATEN/ KOTA</p>
+                                <p style="font-size: 18px;">MENYATAKAN BAHWA BANGUNAN GEDUNG MILIK</p>
+                                <p style="font-size: 18px;text-decoration: underline;font-weight: bolder;">-----</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">
+                                <p style="font-size: 18px;">KATEGORI : </p>
+                                <p style="font-size: 18px;">YANG BERALAMAT DI</p>
+                                <p style="font-size: 18px;text-decoration: underline;font-weight: bolder;">-----</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">
+                                <p style="font-size: 18px;">TELAH MEMENUHI SYARAT BANGUNAN GEDUNG HIJAU DENGAN PERINGKAT</p>
+                                <p style="font-size: 21px;font-weight: bolder;"><b>TAHAPAN PERENCANAAN TEKNIS/ PELAKSANA KONSTRUKSI/ PEMANFAATAN</b></p>
+                                <p style="font-size: 21px;font-weight: bolder;"><b>UTAMA/ MADYA/ PRATAMA</b></p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center" ><img width="15%" src="<?= base_url()  ?>/assets/bgh/sertif/logobgh.png" /></th>
+                        </tr>
+                    </table> 
+                </div>
+                <div class="col-sm-4">
+                    <table style="width:100%;margin:32% 10% 10% 0;">
+                        <tr>
+                            <th class="text-center">
+                                <p style="font-size: 18px;text-decoration: underline;">-----</p>
+                            </th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center" ><img width="30%" src="<?= base_url()  ?>/assets/bgh/sertif/placeholder.png" /></th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">
+                                <p style="font-size: 18px;">A/N KEPALA DAERAH</p>
+                                <p style="font-size: 18px;">KEPALA DINAS</p>
+                            </th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr> 
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center" ><img width="28%" src="<?= base_url()  ?>/assets/bgh/sertif/logobgh.png" style="-webkit-filter: grayscale(100%);" /></th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+               
          </div>
-      <!-- </div> -->
    </body>
 </html>
