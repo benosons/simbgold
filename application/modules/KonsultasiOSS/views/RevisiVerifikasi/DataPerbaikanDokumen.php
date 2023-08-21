@@ -21,21 +21,43 @@
 						<tbody>
 							<?php if ($DataTanah->num_rows() > 0) {
 								$no = 1;
-								foreach ($DataTanah->result() as $key) { ?>
+								foreach ($DataTanah->result() as $key) { 
+									$filename = FCPATH . "/object-storage/dekill/Earth/$key->dir_file";
+									$filenamephat = FCPATH . "/object-storage/dekill/Earth/$key->dir_file_phat";
+									$dirt = '';
+									if (file_exists($filename)) {
+										$dirt = base_url('object-storage/dekill/Earth/' . $key->dir_file);
+									} else {
+										$dirt = base_url('object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file);
+									}
+									if (file_exists($filenamephat)) {
+										$dirphat = base_url('object-storage/dekill/Earth/' . $key->dir_file_phat);
+									} else {
+										$dirphat = base_url('object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file_phat);
+									}
+									?>
 									<tr>
 										<td align="center"> <?php echo $no++; ?></td>
 										<td align="center"> <?php echo $key->Jns_dok; ?></td>
 										<td align="center"> <?php echo $key->no_dok; ?><br><?php echo $key->tanggal_dok; ?></td>
 										<td align="center"> <?php echo $key->luas_tanah; ?></td>
 										<td align="center"> <?php echo $key->atas_nama_dok; ?></td>
-										<td align="center"><a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a></td>
+										<td align="center">
+											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirt; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+										</td>
 										<?php if ($key->dir_file_phat != "") { ?>
-											<td align="center"><a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file_phat); ?>')" class="btn default btn-xs blue-stripe">Lihat</a></td>
+											<td align="center">
+												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirphat ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+											</td>
 										<?php } else { ?>
 											<td align="center"> Tidak Ada Dokumen</td>
 										<?php } ?>
                                         <td align="center">
-											<a href="<?php echo site_url('Konsultasi/removeTanah/' . $key->id_detail . '/' . $key->id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
+										<?php if($key->status_verifikasi_tanah =='1'){ ?>
+											Sudah di Verifikasi
+										<?php } else { ?>
+											<a href="<?php echo site_url('KonsultasiOSS/removeTanah/' . $key->id_detail . '/' . $key->id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
+										<?php } ?>
 										</td>
 									</tr>
 								<?php }
@@ -49,13 +71,13 @@
             <div class="table-scrollable">
 			<table class="table table-bordered table-striped table-hover" id="sample_editable_1">
 				<thead>
-						<tr class="warning">
-							<th>No</th>
-							<th width="50%">Data Teknis Tanah</th>
-							<th width="43%">Keterangan</th>
-							<th width="7%">Berkas</th>
-						</tr>
-					</thead>
+					<tr class="warning">
+						<th>No</th>
+						<th width="50%">Data Teknis Tanah</th>
+						<th width="43%">Keterangan</th>
+						<th width="7%">Berkas</th>
+					</tr>
+				</thead>
 					<tbody>
 						<?php if (!empty($DataTkTanah)) {
 							$no = 1;
@@ -85,23 +107,31 @@
 											}
 										}
 									}
-								} ?>
+								} 
+								$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
+								$dirtanah = '';
+								if (file_exists($filename)) {
+									$dirtanah = base_url('object-storage/dekill/Requirement/' . $dir_file);
+								} else {
+									$dirtanah = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+								}
+								?>
 								<tr class="<?= $clss ?>">
 									<td align="center"><?php echo $no++; ?></td>
 									<td align="left"><?php echo $key->nm_dokumen; ?></td>
 									<td align="left"><?php echo $key->keterangan; ?></td>
 									<td align="center">
-										<?php echo form_open_multipart('Konsultasi/SaveDokumen1/'.$id .'/'.$key->id_detail .'/1/'.$id_teknis, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
+										<?php echo form_open_multipart('KonsultasiOSS/UploadPerbaikan/'.$id .'/'.$key->id_detail .'/1/'.$id_teknis, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
 										<?php if ($status_ver !='1'){ ?>
 											<?php if($dir_file == null)  {?>
 												<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 											<?php } else { ?>
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirtanah; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
 												|
-												<a href="<?php echo site_url('Konsultasi/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
+												<a href="<?php echo site_url('KonsultasiOSS/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											<?php } ?>
 										<?php } else { ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
 										<?php } ?>
 										<?php echo form_close(); ?>
 									</td>
@@ -156,25 +186,33 @@
 										}
 									}
 								}
-							} ?>
+							} 
+							$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
+							$dir = '';
+							if (file_exists($filename)) {
+								$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+							} else {
+								$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+							}
+							?>
 							<tr class="<?= $clss ?>">
 								<td align="center"><?php echo $no++; ?></td>
 								<td align="left"><?php echo $key->nm_dokumen; ?></td>
 								<td align="left"><?php echo $key->keterangan; ?></td>
 								<td align="center">
-									<?php echo form_open_multipart('Konsultasi/UploadPerbaikan/'.$id.'/'.$key->id_detail.'/5/'.$id_administrasi,array('name'=>'frmup'.$no, 'id'=>'frmup'.$no)); ?>		
+									<?php echo form_open_multipart('KonsultasiOSS/UploadPerbaikan/'.$id.'/'.$key->id_detail.'/5/'.$id_administrasi,array('name'=>'frmup'.$no, 'id'=>'frmup'.$no)); ?>		
 									<?php if ($status_ver !='1'){ ?>
 										<?php if($dir_file == null)  {?>
 											<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 										<?php } else { ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
 											|
-											<a href="<?php echo site_url('Konsultasi/DeleteDokumenRev/' . $id_administrasi . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
+											<a href="<?php echo site_url('KonsultasiOSS/DeleteDokumenRev/' . $id_administrasi . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 										<?php } ?>
 									<?php } else if($dir_file == null){ ?>
 										Sudah di Verifikasi
 									<?php } else{ ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a> Sudah di Verifikasi
+										<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
 									<?php }?>
 									<?php echo form_close(); ?>
 								</td>
@@ -226,27 +264,34 @@
 										}
 									}
 								}
-								
-							} ?>
+							} 
+							$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
+							$dir = '';
+							if (file_exists($filename)) {
+								$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+							} else {
+								$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+							}
+							?>
 							<tr class="<?= $clss ?>">
 								<td align="center"><?php echo $no++; ?></td>
 								<td align="left"><?php echo $key->nm_dokumen; ?></td>
 								<td align="left"><?php echo $key->keterangan; ?></td>
 								<td align="center">
-									<?php echo form_open_multipart('Konsultasi/SaveDokumen1/'.$id .'/'.$key->id_detail .'/2/'.$id_teknis, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
+									<?php echo form_open_multipart('KonsultasiOSS/SaveDokumen1/'.$id .'/'.$key->id_detail .'/2/'.$id_teknis, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
 									<?php if ($status_ver !='1'){ ?>
 											<?php if($dir_file == null)  {?>
 												<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 											<?php } else { ?>
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
 												|
-												<a href="<?php echo site_url('Konsultasi/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
+												<a href="<?php echo site_url('KonsultasiOSS/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											<?php } ?>
 										<?php } else if($dir_file == null){ ?>
 										Sudah di Verifikasi
 										<?php } else{ ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a> Sudah di Verifikasi
-									<?php }?>
+											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+										<?php }?>
 									<?php echo form_close(); ?>
 								</td>
 							</tr>
@@ -295,23 +340,30 @@
 											}
 										}
 									}
-								} ?>
+								} 
+								$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
+								$dir = '';
+								if (file_exists($filename)) {
+									$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+								} else {
+									$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+								}?>
 								<tr class="<?= $clss ?>">
 									<td align="center"><?php echo $no++; ?></td>
 									<td align="left"><?php echo $key->nm_dokumen; ?></td>
 									<td align="left"><?php echo $key->keterangan; ?></td>
 									<td align="center">
-										<?php echo form_open_multipart('Konsultasi/SaveDokumen1/'.$id .'/'.$key->id_detail .'/3/'.$id_teknis, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
+										<?php echo form_open_multipart('KonsultasiOSS/UploadPerbaikan/'.$id .'/'.$key->id_detail .'/3/'.$id_teknis, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
 										<?php if ($status_ver !='1'){ ?>
 											<?php if($dir_file == null)  {?>
 												<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 											<?php } else { ?>
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-												|
-												<a href="<?php echo site_url('Konsultasi/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
+												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+													|
+												<a href="<?php echo site_url('KonsultasiOSS/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											<?php } ?>
 										<?php } else { ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
 										<?php } ?>
 										<?php echo form_close(); ?>
 									</td>
@@ -371,25 +423,32 @@
 										}
 									}
 								}
-							} ?>
+							} 
+							$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
+							$dir = '';
+							if (file_exists($filename)) {
+								$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+							} else {
+								$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+							}?>
 							<tr class="<?= $clss ?>">
 								<td align="center"><?php echo $no++; ?></td>
 								<td align="left"><?php echo $key->nm_dokumen; ?></td>
 								<td align="left"><?php echo $key->keterangan; ?></td>
 								<td align="center">
-									<?php echo form_open_multipart('Konsultasi/SaveDokumen1/'.$id .'/'.$key->id_detail .'/4/'.$id_teknis, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
+									<?php echo form_open_multipart('KonsultasiOSS/UploadPerbaikan/'.$id .'/'.$key->id_detail .'/4/'.$id_teknis, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
 									<?php if ($status_ver !='1'){ ?>
-										<?php if($dir_file == null)  {?>
-											<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
+											<?php if($dir_file == null)  {?>
+												<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
+											<?php } else { ?>
+												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+													|
+												<a href="<?php echo site_url('KonsultasiOSS/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
+											<?php } ?>
 										<?php } else { ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-											|
-											<a href="<?php echo site_url('Konsultasi/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
+											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
 										<?php } ?>
-									<?php } else { ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-									<?php } ?>
-									<?php echo form_close(); ?>
+										<?php echo form_close(); ?>
 								</td>
 							</tr>
 						<?php }
@@ -406,9 +465,10 @@
 			<div class="portlet-title">
 				<div class="caption">Konfirmasi Pernyataan Ulang Pengajuan Konsultasi/Permohonan</div>
             </div>
-            <form action="<?php echo site_url('Konsultasi/saveUlangPernyataan'); ?>" class="form-horizontal" role="form" method="post" id="FormPernyataan">
+            <form action="<?php echo site_url('KonsultasiOSS/saveUlangPernyataan'); ?>" class="form-horizontal" role="form" method="post" id="FormPernyataan">
 				<input type="hidden" class="form-control" value="<?php echo set_value('id', (isset($id) ? $id : '')) ?>" name="id" placeholder="id" autocomplete="off">
 				<input type="hidden" class="form-control" value="<?php echo set_value('no_konsultasi', (isset($no_konsultasi) ? $no_konsultasi : '')) ?>" name="no_konsultasi" placeholder="id" autocomplete="off">
+				<input type="text" style="display: none;" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>">
 				<div class="note note-warning">
                     <h4 class="font-blue"><b>Sebelum anda mengkonfirmasi, Mohon memperhatikan informasi berikut:</b><br></h4>
                     <h5 class="font-blue"><b>
@@ -448,7 +508,8 @@
 			<h4 class="modal-title">Tambah Data Tanah</h4>
 		</div>
 		<div class="modal-body form">
-			<form action="<?php echo site_url('Konsultasi/SimpanTanahPerbaikan'); ?>" class="form-horizontal" role="form" method="post" id="FormTambahTanah" enctype="multipart/form-data">
+			<form action="<?php echo site_url('KonsultasiOSS/SimpanTanahPerbaikan'); ?>" class="form-horizontal" role="form" method="post" id="FormTambahTanah" enctype="multipart/form-data">
+				<input type="text" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
 				<div class="portlet-body form">
 					<div class="form-body">
 						<br>
@@ -611,7 +672,8 @@
 <!-- /.modaledit -->
 <div id="tanahnyaedit" class="modal fade" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg">
-		<div class="modal-content"></div>
+		<div class="modal-content">
+		</div>
 	</div>
 </div>
 <script>
@@ -622,7 +684,6 @@
 	}
 
 	function set_status(v) {
-		//alert();
 		if (v == '1') {
 			document.getElementById('izintanah').style.display = "block";
 		} else {
@@ -630,12 +691,13 @@
 		}
 	}
 
-
 	function coktan() {
+
 		$('#dir_file_tan').val(d_file_tan.value);
 	}
 
 	function cokphat() {
+
 		$('#dir_file_phat').val(d_file_phat.value);
 	}
 
@@ -661,6 +723,7 @@
 				$(element).closest('.form-group').removeClass('has-error').addClass('has-success');
 			},
 			errorClass: 'help-block',
+
 			// Specify the validation error messages
 			messages: {
 				id_dokumen: "",

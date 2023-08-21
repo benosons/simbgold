@@ -8,7 +8,7 @@ if ($nilai == "KAB") {
   $pejabat = "BUPATI";
 } elseif ($nilai == "KOT") {
   if (substr($wilayah,10,7) == "JAKARTA") {
-	  $kabkota = $wilayah;
+    $kabkota = "DKI JAKARTA";
     $pejabat = "GUBERNUR";
   }
   else {
@@ -19,15 +19,29 @@ if ($nilai == "KAB") {
 if($bg['id_izin'] =='1'){
   $peruntukan = "Bangunan Baru";
 }else if($bg['id_izin'] =='2'){
- $peruntukan = "Bangunan Eksisting";
+  $peruntukan = "Bangunan Eksisting";
 }else if($bg['id_izin'] =='4'){
   $peruntukan = "Bangunan Kolektif";
 }else if($bg['id_izin'] =='5') {
   $peruntukan = "Bangunan Prasarana";
-} else {
+} else if($bg['id_izin'] =='3'){
+  $peruntukan = "Bangunan Baru";
+}else if($bg['id_izin'] =='7'){
+  $peruntukan = "Bangunan Pertashop";
+}else{
   $peruntukan = "Belum Ditentukan";
 }
-
+$tgl_skrg =  tgl_eng_to_ind(date("Y-m-d"));
+$tgl_val  =  date('d').date('m').date('Y');
+if($bg['status'] =='13'){
+  $no_izin  = 'SK-PBG-'.$bg['id_kec_bgn'].'-00000000-000';
+  //$no_izin = $bg['no_izin_pbg'];
+  $tgl_sk = $tgl_skrg;
+  
+}else{
+  $no_izin  = $bg['no_izin_pbg'];
+  $tgl_sk   = tgl_eng_to_ind($bg['tgl_pbg']);
+}
 
 $montharray = Array("Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
 if (trim($bg['date_sk_tk']) != ''){
@@ -52,7 +66,7 @@ $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(0, 5, "PEMERINTAH REPUBLIK INDONESIA", 0, 1, "C");
 $pdf->Cell(0, 5, "PERSETUJUAN BANGUNAN GEDUNG", 0, 1, "C");
 $pdf->SetFont('Arial', '', 12);
-$pdf->Cell(0, 5, "Nomor : ".$bg['no_izin_pbg'], 0, 1, "C");
+$pdf->Cell(0, 5, "Nomor : ".$no_izin, 0, 1, "C");
 $pdf->Cell(0, 5, "", 0, 1, "C");
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(40, 5, "Membaca", 0, 0, "L");
@@ -60,7 +74,7 @@ $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(0, 5, ": Permohonan Persetujuan Bangunan Gedung", 0, 1, "L");
 $pdf->Cell(42, 5, "", 0, 0, "L");
 $pdf->Cell(50, 5, "Nomor", 0, 0, "L");
-$pdf->Cell(0, 5, ": ".$bg['no_izin_pbg']." Tanggal ".tgl_eng_to_ind($bg['tgl_pbg']), 0, 1, "L");
+$pdf->Cell(0, 5, ": ".$no_izin." Tanggal ".$tgl_sk, 0, 1, "L");
 $pdf->Cell(42, 5, "", 0, 0, "L");
 $pdf->Cell(50, 5, "Nama pemohon/Pemilik", 0, 0, "L");
 $pdf->Cell(2, 5, ":", 0, 0, "L");
@@ -76,7 +90,6 @@ $pdf->MultiCell(0, 5,$pg['alamat'].', Kel/Desa '.$pg['nama_kelurahan'].', Kec. '
 $pdf->Cell(42, 5, "", 0, 0, "L");
 $pdf->Cell(50, 5, "Untuk", 0, 0, "L");
 $pdf->MultiCell(0, 5,": ".$peruntukan, 0, "L", 0);
-
 if ($bg['id_izin'] == '5') {
   $pdf->Cell(42, 5, "", 0, 0, "L");
   $pdf->Cell(50, 5, "Fungsi Bangunan Gedung", 0, 0, "L");
@@ -87,25 +100,36 @@ if ($bg['id_izin'] == '5') {
   $pdf->Cell(50, 5, "Fungsi Bangunan Gedung", 0, 0, "L");
   $pdf->Cell(2, 5, ":", 0, 0, "L");
   $pdf->Cell(0, 5, "Fungsi Hunian", 0, 1, "L");
-} else {
+} else if ($bg['id_izin'] == '2'){
+  if($bg['permohonan_slf'] == '2'){
+    $pdf->Cell(42, 5, "", 0, 0, "L");
+    $pdf->Cell(50, 5, "Fungsi Bangunan Gedung", 0, 0, "L");
+    $pdf->Cell(2, 5, ":", 0, 0, "L");
+    $pdf->Cell(0, 5, "Fungsi Prasarana", 0, 1, "L");
+  }else{
+    $pdf->Cell(42, 5, "", 0, 0, "L");
+    $pdf->Cell(50, 5, "Fungsi Bangunan Gedung", 0, 0, "L");
+    $pdf->Cell(2, 5, ":", 0, 0, "L");
+    $pdf->Cell(0, 5, $bg['fungsi_bg'], 0, 1, "L");
+  }
+}else{
   $pdf->Cell(42, 5, "", 0, 0, "L");
   $pdf->Cell(50, 5, "Fungsi Bangunan Gedung", 0, 0, "L");
   $pdf->Cell(2, 5, ":", 0, 0, "L");
   $pdf->Cell(0, 5, $bg['fungsi_bg'], 0, 1, "L");
 }
 $pdf->Cell(42, 5, "", 0, 0, "L");
-if ($bg['luas_bgn'] >= '100'){
+if($bg['id_klasifikasi'] == '2'){
   $klasifikasi ='Bangunan Tidak Sederhana';
 }else{
   $klasifikasi = 'Bangunan Sederhana';
-}
+} 
 $pdf->Cell(50, 5, "Klasifikasi bangunan Gedung", 0, 0, "L");
 $pdf->Cell(0, 5, ": $klasifikasi", 0, 1, "L");
 $pdf->Cell(42, 5, "", 0, 0, "L");
 $pdf->Cell(50, 5, "Nama bangunan gedung", 0, 0, "L");
 $pdf->Cell(2, 5, ":", 0, 0, "L");
 $pdf->MultiCell(0, 5,$bg['nm_bgn'], 0, "L", 0);
-
 if($bg['id_jenis_permohonan'] == '11'){
   $tipe = json_decode($bg['tipeA']);
   $luas = json_decode($bg['luasA']);
@@ -175,7 +199,18 @@ if($bg['id_jenis_permohonan'] == '11'){
   $pdf->Cell(50, 5, "Luas Bangunan Prasarana ", 0, 0, "L");
   $pdf->Cell(19, 5, ": ".number_format($bg['luas_bgp'],2,',','.'), 0, 0);
   $pdf->Cell(4,5,' meter persegi',0,1,"L");
-} else {
+} else if($bg['id_jenis_permohonan'] == '14'){
+  if($bg['permohonan_slf'] =='2'){
+    $pdf->Cell(42, 5, "", 0, 0, "L");
+    $pdf->Cell(50, 5, "Luas Bangunan Prasarana ", 0, 0, "L");
+    $pdf->Cell(19, 5, ": ".number_format($bg['luas_bgp'],2,',','.'), 0, 0);
+    $pdf->Cell(4,5,' meter persegi',0,1,"L");
+  }else{
+    $pdf->Cell(42, 5, "", 0, 0, "L");
+    $pdf->Cell(50, 5, "Luas Bangunan Gedung ", 0, 0, "L");
+    $pdf->Cell(0, 5, ": ".$bg['luas_bgn'], 0, 1, "L");
+  }
+}else{
   $pdf->Cell(42, 5, "", 0, 0, "L");
   $pdf->Cell(50, 5, "Luas Bangunan Gedung ", 0, 0, "L");
   $pdf->Cell(0, 5, ": ".$bg['luas_bgn'], 0, 1, "L");
@@ -305,7 +340,7 @@ $pdf->SetFont('Arial', '', 10);
 
 $pdf->Cell(40, 5, "Nama Pemohon", 0, 0, "L");
 $pdf->Cell(2, 5, ":", 0, 0, "L");
-$pdf->Cell(0, 5,$pg['nm_pemilik'], 0, 1, "L");
+$pdf->MultiCell(0, 5,$pg['nm_pemilik'], 0, "L", 0);
 
 
 //$pdf->Cell(0, 5, ": ".$pg['nm_pemilik'], 0, 1, "L");
@@ -400,9 +435,17 @@ $pdf->Cell(0, 5, "DITETAPKAN DI : ".$kabkota, 0, 1, "L");
 $pdf->Cell(100, 5, "", 0, 0, "L");
 $pdf->Cell(0, 5, "PADA TANGGAL : ".tgl_eng_to_ind($bg['tgl_pbg']), 0, 1, "L");
 $pdf->Cell(100, 5, "", 0, 0, "L");
-$pdf->Cell(0,5,'ATAS NAMA '.$pejabat.' '.$kabkota,0,1,"L");
 
-if($bg['status'] == '13'){
+if($bg['id_prov_bgn'] =='31'){
+  $pdf->Cell(0,5,'ATAS NAMA '.$pejabat ." DKI JAKARTA",0,1,"L");
+}else{
+  $pdf->Cell(0,5,'ATAS NAMA '.$pejabat.' '.$kabkota,0,1,"L");
+}
+
+if($bg['id_dki'] == '1'){
+  $pdf->Cell(100, 5, "", 0, 0, "L");
+  $pdf->MultiCell(0, 5, "KEPALA DINAS PENANAMAN MODAL DAN PELAYANAN TERPADU SATU PINTU PROVINSI DKI JAKARTA", 0, "L", 0);
+}else if($bg['status'] == '13'){
   if($bg['stat_pejabat'] =='1'){
     $pdf->Cell(100, 5, "", 0, 0, "L");
     $pdf->MultiCell(0, 5, "PLT KEPALA " .ucwords(strtoupper($bg['p_nama_dinas'])), 0, "L", 0);
@@ -439,7 +482,10 @@ if($bg['status'] == '13'){
 }
 //$pdf->Cell(100, 5, "", 0, 0, "L");
 //$pdf->MultiCell(0, 5, "KEPALA " .ucwords(strtoupper($bg['p_nama_dinas'])), 0, "L", 0);
-if($bg['nip_kadis'] =='' || $bg['nip_kadis'] == null){
+if($bg['id_dki'] == '1'){
+  $kadis = 'Benni Aguscandra';
+  $nip   = '196908081997031004';
+}else if($bg['nip_kadis'] =='' || $bg['nip_kadis'] == null){
   $kadis = $bg['kepala_dinas'];
   $nip   = $bg['nip_kepala_dinas'];
 }else{
@@ -464,7 +510,8 @@ if ($nilai == "KAB") {
   $pejabat = "BUPATI";
 } elseif ($nilai == "KOT") {
   if (substr($wilayah,10,7) == "JAKARTA") {
-	$kabkota = $wilayah;
+
+	  $kabkota = $wilayah;
     $pejabat = "GUBERNUR";
   }
   else {
@@ -485,7 +532,11 @@ if (trim($bg['tgl_penerbitan_slf']) != ''){
 }
 
 if ($bg['id_fungsi_bg'] =='1'){
-  $usiabg ='20';
+  if($bg['id_jns_bg'] == '3'){
+    $usiabg ='5';
+  }else{
+    $usiabg ='20';
+  }
 }else{
   $usiabg ='5';
 }
@@ -508,7 +559,13 @@ $pdf->setXY(10, 15);
 $pdf->image('file/garuda.png', 68, 30, 80, 80, '', '', '', false, 300, '', false, false, 0);
 $pdf->SetFont('Arial', 'B', 22);
 $pdf->Cell(0, 10, "PEMERINTAH DAERAH", 0, 1, "C");
-$pdf->Cell(0, 10, $kabkota, 0, 1, "C");
+if($bg['id_dki'] != 1){
+  $pdf->Cell(0, 10, $kabkota, 0, 1, "C");
+  
+}else{
+  $pdf->Cell(0, 10, "DKI JAKARTA", 0, 1, "C");
+}
+
 $pdf->setXY(10, 130);
 
 $pdf->SetFont('Arial', 'B', 28);
@@ -532,10 +589,15 @@ $pdf->Cell(0, 10, ": ".ucwords(strtoupper($bg['nama_kelurahan'])), 0, 1, "L");
 $pdf->SetFont('Arial', 'B', 14);
 $pdf->Cell(0, 10, "", 0, 1, "C");
 $pdf->Cell(90, 10, "", 0, 0, "L");
-$pdf->MultiCell(100, 10, ucwords(strtoupper($bg['p_nama_dinas'])), 0, "L", 0);
+if($bg['id_dki'] != 1){
+  $pdf->MultiCell(100, 10, ucwords(strtoupper($bg['p_nama_dinas'])), 0, "L", 0);
+}else{
+  $pdf->MultiCell(100, 10, "DINAS PENANAMAN MODAL DAN PELAYANAN TERPADU SATU PINTU PROVINSI DKI JAKARTA", 0, "L", 0);
+}
+//$pdf->MultiCell(100, 10, ucwords(strtoupper($bg['p_nama_dinas'])), 0, "L", 0);
 //$pdf->Cell(90, 10, "", 0, 0, "L");
 //$pdf->Cell(0, 10, $bg['nama_kabkota'], 0, 1, "L");
-//$pdf->image('assets/gambar/barcode.PNG', 150, 225, 30, 30);
+//$pdf->image('assets/gambar/barcode.PNG', 150, 225, 30, 30);DINAS PENANAMAN MODAL DAN PELAYANAN TERPADU SATU PINTU PROVINSI DKI JAKARTA
 
 
 $pdf->SetMargins(20, 20, 20);
@@ -557,16 +619,36 @@ $pdf->Cell(0, 5, "Nomor : ".$bg['no_slf']. " Tanggal : ".$tgl_teknis, 0, 1, "C")
 $pdf->Cell(0, 5, "Menyatakan bahwa :", 0, 1, "C");
 $pdf->Cell(0, 5, "Nama Bangunan Gedung", 0, 1, "C");
 $pdf->Cell(0, 5, $bg['nm_bgn'], 0, 1, "C");
-$pdf->Cell(0, 5, "Fungsi Bangunan Gedung", 0, 1, "C");
-$pdf->Cell(0, 5, $bg['fungsi_bg'], 0, 1, "C");
-$pdf->Cell(0, 5, "Klasifikasi Bangunan Gedung", 0, 1, "C");
+if($bg['id_izin'] =='2'){
+  if($bg['permohonan_slf'] =='1'){
+    $pdf->Cell(0, 5, "Fungsi Bangunan Gedung", 0, 1, "C");
+    $pdf->Cell(0, 5, $bg['fungsi_bg'], 0, 1, "C");
+    $pdf->Cell(0, 5, "Klasifikasi Bangunan Gedung", 0, 1, "C");
+  $pdf->Cell(0, 5, $fungsi['nm_jenis_bg'], 0, 1, "C");
+  }else if($bg['permohonan_slf'] =='2'){
+    $pdf->Cell(0, 5, "Fungsi Bangunan Gedung", 0, 1, "C");
+    $pdf->Cell(0, 5, 'Prasarana Bangunan Gedung', 0, 1, "C");
+    $pdf->Cell(0, 5, "Klasifikasi Bangunan Gedung", 0, 1, "C");
+$pdf->Cell(0, 5, 'Tidak Sederhana', 0, 1, "C");
+  }else if($bg['permohonan_slf'] =='3'){
+    $pdf->Cell(0, 5, "Fungsi Bangunan Gedung", 0, 1, "C");
+    $pdf->Cell(0, 5, $bg['fungsi_bg'], 0, 1, "C");
+    $pdf->Cell(0, 5, "Klasifikasi Bangunan Gedung", 0, 1, "C");
 $pdf->Cell(0, 5, $fungsi['nm_jenis_bg'], 0, 1, "C");
+  }
+}else{
+  $pdf->Cell(0, 5, "Fungsi Bangunan Gedung", 0, 1, "C");
+  $pdf->Cell(0, 5, $bg['fungsi_bg'], 0, 1, "C");
+  $pdf->Cell(0, 5, "Klasifikasi Bangunan Gedung", 0, 1, "C");
+  $pdf->Cell(0, 5, $fungsi['nm_jenis_bg'], 0, 1, "C");
+}
+
+//$pdf->Cell(0, 5, "Klasifikasi Bangunan Gedung", 0, 1, "C");
+//$pdf->Cell(0, 5, $fungsi['nm_jenis_bg'], 0, 1, "C");
+
 if ($bg['no_imb'] =='' || $bg['no_imb'] == null || $bg['no_imb'] == 0){
-  //$no_izin_mendirikan = $bg['no_slf'];
-  //$no_izin_mendirikan = $bg['no_imb'];
   $no_izin_mendirikan = $bg['no_izin_pbg'];
 }else {
-  //$no_izin_mendirikan = $bg['no_izin_pbg'];
   $no_izin_mendirikan = $bg['no_imb'];
 }
 $pdf->Cell(0, 5, "Nomor PBG", 0, 1, "C");
@@ -585,25 +667,62 @@ $pdf->Cell(0, 5, "Sertifikat Laik Fungsi ini berlaku selama ".$usiabg." tahun se
 $pdf->Cell(0, 2, "", 0, 1, "L");
 
 $pdf->Cell(0, 10, "", 0, 1, "L");
-//$pdf->Cell(0,0,$pdf->image(BASE_FILE_PATH2.'QR_Code/'.$bg['no_slf'].'.png', $pdf->GetX(), $pdf->GetY(), 30,30),0,1);
 $pdf->image(BASE_FILE_PATH2.'QR_Code/'.$bg['no_slf'].'.png', 60, 180, 30, 30);
 $pdf->Cell(100, 5, "", 0, 0, "L");
 $pdf->Cell(0, 5, "DITETAPKAN DI :".$wilayah, 0, 1, "L");
 $pdf->Cell(100, 5, "", 0, 0, "L");
 $pdf->Cell(0, 5, "PADA TANGGAL : ". $tgl_teknis, 0, 1, "L");
 $pdf->Cell(100, 5, "", 0, 0, "L");
-$pdf->MultiCell(0, 5,'ATAS NAMA '.$pejabat.' '.$kabkota,0, "L", 0);
+if($bg['id_dki'] != 1){
+  $pdf->MultiCell(0, 5,'ATAS NAMA '.$pejabat.' '.$kabkota,0, "L", 0);
+}else{
+  $pdf->MultiCell(0, 5,'ATAS NAMA '.$pejabat.' '."PROVINSI DKI JAKARTA",0, "L", 0);
+}
+
+if($bg['id_dki'] == 1){
+  $pdf->Cell(100, 5, "", 0, 0, "L");
+  $pdf->MultiCell(0, 5, "KEPALA DINAS CIPTA KARYA, TATA RUANG DAN PERTANAHAN PROVINSI DKI JAKARTA", 0, "L", 0);
+}else if($bg['stat_pjbt'] == '1'){
+  $pdf->Cell(100, 5, "", 0, 0, "L");
+  $pdf->MultiCell(0, 5, "PLT KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+} else if($bg['stat_pjbt'] == '2'){
+  $pdf->Cell(100, 5, "", 0, 0, "L");
+  $pdf->MultiCell(0, 5, "PJS KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+} else if($bg['stat_pjbt'] == '3'){
+  $pdf->Cell(100, 5, "", 0, 0, "L");
+  $pdf->MultiCell(0, 5, "KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+} else if($bg['stat_pjbt'] == '4'){
+  $pdf->Cell(100, 5, "", 0, 0, "L");
+  $pdf->MultiCell(0, 5, "PLH KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+} else{
+  $pdf->Cell(100, 5, "", 0, 0, "L");
+  $pdf->MultiCell(0, 5, "KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+}
+
+
+
+
+//$pdf->MultiCell(0, 5, "KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+$pdf->Cell(100, 5, "", 0, 0, "L");
+$pdf->Cell(0, 5, "", 0, 1, "L");
+$pdf->Cell(100, 5, "", 0, 0, "L");
+$pdf->Cell(0, 5, "", 0, 1, "L");
+$pdf->Cell(100, 5, "", 0, 0, "L");
+//$pdf->Cell(0, 5, ($bg['nm_kadis_teknis']), 0, 1, "L");
+//$pdf->Cell(100, 5, "", 0, 0, "L");
+//$pdf->Cell(0, 5, "NIP. ".$bg['nip_kadis_teknis'], 0, 1, "L");
+if($bg['id_dki'] =='1'){
+  $pdf->Cell(0, 5, "Heru Hermawanto", 0, 1, "L");
+}else{
+  $pdf->Cell(0, 5, ($bg['nm_kadis_teknis']), 0, 1, "L");
+}
 
 $pdf->Cell(100, 5, "", 0, 0, "L");
-$pdf->MultiCell(0, 5, "KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
-$pdf->Cell(100, 5, "", 0, 0, "L");
-$pdf->Cell(0, 5, "", 0, 1, "L");
-$pdf->Cell(100, 5, "", 0, 0, "L");
-$pdf->Cell(0, 5, "", 0, 1, "L");
-$pdf->Cell(100, 5, "", 0, 0, "L");
-$pdf->Cell(0, 5, ($bg['nm_kadis_teknis']), 0, 1, "L");
-$pdf->Cell(100, 5, "", 0, 0, "L");
-$pdf->Cell(0, 5, "NIP. ".$bg['nip_kadis_teknis'], 0, 1, "L");
+if($bg['id_dki'] =='1'){
+  $pdf->Cell(0, 5, "196803121998031010", 0, 1, "L");
+}else{
+  $pdf->Cell(0, 5, "NIP. ".$bg['nip_kadis_teknis'], 0, 1, "L");
+}
 
 
 $pdf->AddPage();

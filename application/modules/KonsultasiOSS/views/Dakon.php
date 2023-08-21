@@ -71,9 +71,7 @@
 											if ($key->data_step == '7') { ?>
 												<a href="<?php echo site_url('KonsultasiOSS/FormPengecekan/' . $key->id); ?>" class="btn btn-primary btn-sm" title="Perbaikan Dokumen Teknis"><span class="glyphicon glyphicon-edit"></span></a>
 											<?php } else { ?>
-
 											<?php } ?>
-
 										<?php } else if ($key->status == '15') { ?>
 											<a href="<?php echo site_url("KonsultasiOSS/FormSummary/{$this->secure->encrypt_url($key->id)}"); ?>" class="btn btn-primary btn-sm tooltips" data-container="body" data-placement="bottom" data-original-title="Verifikasi Data"><span class="glyphicon glyphicon-edit"></span></a>
 											<a href="<?php echo site_url('KonsultasiOSS/LaporPembangunan/' . $key->id); ?>" class="btn btn-success btn-sm" title="Verifikasi Data" id="tombolver" data-toggle="modal" data-target="#modal-edit"><span class="glyphicon glyphicon-edit"></span></a>
@@ -661,9 +659,7 @@
 			}
 		})
 	});
-
 	$(function() {
-
 		var table = $('#tableKonsultasi').DataTable({
 			"responsive": false,
 			"language": {

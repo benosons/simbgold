@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'email','session','template','Datatables', 'form_validation');
+$autoload['libraries'] = array('database', 'email','session','template','Datatables', 'form_validation','secure');
 
 /*
 | -------------------------------------------------------------------
@@ -133,7 +133,3 @@ $autoload['language'] = array();
 |	$autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = array('mglobals','Mglobals','mglobal','Mglobal','mmenu','Global_model','Outh_model');
-
-require_once BASEPATH . 'dotenv/autoloader.php';
-$dotenv = new Dotenv\Dotenv(FCPATH);
-$dotenv->load();

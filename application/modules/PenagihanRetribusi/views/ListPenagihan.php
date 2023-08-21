@@ -97,15 +97,16 @@
 					<th>No. Konsultasi</th>
                     <th>Nama Pemilik</th>
 					<th>Lokasi BG</th>
+                    <th>Dokumen SPPST</th>
 					<th>Detail</th>
-                    <th>Status</th>
+                    
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
 				<?php if($skrd->num_rows() > 0){
-                	$no = 1;
-                	foreach ($skrd->result() as $skrd) { ?>
+                    $no = 1;
+                    foreach ($skrd->result() as $skrd) { ?>
 						<?php if($skrd->status == '11'){
 							$clss = "danger";
 						}else{
@@ -117,27 +118,13 @@
 							<td align="center"><?php echo $skrd->no_konsultasi;?></td>
 							<td align="center"><?php echo $skrd->nm_pemilik;?></td>
 							<td><?php echo $skrd->almt_bgn;?></td>
+                            <td>
+                                <a href="#" onclick="GetCetakRekomtek(<?php echo $skrd->id ?>)" class="btn btn-info btn" title="Cetak SPPST" id="tombolinver"><span class="glyphicon glyphicon-print"> Lihat SPPST</span></a>
+                            </td>
 							<td>
 								<a href="javascript:;" class="btn btn-info btn-sm detail-retribusi" title="Lihat Data" data-id="<?= $skrd->id ?>"><span class="fa fa-file"></span> Lihat Disini</a>
 							</td>
-							<td align="center"><?php
-								if($skrd->status == 11){
-										$class = "label label-sm label-danger";
-										$syarat = "Menunggu SKRD";
-								}else{
-									if($skrd->status == 12){
-										$class = "label label-sm label-success";
-										$syarat = "Menunggu Pembayaran";
-									}else if($skrd->status == 13){
-										$class = "label label-sm label-success";
-										$syarat = "Menunggu Validasi Pembayaran";
-									}else if($skrd->status >= 14){
-										$class = "label label-sm label-success";
-										$syarat = "Tervalidasi";
-									}
-								};?>
-								<span class=""></span> 
-							</td>
+						
 							<?php  if ($skrd->status == 11) { ?>
 								<td align="center">
                                     <a href="#" onClick="href='<?php echo site_url('PenagihanRetribusi/FormRetribusi/'.$skrd->id);?>'" class="btn btn-danger btn-sm" title="Buatkan SKRD" id="tombolver" data-toggle="modal" data-target="#modal-edit"><span class="glyphicon glyphicon-edit"></span></a>
@@ -387,6 +374,11 @@
     </div>
 </div>
 <script>
+    function GetCetakRekomtek(id) {
+        var url = "<?php echo base_url() . index_page() ?>Dokumen/CetakVerifikasiBgnBaru/" + id;
+        swin = window.open(url, 'win', 'scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');
+        swin.focus();
+    }
     var site_url = "<?= site_url() ?>";
     $(document).ready(function() {
         var table = $('#sample_1').DataTable({

@@ -25,6 +25,8 @@ class Mvalidasiteknis extends CI_Model
         $this->db->where("b.status != 26 ");
         $this->db->where("b.pernyataan = 1 ");
         $this->db->where("b.id_jenis_permohonan != 14 ");
+        $this->db->where("b.id_jenis_permohonan != 35 ");
+        $this->db->where("b.id_jenis_permohonan != 36 ");
         $this->db->where("b.id_izin != 5 ");
         if($Dinas =='31'){
 			$this->db->where('b.id_prov_bgn = 31');
@@ -79,7 +81,7 @@ class Mvalidasiteknis extends CI_Model
         $Dinas = $this->session->userdata('loc_id_kabkot');
         $this->db->select('a.*,b.almt_bgn,b.no_konsultasi,b.status,b.imb,b.catatan,c.nm_konsultasi,d.file_retribusi');
         $this->db->from('tmdatapemilik a');
-        $this->db->where("b.status >=", 10);
+        $this->db->where("b.status >= 10");
         $this->db->where("b.status != 25 ");
         $this->db->where("b.status != 26 ");
         $this->db->where("b.pernyataan = 1 ");
@@ -372,7 +374,7 @@ class Mvalidasiteknis extends CI_Model
         $query     = $this->db->get('tmdatabangunan a');
         return $query->row();
     }
-
+    
     function get_pejabat($id)
     {
         $sql = "SELECT a.id,a.id_kabkot_bgn, b.kepala_dinas, b.nip_kepala_dinas, b.p_nama_dinas,b.status_pejabat
@@ -382,4 +384,34 @@ class Mvalidasiteknis extends CI_Model
         $hasil = $this->db->query($sql)->row_array();
         return $hasil;
     }
+    function get_pejabat_dki($id)
+    {
+        $sql = "SELECT a.id,a.id_kabkot_bgn, b.kepala_dinas, b.nip_kepala_dinas, b.p_nama_dinas,b.status_pejabat
+        FROM tmdatabangunan a
+        left join tm_profile_teknis b On (a.id_prov_bgn = b.id_kabkot)
+        where a.id = $id";
+        $hasil = $this->db->query($sql)->row_array();
+        return $hasil;
+    }
+    function insertDataValidasi($dataInKonsultasi)
+	{
+		$this->db->insert('tmdatavalkadintek',$dataInKonsultasi);
+		return $this->db->insert_id();
+	}
+    function getNoDrafSPPST($id_kec_bgn,$tgl_skrg)
+	{
+			$sql = "SELECT max(no_sppst) as no_registrasi_baru 
+			FROM tmdatavalkadintek
+			WHERE SUBSTR(no_sppst,7,6) = '$id_kec_bgn' and SUBSTR(no_sppst,14,8) = '$tgl_skrg'";
+			$hasil = $this->db->query($sql)->row_array();
+			return $hasil;
+	}
+
+    function get_id_kabkot($id)
+	{
+			$sql = "SELECT id, id_kabkot_bgn, id_kec_bgn 
+					FROM tmdatabangunan where id = ".$id;
+			$hasil = $this->db->query($sql)->row_array();
+			return $hasil;
+	}
 }

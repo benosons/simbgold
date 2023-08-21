@@ -5,19 +5,15 @@ class Mauth extends CI_Model
 
 	public function getLoginData($select = '*', $email, $password)
 	{
-		// $this->db->select($select, FALSE);
-		// $this->db->where('a.username', $email);
+		$this->db->select($select, FALSE);
+		$this->db->where('a.username', $email);
 		//$this->db->or_where('a.email', $email);
-		// $this->db->where('a.password', $password);
-		// $this->db->where('a.status', "1");
-		// $this->db->join('tm_role b', 'a.role_id = b.id');
-		// $this->db->join('tm_user_data c', 'a.id = c.user_id', 'LEFT');
-		// return $this->db->get('tm_user a');
+		$this->db->where('a.password', $password);
+		$this->db->where('a.status', "1");
+		$this->db->join('tm_role b', 'a.role_id = b.id');
+		$this->db->join('tm_user_data c', 'a.id = c.user_id', 'LEFT');
+		return $this->db->get('tm_user a');
 		//echo $this->db->last_query(); die;
-
-		$query = $this->db->query("SELECT $select FROM `tm_user` `a` JOIN `tm_role` `b` ON `a`.`role_id` = `b`.`id` LEFT JOIN `tm_user_data` `c` ON `a`.`id` = `c`.`user_id` WHERE `a`.`username` = '$email' AND `a`.`password` = '$password' AND `a`.`status` = '1'");
-		
-		return $query;
 	}
 
 
@@ -32,6 +28,64 @@ class Mauth extends CI_Model
 		return $this->db->get('tm_user a');
 		//echo $this->db->last_query(); die;
 	}
+	public function getLoginDataAkses($select = '*', $email, $password)
+	{
+		$this->db->select($select, FALSE);
+		$this->db->where('a.username', $email);
+		$this->db->where('a.password', $password);
+		$this->db->where('a.status', "1");
+		$this->db->join('tm_role b', 'a.role_id = b.id');
+		return $this->db->get('tm_user a');
+	} 
+	public function getDataRetribusi($id_kabkot=null,$no_sppst=null) 
+	{
+		$sql = "SELECT a.id,a.no_sppst,
+				b.almt_bgn,b.status,b.nm_bgn,b.id_fungsi_bg,b.luas_bgn,b.tipeA,b.tinggiA,b.luasA,b.jumlahA,b.lantaiA,
+				k.nm_pemilik
+       		FROM tmdatavalkadintek a
+			LEFT JOIN tmdatabangunan b ON(b.id=a.id)
+			LEFT JOIN tmdatapemilik k On(k.id=a.id)
+			WHERE (1=1) ";
+		if ($no_sppst != null || trim($no_sppst) != '')  $sql .= " AND a.no_sppst = '$no_sppst' ";
+		if ($id_kabkot != null || trim($id_kabkot) != '')  $sql .= " AND b.id_kabkot_bgn = '$id_kabkot' ";
+		$hasil  = $this->db->query($sql);
+		return $hasil ;
+	}
+	public function getDataRetribusiPemohon($user_id=null, $no_sppst=null) 
+	{
+		$sql = "SELECT a.id,a.no_sppst,
+				b.almt_bgn,b.status,b.nm_bgn,b.id_fungsi_bg,b.luas_bgn,b.tipeA,b.tinggiA,b.luasA,b.jumlahA,b.lantaiA,
+				d.nama_kelurahan,
+				e.nama_kecamatan,
+				f.nama_kabkota,
+				g.nama_provinsi,
+				k.nm_pemilik
+       		FROM tmdatavalkadintek a
+			LEFT JOIN tmdatabangunan b ON(b.id=a.id)
+			LEFT JOIN tr_kelurahan d ON(d.id_kelurahan=b.id_kel_bgn)
+			LEFT JOIN tr_kecamatan e ON(e.id_kecamatan=b.id_kec_bgn)
+			LEFT JOIN tr_kabkot f ON(f.id_kabkot=b.id_kabkot_bgn)
+			LEFT JOIN tr_provinsi g ON(g.id_provinsi=b.id_prov_bgn)
+			LEFT JOIN tmdatapemilik k On(k.id=a.id)
+			WHERE (1=1)AND a.no_sppst = '$no_sppst' ";
+		if ($no_sppst != null || trim($no_sppst) != '')  $sql .= " AND a.no_sppst = '$no_sppst' ";
+		if ($user_id != null || trim($user_id) != '')  $sql .= " AND k.user_id = '$user_id' ";
+		$hasil  = $this->db->query($sql);
+		return $hasil ;
+	}
+	public function getDataDataTeknis($id=null,$id_kabkot=null) 
+	{
+		$sql = "SELECT a.id,
+				a.status
+       		FROM tmdatabangunan a
+			WHERE (1=1) ";
+		if ($id != null || trim($id) != '')  $sql .= " AND a.id = '$id' ";
+		if ($id_kabkot != null || trim($id_kabkot) != '')  $sql .= " AND a.id_kabkot_bgn = '$id_kabkot' ";
+		$hasil  = $this->db->query($sql);
+		return $hasil ;
+	}
+
+	
 
 	//Begin Verifikasi User
 	public function getDataTempUser($select = "*", $aktivasi = '')

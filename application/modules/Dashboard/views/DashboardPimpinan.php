@@ -6,8 +6,8 @@
 		<div class="dashboard-stat blue-madison">
 			<div class="visual"><i class="fa fa-comments"></i></div>
 			<div class="details">
-				<div class="number"><u><b><?php echo number_format($pbg_rekap->Total,0,',','.')?></b></u></div>
-				<div class="desc">Total Pengajuan PBG</div>
+				<div class="number"><a href="https://simbg.pu.go.id/Rekap/RekapKab" target="_blank"><font color=white><u><b><?php echo number_format($pbg_rekap->Total,0,',','.')?></b></u></font></a></div>
+				<div class="desc"><font color=white>Total Pengajuan PBG</div>
 			</div>	
 		</div>
 	</div>
@@ -15,7 +15,7 @@
 		<div class="dashboard-stat green-haze">
 			<div class="visual"><i class="fa fa-bar-chart-o"></i></div>
 			<div class="details">
-				<div class="number"><u><b><?php echo number_format($pbg_rekap->DinasTeknis,0,',','.')?></b></u></div>
+				<div class="number"><a href="https://simbg.pu.go.id/Rekap/RekapKab" target="_blank"><font color=white><u><b><?php echo number_format($pbg_rekap->DinasTeknis,0,',','.')?></b></u></font></a></div>
 				<div class="desc">Di Dinas Teknis</div>
 			</div>	
 		</div>
@@ -24,7 +24,7 @@
 		<div class="dashboard-stat red-intense">
 			<div class="visual"><i class="fa fa-shopping-cart"></i></div>
 			<div class="details">
-				<div class="number"><u><b><?php echo number_format($pbg_rekap->DinasPerizinan,0,',','.')?></b></u></div>
+				<div class="number"><a href="https://simbg.pu.go.id/Rekap/RekapKab" target="_blank"><font color=white><u><b><?php echo number_format($pbg_rekap->DinasPerizinan,0,',','.')?></b></u></font></a></div>
 				<div class="desc">Di Dinas Perizinan</div>
 			</div>
 		</div>
@@ -33,7 +33,11 @@
 		<div class="dashboard-stat purple-plum">
 			<div class="visual"><i class="fa fa-globe"></i></div>
 			<div class="details">
-				<div class="number"><u><b><?php echo number_format($pbg_rekap->TelahTerbit,0,',','.')?></b></u> / <u><b><?php echo number_format($pbg_rekap->Ditolak,0,',','.')?></b></u></div>
+				<?php 
+					$tot_ditolak = $pbg_rekap->Ditolak + 1 ;
+					?>
+				
+				<div class="number"><a href="https://simbg.pu.go.id/Rekap/RekapKab" target="_blank"><font color=white><u><b><?php echo number_format($pbg_rekap->TelahTerbit,0,',','.')?></b></u></font></a> / <a href="https://simbg.pu.go.id/Rekap/RekapKab" target="_blank"><font color=white><u><b><?php echo number_format($tot_ditolak,0,',','.')?></b></u></font></a></div>
 				<div class="desc">Telah Terbit / Ditolak</div>
 			</div>	
 		</div>

@@ -48,6 +48,12 @@
 						</select>
 					</div>
 				</div>
+				<div class="form-group" style="display:none;">
+					<label class="col-md-3 control-label">id_otorita</label>
+					<div class="col-md-7">
+						<input type="hidden" class="form-control" value="<?php echo set_value('id_otorita', (isset($DataBangunan->id_otorita) ? $DataBangunan->id_otorita : '')) ?>" name="id_otorita" id="id_otorita">
+					</div>
+				</div>
 				<div class="form-group">
 					<label class="col-md-3 control-label">Lokasi Bangunan Gedung</label>
 					<div class="col-md-7">
@@ -369,10 +375,10 @@
 							<input type="text" class="form-control input-comma" value="<?php echo set_value('tinggi_bg', (isset($DataBangunan->tinggi_bgn) ? $DataBangunan->tinggi_bgn : '')) ?>" name="tinggi_bg" onblur="cek()" placeholder="Tinggi Bangunan" autocomplete="off" pattern="[0-9]+,">
 						</div>
 					</div>
-					<label class="control-label">Meter</label>
+					<label class="control-label">m</label>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-md-3">Luas Basement Bangunan</label>
+					<label class="control-label col-md-3">Luas Basemen Bangunan</label>
 					<div class="col-md-3">
 						<div class="checkbox-list">
 							<input type="text" class="form-control input-comma" value="<?php echo set_value('luas_basement', (isset($DataBangunan->luas_basement) ? $DataBangunan->luas_basement : '')) ?>" name="luas_basement" placeholder="Luas Basement Bangunan" autocomplete="off">
@@ -381,7 +387,7 @@
 					<label class="control-label">m<sup>2</sup></label>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-md-3">Jumlah Lantai Basement Bangunan</label>
+					<label class="control-label col-md-3">Jumlah Lantai Basemen Bangunan</label>
 					<div class="col-md-4">
 						<div class="checkbox-list">
 							<select name="lapis_basement" id="lapis_basement" class="form-control dropdown-basement">
@@ -1207,4 +1213,25 @@
 		$('#id_prototype').html(id_type);
 
 	}
+	$('#nama_kelurahan').change(function() {
+		var v = $(this).val();
+		var select = "<?= isset($DataBangunan->id_kelurahan) ? $DataBangunan->id_kelurahan : ""; ?>";
+
+		$.ajax({
+			type: 'POST',
+			url: '<?php echo base_url(); ?>Konsultasi/getDataOtorita/' + v,
+			data: $('form.form-horizontal').serialize(),
+			success: function(response) {
+				let data = JSON.parse(response);
+				let csrf_token = data.csrf;
+				$('#csrf_id').val(csrf_token);
+				delete data.csrf;
+				$('#id_otorita').val(data.id_otorita);
+			},
+			error: function(error) {
+				console.log(' Tidak Ditemukan');
+			}
+		});
+	});
+
 </script>

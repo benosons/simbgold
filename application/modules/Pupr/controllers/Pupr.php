@@ -15,7 +15,7 @@ class Pupr extends CI_Controller
 	}
 	public function index()
 	{
-		redirect('dashboard');
+		redirect('Dashboard');
 	}
 	//Begin Profile Dinas
 	public function data_dinas()

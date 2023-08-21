@@ -102,12 +102,14 @@
                                                                                 $filename = FCPATH . "/object-storage/dekill/Requirement/$berkas_file1";
                                                                                 $dir = '';
                                                                                 if (file_exists($filename)) {
-                                                                                    $dir = base_url('object-storage/dekill/Requirement/' . $berkas_file1);
+                                                                                    $dir = 'object-storage/dekill/Requirement/' . $berkas_file1;
                                                                                 } else {
-                                                                                    $dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $berkas_file1);
+                                                                                    $dir = 'object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $berkas_file1;
                                                                                 }
+                                                                                $dirRev= $this->Outh_model->Encryptor('encrypt', $dir);
                                                                             ?>
-                                                                                <a href="javascript:void(0);" id="lihatBerkas" data-val="<?= $r['id_detail'] ?>" class="btn btn-primary lihat-berkas" onClick="javascript:popWin('<?php echo $dir; ?>')"><i class="fa fa-eye"></i> Lihat Berkas</a>
+                                                                                <a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" class="btn btn-primary" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirRev); ?>"><i class="fa fa-eye"></i>Lihat Berkas</a>
+												<br>
                                                                             <?php endif; ?>
                                                                             &nbsp;
                                                                             <a href="javascript:void(0);" class="btn btn-warning ubah-berkas" data-id="<?= $r['id_detail'] ?>" id="ubahBerkas" onclick="clickModal(<?= $id_konsultasi ?>,<?= $r['id_detail_jenis_persyaratan'] ?>,<?= $r['id_detail'] ?>)" style="display:<?= $css1 ?>;"><i class="fa fa-edit"></i> Ubah Berkas</a>
@@ -195,10 +197,21 @@
         </div>
         <?php echo form_close(); ?>
 </div>
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%" >
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+	</div>
+</div>
 <script>
+    $(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
+
     var segment = '<?= $this->uri->segment(3) ?>';
-
-
     var getStep;
     var returnFail;
 

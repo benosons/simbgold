@@ -38,7 +38,7 @@ class PenagihanRetribusi extends CI_Controller
 		$data['id']                 = $id;
 		$query 			            = $this->Mpenagihanretribusi->getDataPemilik($id);
 		$data['data'] 	            = $query->row();
-		$querybangunan 	            = $this->Mpenagihanretribusi->getDataBangunan($id);
+		$querybangunan 	            = $this->Mpenagihanretribusi->getDataBangunanRetribusi($id);
 		$getTotalRetribusi          = $this->Mpenagihanretribusi->getTotalRetribusi($id);
 		$total                      = $getTotalRetribusi->num_rows() > 0 ? $getTotalRetribusi->row()->nilai_retribusi_keseluruhan : 0;
 		$data['total_retribusi']    = $total;
@@ -72,14 +72,15 @@ class PenagihanRetribusi extends CI_Controller
 			$thisdir 							= getcwd();
 			$dirPath 							= $thisdir."/object-storage/dekill/Retribution/";
 			$config_file['upload_path'] 		= $dirPath;
-			$config_file['allowed_types'] 		= 'pdf|PDF';
-			$config_file['max_size']			= '10240';
+			//$config_file['allowed_types'] 		= 'pdf|PDF';
+			$config_file['allowed_types'] 		= '*';
+			$config_file['max_size']			= '502400';
 			$config_file['encrypt_name']		= TRUE;
 			$this->load->library('upload', $config_file);
 			$this->upload->initialize($config_file);
 			//End Upload
 			if ((!$this->upload->do_upload($file_element_name)) && ($lam != '') ){
-				$this->session->set_flashdata('message','SKRD Gagal Disimpan.');
+				$this->session->set_flashdata('message','SKRD Gagal Disimpan!!!.');
 				$this->session->set_flashdata('status','danger');
 			}else {
 				if($lam != ''){
@@ -123,9 +124,11 @@ class PenagihanRetribusi extends CI_Controller
 								$nama_status 	= 'Penagihan Retribusi Komitmen';
 								$keterangan 	= 'Pembayaran Retribusi';
 								$this->oss_lib->receiveLicenseStatusNew($id,$kd_status,$tgl_status,$nama_status,$keterangan);
-							 }
+							}
 							$this->Mpenagihanretribusi->updateProgress($dataStatus,$id);
 							$this->Mglobals->setDatakol('th_data_konsultasi', $data);
+							$this->session->set_flashdata('message','SKRD Telah Disimpan!!!.');
+							$this->session->set_flashdata('status','danger');
 						}
 					}
 					catch (Exception $e) {

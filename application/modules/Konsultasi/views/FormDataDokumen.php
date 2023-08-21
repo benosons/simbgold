@@ -56,14 +56,15 @@
 												$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
 												$dir = '';
 												if (file_exists($filename)) {
-													$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+													$dir = './object-storage/dekill/Requirement/' . $dir_file;
 												} else {
-													$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+													$dir = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
 												}
+												$dir1	= $this->Outh_model->Encryptor('encrypt', $dir);
+											
 											?>
 												<center>
-													<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-													|
+													<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/' . $dir1); ?>">Lihat</a>
 													<a href="<?php echo site_url('Konsultasi/DeleteAdministrasi/' . $id_administrasi . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 												</center>
 											<?php } ?>
@@ -92,7 +93,21 @@
 <div id="loadertot" class="modal fade" tabindex="-1" data-width="auto" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<center> <img src="https://icon-library.com/images/ajax-loading-icon/ajax-loading-icon-2.jpg"> </center>
 </div>
+
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="55%">
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+	</div>
+</div>
 <script>
+$(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
+	
 //loader (bisa dipindahkan ke View Utama)
 function showDiv() {
 	$('#loadertot').modal('show');

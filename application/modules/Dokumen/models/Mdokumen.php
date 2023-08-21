@@ -4,7 +4,7 @@ class Mdokumen extends CI_Model
 {
     function getdatapermohonan($id = null, $cari = null)
     {
-        $sql = "SELECT a.id,a.id_izin,a.id_fungsi_bg,a.id_jns_bg,a.id_prasarana_bg,a.permohonan_slf,a.imb,
+        $sql = "SELECT a.id,a.id_izin,a.id_fungsi_bg,a.id_jns_bg,a.id_prasarana_bg,a.permohonan_slf,a.imb,a.status,a.id_dki,
                 b.email
 		FROM tmdatabangunan a
         LEFT Join tmdatapemilik b On(b.id=a.id)
@@ -14,6 +14,131 @@ class Mdokumen extends CI_Model
         $hasil  = $this->db->query($sql);
         return $hasil;
     }
+    function getDataVerifikasiValKadintek($id = 'null'){
+        $sql = "SELECT a.id as id_pemilik,a.nm_pemilik,a.alamat,
+				b.id_kec_bgn,b.id_jenis_permohonan,b.no_konsultasi,b.almt_bgn,b.tgl_pernyataan,b.luas_bgn,b.jml_lantai,b.id_prasarana_bg,b.id_kabkot_bgn,b.status,b.id_resiko,b.id_lokasi,b.id_kelas,
+				b.tinggi_bgn,b.nm_bgn, b.id_izin,b.imb,b.id_fungsi_bg,b.id_jns_bg,b.tipeA,b.luasA,b.tinggiA,b.lantaiA,b.jumlahA,b.luas_bgp,b.tinggi_bgp,b.status,b.no_imb,b.permohonan_slf,b.luas_basement,
+				c.p_nama_dinas,c.kepala_dinas,c.nip_kepala_dinas,c.status_pejabat,
+				e.fungsi_bg,
+				f.nama_provinsi as nm_prov_bgn,
+				g.nama_kabkota as nm_kabkot_bgn,
+				h.nama_kecamatan as nm_kec_bgn,
+				i.nama_kelurahan as nm_kel_bgn,
+				j.jns_prasarana,
+				k.tgl_validasi,k.nama_kadis,k.nama_dinas,k.stat_pejabat,k.no_sppst,k.nip_kadis,
+                l.no_sk_tk
+				FROM tmdatapemilik a
+				LEFT JOIN tmdatabangunan b ON(a.id = b.id)
+				LEFT JOIN tm_profile_teknis c ON(b.id_kabkot_bgn = c.id_kabkot)
+				LEFT JOIN tr_fungsi_bg e ON(b.id_fungsi_bg=e.id_fungsi_bg)
+				LEFT JOIN tr_provinsi f ON(b.id_prov_bgn=f.id_provinsi)
+				LEFT JOIN tr_kabkot g ON (b.id_kabkot_bgn=g.id_kabkot)
+				LEFT JOIN tr_kecamatan h ON (b.id_kec_bgn=h.id_kecamatan)
+				LEFT JOIN tr_kelurahan i ON(b.id_kel_bgn=i.id_kelurahan)
+                LEFT JOIN tr_prasarana j ON(b.id_prasarana_bg=j.idp)
+                LEFT JOIN tmdatavalkadintek k On(b.id = k.id)
+                LEFT JOIN tmdatajadwal l On(b.id = l.id)
+				WHERE (a.id=$id)
+			limit 1
+			";
+        $hasil = $this->db->query($sql);
+        return $hasil->row_array();
+    }
+
+    function getDataVerifikasiValKadintekDki($id = 'null'){
+        $sql = "SELECT a.id as id_pemilik,a.nm_pemilik,a.alamat,
+				b.id_kec_bgn,b.id_jenis_permohonan,b.no_konsultasi,b.almt_bgn,b.tgl_pernyataan,b.luas_bgn,b.jml_lantai,b.id_prasarana_bg,b.id_kabkot_bgn,b.status,b.id_resiko,b.id_lokasi,b.id_kelas,
+				b.tinggi_bgn,b.nm_bgn, b.id_izin,b.imb,b.id_fungsi_bg,b.id_jns_bg,b.tipeA,b.luasA,b.tinggiA,b.lantaiA,b.jumlahA,b.luas_bgp,b.tinggi_bgp,b.status,b.no_imb,b.permohonan_slf,b.luas_basement,
+				c.p_nama_dinas,c.kepala_dinas,c.nip_kepala_dinas,c.status_pejabat,
+				e.fungsi_bg,
+				f.nama_provinsi as nm_prov_bgn,
+				g.nama_kabkota as nm_kabkot_bgn,
+				h.nama_kecamatan as nm_kec_bgn,
+				i.nama_kelurahan as nm_kel_bgn,
+				j.jns_prasarana,
+				k.tgl_validasi,k.nama_kadis,k.nama_dinas,k.stat_pejabat,k.no_sppst,k.nip_kadis,
+                l.no_sk_tk
+				FROM tmdatapemilik a
+				LEFT JOIN tmdatabangunan b ON(a.id = b.id)
+				LEFT JOIN tm_profile_teknis c ON(b.id_prov_bgn = c.id_kabkot)
+				LEFT JOIN tr_fungsi_bg e ON(b.id_fungsi_bg=e.id_fungsi_bg)
+				LEFT JOIN tr_provinsi f ON(b.id_prov_bgn=f.id_provinsi)
+				LEFT JOIN tr_kabkot g ON (b.id_kabkot_bgn=g.id_kabkot)
+				LEFT JOIN tr_kecamatan h ON (b.id_kec_bgn=h.id_kecamatan)
+				LEFT JOIN tr_kelurahan i ON(b.id_kel_bgn=i.id_kelurahan)
+                LEFT JOIN tr_prasarana j ON(b.id_prasarana_bg=j.idp)
+                LEFT JOIN tmdatavalkadintek k On(b.id = k.id)
+                LEFT JOIN tmdatajadwal l On(b.id = l.id)
+				WHERE (a.id=$id)
+			limit 1
+			";
+        $hasil = $this->db->query($sql);
+        return $hasil->row_array();
+    }
+
+    function getDataVerifikasi($id = 'null'){
+        $sql = "SELECT a.id as id_pemilik,a.nm_pemilik,a.alamat,
+            b.id_kec_bgn,b.id_jenis_permohonan,b.no_konsultasi,b.almt_bgn,b.tgl_pernyataan,b.luas_bgn,b.jml_lantai,b.id_prasarana_bg,b.id_kabkot_bgn,
+            b.tinggi_bgn,b.nm_bgn, b.id_izin,b.imb,b.id_fungsi_bg,b.id_jns_bg,b.tipeA,b.luasA,b.tinggiA,b.lantaiA,b.jumlahA,b.luas_bgp,b.tinggi_bgp,b.status,b.id_dki,
+            c.p_nama_dinas,c.kepala_dinas,c.nip_kepala_dinas,c.status_pejabat,
+            d.no_sk_tk,d.date_sk_tk,d.nm_kadis,d.nip_kadis,
+            e.fungsi_bg,
+            f.nama_provinsi as nm_prov_bgn,
+            g.nama_kabkota as nm_kabkot_bgn,
+            h.nama_kecamatan as nm_kec_bgn,
+            i.nama_kelurahan as nm_kel_bgn,
+            j.jns_prasarana,
+            k.tgl_validasi,k.nama_kadis,k.nama_dinas,k.stat_pejabat,k.nip_kadis as nip_kadin
+				FROM tmdatapemilik a
+				LEFT JOIN tmdatabangunan b ON(a.id = b.id)
+				LEFT JOIN tm_profile_teknis c ON(b.id_kabkot_bgn = c.id_kabkot)
+				LEFT JOIN tmdatajadwal d ON(a.id=d.id)
+				LEFT JOIN tr_fungsi_bg e ON(b.id_fungsi_bg=e.id_fungsi_bg)
+				LEFT JOIN tr_provinsi f ON(b.id_prov_bgn=f.id_provinsi)
+				LEFT JOIN tr_kabkot g ON (b.id_kabkot_bgn=g.id_kabkot)
+				LEFT JOIN tr_kecamatan h ON (b.id_kec_bgn=h.id_kecamatan)
+				LEFT JOIN tr_kelurahan i ON(b.id_kel_bgn=i.id_kelurahan)
+                LEFT JOIN tr_prasarana j ON(b.id_prasarana_bg=j.idp)
+                LEFT JOIN tmdatavalkadintek k On(b.id = k.id)
+				WHERE (a.id=$id)
+			limit 1
+			";
+        $hasil = $this->db->query($sql);
+        return $hasil->row_array();
+    }
+
+    function getDataVerifikasiDki($id = 'null'){
+        $sql = "SELECT a.id as id_pemilik,a.nm_pemilik,a.alamat,
+            b.id_kec_bgn,b.id_jenis_permohonan,b.no_konsultasi,b.almt_bgn,b.tgl_pernyataan,b.luas_bgn,b.jml_lantai,b.id_prasarana_bg,b.id_kabkot_bgn,
+            b.tinggi_bgn,b.nm_bgn, b.id_izin,b.imb,b.id_fungsi_bg,b.id_jns_bg,b.tipeA,b.luasA,b.tinggiA,b.lantaiA,b.jumlahA,b.luas_bgp,b.tinggi_bgp,b.status,b.id_dki,
+            c.p_nama_dinas,c.kepala_dinas,c.nip_kepala_dinas,c.status_pejabat,
+            d.no_sk_tk,d.date_sk_tk,d.nm_kadis,d.nip_kadis,
+            e.fungsi_bg,
+            f.nama_provinsi as nm_prov_bgn,
+            g.nama_kabkota as nm_kabkot_bgn,
+            h.nama_kecamatan as nm_kec_bgn,
+            i.nama_kelurahan as nm_kel_bgn,
+            j.jns_prasarana,
+            k.tgl_validasi,k.nama_kadis,k.nama_dinas,k.stat_pejabat,k.nip_kadis as nip_kadin
+				FROM tmdatapemilik a
+				LEFT JOIN tmdatabangunan b ON(a.id = b.id)
+				LEFT JOIN tm_profile_teknis c ON(b.id_prov_bgn = c.id_kabkot)
+				LEFT JOIN tmdatajadwal d ON(a.id=d.id)
+				LEFT JOIN tr_fungsi_bg e ON(b.id_fungsi_bg=e.id_fungsi_bg)
+				LEFT JOIN tr_provinsi f ON(b.id_prov_bgn=f.id_provinsi)
+				LEFT JOIN tr_kabkot g ON (b.id_kabkot_bgn=g.id_kabkot)
+				LEFT JOIN tr_kecamatan h ON (b.id_kec_bgn=h.id_kecamatan)
+				LEFT JOIN tr_kelurahan i ON(b.id_kel_bgn=i.id_kelurahan)
+                LEFT JOIN tr_prasarana j ON(b.id_prasarana_bg=j.idp)
+                LEFT JOIN tmdatavalkadintek k On(b.id = k.id)
+				WHERE (a.id=$id)
+			limit 1
+			";
+        $hasil = $this->db->query($sql);
+        return $hasil->row_array();
+    }
+
+    
     function getdatapemilikDok($id = 'null')
     {
         $sql = "SELECT a.id,a.nm_pemilik,a.alamat,
@@ -63,36 +188,7 @@ class Mdokumen extends CI_Model
         $hasil = $this->db->query($sql);
         return $hasil->row_array();
     }
-    function getDataVerifikasi($id = 'null'){
-        $sql = "SELECT a.id as id_pemilik,a.nm_pemilik,a.alamat,
-            b.id_kec_bgn,b.id_jenis_permohonan,b.no_konsultasi,b.almt_bgn,b.tgl_pernyataan,b.luas_bgn,b.jml_lantai,b.id_prasarana_bg,b.id_kabkot_bgn,
-            b.tinggi_bgn,b.nm_bgn, b.id_izin,b.imb,b.id_fungsi_bg,b.id_jns_bg,b.tipeA,b.luasA,b.tinggiA,b.lantaiA,b.jumlahA,b.luas_bgp,b.tinggi_bgp,b.status,b.id_dki,
-            c.p_nama_dinas,c.kepala_dinas,c.nip_kepala_dinas,c.status_pejabat,
-            d.no_sk_tk,d.date_sk_tk,d.nm_kadis,d.nip_kadis,
-            e.fungsi_bg,
-            f.nama_provinsi as nm_prov_bgn,
-            g.nama_kabkota as nm_kabkot_bgn,
-            h.nama_kecamatan as nm_kec_bgn,
-            i.nama_kelurahan as nm_kel_bgn,
-            j.jns_prasarana,
-            k.tgl_validasi,k.nama_kadis,k.nama_dinas,k.stat_pejabat
-				FROM tmdatapemilik a
-				LEFT JOIN tmdatabangunan b ON(a.id = b.id)
-				LEFT JOIN tm_profile_teknis c ON(b.id_kabkot_bgn = c.id_kabkot)
-				LEFT JOIN tmdatajadwal d ON(a.id=d.id)
-				LEFT JOIN tr_fungsi_bg e ON(b.id_fungsi_bg=e.id_fungsi_bg)
-				LEFT JOIN tr_provinsi f ON(b.id_prov_bgn=f.id_provinsi)
-				LEFT JOIN tr_kabkot g ON (b.id_kabkot_bgn=g.id_kabkot)
-				LEFT JOIN tr_kecamatan h ON (b.id_kec_bgn=h.id_kecamatan)
-				LEFT JOIN tr_kelurahan i ON(b.id_kel_bgn=i.id_kelurahan)
-                LEFT JOIN tr_prasarana j ON(b.id_prasarana_bg=j.idp)
-                LEFT JOIN tmdatavalkadintek k On(b.id = k.id)
-				WHERE (a.id=$id)
-			limit 1
-			";
-        $hasil = $this->db->query($sql);
-        return $hasil->row_array();
-    }
+    
     function getDataVerifikasiEksis($id = 'null')
     {
         $sql = "SELECT a.id as id_pemilik,a.nm_pemilik,a.alamat,
@@ -388,7 +484,7 @@ class Mdokumen extends CI_Model
     function getDataFungsiCampuran($fg_bg = 'null')
     {
         $sql = "SELECT a.*
-				FROM tm_jenis_bg a
+				FROM tr_fungsi_bg a
 				WHERE(1=1) And a.id_fungsi_bg=$fg_bg 
 			";
         $hasil = $this->db->query($sql);
@@ -624,6 +720,147 @@ class Mdokumen extends CI_Model
 		$hasil  = $this->db->query($sql);
 		return $hasil;
 	}
+
+    //Begin Cetak IMB SIMBG ver Lama
+    function get_permohonan($id=null,$cari=null)
+	{
+		$sql = "SELECT a.*, b.*
+		FROM tm_imb_permohonan a
+		left join tr_imb_permohonan b on (a.id_jenis_permohonan = b.id_jenis_permohonan)
+		WHERE (1=1) ";
+		if ($id != null || trim($id) != '')  $sql .= " AND a.id_permohonan = '$id' ";
+		if ($cari != null || trim($cari) != '')  $sql .= " $cari ";
+		$hasil  = $this->db->query($sql);
+		return $hasil;
+	}
+    function getDataKolektif($id='null')
+	{
+		$sql ="SELECT a.id_permohonan,b.*
+				FROM tm_imb_permohonan a
+				LEFT JOIN tm_imb_kolektif b ON(a.id_permohonan=b.id_permohonan)
+				WHERE (a.id_permohonan=$id)";
+		$hasil = $this->db->query($sql);
+		return $hasil;
+	}
+    function Datatanah($id='null')
+	{
+		$sql ="SELECT a.id_permohonan, y.*, r.nama_kabkota,z.nama_provinsi,x.nama_kecamatan
+						FROM tm_imb_permohonan a
+						LEFT JOIN tm_imb_tanah y ON(y.id_permohonan=a.id_permohonan)
+						LEFT JOIN tr_kabkot r ON(r.id_kabkot=y.id_kabkot)
+						LEFT JOIN tr_provinsi z ON(z.id_provinsi=y.id_provinsi)
+						LEFT JOIN tr_kecamatan x ON(x.id_kecamatan=y.id_kecamatan)
+						WHERE (a.id_permohonan=$id)";
+		$hasil = $this->db->query($sql);
+		return $hasil;
+	}
+    
+    function getDataPenilaian($id='null')
+	{
+		$sql = "SELECT a.*
+				FROM tm_imb_penjadwalan a
+				WHERE (a.id_permohonan=$id)
+				AND a.status_perbaikan = '2'
+			";
+		$hasil = $this->db->query($sql);
+		return $hasil->row_array();
+	}
+    function get_penerbitan_imb_pemecahan($id='null')
+	{
+		$sql = "SELECT a.*,
+			b.id_penerbitan_imb,b.no_imb,b.tgl_imb,b.ttd_pejabat_sk,b.nip_pejabat_sk,b.dir_file_imb,
+			d.nama_permohonan, q.nama_provinsi as nama_provinsi_bg, f.nama_kabkota, g.nama_provinsi,
+			i.fungsi_bg,k.klasifikasi_bg,s.nama_kecamatan,r.nama_kabkota as nama_kabkota_bg,
+			j.dir_file_logo,j.p_alamat,j.p_nama_dinas,
+			j.p_tlp,j.sub_domain,
+			y.atas_nama_dok,y.luas_tanah,y.lokasi_tanah,y.hat,x.jns_permohonan,v.no_sk_tk,v.date_sk_tk,v.tgl_sidang
+				FROM tm_imb_permohonan a
+				LEFT JOIN tr_fungsi_bg i ON(i.id_fungsi_bg = a.id_fungsi_bg)
+				LEFT JOIN tm_imb_penerbitan b ON(a.id_permohonan = b.id_permohonan)
+				LEFT JOIN tr_imb_permohonan d ON(a.id_jenis_permohonan = d.id_jenis_permohonan)
+				LEFT JOIN tr_kecamatan s ON(a.id_kecamatan=s.id_kecamatan)
+				LEFT JOIN tr_kabkot f ON(a.id_kabkot=f.id_kabkot)
+				LEFT JOIN tr_provinsi g ON(a.id_provinsi=g.id_provinsi)
+				LEFT JOIN tr_klasifikasi_bg k ON (d.id_klasifikasi_bg=k.id_klasifikasi_bg)
+				LEFT JOIN tm_profile_dinas j ON (a.id_kabkot_bg=j.id_kabkot)
+				LEFT JOIN tr_provinsi q ON(q.id_provinsi=a.id_provinsi_bg)
+				LEFT JOIN tr_kabkot r ON(r.id_kabkot=a.id_kabkot_bg)
+				LEFT JOIN tm_imb_tanah y ON(y.id_permohonan=a.id_permohonan)
+				LEFT JOIN tr_jenis_bg x ON(x.id_jenis_bg=a.id_jenis_bg)
+				LEFT JOIN tm_imb_penjadwalan v ON(v.id_permohonan=a.id_permohonan)
+				WHERE (a.id_permohonan=$id)
+				ORDER BY no_imb DESC
+			limit 1
+			";
+		$hasil = $this->db->query($sql);
+		return $hasil->row_array();
+	}
+    function get_penerbitan_imb_cetak($id='null')
+	{
+		$sql = "SELECT a.*,
+			b.id_penerbitan_imb,b.no_imb,b.tgl_imb,b.ttd_pejabat_sk,b.nip_pejabat_sk,b.dir_file_imb,
+			d.nama_permohonan, q.nama_provinsi as nama_provinsi_bg, f.nama_kabkota, g.nama_provinsi,
+			i.fungsi_bg,k.klasifikasi_bg,s.nama_kecamatan,r.nama_kabkota as nama_kabkota_bg,
+			j.dir_file_logo,j.p_alamat,j.p_nama_dinas,
+			j.p_tlp,j.sub_domain,
+			y.atas_nama_dok,y.luas_tanah,y.lokasi_tanah,y.hat,x.jns_permohonan,v.no_sk_tk,v.date_sk_tk,v.tgl_sidang
+				FROM tm_imb_permohonan a
+				LEFT JOIN tr_fungsi_bg i ON(i.id_fungsi_bg = a.id_fungsi_bg)
+				LEFT JOIN tm_imb_penerbitan b ON(a.id_permohonan = b.id_permohonan)
+				LEFT JOIN tr_imb_permohonan d ON(a.id_jenis_permohonan = d.id_jenis_permohonan)
+				LEFT JOIN tr_kecamatan s ON(a.id_kecamatan=s.id_kecamatan)
+				LEFT JOIN tr_kabkot f ON(a.id_kabkot=f.id_kabkot)
+				LEFT JOIN tr_provinsi g ON(a.id_provinsi=g.id_provinsi)
+				LEFT JOIN tr_klasifikasi_bg k ON (d.id_klasifikasi_bg=k.id_klasifikasi_bg)
+				LEFT JOIN tm_profile_dinas j ON (a.id_kabkot_bg=j.id_kabkot)
+				LEFT JOIN tr_provinsi q ON(q.id_provinsi=a.id_provinsi_bg)
+				LEFT JOIN tr_kabkot r ON(r.id_kabkot=a.id_kabkot_bg)
+				LEFT JOIN tm_imb_tanah y ON(y.id_permohonan=a.id_permohonan)
+				LEFT JOIN tr_jenis_bg x ON(x.id_jenis_bg=a.id_jenis_bg)
+				LEFT JOIN tm_imb_penjadwalan v ON(v.id_permohonan=a.id_permohonan)
+				WHERE (a.id_permohonan=$id) AND v.status_perbaikan = 2
+				ORDER BY no_imb DESC
+			limit 1
+			";
+		$hasil = $this->db->query($sql);
+		return $hasil->row_array();
+	}
+    function retribusi($id='null')
+	{
+		$sql ="SELECT a.*, r.*
+				FROM tm_imb_permohonan a
+				LEFT JOIN tm_penetapan_retribusi r ON(r.id_permohonan=a.id_permohonan)
+				WHERE (a.id_permohonan=$id)";
+		$hasil = $this->db->query($sql);
+		return $hasil;
+	}
+    function rek_teknis($id='null')
+	{
+		$sql ="SELECT a.*, t.*
+						FROM tm_imb_permohonan a
+						LEFT JOIN tm_penilaian_teknis t ON(t.id_permohonan=a.id_permohonan)
+						WHERE (a.id_permohonan=$id)";
+		$hasil = $this->db->query($sql);
+		return $hasil;
+	}
+    function peraturan($id='null')
+	{
+		$sql ="SELECT x.nama_perda
+						FROM tm_imb_permohonan a
+						LEFT JOIN tm_data_perda x ON (x.id_kabkot=a.id_kabkot_bg)
+						WHERE (a.id_permohonan=$id)
+						ORDER BY urutan ASC";
+		$hasil = $this->db->query($sql);
+		return $hasil;
+	}
+    function undang2()
+	{
+		$sql ="SELECT *
+						FROM tr_uu";
+		$hasil = $this->db->query($sql);
+		return $hasil;
+	}
+    //End Cetak IMB SIMBG Ver Lama
 
 }
 /* End of file Mpemeriksaan.php */

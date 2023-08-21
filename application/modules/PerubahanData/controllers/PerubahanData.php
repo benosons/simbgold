@@ -96,6 +96,68 @@ class PerubahanData extends CI_Controller
 			}
 		}
 	}
+	public function QrCode()
+	{
+		$nobobo = $this->uri->segment(3);
+		$no_registrasi = str_replace("'", "", htmlspecialchars($nobobo, ENT_QUOTES));
+		$SQLcari            = "";
+		if (trim($no_registrasi) != '') {
+			$SQLcari .= " AND a.no_konsultasi = '$no_registrasi' ";
+		} else {
+			$SQLcari .= " AND a.no_konsultasi = '000-000-0000-000' ";
+		}
+		$query = $this->Mperubahandata->getRegistrasi($SQLcari);
+		$data['title']          =  '';
+		$data['heading']        =  '';
+		$this->template->load('template/template_backend', 'FormPerubahanQrcode', $data);
+	}
+	public function CariQrcode()
+	{
+		$data = "";
+		$nobobo = $this->uri->segment(3);
+		$del = $this->uri->segment(4);
+		$no_registrasi = str_replace("'", "", htmlspecialchars($nobobo, ENT_QUOTES));
+		$SQLcari = "";
+		if (trim($no_registrasi) != '') {
+			$SQLcari .= " AND a.no_konsultasi = '$no_registrasi' ";
+			$SQLcari .= " AND a.status != 26 ";
+			$SQLcari .= " AND a.pernyataan is not null";
+		}
+		$query = $this->Mperubahandata->getRegistrasi($SQLcari);
+		$mydata = $query->row_array();
+		$baris = $query->num_rows();
+		if ($no_registrasi != "") {
+			if ($baris >= 1) {
+				$i = 1;
+				foreach ($query->result() as $row) {
+					$data .= '<tr>
+					<td>' . $i . '</td>
+					<td>' . $row->no_konsultasi . '</td>
+					<td>' . $row->nm_pemilik . '</td>
+                    <td>' . $row->nm_konsultasi . '</td>
+					<td>' . $row->almt_bgn . '</td>
+					<td>' . $row->status_dinas . '</td>';
+					if($row->id_izin != '2'){
+						$data .= '<td>' . '<a href="' . base_url() . 'Dokumen/CetakVerifikasiBgnBaru/' . $row->id . '" class="btn btn-warning btn-xs" data=' . $row->id . '>Lihat Dokumen</a> ' . ' </td>';
+					}else{
+						$data .= '<td>' . '<a href="' . base_url() . 'Dokumen/CetakVerifikasiBangunanEksisting/' . $row->id . '" class="btn btn-warning btn-xs" data=' . $row->id . '>Lihat Dokumen</a> ' . ' </td>';
+					}
+					$data .= '<td>' . '<a href="#" class="btn btn-danger btn-xs item_qrcode" data-toggle="modal"onclick="ModalHapus(' . $row->id . ')">Create QrCode</a> ' . ' </td>';
+					$data .= '</tr>';
+					$data .= '<div id="popupHapusData" class="modal fade" role="dialog" aria-hidden="true" data-width="60%" data-backdrop="static" data-keyboard="false">
+					<div class="modal-content">
+					<div>
+					<div>';
+				}
+				echo $data;
+			} else {
+				$fix = "Nomor Registrasi Tidak Ditemukan";
+				$data2 = '<tr><td colspan="6" align="center">' . $fix . '</td></tr>';
+				echo $data2;
+			}
+		}
+	}
+
 	public function CariPusat()
 	{
 		$data = "";
@@ -128,6 +190,7 @@ class PerubahanData extends CI_Controller
 					} else {
 						$data .= '<td>' . '<a href="' . base_url() . 'PerubahanData/UbahPusat/' . $row->id . '" class="btn btn-warning btn-xs" data=' . $row->id . '>Ubah</a> ' . ' </td>';
 					}
+					
 					$data .= '</tr>';
 					$data .= '<div id="popupHapusData" class="modal fade" role="dialog" aria-hidden="true" data-width="60%" data-backdrop="static" data-keyboard="false">
 					<div class="modal-content">
@@ -161,10 +224,9 @@ class PerubahanData extends CI_Controller
 
 	public function Ubah($id)
 	{
-		$user_id	= $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'));
-
-		$data['DataBangunan'] = $this->Mglobals->getData('', 'tmdatabangunan', array('id' => $id))->row();
-		$data['DataPemilik'] = $this->Mglobals->getData('', 'tmdatapemilik', array('id' => $id))->row();
+		$user_id				= $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'));
+		$data['DataBangunan'] 	= $this->Mglobals->getData('', 'tmdatabangunan', array('id' => $id))->row();
+		$data['DataPemilik'] 	= $this->Mglobals->getData('', 'tmdatapemilik', array('id' => $id))->row();
 		$data['DataTanah']		= $this->Mperubahandata->getTanah('a.*', $id);
 		$queFungsi = $this->Mglobals->getData('', 'tr_fungsi_bg')->result();
 		$data['daftar_provinsi']	= $this->Mglobal->listDataProvinsi('id_provinsi,nama_provinsi');
@@ -223,7 +285,6 @@ class PerubahanData extends CI_Controller
 		$nm_pemilik				= $this->input->post('nm_pemilik');
 		$nama_pemilik 			= $this->input->post('nama_pemilik');
 		$no_ktp					= $this->input->post('no_ktp');
-
 		if ($jns_pemilik == '1') {
 			$nm_pemilik		= $this->input->post('unit_organisasi');
 		} else if ($jns_pemilik == '2') {
@@ -244,25 +305,6 @@ class PerubahanData extends CI_Controller
 		$id_bgn					= $this->input->post('id_bgn');
 		$id_izin				= $this->input->post('id_izin');
 		$nama_bangunan			= $this->input->post('nama_bangunan');
-		$nama_bangunan_kolektif	= $this->input->post('nama_bangunan_kolektif');
-		$permohonan_slf			= $this->input->post('permohonan_slf');
-		if($id_izin == '2'){
-			if($permohonan_slf == '3'){
-				$nama_bangunan		= $this->input->post('nama_bangunan_pertashop'); //Pertashop Eksisting
-			}else if($permohonan_slf == '2'){
-				$nama_bangunan		= $this->input->post('nama_bangunan_prasarana'); //Prasarana Eksisting
-			}else{
-				$nama_bangunan		= $this->input->post('nama_bangunan'); //Bangunan Umum Eksisting
-			}
-		}else if ($id_izin == '4') {
-			$nama_bangunan		= $this->input->post('nama_bangunan_kolektif'); //Bangunan Kolektif
-		} else if ($id_izin == '5') {
-			$nama_bangunan		= $this->input->post('nama_bangunan_prasarana'); // Bangunan Prasarana
-		} else if($id_izin == '7'){
-			$nama_bangunan		= $this->input->post('nama_bangunan_pertashop'); // Bangunan Pertashop
-		}else{
-			$nama_bangunan		= $this->input->post('nama_bangunan');
-		}
 		$id_kecamatan_bg		= $this->input->post('id_kecamatan_bg');
 		$id_kelurahan_bg		= $this->input->post('id_kelurahan_bg');
 		$alamat_bg				= $this->input->post('alamat_bg');
@@ -289,6 +331,7 @@ class PerubahanData extends CI_Controller
 		$slf					= $this->input->post('slf');
 		$cetak					= $this->input->post('cetak');
 		$id_doc_tek				= $this->input->post('id_doc_tek');
+		$no_imb					= $this->input->post('no_imb');
 		if ($id_fungsi_bg == 6) {
 			$jns_campur			= $this->input->post('dcampur');
 			$id_jns_bg			= json_encode($jns_campur);
@@ -429,6 +472,7 @@ class PerubahanData extends CI_Controller
 			'luas_bgp'				=> $luas_bgp,
 			'tinggi_bgp'			=> $tinggi_bgp,
 			'id_doc_tek'			=> $id_doc_tek,
+			'no_imb'				=> $no_imb,
 			'imb'					=> $imb,
 			'slf'					=> $slf,
 			'id_klasifikasi'		=> $id_klasifikasi
@@ -699,13 +743,36 @@ class PerubahanData extends CI_Controller
 		redirect('PerubahanData/UbahPusat/'.$id);
 	}
 
+	public function CreateQrCode()
+	{
+		$no_konsultasi = $this->input->post('keterangan');
+		$this->load->library('ciqrcode'); //pemanggilan library QR CODE
+		$config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
+		$config['quality']      = true; //boolean, the default is true
+		$config['size']         = '1024'; //interger, the default is 1024
+		$config['black']        = array(224,255,255); // array, default is arra/y(255,255,255)
+		$config['white']        = array(70,130,180); // array, default is array(0,0,0)
+		$this->ciqrcode->initialize($config);
+		$image_name=$no_konsultasi.'.png'; //buat name dari qr code sesuai dengan nim
+		//$params['data'] 	= 'http://simbg.pu.go.id/Main/Berkas/'.$no_konsultasi; //data yang akan di jadikan QR CODE  SLF SIMBG ver Baru
+		//$params['data'] = 'http://simbg.pu.go.id/Main/VerifikasiPBG/'.$no_konsultasi; //data yang akan di jadikan QR CODE PBG
+		$params['data'] = 'http://simbg.pu.go.id/Main/Konsultasi/'.$no_konsultasi; //data yang akan di jadikan QR CODE PBG
+		//$params['data'] = 'https://simbg.pu.go.id/Main/DraftSLF/'.$sk_slf; //data yang akan di jadikan QR CODE SLF
+		//$params['data'] = 'https://simbg.pu.go.id/Main/VerifikasiBerkas/'.$sk_slf; //data yang akan di jadikan QR CODE IMB Lama
+		$params['level'] 	= 'H'; //H=High
+		$params['size'] 	= 10;
+		$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+		$data['QR'] 		= $this->ciqrcode->generate($params);
+		redirect('PerubahanData/QrCode');
+	}
+
 	public function Delete()
 	{
 
 		$id = $this->input->post('id');
 		$ket = $this->input->post('keterangan');
 		$thisdir = getcwd();
-		$dirPath = $thisdir . "/dekill/PerubahanData/";
+		$dirPath = $thisdir . "/object-storage/dekill/PerubahanData/";
 		if (!file_exists($dirPath)) {
 			//mkdir($dirPath, 0755, true);
 		}
@@ -892,5 +959,31 @@ class PerubahanData extends CI_Controller
 				redirect('PerubahanData/ubah/' . $id);
 			}
 		}
+	}
+	public function DataTPT() 
+	{
+		//$this->load->model('mglobal');
+		$data = array(
+			'asn' => $this->Mperubahandata->listDataPesonilAsn('*'),
+			'keahlian' => $this->Mperubahandata->listDataBidang('a.id_bidang,a.nama_bidang'),
+			'daftar_provinsi' => $this->Mperubahandata->listDataProvinsi('id_provinsi,nama_provinsi'),
+			'title' => 'Daftar Personal TPT',
+			'heading' => ''
+		);
+		$this->template->load('template/template_backend', 'personal_list', $data);
+	
+	}
+	public function DataPenilik() 
+	{
+		//$this->load->model('mglobal');
+		$data = array(
+			'asn' => $this->Mperubahandata->listDataPesonilPenilik('*'),
+			'keahlian' => $this->Mperubahandata->listDataBidang('a.id_bidang,a.nama_bidang'),
+			'daftar_provinsi' => $this->Mperubahandata->listDataProvinsi('id_provinsi,nama_provinsi'),
+			'title' => 'Daftar Personal Penilik',
+			'heading' => ''
+		);
+		$this->template->load('template/template_backend', 'personal_penilik', $data);
+	
 	}
 }

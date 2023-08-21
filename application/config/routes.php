@@ -79,5 +79,6 @@ $route['form-penugasan/(:any)'] = 'pengawas/index';
 $route['get-chat-history-vendor'] = 'chat/get_chat_history_by_user';
 $route['send-message'] = 'chat/send_text_message';
 $route['chat-clear'] = 'chat/chat_clear_client_cs';
+$route['dekill/(:any)'] = 'Front';
 
 

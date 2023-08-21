@@ -444,6 +444,18 @@ class Mkonsultasi extends CI_Model
 		return $query;
 	}
 
+	public function getDataHijau($select = "a.*", $id_jenis_permohonan = '', $tahap_pbg='')
+	{
+		$this->db->select($select, FALSE);
+		if ($id_jenis_permohonan != null || trim($id_jenis_permohonan) != '')  $this->db->where('a.id', $id_jenis_permohonan);
+		if ($tahap_pbg != null || trim($tahap_pbg) != '')  $this->db->where('c.id_tahap', $tahap_pbg);
+		$this->db->where('a.id_detail_jenis_persyaratan', '6');
+		$this->db->join('tr_pbg_syarat_detail b', 'a.id_persyaratan = b.id_persyaratan', 'LEFT');
+		$this->db->join('tr_dokumen_syarat c', 'b.id_syarat = c.id', 'LEFT');
+		$query 	= $this->db->get('tr_konsultasi_syarat a');
+		return $query;
+	}
+
 	public function getDataPemeriksaanKesesuaian($id, $id_pemilik)
 	{
 		return $this->db
@@ -575,5 +587,13 @@ class Mkonsultasi extends CI_Model
 			$this->db->where('a.id', $id);
 		$query 	= $this->db->get('tmdatabangunan a');
 		return $query->row();
+	}
+
+	public function cekNamaNoKonsultasi($select = "a.*", $no_konsultasi)
+	{
+		$this->db->select($select, FALSE);
+		$this->db->where('a.no_konsultasi', $no_konsultasi);
+		$query 	= $this->db->get('tmdatabangunan a');
+		return $query;
 	}
 }

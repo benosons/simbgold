@@ -19,8 +19,9 @@ class MDinasTeknis extends CI_Model
 		} else if ($Dinas =='3101' || $Dinas =='3171' || $Dinas =='3172' || $Dinas =='3173' || $Dinas =='3174' || $Dinas =='3175'){
 			$this->db->where('b.id_kabkot_bgn', $Dinas);
 			$this->db->where('b.jml_lantai < 9');
-		} else if($Dinas =='100'){
-			$this->db->where('b.id_otorita', 1);
+		} else if($Dinas =='6479'){
+			//$this->db->where('b.id_otorita', 1);
+			$this->db->where('b.id_kabkot_bgn', $Dinas);
 		} else {
 			$this->db->where('b.id_kabkot_bgn', $Dinas);
 		}
@@ -339,4 +340,30 @@ class MDinasTeknis extends CI_Model
 		return $this->db->get_where('th_data_konsultasi ', array('id' => $id));
 	}
 	//End Dinas Teknis Tarik Persyaratan
+	function getJenisKonsultasiBertahap($id = null, $cari = null)
+	{
+		$sql = "SELECT a.id,a.id_jenis_permohonan,a.tahap_pbg
+		FROM tmdatabangunan a
+		WHERE (1=1) ";
+		if ($id != null || trim($id) != '')  $sql .= " AND a.id = '$id' ";
+		if ($cari != null || trim($cari) != '')  $sql .= " $cari ";
+		$hasil  = $this->db->query($sql);
+		return $hasil;
+	}
+	function getSyaratListBertahap($per = null, $kls = null, $tahap= null)
+	{
+		$sql = "SELECT a.id_persyaratan,a.id,a.id_jenis_persyaratan,a.id_detail_jenis_persyaratan,
+				b.id_detail,b.id_syarat, c.nm_dokumen,c.keterangan 
+				FROM tr_konsultasi_syarat a 
+				LEFT JOIN tr_pbg_syarat_detail b ON(a.id_persyaratan=b.id_persyaratan) 
+				LEFT JOIN tr_dokumen_syarat c ON(b.id_syarat=c.id) 
+				WHERE (1=1)
+		";
+		if ($per != null || trim($per) != '')  $sql .= " AND a.id = '$per' ";
+		if ($kls != null || trim($kls) != '')  $sql .= " AND a.id_detail_jenis_persyaratan = '$kls' ";
+		if ($tahap != null || trim($tahap) != '')  $sql .= " AND c.id_tahap = '$tahap' ";
+		$sql .= " Group by b.id_detail ORDER BY a.id, a.id_jenis_persyaratan, a.id_detail_jenis_persyaratan, b.id_syarat ASC ";
+		$hasil  = $this->db->query($sql);
+		return $hasil;
+	}
 }

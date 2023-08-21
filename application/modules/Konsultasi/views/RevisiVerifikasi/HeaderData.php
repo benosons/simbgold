@@ -151,9 +151,14 @@
                                                     <td align="center"> <?php echo $key->tgl_status; ?></td>
                                                     <td align="left"> <?php echo $key->catatan; ?></td>
                                                     <td align="center">
+														<?php
+														$dir = './object-storage/dekill/Consultation/' . $key->dir_file;
+														$dirStr	= $this->Outh_model->Encryptor('encrypt', $dir);
+								
+														?>
                                                         <?php if($key->dir_file !='' && $key->dir_file !=null) { ?>
-                                                            <a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('object-storage/dekill/Consultation/' . $key->dir_file); ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-                                                        <?php } else { ?>
+															<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirStr); ?>">Lihat</a>
+														<?php } else { ?>
                                                             Tidak Ada Dokumen
                                                         <?php } ?>
                                                     </td>

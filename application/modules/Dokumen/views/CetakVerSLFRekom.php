@@ -3,7 +3,7 @@ require_once(BASE_FILE_FPDF . '/fpdf.php');
 $pdf = new FPDF('P', 'mm', 'A4');
 $wilayah = $result_list2['nm_kabkot_bgn'];
 $nilai = substr($wilayah,0,3);
-if($bg['id_kabkot_bgn'] == '3101' || $bg['id_kabkot_bgn'] == '3171' || $bg['id_kabkot_bgn'] == '3172' || $bg['id_kabkot_bgn'] == '3173' || $bg['id_kabkot_bgn'] == '3174' || $bg['id_kabkot_bgn'] == '3175'){
+if($result_list2['id_kabkot_bgn'] == '3101' || $result_list2['id_kabkot_bgn'] == '3171' || $result_list2['id_kabkot_bgn'] == '3172' || $result_list2['id_kabkot_bgn'] == '3173' || $result_list2['id_kabkot_bgn'] == '3174' || $result_list2['id_kabkot_bgn'] == '3175'){
   $wilayahterbit = "DKI JAKARTA";
 } else {
   $wilayahterbit = $result_list2['nm_kabkot_bgn'];
@@ -22,7 +22,7 @@ if ($nilai == "KAB") {
   }
 }
 
-if($result_list2['id_jenis_permohonan'] =='14'){
+if($result_list2['id_jenis_permohonan'] =='14' || $result_list2['id_jenis_permohonan'] =='35' || $result_list2['id_jenis_permohonan'] =='36'){
   if($result_list2['imb'] =='1'){
     $permohonan = "SLF";
   }else{
@@ -33,7 +33,11 @@ if($result_list2['id_jenis_permohonan'] =='14'){
 }
 
 if ($result_list2['id_fungsi_bg'] =='1'){
-  $usiabg ='20';
+  if($result_list2['id_jns_bg'] =='3'){
+    $usiabg ='5';
+  }else{
+    $usiabg ='20';
+  }
 }else{
   $usiabg ='5';
 }

@@ -8,6 +8,14 @@ class Mglobal extends CI_Model{
 		$query 	= $this->db->get('tr_provinsi a');
 		return $query;
 	}
+
+	public function listDataFungsi($select="a.*")
+	{
+		$this->db->select($select,FALSE);
+		//$this->db->where('a.id' != '2');
+		$query 	= $this->db->get('tm_jenis_permohonan a');
+		return $query;
+	}
 	
 	public function listDataKabKota($select="a.*",$id_kabkot='',$id_provinsi='')
 	{

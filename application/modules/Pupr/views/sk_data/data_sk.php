@@ -47,7 +47,10 @@
 				<tbody>
 					<?php if ($data_sk->num_rows() > 0) {
                         $no = 1;
-                        foreach ($data_sk->result() as $r) { ?>
+                        foreach ($data_sk->result() as $r) { 
+							$dirsk = './public/uploads/pupr/sk/psk/' . $r->file_sk;
+							$dirSke	= $this->Outh_model->Encryptor('encrypt', $dirsk);
+						?>
 					<tr>
 						<td><?php echo $no++; ?></td>
 						<td><?php echo $r->no_sk; ?></td>
@@ -69,25 +72,18 @@
 								<a href="<?php echo site_url('Pupr/personil_tpa/' . $r->id_sk); ?>"
 									class="btn btn-success btn-sm" title="Ubah Data Personil" data-toggle="modal" data-target="#personil-skPenilik"><span class="glyphicon glyphicon-user"></span>
 								</a>
-							<?php }?>
+							<?php }
 							
-						</td>
-						<!--td>
-							<a href="javascript:void(0);" class="btn purple btn-sm" title="Lihat Berkas"
-								onClick="javascript:get_PSK('<?php echo $r->file_sk ?>')"> <i class="fa fa-file"></i>
-								Lihat Berkas
-							</a>
-						</td-->
+							?>
+							
+							</td>
 						<td>
-							<a href="javascript:void(0);" class="btn purple btn-sm" title="Lihat Berkas"
-								onClick="javascript:get_PSK('<?php echo $r->file_sk ?>')"> <i class="fa fa-file"></i>
-							</a>
+						<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirSke); ?>"><i class="fa fa-file"></i>Lihat</a>
+											
+							
 							<a class="btn btn-warning btn-sm" onClick="UbahPSK('<?php echo $r->id_sk; ?>')" title="Ubah SK">
 							 <span class="glyphicon glyphicon-pencil"></span>
 							</a>
-							<!--<a class="btn btn-danger btn-sm" data-href="<?php echo site_url('Pupr/hapus_psk/' . $r->id_sk); ?>"
-							data-confirm="Anda yakin ingin menghapus data ini ?" title="Hapus Data SK"><span class="glyphicon glyphicon-trash"></span>
-							</a>-->
 						</td>
 					</tr>
 					<?php }
@@ -296,9 +292,19 @@
 		
 	</div>
 </div>
-
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%" >
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+	</div>
+</div>
 <script>
-	
+	$(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
 	$(document).ready(function () {
 
 		$( ".datepicker" ).datepicker({
@@ -402,11 +408,7 @@
 				form.submit();
 			}
 		});
-
-
 	});
-
-
 	function UbahPSK(id) {
 		$.ajax({
 			type: "GET",
@@ -428,15 +430,12 @@
 		});
 		return false;
 	};
-
-
 	function get_PSK(id) {
 		url = "<?php echo base_url() . index_page() ?>public/uploads/pupr/sk/psk/" + id;
 		swin = window.open(url, 'win',
 			'scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');
 		swin.focus();
 	}
-
 	function ResRes2() {
 		document.getElementById("tambah_psk").reset();
 		document.getElementById("edit_psk").reset();

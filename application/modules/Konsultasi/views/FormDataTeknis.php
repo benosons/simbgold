@@ -4,50 +4,9 @@
 			<div class="portlet-title">
 				<div class="caption">Data Pengajuan Konsultasi</div>
 			</div>
-			<div class="portlet box blue">
-				<div class="portlet-body form">
-					<form class="form-horizontal" role="form">
-						<div class="form-body">
-							<div class="row">
-								<div class="col-md-9">
-									<div class="form-group">
-										<label class="control-label col-md-3">Jenis Konsultasi :</label>
-										<div class="col-md-9">
-											<p class="form-control-static"><?php echo $DataBangunan->nm_konsultasi; ?></p>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-3">Nama Pemilik :</label>
-										<div class="col-md-9">
-											<p class="form-control-static"><?php echo $DataPemilik->nm_pemilik; ?></p>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-3">Alamat Pemilik Bangunan :</label>
-										<div class="col-md-9">
-											<p class="form-control-static">
-												<?php echo $DataPemilik->alamat;?>, Kec. <?php echo $DataPemilik->nama_kecamatan;?>, <?php echo ucwords(strtolower($DataPemilik->nama_kabkota));?>, Prov. <?php echo $DataPemilik->nama_provinsi;?>
-											</p>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-3">Lokasi Bangunan Gedung :</label>
-										<div class="col-md-9">
-											<p class="form-control-static">
-												<?php echo $DataBangunan->almt_bgn;?>, Kec. <?php echo $DataBangunan->nama_kecamatan;?>, <?php echo ucwords(strtolower($DataBangunan->nama_kabkota));?>, Prov. <?php echo $DataBangunan->nama_provinsi;?>
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
+			<?php $this->load->view('HeaderData') ?>
 			<div class="portlet-title">
-				<div class="caption">
-					Data Kelengkapan
-				</div>
+				<div class="caption">Data Kelengkapan</div>
 			</div>
 			<?php echo ($this->session->flashdata('message') != '') ? '<div id="infoMessage" align="center" class="alert alert-'.$this->session->flashdata('status').'">'.$this->session->flashdata('message').'</div>' : ''; ?>
 			<div class="table-scrollable">
@@ -88,7 +47,7 @@
 											}
 										}
 									}
-									$Prototype = base_url('object-storage/file/TypeProtype/' . $DataBangunan->dir_file);
+									$Prototype 		= base_url('object-storage/file/TypeProtype/' . $DataBangunan->dir_file);
 									$dir_protype	= $this->Outh_model->Encryptor('encrypt', $Prototype);
 								} ?>
 								<tr class="<?= $clss ?>">
@@ -116,13 +75,14 @@
 												$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
 												$dir = '';
 												if (file_exists($filename)) {
-													$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+													$dir = './object-storage/dekill/Requirement/' . $dir_file;
 												} else {
-													$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+													$dir = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
 												}
+												$dir1	= $this->Outh_model->Encryptor('encrypt', $dir);
 											?>
 												<center>
-													<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+													<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/' . $dir1); ?>">Lihat</a>
 													|
 													<a href="<?php echo site_url('Konsultasi/DeleteTeknis/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											</center>
@@ -184,13 +144,14 @@
 												$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
 												$dir = '';
 												if (file_exists($filename)) {
-													$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+													$dir = 'object-storage/dekill/Requirement/' . $dir_file;
 												} else {
-													$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+													$dir = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
 												}
+												$dir2	= $this->Outh_model->Encryptor('encrypt', $dir);
 											?>
 												<center>
-													<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+												<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/' . $dir2); ?>">Lihat</a>
 													|
 													<a href="<?php echo site_url('Konsultasi/DeleteTeknis/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											</center>
@@ -224,27 +185,33 @@
 	</div>
 </div>				
 <!-- /.modal -->
-<div id="modal-edit" class="modal fade" tabindex="-1" width="100%"  aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" data-focus-on="input:first">
-	<div class="modal-content" >
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+<div id="loadertot" class="modal fade" tabindex="-1" data-width="auto" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<center> <img src="https://icon-library.com/images/ajax-loading-icon/ajax-loading-icon-2.jpg"> </center>
+</div>
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="55%">
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
 		</div>
-		<div class="modal-body"></div>
 	</div>
 </div>
-
-<div id="tanahnyaedit" class="modal fade" tabindex="-1"  role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-        </div>
-	</div>
-</div>	
 <script>
 	function popWin(x){
 		url = x;
 		swin = window.open(url,'win','scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');
 		swin.focus();
 	}
+	function showDiv() {
+		$('#loadertot').modal('show');
+	}
+
+	$(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
+	
 </script>
 
 

@@ -5,29 +5,24 @@
         display: block;
         margin: 48px;
     }
-
     .u-loading__symbol {
         background-color: #030f6b;
         padding: 8px;
         animation: loading 3s infinite;
         border-radius: 5px;
     }
-
     .u-loading__symbol img {
         display: block;
         max-width: 100%;
         animation: loading-icon 3s infinite;
     }
-
     @keyframes loading {
         0% {
             transform: perspective(250px) rotateX(0deg) rotateY(0deg);
         }
-
         15% {
             background-color: #030f6b;
         }
-
         16% {
             background-color: #F4A42C;
         }
@@ -138,24 +133,21 @@
 	</div>
 </div>
 <div class="modal fade" id="dialog-popup" data-width="53%" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<form action="<?php echo site_url('Penerbitan/ValidasiForm'); ?>" class="form-horizontal" role="form" method="post">
-			<input type="text" style="display: none;" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" >            
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" onclick="return confirm('Yakin Ingin Keluar?')" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title" id="myModalLabel"></h4>
-				</div>
-				<div class="modal-body" id="MyModalBody"></div>
-				<div class="modal-footer">
-					<input class="form-control" id="id" name="id" style="display: none;">
-					<center><button type="submit" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-check"></span>Validasi Kepala Dinas</button></center>
-				</div>
+	<form action="<?php echo site_url('Penerbitan/ValidasiForm'); ?>" class="form-horizontal" role="form" method="post">
+		<input type="text" style="display: none;" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" >            
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" onclick="return confirm('Yakin Ingin Keluar?')" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="myModalLabel"></h4>
 			</div>
-		</form>
-	</div>
+			<div class="modal-body" id="MyModalBody"></div>
+			<div class="modal-footer">
+				<input class="form-control" id="id" name="id" style="display: none;">
+				<center><button type="submit" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-check"></span>Validasi Kepala Dinas</button></center>
+			</div>
+		</div>
+	</form>
 </div>
-
 <div id="modalDetail" class="modal fade bs-modal-sm" data-width="70%" tabindex="-1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-content">
         <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button></div>
@@ -164,7 +156,6 @@
                 <div class="portlet-title">
                     <h4 align="center" class="caption-subject font-blue bold uppercase no-konsultasi"></h4>
                     <hr>
-                    <br>
                     <div class="row static-info">
                         <div class="col-md-4 name">Nama Pemilik</div>
                         <div class="col-md-8 value nm-pemilik"></div>
@@ -177,11 +168,7 @@
                         <div class="col-md-4 name">Jenis Konsultasi</div>
                         <div class="col-md-8 value jenis-konsultasi"></div>
                     </div>
-                    <div class="row static-info">
-                        <div class="col-md-4 name">Tanggal Verifikasi &amp; <br> Batas Waktu Pelayanan</div>
-                        <div class="col-md-8 value tgl-periode">
-                        </div>
-                    </div>
+
                     <div class="row static-info">
                         <div class="col-md-4 name">Lokasi Bangunan Gedung</div>
                         <div class="col-md-8 value alamat-bangunan"></div>

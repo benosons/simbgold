@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php 
+//session_start();
+if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Rekap extends CI_Controller {
 
@@ -552,6 +554,27 @@ class Rekap extends CI_Controller {
 				$SQLcari .= "AND a.id_provinsi = $prop_p";
 				$data['select_prov'] = $prop_p;
 			}
+			//Tambahan iful
+			$tgl_permohonan_awal2 = $this->input->post('tanggalawal');
+			$tgl_permohonan_akhir2 = $this->input->post('tanggalakhir');
+			$tglawal=substr($tgl_permohonan_awal2,6,4).'-'.substr($tgl_permohonan_awal2,3,2).'-'.substr($tgl_permohonan_awal2,0,2);
+			$tglakhir=substr($tgl_permohonan_akhir2,6,4).'-'.substr($tgl_permohonan_akhir2,3,2).'-'.substr($tgl_permohonan_akhir2,0,2);
+			
+			if ($tglawal<>'--') {
+			$_SESSION['tanggal1']= $tglawal;
+			$_SESSION['tanggal2']= $tglakhir;
+
+			$data['tanggalawal']  = $_SESSION['tanggal1'];
+			$data['tanggalakhir'] = $_SESSION['tanggal2'];
+			}
+				
+
+			if (trim($tgl_permohonan_awal2) !='' && trim($tgl_permohonan_akhir2) !='')
+			{
+				$SQLcari .= " AND b.tgl_pernyataan between '".$tglawal."' AND '".$tglakhir."'";				
+			}
+			//
+
 			$query = $this->Mrekap->getDataRekapKab($SQLcari);
 		} else {
 			$query = $this->Mrekap->getDataRekapKab($SQLcari);
@@ -575,9 +598,19 @@ class Rekap extends CI_Controller {
 		}
 		$data['status'] = '0';
 		$data['select_prov'] = '0';
+		
+		$fungsi_bg	= $this->Mglobal->listDataFungsi('id,nm_jns_permohonan');
+		$opt_fungsi = ['0' => '-- Pilih Jenis Permohonan --'];
+		foreach ($fungsi_bg->result() as $value1) {
+			$opt_fungsi[$value1->id] = $value1->nm_jns_permohonan;
+		}
+		$data['status'] = '0';
+		$data['select_fungsi'] = '0';
+		
 		if ($this->input->post('search', TRUE)) {
 			$status = trim($this->input->post('status'));
 			$prop_p = trim($this->input->post('provinsi'));
+			$prop_f = trim($this->input->post('fungsi_bg'));
 			$data['status'] = $status;
 			if ($status == '1') {
 				$SQLcari .= "AND b.status = '1'";
@@ -586,15 +619,37 @@ class Rekap extends CI_Controller {
 			} else if ($status == '3') {
 				$SQLcari .= "AND  b.status = '5' ";
 			}
+			
 			if ($prop_p != '0') {
 				$SQLcari .= "AND a.id_provinsi = $prop_p";
 				$data['select_prov'] = $prop_p;
+			}
+			
+			if ($prop_f != '0') {
+				$SQLcari .= " AND b.id_izin = $prop_f";
+				$data['select_fungsi'] = $prop_f;
+			}
+			//Tambahan iful
+			$tgl_permohonan_awal2 = $this->input->post('tanggalawal');
+			$tgl_permohonan_akhir2 = $this->input->post('tanggalakhir');
+			$tglawal=substr($tgl_permohonan_awal2,6,4).'-'.substr($tgl_permohonan_awal2,3,2).'-'.substr($tgl_permohonan_awal2,0,2);
+			$tglakhir=substr($tgl_permohonan_akhir2,6,4).'-'.substr($tgl_permohonan_akhir2,3,2).'-'.substr($tgl_permohonan_akhir2,0,2);
+			if ($tglawal<>'--') {
+			$_SESSION['tanggal1']= $tglawal;
+			$_SESSION['tanggal2']= $tglakhir;
+			$data['tanggalawal']  = $_SESSION['tanggal1'];
+			$data['tanggalakhir'] = $_SESSION['tanggal2'];
+			}
+			if (trim($tgl_permohonan_awal2) !='' && trim($tgl_permohonan_akhir2) !='')
+			{
+				$SQLcari .= " AND b.tgl_pernyataan between '".$tglawal."' AND '".$tglakhir."'";				
 			}
 			$query = $this->Mrekap->getDataRekapKabBulan($SQLcari);
 		} else {
 			$query = $this->Mrekap->getDataRekapKabBulan($SQLcari);
 		}
 		$data['opt_prov'] = $opt_prov;
+		$data['opt_fungsi'] = $opt_fungsi;
 		$data['jum_data'] = $query->num_rows();	
 		$data['result'] = $query->result();
 		$data['title']		= '';
@@ -602,10 +657,45 @@ class Rekap extends CI_Controller {
 		$this->template->load('template/template_backend', 'Rekap/Eksisting/RekapKabKotaBulan', $data);
 	}
 
+	public function RekapKabKotBulanCetak($prov = 0, $prop_f = 0, $type = 'xls')
+	{
+		$SQLcari = "";
+		$status = 0;
+			if ($status == '1') {
+				$SQLcari .= "AND b.status = '1'";
+			} else if ($status == '2') {
+				$SQLcari .= "AND  b.status ='3' ";
+			} else if ($status == '3') {
+				$SQLcari .= "AND  b.status = '5' ";
+			}
+			if ($prov != '0') {
+				$SQLcari .= "AND a.id_provinsi = $prov";
+				$data['select_prov'] = $prov;
+			}
+
+			if ($prop_f != '0') {
+				$SQLcari .= " AND b.id_izin = $prop_f";
+				$data['select_fungsi'] = $prop_f;
+			}
+
+			$tgl_permohonan_awal2 = $_SESSION['tanggal1'];
+			$tgl_permohonan_akhir2 = $_SESSION['tanggal2'];
+			if (trim($tgl_permohonan_awal2) !='' && trim($tgl_permohonan_akhir2) !='')
+			{
+				$SQLcari .= " AND b.tgl_pernyataan between '$tgl_permohonan_awal2' AND '$tgl_permohonan_akhir2'";
+			}
+			$query = $this->Mrekap->getDataRekapKabBulan($SQLcari);
+		$data['jum_data'] = $query->num_rows();	
+		$data['result'] = $query->result();
+		$data['title']		= '';
+		$data['heading']	= '';
+		$html = $this->load->view('Rekap/Eksisting/RekapKabKotaBulanCetak', $data, TRUE);
+		print_cetak($html, $type, 'Cetak', 'P');
+	}
+
 	public function RekapKabKot_cetak($prov = 0, $type = 'xls')
 	{
 		$SQLcari = "";
-
 			$status = 0;
 			if ($status == '1') {
 				$SQLcari .= "AND b.status = '1'";
@@ -618,8 +708,13 @@ class Rekap extends CI_Controller {
 				$SQLcari .= "AND a.id_provinsi = $prov";
 				$data['select_prov'] = $prov;
 			}
-			$query = $this->Mrekap->getDataRekapKab($SQLcari);
-
+			$tgl_permohonan_awal2 = $_SESSION['tanggal1'];
+			$tgl_permohonan_akhir2 = $_SESSION['tanggal2'];
+			if (trim($tgl_permohonan_awal2) !='' && trim($tgl_permohonan_akhir2) !='')
+			{
+				$SQLcari .= " AND b.tgl_pernyataan between '$tgl_permohonan_awal2' AND '$tgl_permohonan_akhir2'";
+			}
+		$query = $this->Mrekap->getDataRekapKab($SQLcari);
 		$data['jum_data'] = $query->num_rows();	
 		$data['result'] = $query->result();
 		$data['title']		= '';
@@ -628,10 +723,9 @@ class Rekap extends CI_Controller {
 		print_cetak($html, $type, 'Cetak', 'P');
 	}
 
-	public function RekapKabKotBulanCetak($prov = 0, $type = 'xls')
+	/*public function RekapKabKotBulanCetak($prov = 0, $type = 'xls')
 	{
 		$SQLcari = "";
-
 			$status = 0;
 			if ($status == '1') {
 				$SQLcari .= "AND b.status = '1'";
@@ -644,15 +738,20 @@ class Rekap extends CI_Controller {
 				$SQLcari .= "AND a.id_provinsi = $prov";
 				$data['select_prov'] = $prov;
 			}
-			$query = $this->Mrekap->getDataRekapKabBulan($SQLcari);
-
+			$tgl_permohonan_awal2 = $_SESSION['tanggal1'];
+			$tgl_permohonan_akhir2 = $_SESSION['tanggal2'];
+			if (trim($tgl_permohonan_awal2) !='' && trim($tgl_permohonan_akhir2) !='')
+			{
+				$SQLcari .= " AND b.tgl_pernyataan between '$tgl_permohonan_awal2' AND '$tgl_permohonan_akhir2'";
+			}
+			$query = $this->Mrekap->getDataRekapKab($SQLcari);
 		$data['jum_data'] = $query->num_rows();	
 		$data['result'] = $query->result();
 		$data['title']		= '';
 		$data['heading']	= '';
 		$html = $this->load->view('Rekap/Eksisting/RekapKabKotaBulanCetak', $data, TRUE);
 		print_cetak($html, $type, 'Cetak', 'P');
-	}
+	}*/
 
 	public function TPA()
 	{

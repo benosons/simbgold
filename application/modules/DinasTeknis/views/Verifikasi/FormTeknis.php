@@ -1,13 +1,13 @@
 <!-- Begin Data teknis Struktur -->
 <table id="sample_2" class="table table-bordered table-striped table-hover">
     <thead>
-	    <tr class="warning">
-	        <th>No</th>
-	        <th width="45%">Ketentuan Teknis Struktur</th>
-	        <th width="42%">Keterangan</th>
+		<tr class="warning">
+			<th>No</th>
+			<th width="45%">Ketentuan Teknis Struktur</th>
+			<th width="42%">Keterangan</th>
 			<th width="10%">Berkas</th>
 			<th width="3%">Verifikasi</th>
-	    </tr>
+		</tr>
     </thead>
     <tbody>
 		<?php
@@ -22,10 +22,12 @@
 			?>	
 			<tr >
 				<td align="center"><?php echo $i?></td>
-					<?
+					<?php
+					$id		= $this->uri->segment('3');
+					$ids 	= $this->secure->decrypt_url($id);
 					$detail = $row->id_jenis_persyaratan;
 					$status = "";
-					$query = $this->MDinasTeknis->getSyarat($row->id_detail,$this->uri->segment('3'))->result_array();
+					$query = $this->MDinasTeknis->getSyarat($row->id_detail,$ids)->result_array();
 					for($n=0;$n<count($query);$n++) {
 						$cek = $query[$n]['id_persyaratan_detail'];
 						$dir = $query[$n]['dir_file'];
@@ -35,16 +37,18 @@
 					$filename = FCPATH . "/object-storage/dekill/Requirement/$dir";
 					$dirstr = '';
 					if (file_exists($filename)) {
-						$dirstr = base_url('object-storage/dekill/Requirement/' . $dir);
+						$dirstr = './object-storage/dekill/Requirement/' . $dir;
 					} else {
-						$dirstr = base_url('object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir);
-					}?>
+						$dirstr = './object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir;
+					}
+					$dirStruktur	= $this->Outh_model->Encryptor('encrypt', $dirstr);
+					?>
 				<td><?php echo $row->nm_dokumen;?></td>
 				<td><?php echo $row->keterangan;?></td>
 				<td align="center">
 					<? if($row->id_detail == $cek){?>
 						<? if($dir != ''){ ?>
-							<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirstr; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>			
+							<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirStruktur); ?>">Lihat</a>
 						<?php } else {?>
 							[Tidak Ada Dokumen]
 						<?php }?>
@@ -92,10 +96,12 @@
 			?>	
 			<tr >
 				<td align="center"><?php echo $i?></td>
-					<?
+					<?php
+					$id		= $this->uri->segment('3');
+					$ids 	= $this->secure->decrypt_url($id);
 					$detail = $row->id_jenis_persyaratan;
 					$status = "";
-					$query = $this->MDinasTeknis->getSyarat($row->id_detail,$this->uri->segment('3'))->result_array();
+					$query = $this->MDinasTeknis->getSyarat($row->id_detail,$ids)->result_array();
 					for($n=0;$n<count($query);$n++) {
 						$cek = $query[$n]['id_persyaratan_detail'];
 						$dir = $query[$n]['dir_file'];
@@ -105,16 +111,18 @@
 					$filename = FCPATH . "/object-storage/dekill/Requirement/$dir";
 					$dirmep = '';
 					if (file_exists($filename)) {
-						$dirmep = base_url('object-storage/dekill/Requirement/' . $dir);
+						$dirmep = './object-storage/dekill/Requirement/' . $dir;
 					} else {
-						$dirmep = base_url('object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir);
-					}?>
+						$dirmep = './object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir;
+					}
+					$dirMEP	= $this->Outh_model->Encryptor('encrypt', $dirmep);
+					?>
 				<td><?php echo $row->nm_dokumen;?></td>
 				<td><?php echo $row->keterangan;?></td>
 				<td align="center">
 					<? if($row->id_detail == $cek){?>
 						<? if($dir != ''){?>
-							<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirmep; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+							<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirMEP); ?>">Lihat</a>
 						<?php } else {?>
 							[Tidak Ada Dokumen]
 						<?php }?>

@@ -494,14 +494,14 @@
 									<div class="col-md-3 name">Indeks Parameter Ketinggian</div>
 									<div class="col-md-8 value">
 										<?php
-										$jumlahLantai = $DataBangunan->jml_lantai;
-										$lapisBsement = $DataBangunan->lapis_basement;
-										$getKoefisienLantai = $this->Mperhitungan->getKoefisienLantai($jumlahLantai)->row();
-										$getKoefisienBasement = $this->Mperhitungan->getKoefisienBasement($lapisBsement)->row();
-										$kl = $getKoefisienLantai === NULL ? 0 : $getKoefisienLantai->koefisien_lantai;
-										$kb = $getKoefisienBasement === NULL ? 0 : $getKoefisienBasement->koefisien_basement;
-										$koefisienLantai = isDecimal($kl) === true ? number_format((float)$getKoefisienLantai->koefisien_lantai, 3, '.', '') : intval($kl);
-										$koefisienBasement = isDecimal($kb) === true ? number_format((float)$getKoefisienBasement->koefisien_basement, 3, '.', '') : intval($kb);
+										$jumlahLantai 				= $DataBangunan->jml_lantai;
+										$lapisBsement 				= $DataBangunan->lapis_basement;
+										$getKoefisienLantai 		= $this->Mkonsultasi->getKoefisienLantai($jumlahLantai)->row();
+										$getKoefisienBasement 		= $this->Mkonsultasi->getKoefisienBasement($lapisBsement)->row();
+										$kl 						= $getKoefisienLantai === NULL ? 0 : $getKoefisienLantai->koefisien_lantai;
+										$kb 						= $getKoefisienBasement === NULL ? 0 : $getKoefisienBasement->koefisien_basement;
+										$koefisienLantai 			= ($kl) === true ? number_format((float)$getKoefisienLantai->koefisien_lantai, 3, '.', '') : intval($kl);
+										$koefisienBasement 			= ($kb) === true ? number_format((float)$getKoefisienBasement->koefisien_basement, 3, '.', '') : intval($kb);
 
 										if ($DataBangunan->id_jenis_permohonan == '11') {
 											$luas_bangunan = $LuasBg;

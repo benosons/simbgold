@@ -56,6 +56,20 @@
 <div class="modal-footer">
 	<button type="button" onclick="return confirm('Yakin Ingin Keluar?')" data-dismiss="modal" class="btn red"> X Tutup</button>
 </div>
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%" >
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+	</div>
+</div>
+<script>
+	$(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
+</script>
 <script type="text/javascript">
 	$('#dir_file_pemberitahuan').change(function() {
 		var filename_pemberitahuan = $(this).val();

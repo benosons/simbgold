@@ -105,7 +105,7 @@ class Penugasan extends CI_Controller
 			$tgl_pernyataan = $row->tgl_pernyataan;
 			$LuasBg 		= 0;
 			$id_jenis_permohonan = $row->id_jenis_permohonan;
-			if ($id_jenis_permohonan == 11) {
+			if ($id_jenis_permohonan == 11 || $id_jenis_permohonan == 29 || $id_jenis_permohonan == 30 || $id_jenis_permohonan == 31 || $id_jenis_permohonan == 32 || $id_jenis_permohonan == 33) {
 				$tipeA 		= $row->tipeA;
 				$luasA 		= $row->luasA;
 				$tinggiA 	= $row->tinggiA;
@@ -205,9 +205,7 @@ class Penugasan extends CI_Controller
 					$Petugas = "Pilih Tenaga TPA";
 				}
 			}
-			//$get_data_penugasan = $id_fbg  == 1 ? $this->Mpenugasan->getTimTpt($id_kabkot, $year) : $this->Mpenugasan->getTimTpa($id_kabkot, $year);
 			$tim_petugas = [];
-			// var_dump($get_data_penugasan->result()); die;
 			foreach ($get_data_penugasan->result() as $p) {
 				$gelar_depan = $p->glr_depan != '' && $p->glr_depan != NULL ? $p->glr_depan . ' ' : '';
 				if($id_izin =='2'){
@@ -476,8 +474,12 @@ class Penugasan extends CI_Controller
         $mail->Port = '465';
         $mail->SMTPAuth = true;
 		$mail->SMTPSecure = 'ssl';
-        $mail->Username = 'simbgcs.reset@gmail.com';
-        $mail->Password = '@shinigami07';
+        //$mail->Username = 'simbgcs.reset@gmail.com';
+        //$mail->Password = '@shinigami07';
+
+		$mail->Username = 'simbg.konsultasi@pu.go.id';
+        $mail->Password = 'SIMBG2020!!!';
+
         $mail->WordWrap = 50;  
 		
 		if( ! is_null($id) && (trim($id) != '') && (trim($id) != '0')) {
@@ -518,8 +520,8 @@ class Penugasan extends CI_Controller
         $mail->Port = '465';
         $mail->SMTPAuth = true;
 		$mail->SMTPSecure = 'ssl';
-        $mail->Username = 'simbgcs.reset@gmail.com';
-        $mail->Password = '@shinigami07';
+		$mail->Username = 'simbg.konsultasi@pu.go.id';
+        $mail->Password = 'SIMBG2020!!!';
         $mail->WordWrap = 50;  
 		
 		if( ! is_null($id) && (trim($id) != '') && (trim($id) != '0')) {
@@ -544,7 +546,6 @@ class Penugasan extends CI_Controller
 			$mail->setFrom('simbgcs@gmail.com', 'CS SIMBG');
 			//$mail->addAddress($email_pemohon);
 			$mail->Subject = 'Penetapan TIM TPT | CS SIMBG';
-			
 			$mail->Body = $text_email;
 			$mail->isHTML(true); 
 			$mail->send();
@@ -566,8 +567,12 @@ class Penugasan extends CI_Controller
         $mail->Port = '465';
         $mail->SMTPAuth = true;
 		$mail->SMTPSecure = 'ssl';
-        $mail->Username = 'simbgcs.reset@gmail.com';
-        $mail->Password = '@shinigami07';
+
+		$mail->Username = 'simbg.konsultasi@pu.go.id';
+        $mail->Password = 'SIMBG2020!!!';
+
+        //$mail->Username = 'simbgcs.reset@gmail.com';
+        //$mail->Password = '@shinigami07';
         $mail->WordWrap = 50;  
 		
 		if( ! is_null($id) && (trim($id) != '') && (trim($id) != '0')) {

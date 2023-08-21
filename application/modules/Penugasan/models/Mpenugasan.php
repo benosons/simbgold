@@ -18,8 +18,9 @@ class MPenugasan extends CI_Model
 		}else if ($Dinas =='3101' || $Dinas =='3171' || $Dinas =='3172' || $Dinas =='3173' || $Dinas =='3174' || $Dinas =='3175'){
 			$this->db->where('c.id_kabkot_bgn', $Dinas);
 			$this->db->where('c.jml_lantai < 9');
-		}else if($Dinas == '100') {
-			$this->db->where('b.id_otorita', 1);
+		}else if($Dinas == '6479') {
+			//$this->db->where('b.id_otorita', 1);
+			$this->db->where('c.id_kabkot_bgn', $Dinas);
 		}else{
 			$this->db->where('c.id_kabkot_bgn', $Dinas);
 		}

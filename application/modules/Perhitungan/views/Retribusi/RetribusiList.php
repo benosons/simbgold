@@ -14,7 +14,7 @@
 					<th>No. Registrasi</th>
 					<th>Nama Pemilik</th>
 					<th>Lokasi BG</th>
-					<th>Berita Acara</th>
+					<!--<th>Berita Acara</th>-->
 					<th>Status</th>
 					<th>Aksi</th>
 				</tr>
@@ -34,7 +34,7 @@
 						<td align="center"><?php echo $r->no_konsultasi; ?></td>
 						<td><?php echo $r->nm_pemilik; ?></td>
 						<td><?php echo $r->almt_bgn; ?></td>
-						<td align="center">
+						<!--<td align="center">
 							<?php if ($r->dir_file_konsultasi != '') :
 							$filename = FCPATH . "/object-storage/dekill/Consultation/$r->dir_file_konsultasi";
 							$dir = '';
@@ -48,7 +48,7 @@
 							<?php else : ?>
 							Berita Acara Belum Diupload
 							<?php endif; ?>
-						</td>
+						</td>-->
 						<td align="center">
 							<?php if ($r->status == 9) {
 								$class = "label label-sm label-danger";
@@ -128,6 +128,16 @@
 						<div class="row static-info">
 							<div class="col-md-4 name">Fungsi Bangunan Gedung</div>
 							<div class="col-md-8 value jns-prasarana"></div>
+						</div>
+						<div class="row static-info">
+							<div class="col-md-4 name">Luas dan Tinggi </div>
+							<div class="col-md-8 value luas-tinggi-prasarana"></div>
+						</div>
+					</div>
+					<div class="spbu" style="display:none;">
+						<div class="row static-info">
+							<div class="col-md-4 name">Fungsi Bangunan Gedung</div>
+							<div class="col-md-8 value fungsi-bangunan-gedung"></div>
 						</div>
 						<div class="row static-info">
 							<div class="col-md-4 name">Luas dan Tinggi </div>
@@ -450,6 +460,7 @@
 							$('.fungsi-bangunan').css('display', 'none');
 							$('.bangunan-kolektif').css('display', 'block');
 							$('.prasarana').css('display', 'none');
+							$('.spbu').css('display', 'none');
 							$('.total-luas-kolektif').html(`${response.luas_total_kolektif} m<sup>2</sup>`);
 							var tableKolektif;
 							if (response.hasil_kolektif != 0) {
@@ -467,10 +478,17 @@
 							$('.bangunan-kolektif').css('display', 'none');
 							$('.fungsi-bangunan').css('display', 'none');
 							$('.prasarana').css('display', 'block');
-						} else {
+							$('.spbu').css('display', 'none');
+						} else if (response.id_jenis_permohonan == 21 || response.id_jenis_permohonan == 34 || response.id_jenis_permohonan == 35 || response.id_jenis_permohonan == 36){
+							$('.bangunan-kolektif').css('display', 'none');
+							$('.fungsi-bangunan').css('display', 'none');
+							$('.prasarana').css('display', 'none');
+							$('.spbu').css('display', 'block');
+						}else{
 							$('.bangunan-kolektif').css('display', 'none');
 							$('.fungsi-bangunan').css('display', 'block');
 							$('.prasarana').css('display', 'none');
+							$('.spbu').css('display', 'none');
 						}
 						$(".tgl-periode").html(`<p><span class="font-blue">${response.tgl_pernyataan}</span> <i class="text-tot">sampai dengan</i> <span class="font-blue">${response.hasil_tgl}</span> <i class="text-tot">, (${response.lama_proses} Hari Kerja) <br>terhitung dari tanggal verifikasi kelengkapan berkas</i></p>`);
 						$(".nilai-retribusi-bangunan").html(`Rp. ${response.nilai_retribusi_bangunan}`);

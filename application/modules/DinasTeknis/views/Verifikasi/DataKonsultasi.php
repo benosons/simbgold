@@ -165,7 +165,68 @@
 				<div class="col-md-4 name">Ketinggian Bangunan Gedung</div>
 				<div class="col-md-8 value"><?php echo $data->tinggi_bgp; ?> Meter</div>
 			</div>
-		<?php } else {?>
+		<?php } else if($data->id_izin =='2'){
+			if($data->permohonan_slf =='1'){ ?>
+				<?php if($data->luas_bgn >='72'){
+					$status_bg = 'Tidak Sederhana';
+				}else{
+					$status_bg ='Sederhana';
+				}?>
+				<div class="row static-info">
+					<div class="col-md-4 name">Klasifikasi Bangunan Gedung</div>
+					<div class="col-md-8 value"><?php echo $status_bg; ?></div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-4 name">Fungsi Bangunan Gedung</div>
+					<div class="col-md-8 value">
+						<?php $queFungsi = $this->MDinasTeknis->get_jenis_fungsi_list($data->id_fungsi_bg)->row();
+						echo $queFungsi->fungsi_bg; ?>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-4 name">Luas Bangunan Gedung</div>
+					<div class="col-md-8 value"><?php echo $data->luas_bgn; ?> m<sup>2</sup></div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-4 name">Ketinggian Bangunan Gedung</div>
+					<div class="col-md-8 value"><?php echo $data->tinggi_bgn; ?> Meter</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-4 name">Jumlah Lantai Bangunan Gedung</div>
+					<div class="col-md-8 value"><?php echo $data->jml_lantai; ?> Lantai</div>
+				</div>
+				<?php if($data->luas_basement =='' || $data->luas_basement == null || $data->luas_basement =='0'){ ?>
+	
+				<?php } else { ?>
+					<div class="row static-info">
+						<div class="col-md-4 name">Luas Basement</div>
+						<div class="col-md-8 value"><?php echo $data->luas_basement; ?> - m<sup>2</sup></div>
+					</div>
+				<?php } ?>
+				<?php if($data->lapis_basement =='' || $data->lapis_basement == null || $data->lapis_basement =='0'){ ?>
+	
+				<?php } else { ?>
+					<div class="row static-info">
+						<div class="col-md-4 name">Jumlah Lantai Basement</div>
+						<div class="col-md-8 value"><?php echo $data->lapis_basement; ?> - Lantai</div>
+					</div>
+				<?php } ?> 
+			<?php }else{ ?>
+				<div class="row static-info">
+				<div class="col-md-4 name">Luas Bangunan Gedung</div>
+					<div class="col-md-8 value"><?php echo $data->luas_bgp; ?> m<sup>2</sup></div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-4 name">Ketinggian Bangunan Gedung</div>
+					<div class="col-md-8 value"><?php echo $data->tinggi_bgp; ?> Meter</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-4 name">Jumlah Lantai Bangunan Gedung</div>
+					<div class="col-md-8 value"><?php echo $data->jml_lantai; ?> Lantai</div>
+				</div>
+			<?php } ?>
+
+		<?php }else{ ?>
 			<?php if($data->luas_bgn >='72'){
 				$status_bg = 'Tidak Sederhana';
 			}else{

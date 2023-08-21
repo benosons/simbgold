@@ -259,14 +259,17 @@
 								<div class="col-md-4 name">Perhitungan Retribusi</div>
 								<div class="col-md-8 value">
 									<?php
+									
 									$oldFIle = FCPATH . 'object-storage/file/konsultasi/' . $databgn->id . '/retribusi/berkas_retribusi/' . $databgn->file_retribusi;;
-									$dir = '';
+									$dirR = '';
 									if (file_exists($oldFIle)) {
-										$dir = 'object-storage/file/konsultasi/' . $id . '/retribusi/berkas_retribusi/' . $databgn->file_retribusi;
+										$dirR = './object-storage/file/konsultasi/' . $id . '/retribusi/berkas_retribusi/' . $databgn->file_retribusi;
 									} else {
-										$dir = 'object-storage/dekill/Retribution/' . $databgn->file_retribusi;
-									} ?>
-									<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url($dir); ?>')" class="btn default btn-xs blue-stripe">Lihat Perhitungan Retribusi</a>
+										$dirR = './object-storage/dekill/Retribution/' . $databgn->file_retribusi;
+									}
+									$dirRetribusiF	= $this->Outh_model->Encryptor('encrypt', $dirR);
+									?>
+									<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirRetribusiF); ?>">Lihat</a>
 								</div>
 							</div>
 						<?php endif; ?>
@@ -326,14 +329,16 @@
 										<?php $filename = FCPATH . "/object-storage/dekill/Retribution/$retribusi->dir_file_penagihan";
 										$dir = '';
 										if (file_exists($filename)) {
-											$dir_bayar = base_url('object-storage/dekill/Retribution/' . $retribusi->dir_file_penagihan);
+											$dir_bayar = './object-storage/dekill/Retribution/' . $retribusi->dir_file_penagihan;
 										} else {
-											$dir_bayar = base_url('object-storage/file/Konsultasi/' . $id . '/SKRD/' . $retribusi->dir_file_penagihan);
-										} ?>
+											$dir_bayar = './object-storage/file/Konsultasi/' . $id . '/SKRD/' . $retribusi->dir_file_penagihan;
+										} 
+										$dirSkrd	= $this->Outh_model->Encryptor('encrypt', $dir_bayar);
+										?>
 
 										<?php if (isset($retribusi->dir_file_penagihan) != '' or $retribusi->dir_file_penagihan != null) { ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir_bayar; ?>')" class="btn default btn-xs blue-stripe">Berkas SKRD</a>
-										<?php } else { ?>
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirSkrd); ?>">Lihat</a>
+											<?php } else { ?>
 											<input style="display: none;" name="dir_file" id="dir_file" onchange='cekik()'>
 											<input type="file" class="form-control" name="d_file" id="d_file" onchange='cekik()'>
 											<label for="form_control_1">Berkas SKRD</label>
@@ -357,13 +362,15 @@
 										<?php $filename = FCPATH . "/object-storage/dekill/Retribution/$retribusi->bukti_pembayaran";
 											$dir = '';
 											if (file_exists($filename)) {
-												$dir_bukti = base_url('object-storage/dekill/Retribution/' . $retribusi->bukti_pembayaran);
+												$dir_bukti = './object-storage/dekill/Retribution/' . $retribusi->bukti_pembayaran;
 											} else {
-												$dir_bukti = base_url('object-storage/file/Konsultasi/' . $id . '/retribusi/' . $retribusi->bukti_pembayaran);
-											} ?>
+												$dir_bukti = './object-storage/file/Konsultasi/' . $id . '/retribusi/' . $retribusi->bukti_pembayaran;
+											} 
+											$dirSSRD	= $this->Outh_model->Encryptor('encrypt', $dir_bukti);
+											?>
 										<?php if (isset($retribusi->bukti_pembayaran) != '' or $retribusi->bukti_pembayaran  != null) { ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir_bukti; ?>')" class="btn default btn-xs blue-stripe">Berkas Bukti Bayar</a>
-										<?php } else { ?>
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirSSRD); ?>">Lihat</a>
+											<?php } else { ?>
 											<input style="display: none;" name="dir_file_s" id="dir_file_s" onchange='cekuk()'>
 											<input type="file" class="form-control" name="d_file_s" id="d_file_s" onchange='cekuk()'>
 											<label for="form_control_1">Berkas Bukti Pembayaran</label>
@@ -396,8 +403,23 @@
 		</div>
 	</div>
 </div>
-
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="50%">
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+		<div class="modal-footer">
+			<button type="button" data-dismiss="modal" class="btn btn-primary"><i class="fa fa-sign-out"></i> Tutup</button>
+		</div>
+	</div>
+</div>
 <script type="text/javascript">
+
+	$(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
 	function popWin(x) {
 		url = x;
 		swin = window.open(url, 'win', 'scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');

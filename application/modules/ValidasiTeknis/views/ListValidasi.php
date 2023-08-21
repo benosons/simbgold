@@ -362,12 +362,12 @@
 
 <script>
     function GetCetakRekomtek(id) {
-        var url = "<?php echo base_url() . index_page() ?>Dokumen/CetakVerifikasiBangunanBaru/" + id;
+        var url = "<?php echo base_url() . index_page() ?>Dokumen/CetakVerifikasiBgnBaru/" + id;
         swin = window.open(url, 'win', 'scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');
         swin.focus();
     }
     function GetVerifikasi(id) {
-        $("#MyModalBody").html('<iframe src="<?php echo base_url(); ?>Dokumen/CetakVerifikasiBangunanBaru/' + id + '" frameborder="no" width="860" height="540"></iframe>');
+        $("#MyModalBody").html('<iframe src="<?php echo base_url(); ?>Dokumen/CetakVerifikasiBgnBaru/' + id + '" frameborder="no" width="860" height="540"></iframe>');
         $('[name="id"]').val(id);
     }
 </script>

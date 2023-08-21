@@ -221,6 +221,7 @@ class Mrekap extends CI_Model {
 				GROUP BY a.id_kabkot
 				ORDER BY a.id_kabkot";
 		//echo $sql;
+		//echo 'x1';
 		$hasil  = $this->db->query($sql);
 		return $hasil;
 	}
@@ -270,33 +271,43 @@ class Mrekap extends CI_Model {
 				$cari
 				GROUP BY a.id_kabkot
 				ORDER BY a.id_kabkot";
+		
+		
 		//echo $sql;
+		//echo 'x2';
+		
 		$hasil  = $this->db->query($sql);
 		return $hasil;
 	}
 
 	public function getDataRekapKabBulan($cari=null)
 	{
-		$sql = "SELECT a.id_kabkot, a.nama_kabkota,b.id_fungsi_bg,a.Status_perda,a.status_teknis,a.status_perizinan,
+		$sql = "SELECT a.id_kabkot, a.nama_kabkota,b.id_fungsi_bg,
 				SUM(CASE  when (b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS Total,
 				SUM(CASE  when (b.status between '1' AND '2' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS VerifikasiDokumen,
-				SUM(CASE  when (b.status  ='3' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS Dikembalikan,
-				
-				SUM(CASE  when (b.status between '4' AND '10' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS Konsultasi,
-				SUM(CASE  when (b.status between '11' AND '13' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS Retribusi,
+				SUM(CASE  when (b.status ='3' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS Dikembalikan,
+				SUM(CASE  when (b.status ='4' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS PenugasanTPA,
+				SUM(CASE  when (b.status = '5' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS Penjadwalan,
+				SUM(CASE  when (b.status between '6' and '8' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS Konsultasi,
+				SUM(CASE  when (b.status between '9' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS PerhitunganRetribusi,
+				SUM(CASE  when (b.status between '10' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS Valkadintek,
+				SUM(CASE  when (b.status ='11' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS PenagihanRetribusi,
+				SUM(CASE  when (b.status between '12' AND '13' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS ValidasiRetribusi,
 				SUM(CASE  when (b.status between '14' AND '21' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS Terbit,
-				SUM(CASE  when (b.status ='25' and b.pernyataan ='1' and b.id_jenis_permohonan !='14') then 1 else 0 END ) AS Ditolak
-				
+				SUM(CASE  when (b.status ='25' and b.pernyataan ='1' and b.id_jenis_permohonan !='14' and b.id_jenis_permohonan !='15' and b.id_jenis_permohonan !='16' and b.id_jenis_permohonan !='35' and b.id_jenis_permohonan !='36') then 1 else 0 END ) AS Ditolak
 				FROM tm_akun_dinas a 
 				LEFT JOIN tmdatabangunan b ON (a.id_kabkot = b.id_kabkot_bgn)
-				AND b.pernyataan = '1' and b.id_kabkot_bgn !='9971' and b.id_kabkot_bgn !='9972'  and b.tgl_pernyataan between '2022-12-01' and '2022-12-31' where(1=1)
+				AND b.pernyataan = '1' and b.id_kabkot_bgn !='9971' and b.id_kabkot_bgn !='9972'
+				where(1=1)
 				$cari
 				GROUP BY a.id_kabkot
 				ORDER BY a.id_kabkot";
 		//echo $sql;
+		//echo 'x3';
+		
 		$hasil  = $this->db->query($sql);
 		return $hasil;
-	}
+		}
 
 	
 
@@ -320,6 +331,8 @@ class Mrekap extends CI_Model {
 				GROUP BY a.id_kabkot
 				ORDER BY a.id_kabkot";
 		//echo $sql;
+		//echo 'x4';
+		
 		$hasil  = $this->db->query($sql);
 		return $hasil;
 	}

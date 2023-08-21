@@ -1,3 +1,80 @@
+<style>
+    .u-loading {
+        width: 50px;
+        height: 50px;
+        display: block;
+        margin: 48px;
+    }
+    .u-loading__symbol {
+        background-color: #030f6b;
+        padding: 8px;
+        animation: loading 3s infinite;
+        border-radius: 5px;
+    }
+    .u-loading__symbol img {
+        display: block;
+        max-width: 100%;
+        animation: loading-icon 3s infinite;
+    }
+    @keyframes loading {
+        0% {
+            transform: perspective(250px) rotateX(0deg) rotateY(0deg);
+        }
+        15% {
+            background-color: #030f6b;
+        }
+        16% {
+            background-color: #F4A42C;
+        }
+
+        50% {
+            transform: perspective(250px) rotateX(180deg) rotateY(0deg);
+            background-color: #F4A42C;
+        }
+
+        65% {
+            background-color: #F4A42C;
+        }
+
+        66% {
+            background-color: #030f6b;
+        }
+
+        100% {
+            transform: perspective(250px) rotateX(180deg) rotateY(-180deg);
+        }
+    }
+
+    @keyframes loading-icon {
+        0% {
+            transform: perspective(250px) rotateX(0deg) rotateY(0deg);
+        }
+
+        15% {
+            transform: perspective(250px) rotateX(0deg) rotateY(0deg);
+        }
+
+        16% {
+            transform: perspective(250px) rotateX(180deg) rotateY(0deg);
+        }
+
+        50% {
+            transform: perspective(250px) rotateX(180deg) rotateY(0deg);
+        }
+
+        65% {
+            transform: perspective(250px) rotateX(180deg) rotateY(0deg);
+        }
+
+        66% {
+            transform: perspective(250px) rotateX(180deg) rotateY(180deg);
+        }
+
+        100% {
+            transform: perspective(250px) rotateX(180deg) rotateY(180deg);
+        }
+    }
+</style>
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption"><i class="fa fa-globe"></i>List Validasi Bangunan Eksisting</div>
@@ -7,7 +84,7 @@
 		<table class="table table-striped table-bordered table-hover" id="sample_1">
 			<?php echo ($this->session->flashdata('message') != '') ? '<div id="infoMessage" align="center" class="alert alert-'.$this->session->flashdata('status').'">'.$this->session->flashdata('message').'</div>' : ''; ?>
             <thead>
-				<tr class="warning">
+				<tr>
 					<th>No</th>
 					<th>Jenis Permohonan</th>
 					<th>No. Registrasi</th>

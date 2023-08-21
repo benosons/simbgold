@@ -54,7 +54,7 @@
                     </div>
                   </div>
                 </div>
-                <?php if ($row->id_jenis_permohonan == '11' || $row->id_jenis_permohonan == '29' || $row->id_jenis_permohonan == '30' || $row->id_jenis_permohonan == '31' || $row->id_jenis_permohonan == '32') { ?>
+                <?php if ($row->id_jenis_permohonan == '11' || $row->id_jenis_permohonan == '29' || $row->id_jenis_permohonan == '30' || $row->id_jenis_permohonan == '31' || $row->id_jenis_permohonan == '32' || $row->id_jenis_permohonan == '33') { ?>
                   <div class="row">
                     <div class="col-md-8 ket-bangunan">
                       <div class="form-group">
@@ -264,7 +264,9 @@
                     }
                     else if($row->id_jenis_permohonan == '29'){
                       $luas_bangunan = $LuasBg;
-                    }  
+                    } else if($row->id_jenis_permohonan == '30'){
+                      $luas_bangunan = $LuasBg;
+                    } 
                     else if($row->id_jenis_permohonan == '31'){
                       $luas_bangunan = $LuasBg;
                     }  
@@ -411,7 +413,7 @@
                     <div class="form-group">
                       <label class="control-label col-md-4" style="text-align:left;">Luas Bangunan Gedung :</label>
                       <div class="col-md-6">
-                        <?php if ($row->id_jenis_permohonan == '11' || $row->id_jenis_permohonan == '29' || $row->id_jenis_permohonan == '30' || $row->id_jenis_permohonan == '31' || $row->id_jenis_permohonan == '32') {
+                        <?php if ($row->id_jenis_permohonan == '11' || $row->id_jenis_permohonan == '29' || $row->id_jenis_permohonan == '30' || $row->id_jenis_permohonan == '31' || $row->id_jenis_permohonan == '32' || $row->id_jenis_permohonan == '33') {
                           $luas_bangunan = $LuasBg;
                         } else if ($row->id_jenis_permohonan == '12') {
                           $luas_bangunan = $row->luas_bgp;

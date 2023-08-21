@@ -84,17 +84,11 @@
 				<div class="col-md-12 ">
 					<div class="form-body">
 						<div class="col-md-12"><br>
-						<!--Sehubungan dengan telah diundangkan Peraturan Pemerintah Nomor 16 Tahun 2021 Tentang Peraturan Pelaksanaan
-						Undang – Undang Nomor 28 Tahun 2002 Tentang Bangunan Gedung. Untuk Mempermudah Penggunaan SIMBG bagi Pemilik Akun Pengawas Dinas Teknis:-->
 						<ol><br>
-						Sehubungan dengan permasalahan tidak munculnya penugasan TPA/TPT pada beberapa daerah, mohon Operator/Pengawas agar memperbarui isian <b>Tahun berlaku SK TPA/TPT menjadi Tahun 2023</b> pada menu pengaturan
-						<!--<li>Proses Kerja serta dokumen output pada SIMBG sangat bergantung kepada Validitas Data yang diinput dari Menu Pengaturan Pada Akun Kepala Dinas Teknis maupun Kepala Dinas PTSP.Dalam hal terjadi perubahan data (Misal ada pergantian kepala dinas), agar segera dilakukan perbaikan data pada Menu Pengaturan sebagaimana dimaksud sebelum proses pelayanan dilaksanakan.</li>
-						<li>Apabila diperlukan untuk kembali ke tahap sebelumnya dalam perbaikan data, Pengawas dapat melakukan kembali (roll back) pada Menu:<br>
-						a. Penugasan TPA/TPT <br>
-						b. Penjadwalan Konsultasi <br>
-						c. Input Hasil Konsultasi <br>
-						d. Perhitungan Retribusi<br>
-						<li>Mengantisipasi banyaknya kesalahan yang terjadi pada Dokumen Output dari SIMBG (PBG/SLF), saat ini SIMBG telah dilengkapi dengan fitur konfirmasi kebenaran data dari Pemohon. Proses konfirmasi tersebut agar dimintakan oleh petugas di dinas teknis kepada Pemohon untuk dilakukan segera pasca Proses Perhitungan Retribusi. Kepala Dinas Teknis hanya dapat memberikan pernyataan Pemenuhan Standar Teknis setelah pemohon melakukan konfirmasi kebenaran data.<br>-->
+						<li>Terkait pemutakhiran SIMBG tanggal 3 Juli 2023 mengingat Pasal 11 ayat (1) PP Nomor 16 Tahun 2021 bahwa fungsi dan klasifikasi bangunan gedung dicantumkan dalam PBG, SLF, dan SBKBG, Pemda agar <b>menginputkan klasifikasi bangunan gedung secara manual</b> untuk permohonan PBG yang sedang diproses pada <b>halaman finalisasi data bangunan gedung</b>, meliputi lokasi, tingkatrisiko bahaya kebakaran, dan Klas bangunan.</li><br>
+						<li>Panduan pengisian klasifikasi lokasi, tingkat risiko bahaya kebakaran dan Klas bangunan dapat dilihat dalam SIMBG atau pada Lampiran PP Nomor 16 Tahun 2021 halaman 21 s.d. 30.</li><br>
+						<li>Sehubungan dengan permasalahan tidak munculnya penugasan TPA/TPT pada beberapa daerah, mohon Operator/Pengawas agar memperbarui isian <b>Tahun berlaku SK TPA/TPT menjadi Tahun 2023</b> pada menu pengaturan</li><br>
+						<li>Apabila terdapat pergantian pejabat Kepala Dinas Teknis baik pejabat definitive maupun PelaksanaTugas (Plt.), Penjabat Sementara (Pjs.), atau Pelaksana Harian (Plh,), Dinas Teknis harus segera melakukan pemutakhiran (update) di Data Profile Dinas Karena akan mempengaruhi pejabat penandatanganSK-PBG yang terbit ketika proses validasi.</li>
 						<br>
 						</ol>
 					</div>

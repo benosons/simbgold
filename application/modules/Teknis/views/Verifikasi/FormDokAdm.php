@@ -30,13 +30,21 @@
 						$dir = $query[$n]['dir_file'];
 						$status = $query[$n]['status'];
 						$ipk=$this->uri->segment('3');
-					} ?>
+					} 
+					$filename = FCPATH . "/object-storage/dekill/Requirement/$dir";
+					$dirum = '';
+					if (file_exists($filename)) {
+						$dirum = base_url('object-storage/dekill/Requirement/' . $dir);
+					} else {
+						$dirum = base_url('object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir);
+					}
+					?>
 				<td><?php echo $row->nm_dokumen;?></td>
 				<td><?php echo $row->keterangan;?></td>
 				<td align="center">
 					<? if($row->id_detail == $cek){?>
 						<? if($dir != '' || $dir != null){?>
-							<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/'.$ipk.'/Dokumen/'.$dir);?>')" class="btn default btn-xs blue-stripe" >Lihat</a>
+							<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirum; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
 						<?php } else {?>
 							[Tidak Ada Dokumen]
 						<?php }?>
@@ -89,13 +97,22 @@
 						$dir = $query[$n]['dir_file'];
 						$status = $query[$n]['status'];
 						$ipk=$this->uri->segment('3');
-					} ?>
+					} 
+					$filename = FCPATH . "/object-storage/dekill/Requirement/$dir";
+					$dirum = '';
+					if (file_exists($filename)) {
+						$dirum = base_url('object-storage/dekill/Requirement/' . $dir);
+					} else {
+						$dirum = base_url('object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir);
+					}
+					?>
 				<td><?php echo $row->nm_dokumen;?></td>
 				<td><?php echo $row->keterangan;?></td>
 				<td align="center">
 					<? if($row->id_detail == $cek){?>
 						<? if($dir != ''){?>
-							<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/'.$ipk.'/Dokumen/'.$dir);?>')" class="btn default btn-xs blue-stripe" >Lihat</a>
+							<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirum; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+						
 						<?php } else {?>
 							[Tidak Ada Dokumen]
 						<?php }?>

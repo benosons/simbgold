@@ -14,7 +14,15 @@
                 $luas_bg = $luas_bgp;
                 $tinggi_bg = $tinggi_bgp;
                 $fungsi = "Prasarana";
-              } else {
+              } else if($id_jenis_permohonan =='14'){
+                if($permohonan_slf =='2'){
+                  $fungsi = "Prasarana";
+                }else{
+                  $luas_bg = $luas_bgn;
+                  $tinggi_bg = $tinggi_bgn;
+                  $fungsi = $fungsi_bg;
+                }
+              }else{
                 $luas_bg = $luas_bgn;
                 $tinggi_bg = $tinggi_bgn;
                 $fungsi = $fungsi_bg;
@@ -85,7 +93,15 @@
                     </tr>
                   <?php } ?>
                 </table> 
-              <?php } else { ?>
+              <?php } else if($id_jenis_permohonan =='14'){
+                if($permohonan_slf =='2'){ ?>
+                  <li> <i class="m-icon-swapright m-icon-black"></i>Luas Prasarana : <?=(isset($luas_bgp)? $luas_bgp : '-') ;?> m<sup>2</sup></li>
+                  <li> <i class="m-icon-swapright m-icon-black"></i>Tinggi Prasarana : <?=(isset($tinggi_bgp)? $tinggi_bgp : '-') ;?> Meter</li>
+                
+                <?php }else{
+
+                }
+              } else{?>
               <li> <i class="m-icon-swapright m-icon-black"></i>Luas Bangunan : <?=(isset($luas_bg)? $luas_bg : '-') ;?> m<sup>2</sup></li>
               <li> <i class="m-icon-swapright m-icon-black"></i>Tinggi Bangunan : <?=(isset($tinggi_bg)? $tinggi_bg : '-') ;?> Meter</li>
               <li> <i class="m-icon-swapright m-icon-black"></i>Jumlah Lantai : <?=(isset($jml_lantai)? $jml_lantai : '-') ;?> Lantai</li>
@@ -95,9 +111,11 @@
           <h3><b>Data Pejabat</b></h3>
           <ul>
             <b>
+        
               <li> <i class="m-icon-swapright m-icon-black"></i>Nama Kepala Dinas : <?=(isset($nm_kadis) ? $nm_kadis : 'Nama Kepala Dinas : -');?></li>
               <li> <i class="m-icon-swapright m-icon-black"></i>Nip. Kepala Dinas : <?=(isset($nip_kadis) ? $nip_kadis : 'NIP. Kepala Dinas : -')?> </li>
-            </b>
+              
+              </b>
           </ul>
           <h1><?=(isset($status) ? $status : 'Not Found');?></h1>
         </div>

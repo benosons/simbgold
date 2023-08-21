@@ -1,9 +1,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">Data Pengajuan Konsultasi</div>
-			</div>
+			<div class="portlet-title"><div class="caption">Data Pengajuan Konsultasi</div></div>
 			<?php $this->load->view('HeaderData') ?>
 			<div class="portlet-title">
 				<div class="caption">Data Kelengkapan</div>
@@ -49,24 +47,23 @@
 									<td align="left"><?php echo $key->nm_dokumen; ?></td>
 									<td align="left"><?php echo $key->keterangan; ?></td>
 									<td align="center">
-										<?php echo form_open_multipart('Konsultasi/SaveDokumen/' . $id . '/' . $key->id_detail . '/5/' . $id_administrasi, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
+										<?php echo form_open_multipart('KonsultasiOSS/SaveDokumen/' . $id . '/' . $key->id_detail . '/5/' . $id_administrasi, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
 										<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 										<?php if ($dir_file == '' or $dir_file == null) { ?>
 											<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 										<?php } else {
-											$filename = FCPATH . "/Dekill/Requirement/$dir_file";
+											$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
 											$dir = '';
 											if (file_exists($filename)) {
-												$dir = base_url('Dekill/Requirement/' . $dir_file);
+												$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
 											} else {
-												$dir = base_url('file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+												$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
 											}
 
 											$dir1	= $this->Outh_model->Encryptor('encrypt', $dir);
 										?>
 											<center>
-											<a href="<?php echo site_url('Docreader/PDFRead/' . $dir1); ?>" class="btn default btn-xs blue-stripe" data-toggle="modal" data-target="#modal-edit">Lihat</a>
-												<!--<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>!-->
+												<a href="<?php echo site_url('Docreader/PDFRead/' . $dir1); ?>" class="btn default btn-xs blue-stripe" data-toggle="modal" data-target="#modal-edit">Lihat</a>
 												|
 												<a href="<?php echo site_url('Konsultasi/DeleteAdministrasi/' . $id_administrasi . '/adm/' . $id . '/' . $dir_file); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											</center>

@@ -20,7 +20,55 @@ class Simbg_lib
 		$mail->wordwrap = TRUE;
         $mail->Debugoutput = 'html';
 		$mail->isSMTP();
+        $mail->Host = gethostbyname('ssl://smtp-relay.gmail.com');
+        $mail->Port = '465';
+        $mail->SMTPAuth = true;
+		$mail->SMTPSecure = 'ssl';
+        $mail->Username = 'simbg@pu.go.id';
+        $mail->Password = 'SIMBG2020!!';
+		$mail->setFrom('simbg@pu.go.id', 'CS SIMBG');
+        $mail->addAddress($email);
+		$mail->Subject = $subject;
+		$mail->Body = $text;
+		$mail->isHTML(true);
+        $mail->send();
+	}
+
+	function sendEmailPendaftaran($email,$subject,$text)
+	{
+		$this->ci->load->library('PHPMailerAutoload');
+		$mail = new PHPMailer();
+        $mail->SMTPDebug = false;
+		$mail->protocol = 'mail';
+		$mail->charset = 'iso-8859-1';
+		$mail->wordwrap = TRUE;
+        $mail->Debugoutput = 'html';
+		$mail->isSMTP();
         $mail->Host = gethostbyname('ssl://smtp.gmail.com');
+        $mail->Port = '465';
+        $mail->SMTPAuth = true;
+		$mail->SMTPSecure = 'ssl';
+        $mail->Username = 'simbg.pendaftaran@pu.go.id';
+        $mail->Password = 'FreddyNX1!';
+		$mail->setFrom('simbg.pendaftaran@pu.go.id', 'CS SIMBG');
+        $mail->addAddress($email);
+		$mail->Subject = $subject;
+		$mail->Body = $text;
+		$mail->isHTML(true);
+        $mail->send();
+	}
+
+	function sendEmailPenerbitan($email,$subject,$text)
+	{
+		$this->ci->load->library('PHPMailerAutoload');
+		$mail = new PHPMailer();
+        $mail->SMTPDebug = false;
+		$mail->protocol = 'mail';
+		$mail->charset = 'iso-8859-1';
+		$mail->wordwrap = TRUE;
+        $mail->Debugoutput = 'html';
+		$mail->isSMTP();
+        $mail->Host = gethostbyname('ssl://smtp-relay.gmail.com');
         $mail->Port = '465';
         $mail->SMTPAuth = true;
 		$mail->SMTPSecure = 'ssl';

@@ -941,13 +941,9 @@ class KonsultasiOSS extends CI_Controller
 		$data['id_syarat']			= $id_syarat;
 		$file_element_name 	= 'd_file';
 		$thisdir = getcwd();
-		$dirPath = $thisdir . "/file/Konsultasi/$id/Dokumen/";
-		if (!file_exists($dirPath)) {
-			//mkdir($dirPath, 0755, true);
-			//create directory if not exist
-		}
+		$dirPath = $thisdir . "/object-storage/dekill/Requirement/";
 		$config['upload_path'] 		= $dirPath;
-		$config['allowed_types'] 		= 'pdf';
+		$config['allowed_types'] 	= 'pdf|PDF';
 		$config['max_size']			= '50240';
 		$config['encrypt_name']		= TRUE;
 		$this->load->library('upload', $config);
@@ -959,9 +955,9 @@ class KonsultasiOSS extends CI_Controller
 				$this->session->set_flashdata('message', 'Jenis Berkas atau Ukuran Berkas tidak Sesuai !');
 				$this->session->set_flashdata('status', 'danger');
 				if ($kode_jenis_syarat != '2') {
-					redirect('KonsultasiOSS/FormDataDokumen/' . $id);
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
 				} else {
-					redirect('KonsultasiOSS/FormDataTeknis/' . $id);
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
 				}
 			} else {
 				if ($file_element_name != '') {
@@ -982,6 +978,7 @@ class KonsultasiOSS extends CI_Controller
 				redirect('KonsultasiOSS/FormPerbaikan/' . $id);
 			}
 		}
+
 	}
 
 	public function DeleteTeknisTanah()
@@ -1192,7 +1189,7 @@ class KonsultasiOSS extends CI_Controller
 			$koefisienLantai = $this->isDecimal($kl) === true ? number_format((float)$getKoefisienLantai->koefisien_lantai, 3, '.', '') : intval($kl);
 			$koefisienBasement = $this->isDecimal($kb) === true ? number_format((float)$getKoefisienBasement->koefisien_basement, 3, '.', '') : intval($kb);
 			$retribusi = $this->MkonsultasiOSS->getRowRetribusi($id)->row();
-			var_dump($retribusi);
+			//var_dump($retribusi);
 			$data = [
 				'row' => $row,
 				'status' => $row->status,
@@ -1226,15 +1223,12 @@ class KonsultasiOSS extends CI_Controller
 		}
 	}
 
-
 	public function getDataKabKota()
 	{
 		$crsf = $this->security->get_csrf_hash();
-
 		$id_provinsi	= $this->uri->segment(3);
 		$value		= array();
 		$query		= $this->Mglobal->listDataKabKota('id_kabkot,nama_kabkota', '', $id_provinsi);
-
 		if ($query->num_rows() > 0 && $id_provinsi != '') {
 			foreach ($query->result() as $row) {
 				$value[]	= array('id_kabkot' => $row->id_kabkot, 'nama_kabkota' => $row->nama_kabkota);
@@ -1293,19 +1287,13 @@ class KonsultasiOSS extends CI_Controller
 
 	public function bayar_retribusi()
 	{
-		//$id = $this->input->post('id',TRUE);
-		$id = $this->uri->segment(3);
 		$tgl_pembayaran = date('Y-m-d');
-		$id = $this->input->post('id', TRUE);
+		$id 			= $this->input->post('id', TRUE);
 		$thisdir = getcwd();
-		$dirPath = $thisdir . "/file/Konsultasi/$id/retribusi/";
-		if (!file_exists($dirPath)) {
-			//mkdir($dirPath, 0755, true);
-
-		}
+		$dirPath = $thisdir . "/object-storage/dekill/Retribution/";
 		$config = [
 			'upload_path' => $dirPath,
-			'allowed_types' => '*',
+			'allowed_types' => 'pdf|PDF',
 			'max_size' => '50000',
 			'max_width' => 5000,
 			'max_height' => 5000,
@@ -1315,27 +1303,26 @@ class KonsultasiOSS extends CI_Controller
 		$this->load->library('upload', $config);
 		if (!$this->upload->do_upload('bukti_upload')) {
 			$this->session->set_flashdata('message', $this->upload->display_errors());
-			// $this->session->set_flashdata('message', 'Silahkan Upload File Terlebih Dahulu!');
 			$this->session->set_flashdata('status', 'danger');
 			redirect($_SERVER['HTTP_REFERER']);
 		} else {
-			if ($this->upload->data('file_ext') != ".pdf") {
+			if ($this->upload->data('file_ext') == ".pdf" || $this->upload->data('file_ext') == ".PDF") {
+				$data = [
+					'id' => $id,
+					'bukti_pembayaran' => $this->upload->data('file_name'),
+					'tgl_pembayaran' => $tgl_pembayaran,
+				];
+				$this->Mkonsultasi->insertDataPembayaran($data);
+				$this->session->set_flashdata('message', 'Pembayaran Retribusi Berhasil Disimpan!');
+				$this->session->set_flashdata('status', 'success');
+				redirect($_SERVER['HTTP_REFERER']);
+			} else {
 				$path = FCPATH . "/{$this->pathRetribusi}";
 				$berkas = $path . $this->upload->data('file_name');
 				if (!unlink($berkas)) {
 				}
 				$this->session->set_flashdata('message', 'Silahkan Upload Berkas Menggunakan Format PDF!');
 				$this->session->set_flashdata('status', 'warning');
-				redirect($_SERVER['HTTP_REFERER']);
-			} else {
-				$data = [
-					'id' => $id,
-					'bukti_pembayaran' => $this->upload->data('file_name'),
-					'tgl_pembayaran' => $tgl_pembayaran,
-				];
-				$this->MkonsultasiOSS->insertDataPembayaran($data);
-				$this->session->set_flashdata('message', 'Pembayaran Retribusi Berhasil Disimpan!');
-				$this->session->set_flashdata('status', 'success');
 				redirect($_SERVER['HTTP_REFERER']);
 			}
 		}
@@ -1533,23 +1520,33 @@ class KonsultasiOSS extends CI_Controller
 		$data['id']		= $id;
 		$data['id_syarat']			= $id_syarat;
 		$file_element_name 	= 'd_file';
-		$thisdir = getcwd();
-		$dirPath = $thisdir . "/file/Konsultasi/" . $id . "/Dokumen";
-		if (!file_exists($dirPath)) {
-			//mkdir($dirPath, 0755, true);
-			//create directory if not exist
-		}
-		$config['upload_path'] 		= $dirPath;
-		$config['allowed_types'] 		= 'pdf';
-		$config['max_size']			= '50240';
-		$config['encrypt_name']		= TRUE;
+		$config = [
+			'upload_path' => './object-storage/dekill/Requirement/',
+			'allowed_types' => 'pdf|PDF',
+			'max_size' => '54000',
+			'encrypt_name' =>  TRUE,
+			'remove_space' => TRUE,
+		];
 		$this->load->library('upload', $config);
 		$this->upload->initialize($config);
+		//id_persyaratan_detail
 		if (!empty($_FILES)) {
 			if (!$this->upload->do_upload('d_file')) {
-				$this->session->set_flashdata('message', 'Jenis Berkas atau Ukuran Berkas tidak Sesuai !');
+				$error['upload'] = $this->upload->display_errors();
+				$this->session->set_flashdata('message', $this->upload->display_errors());
+				// $this->session->set_flashdata('message', 'Jenis Berkas atau Ukuran Berkas tidak Sesuai !');
 				$this->session->set_flashdata('status', 'danger');
-				redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				if ($kode_jenis_syarat == '5') {
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				} else if ($kode_jenis_syarat == '2') {
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				} else if ($kode_jenis_syarat == '1') {
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				} else if ($kode_jenis_syarat == '4') {
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				} else if ($kode_jenis_syarat == '3') {
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				}
 			} else {
 				if ($file_element_name != '') {
 					$file_undangan = $this->upload->data();
@@ -1559,14 +1556,24 @@ class KonsultasiOSS extends CI_Controller
 				}
 				$dataPersyaratan = array(
 					'id' => $id,
-					'dir_file' => $filename,
+					'dir_file' => $this->upload->data('file_name'),
 					'id_persyaratan' => $kode_jenis_syarat,
 					'id_persyaratan_detail' =>  $id_syarat
 				);
 				$this->Mglobals->setData('tmpersyaratankonsultasi', $dataPersyaratan, 'id', $id_administrasi);
 				$this->session->set_flashdata('message', 'Berkas Berhasil Disimpan !.');
 				$this->session->set_flashdata('status', 'success');
-				redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				if ($kode_jenis_syarat == '5') {
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				} else if ($kode_jenis_syarat == '2') {
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				} else if ($kode_jenis_syarat == '1') {
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				} else if ($kode_jenis_syarat == '4') {
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				} else if ($kode_jenis_syarat == '3') {
+					redirect('KonsultasiOSS/FormPerbaikan/' . $id);
+				}
 			}
 		}
 	}

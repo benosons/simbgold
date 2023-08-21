@@ -36,7 +36,7 @@
 						</div>
 					</div>-->
 					<div class="form-group col-md-12">
-						<label class="control-label col-md-3"><b>Tgl. Permohonan Konsultasi</b></label>
+						<label class="control-label col-md-3"><b>Tgl. Permohonan Konsultasi.</b></label>
 						<div class="col-md-9">
 							<div class="col-md-2">
 								<input type="text" class="form-control date-picker" data-date-format="dd-mm-yyyy" name="tanggalawal" value="<?= (isset($tanggalawal) ? tgl_eng_to_ind($tanggalawal) : ''); ?>" placeholder="01-01-2018" />
@@ -72,6 +72,7 @@
 					<th>Nama Pemilik</th>
 					<th>Lokasi BG</th>
 					<th>Fungsi BG</th>
+					<th>Nama Bangunan</th>
 					<th>Tgl Permohonan</th>
 					<th>Status</th>
 					<th>Verifikasi</th>
@@ -93,6 +94,7 @@
 							<td align="center"><?php echo $Konsultasi->nm_pemilik; ?></td>
 							<td><?php echo $Konsultasi->almt_bgn; ?></td>
 							<td><?php echo $Konsultasi->fungsi_bg; ?></td>
+							<td><?php echo $Konsultasi->nm_bgn; ?></td>
 							<td align="center"><?php echo  date('d-m-Y', strtotime($Konsultasi->tgl_pernyataan)); ?></td>
 							<td align="center">
 								<?php echo $Konsultasi->status_dinas; ?>
@@ -222,33 +224,54 @@
 												<div class="col-md-4 name">Lokasi Bangunan Gedung</div>
 												<div class="col-md-8 value alamat-bangunan"></div>
 											</div>
-											<div class="row static-info">
-												<div class="col-md-4 name">Fungsi Bangunan Gedung</div>
-												<div class="col-md-8 value fungsi-bangunan-gedung"></div>
+											<div class="fungsi-bangunan" style="display:none;">
+												<div class="row static-info">
+													<div class="col-md-4 name">Fungsi Bangunan Gedung</div>
+													<div class="col-md-8 value fungsi-bangunan-gedung"></div>
+												</div>
+												<div class="row static-info">
+													<div class="col-md-4 name">Luas Bangunan Gedung</div>
+													<div class="col-md-8 value luas-bg"></div>
+												</div>
+												<div class="row static-info">
+													<div class="col-md-4 name">Ketinggian Bangunan Gedung</div>
+													<div class="col-md-8 value tinggi-bg"></div>
+												</div>
+												<div class="row static-info">
+													<div class="col-md-4 name">Jumlah Lantai Bangunan Gedung</div>
+													<div class="col-md-8 value jumlah-lantai"></div>
+												</div>
+												<div class="row static-info">
+													<div class="col-md-4 name">Luas Basement</div>
+													<div class="col-md-8 value luas-basement"></div>
+												</div>
+												<div class="row static-info">
+													<div class="col-md-4 name">Jumlah Lantai Basement</div>
+													<div class="col-md-8 value lapis-basement"></div>
+												</div>
+												<div class="row static-info">
+													<div class="col-md-4 name">Perancang Dokumen Teknis</div>
+													<div class="col-md-8 value">Perencana Kontruksi</div>
+												</div>
 											</div>
-											<div class="row static-info">
-												<div class="col-md-4 name">Luas Bangunan Gedung</div>
-												<div class="col-md-8 value luas-bg"></div>
-											</div>
-											<div class="row static-info">
-												<div class="col-md-4 name">Ketinggian Bangunan Gedung</div>
-												<div class="col-md-8 value tinggi-bg"></div>
-											</div>
-											<div class="row static-info">
-												<div class="col-md-4 name">Jumlah Lantai Bangunan Gedung</div>
-												<div class="col-md-8 value jumlah-lantai"></div>
-											</div>
-											<div class="row static-info">
-												<div class="col-md-4 name">Luas Basement</div>
-												<div class="col-md-8 value luas-basement"></div>
-											</div>
-											<div class="row static-info">
-												<div class="col-md-4 name">Jumlah Lantai Basement</div>
-												<div class="col-md-8 value lapis-basement"></div>
-											</div>
-											<div class="row static-info">
-												<div class="col-md-4 name">Perancang Dokumen Teknis</div>
-												<div class="col-md-8 value">Perencana Kontruksi</div>
+											
+											<div class="prasarana" style="display:none;">
+												<div class="row static-info">
+													<div class="col-md-4 name">Fungsi Bangunan Prasarana</div>
+													<div class="col-md-8 value jns-prasarana"></div>
+												</div>
+												<div class="row static-info">
+													<div class="col-md-4 name">Luas Bangunan Prasarana</div>
+													<div class="col-md-8 value luas-bgp"></div>
+												</div>
+												<div class="row static-info">
+													<div class="col-md-4 name">Ketinggian Bangunan Prasarana</div>
+													<div class="col-md-8 value tinggi-bgp"></div>
+												</div>
+												<div class="row static-info">
+													<div class="col-md-4 name">Jumlah Lantai Bangunan Prasarana</div>
+													<div class="col-md-8 value jumlah-lantai"></div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -426,8 +449,14 @@
 						$(".tinggi-bg").html(`${response.tinggi_bgn} m<sup>2</sup>`);
 						$(".luas-basement").html(`${response.luas_basement} Meter`);
 						$(".lapis-basement").html(`${response.lapis_basement} Lantai`);
+
+						$(".luas-bgp").html(`${response.luas_bgp} m<sup>2</sup>`);
+						$(".tinggi-bgp").html(`${response.tinggi_bgp} Meter`);
+						$(".jns-prasarana").html(`${response.jns_prasarana}`);
+						//$(".jumlah-lantai").html(`${response.jml_lantai} Lantai`);
 						if (response.id_jenis_permohonan == 11 || response.id_jenis_permohonan == 29 || response.id_jenis_permohonan == 30 || response.id_jenis_permohonan == 31 || response.id_jenis_permohonan == 32 || response.id_jenis_permohonan == 33) {
                             $('.fungsi-bangunan').css('display', 'none');
+							$('.prasarana').css('display', 'none');
                             $('.bangunan-kolektif').css('display', 'block');
                             $('.total-luas-kolektif').html(`${response.luas_total_kolektif} m<sup>2</sup>`);
                             var tableKolektif;
@@ -442,9 +471,14 @@
 									$('#tableKolektif').html(tableKolektif);
                                 });
                             }
-                        }else{
+                        }else if(response.id_jenis_permohonan == 12){
+							$('.prasarana').css('display', 'block');
+							$('.fungsi-bangunan').css('display', 'none');
+                            $('.bangunan-kolektif').css('display', 'none');
+						}else{
                             $('.fungsi-bangunan').css('display', 'block');
                             $('.bangunan-kolektif').css('display', 'none');
+							$('.prasarana').css('display', 'none');
                         }
 
 							var tableTanah;

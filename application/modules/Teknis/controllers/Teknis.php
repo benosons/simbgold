@@ -3,13 +3,13 @@
 
 class Teknis extends CI_Controller {
 	
-	protected $pathBerkas = 'public/uploads/pengajuan/persyaratan/';
-    protected $pathPerbaikan = 'public/uploads/penilaian/perbaikan/';
-    protected $pathBerita = 'public/uploads/penilaian/berita_acara/';
-    protected $pathInspeksi = 'public/uploads/inspeksi/pemeriksaan/';
-    protected $pathBeritaInspeksi = 'public/uploads/inspeksi/berita_acara/';
-    protected $pathJustifikasi = 'public/uploads/inspeksi/justifikasi/';
-    protected $pathCatatan = 'public/uploads/inspeksi/catatan/';
+	protected $pathBerkas           = 'public/uploads/pengajuan/persyaratan/';
+    protected $pathPerbaikan        = 'public/uploads/penilaian/perbaikan/';
+    protected $pathBerita           = 'public/uploads/penilaian/berita_acara/';
+    protected $pathInspeksi         = 'public/uploads/inspeksi/pemeriksaan/';
+    protected $pathBeritaInspeksi   = 'public/uploads/inspeksi/berita_acara/';
+    protected $pathJustifikasi      = 'public/uploads/inspeksi/justifikasi/';
+    protected $pathCatatan          = 'public/uploads/inspeksi/catatan/';
 
     public function __construct()
     {
@@ -21,7 +21,7 @@ class Teknis extends CI_Controller {
 		$this->load->model('mglobal');
 		$this->load->library('Simbg_lib');
 		$this->load->library('Oss_lib');
-        $this->simbg_lib->check_session_login();
+        //$this->simbg_lib->check_session_login();
 	}
 	
 	function index(){

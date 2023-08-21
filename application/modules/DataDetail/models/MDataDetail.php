@@ -100,10 +100,11 @@ class MDataDetail extends CI_Model {
 
 	public function cekDataBangunan($id)
 	{
-		$this->db->select('a.id as id_pemilik,a.jns_pemilik,c.lama_proses,
+		$this->db->select('a.id as id_pemilik,a.jns_pemilik,
+		c.lama_proses,
 		b.id_prov_bgn,b.luas_basement,b.lapis_basement,b.luas_bgp,b.tinggi_bgp,b.id_klasifikasi,
 		b.id_kabkot_bgn,b.id_kec_bgn,b.id_jenis_permohonan,no_konsultasi,nm_pemilik,alamat,nm_konsultasi,
-		almt_bgn,fungsi_bg,b.luas_bgn,b.tinggi_bgn,b.status,b.id_fungsi_bg,b.jml_lantai,
+		b.almt_bgn,b.luas_bgn,b.tinggi_bgn,b.status,b.id_fungsi_bg,b.jml_lantai,
 		e.nama_kecamatan,h.nama_kabkota,i.nama_provinsi as nama_prov_pemilik,a.email,a.no_ktp,
 		b.nm_bgn,a.id_kecamatan,
 		n.nama_kelurahan as nama_kel_bg,d.nama_kelurahan,

@@ -30,7 +30,7 @@
 					<div class="form-group">
 						<label class="col-md-3 control-label">Unit Organisasi</label>
 						<div class="col-md-7">
-							<input type="text" class="form-control" value="<?php echo set_value('unit_organisasi', (isset($DataPemilik->nm_pemilik) ? $DataPemilik->nm_pemilik : '')) ?>" name="unit_organisasi" placeholder="Organisasi" autocomplete="off">
+							<input type="text" class="form-control" value="<?php echo set_value('unit_organisasi', (isset($DataPemilik->nm_pemilik) ? $DataPemilik->nm_pemilik : '')) ?>" name="unit_organisasi" placeholder="Kementrian / Lembaga / Organisasi" autocomplete="off">
 						</div>
 					</div>
 				</div>

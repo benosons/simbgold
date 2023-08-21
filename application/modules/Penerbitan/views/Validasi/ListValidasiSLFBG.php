@@ -72,13 +72,13 @@
 <script>	
 function GetCetakSLF(id)
 	{
-		var url = "<?php echo base_url() . index_page() ?>Penerbitan/CetakSertifikatLaikFungsi/"+id;
+		var url = "<?php echo base_url() . index_page() ?>Penerbitan/CetakSertifikatLaikFungsiBaru/"+id;
 		swin = window.open(url,'win','scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');
 		swin.focus();
 	}
 function GetCetak(id)
 {
-	$("#MyModalBody").html('<iframe src="<?php echo base_url();?>Penerbitan/CetakSertifikatLaikFungsi/'+id+'" frameborder="no" width="860" height="540"></iframe>');
+	$("#MyModalBody").html('<iframe src="<?php echo base_url();?>Penerbitan/CetakSertifikatLaikFungsiBaru/'+id+'" frameborder="no" width="860" height="540"></iframe>');
 	$('[name="id"]').val(id) ; 
 }
 </script>

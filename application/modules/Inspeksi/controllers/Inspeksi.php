@@ -1,10 +1,10 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 class Inspeksi extends CI_Controller
 {
-    protected $pathBerkas = 'dekill/Inspection/berkas/';
-    protected $pathBerita = 'dekill/Inspection/berita_acara/';
-    protected $pathJustifikasi = 'dekill/Inspection/justifikasi/';
-    protected $pathCatatan = 'dekill/Inspection/catatan/';
+    protected $pathBerkas = 'object-storage/dekill/Inspection/berkas/';
+    protected $pathBerita = 'object-storage/dekill/Inspection/berita_acara/';
+    protected $pathJustifikasi = 'object-storage/dekill/Inspection/justifikasi/';
+    protected $pathCatatan = 'object-storage/dekill/Inspection/catatan/';
 
     public function __construct()
     {
@@ -37,15 +37,15 @@ class Inspeksi extends CI_Controller
             $get_konsultasi = $this->mglobal->listDataKonsultasi('a.id,a.nm_konsultasi');
             $get_fungsi = $this->mglobal->listDataFungsiBg('a.id_fungsi_bg,a.fungsi_bg');
             $data = array(
-                'id' => $id,
+                'id'            => $id,
                 'id_konsultasi' => $row->id_pemilik,
                 'no_konsultasi' => $row->no_konsultasi,
-                'nm_pemilik' => $row->nm_pemilik,
-                'alamat' => $row->alamat,
+                'nm_pemilik'    => $row->nm_pemilik,
+                'alamat'        => $row->alamat,
                 'nama_kecamatan' => $row->nama_kecamatan,
-                'nama_kabkota' => $row->nama_kabkota,
+                'nama_kabkota'  => $row->nama_kabkota,
                 'nm_konsultasi' => $row->nm_konsultasi,
-                'nama_kec_bg' => $row->nama_kec_bg,
+                'nama_kec_bg'   => $row->nama_kec_bg,
                 'nama_kabkota_bg' => $row->nama_kabkota_bg,
                 'nama_provinsi_bg' => $row->nama_provinsi_bg,
                 'fungsi_bg' => $row->fungsi_bg,
@@ -68,9 +68,11 @@ class Inspeksi extends CI_Controller
                 'lapis_basement' => $row->lapis_basement,
                 'title' => 'Inspeksi',
                 'heading'  => '',
-                'pathCatatan' => "file/Konsultasi/{$id}/Inspeksi/Catatan",
-                'pathInspeksi' => "file/Konsultasi/{$id}/Inspeksi/Dokumen",
-                'pathJustifikasi' => "file/Konsultasi/{$id}/Inspeksi/Justifikasi",
+
+                'pathCatatan' => "object-storage/dekill/Inspection/catatan",
+                'pathInspeksi' => "object-storage/dekill/Inspection/berkas",
+                'pathJustifikasi' => "object-storage/dekill/Inspection/justifikasi",
+
                 'struktur_bawah' => $struktur_bawah,
                 'basement' => $basement,
                 'struktur_atas' => $struktur_atas,
@@ -372,6 +374,7 @@ class Inspeksi extends CI_Controller
                 ];
                 $this->Minspeksi->updateInspeksi($id_inspeksi, $data);
                 $row = $this->getRowInspeksi($idKonsultasi, $struktur)->row();
+
                 $result[] = [
                     'id_pemilik' => $idKonsultasi,
                     'pemeriksaan' => $row->nama_pemeriksaan,
@@ -379,6 +382,10 @@ class Inspeksi extends CI_Controller
                     'catatan' => $row->catatan == NULL ? false : $row->catatan,
                     'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                     'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                        'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                 ];
                 $output = [
                     'status' => true,
@@ -419,6 +426,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -460,6 +471,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -488,6 +503,10 @@ class Inspeksi extends CI_Controller
                     'catatan' => $row->catatan == NULL ? false : $row->catatan,
                     'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                     'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                        'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                 ];
                 $output = [
                     'status' => true,
@@ -530,6 +549,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -572,6 +595,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -614,6 +641,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -659,6 +690,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -690,6 +725,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -740,6 +779,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -782,6 +825,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -810,6 +857,10 @@ class Inspeksi extends CI_Controller
                     'catatan' => $row->catatan == NULL ? false : $row->catatan,
                     'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                     'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                        'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                 ];
                 $output = [
                     'status' => true,
@@ -854,6 +905,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -897,6 +952,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -940,6 +999,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -986,6 +1049,10 @@ class Inspeksi extends CI_Controller
                         'catatan' => $row->catatan == NULL ? false : $row->catatan,
                         'berkas_file' => $row->berkas_file == NULL ? false : $row->berkas_file,
                         'berkas_justifikasi' => $row->berkas_justifikasi == NULL ? false : $row->berkas_justifikasi,
+                                            'dirBerkas' => $row->berkas_file == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathBerkas . $row->berkas_file),
+                    'dirCatatan' => $row->catatan == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathCatatan . $row->catatan),
+                    'dirJustifikasi' => $row->berkas_justifikasi == NULL ? false : $this->Outh_model->Encryptor('encrypt', $this->pathJustifikasi . $row->berkas_justifikasi),
+
                     ];
                     $output = [
                         'status' => true,
@@ -1494,10 +1561,8 @@ class Inspeksi extends CI_Controller
         $nomor_berita = $this->input->post('nomor_berita', TRUE);
         $tgl_berita = $this->input->post('tgl_berita', TRUE);
         $okupansi   = $this->input->post('okupansi', TRUE);
-        
         $cekInspeksi = $this->Minspeksi->cekInspeksiBangunan($id);
         $cek = $this->Minspeksi->cekDataInspeksiBangunan($id);
-
         $ttd = $this->Minspeksi->getPejabatTtd($id);
         $nm_kadis = $ttd['kepala_dinas'];
 		$nip_kadis = $ttd['nip_kepala_dinas'];
@@ -1613,6 +1678,7 @@ class Inspeksi extends CI_Controller
 						$params['size'] = 10;
 						$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
 						$data['QR'] = $this->ciqrcode->generate($params);
+                        
                     }
                 }
             }
@@ -1694,20 +1760,24 @@ class Inspeksi extends CI_Controller
 
     function SK_SLF($id=null)
 	{
-	    $que = $this->Minspeksi->get_id_kabkot($id);
+        $que = $this->Minspeksi->get_id_kabkot($id);
 		$lokasi = $que['id_kec_bgn'];
         $tgl_disetujui = date('d').date('m').date('Y');
 		$mydata2 = $this->Minspeksi->getNoDrafSlf($lokasi,$tgl_disetujui);
-	    if(count($mydata2)>0){
-	        $no_baru = SUBSTR($mydata2['no_slf_baru'],-3)+1;
-	    	if ($no_baru < 100){
+        if(count($mydata2)>0){
+            $no_baru = SUBSTR($mydata2['no_slf_baru'],-3)+1;
+            if ($no_baru < 10){
 				$sk_pbg = "SK-SLF-".$lokasi."-".$tgl_disetujui."-00".$no_baru;
-	  		} else {
-	       		$sk_pbg = "SK-SLF-".$lokasi."-".$tgl_disetujui."-".$no_baru;
-	   		}
-	    } else {
-	    	$sk_pbg = "SK-SLF-".$lokasi."-".$tgl_disetujui."-001";
-	    }
+            } else if($no_baru < 99){
+                $sk_pbg = "SK-SLF-".$lokasi."-".$tgl_disetujui."-0".$no_baru;
+            } else if ($no_baru > 100){
+                $sk_pbg = "SK-SLF-".$lokasi."-".$tgl_disetujui."-".$no_baru;
+            } else {
+                $sk_pbg = "SK-SLF-".$lokasi."-".$tgl_disetujui."-".$no_baru;
+            }
+        } else {
+            $sk_pbg = "SK-SLF-".$lokasi."-".$tgl_disetujui."-001";
+        }
 		return $sk_pbg;
 	}
 
@@ -1757,7 +1827,7 @@ class Inspeksi extends CI_Controller
         $config = [
             'upload_path' => "./{$this->pathPerbaikan}",
             'allowed_types' => 'pdf|PDF',
-            'max_size' => '50000',
+            'max_size' => '100000',
             'max_width' => 5000,
             'max_height' => 5000,
             'encrypt_name' =>  TRUE,
@@ -1873,7 +1943,7 @@ class Inspeksi extends CI_Controller
         $confBerkas1 = [
             'upload_path' => "{$dirPath}",
             'allowed_types' => 'pdf|PDF',
-            'max_size' => '50000',
+            'max_size' => '150000',
             'max_width' => 5000,
             'max_height' => 5000,
             'encrypt_name' =>  TRUE,
@@ -1883,7 +1953,7 @@ class Inspeksi extends CI_Controller
         $confBerkas2 = [
             'upload_path' => "{$dirPath}",
             'allowed_types' => 'pdf|PDF',
-            'max_size' => '50000',
+            'max_size' => '150000',
             'max_width' => 5000,
             'max_height' => 5000,
             'encrypt_name' =>  TRUE,
@@ -1893,7 +1963,7 @@ class Inspeksi extends CI_Controller
         $confBerkas3 = [
             'upload_path' => "{$dirPath}",
             'allowed_types' => 'pdf|PDF',
-            'max_size' => '50000',
+            'max_size' => '150000',
             'max_width' => 5000,
             'max_height' => 5000,
             'encrypt_name' =>  TRUE,

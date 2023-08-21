@@ -166,11 +166,11 @@
                         <div class="col-md-4 name">Jenis Konsultasi</div>
                         <div class="col-md-8 value jenis-konsultasi"></div>
                     </div>
-                    <div class="row static-info">
+                    <!--<div class="row static-info">
                         <div class="col-md-4 name">Tanggal Verifikasi &amp; <br> Batas Waktu Pelayanan</div>
                         <div class="col-md-8 value tgl-periode">
                         </div>
-                    </div>
+                    </div>-->
                     <div class="row static-info">
                         <div class="col-md-4 name">Lokasi Bangunan Gedung</div>
                         <div class="col-md-8 value alamat-bangunan"></div>
@@ -217,6 +217,14 @@
 						<div class="col-md-4 name">Berita Acara/Rekomtek</div>
 						<div class="col-md-8 value berita-acara"></div>
 					</div>
+                    <!--<div class="row static-info">
+						<div class="col-md-4 name">Dokumen SPPST</div>
+						<div class="col-md-8 value dokumen-sppst">
+
+                        <a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('Dokumen/CetakVerifikasiBangunanBaru/' . $databgn->id); ?>')" class="btn default btn-md blue-stripe">Lihat SPPST</a>   
+						
+                        </div>
+					</div>-->
                     <h4 align="center" class="caption-subject font-blue bold uppercase">Detail Perhitungan Retribusi</h4>
                     <div class="row static-info">
                         <div class="col-md-4 name">Status Perhitungan Retribusi</div>
@@ -470,6 +478,8 @@ function GetCetak(id)
                             $(".nilai-retribusi-prasarana").html(`Rp. ${response.nilai_retribusi_prasarana}`);
                             $(".nilai-retribusi-keseluruhan").html(`Rp. ${response.nilai_retribusi_keseluruhan}`);
                             $(".berita-acara").html(`<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('${site_url}/${response.dir_file_konsultasi}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`);
+                            $(".dokumen-sppst").html(`<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('${site_url}/${response.dir_file_konsultasi}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`);
+                            
                             if (response.id_jenis_permohonan == 11) {
                                 $('.fungsi-bangunan').css('display', 'none');
                                 $('.bangunan-kolektif').css('display', 'block');

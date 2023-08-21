@@ -11,7 +11,7 @@ class Mpenyerahandokumen extends CI_Model
 		$this->db->where("b.status >= 15 ");
 		$this->db->where("b.status != 25 ");
 		$this->db->where("b.status != 26 ");
-		$this->db->where("b.id_jenis_permohonan != 14 ");
+		$this->db->where("b.id_izin != 2 ");
 		if($Dinas =='31'){
 			$this->db->where('b.id_prov_bgn = 31');
 			$this->db->where('b.jml_lantai > 8');
@@ -79,7 +79,7 @@ class Mpenyerahandokumen extends CI_Model
 		$this->db->where("b.status >= 15 ");
 		$this->db->where("b.status != 25 ");
         $this->db->where("b.status != 26 ");
-		$this->db->where("b.id_jenis_permohonan = 14 ");
+		$this->db->where("b.id_izin = 2 ");
         if($Dinas =='31'){
 			$this->db->where('b.id_prov_bgn = 31');
 			$this->db->where('b.jml_lantai > 8');

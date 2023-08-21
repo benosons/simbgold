@@ -426,7 +426,7 @@
 						$(".luas-prasarana").html(`${response.luas_bgp} m<sup>2</sup>, dengan tinggi ${response.tinggi_bgp} meter`);
 						$(".fungsi-prasarana").html(`${response.jns_prasarana}`);
 						$(".tgl-periode").html(`<p><span class="font-blue">${response.tgl_pernyataan}</span> <i class="text-tot">sampai dengan</i> <span class="font-blue">${response.hasil_tgl}</span> <i class="text-tot">, (${response.lama_proses} Hari Kerja) <br>terhitung dari tanggal verifikasi kelengkapan berkas</i></p>`);
-						if (response.id_jenis_permohonan == 11) {
+						if (response.id_jenis_permohonan == 11 || response.id_jenis_permohonan == 29 || response.id_jenis_permohonan == 30 || response.id_jenis_permohonan == 31 || response.id_jenis_permohonan == 32 || response.id_jenis_permohonan == 33) {
                             $('.fungsi-bangunan').css('display', 'none');
                             $('.bangunan-kolektif').css('display', 'block');
 							$('.prasarana').css('display', 'none');
@@ -514,7 +514,7 @@
 						$(".luas-prasarana").html(response.luas_bgp);
 						$(".tinggi-prasarana").html(response.tinggi_bgp);
 						$(".jenis-prasarana").html(response.jns_prasarana);
-						if (response.id_jenis_permohonan == 11) {
+						if (response.id_jenis_permohonan == 11 || response.id_jenis_permohonan == 29 || response.id_jenis_permohonan == 30 || response.id_jenis_permohonan == 31 || response.id_jenis_permohonan == 32 || response.id_jenis_permohonan == 33) {
 								$('.prasarana').css('display', 'none');
                                 $('.fungsi-bangunan').css('display', 'none');
                                 $('.bangunan-kolektif').css('display', 'block');

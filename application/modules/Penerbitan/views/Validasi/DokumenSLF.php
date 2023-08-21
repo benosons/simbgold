@@ -29,10 +29,16 @@ if (trim($bg['tgl_penerbitan_slf']) != ''){
   $tgl_teknis = $tgl_tek2[0].' '.$montharray [$tgl_tek2[1]-1].' '.$tgl_tek2[2];
 }
 if ($bg['id_fungsi_bg'] =='1'){
-  $usiabg ='20';
+  if($bg['id_jns_bg'] == '3'){
+    $usiabg ='5';
+  }else{
+    $usiabg ='20';
+  }
 }else{
   $usiabg ='5';
 }
+
+
 if($bg['luas_bgn'] <='72'){
   if($bg['jml_lantai'] =='1'){
     $klasifikasi = 'Sederhana';
@@ -100,12 +106,17 @@ $pdf->Cell(0, 5, "Berdasarkan Surat Pernyataan Pemeriksaan Kelaikan Fungsi Bangu
 $pdf->Cell(0, 5, "Nomor : ".$bg['no_slf']. " Tanggal : ".$tgl_teknis, 0, 1, "C");
 $pdf->Cell(0, 5, "Menyatakan bahwa :", 0, 1, "C");
 $pdf->Cell(0, 5, "Nama Bangunan Gedung", 0, 1, "C");
-$pdf->Cell(0, 5, $bg['nm_bgn'], 0, 1, "C");
+$pdf->SetFont('Arial', 'B', 10);
+$pdf->MultiCell(0, 5, $bg['nm_bgn'], 0, "C", 0);
+$pdf->SetFont('Arial', '', 10);
 $pdf->Cell(0, 5, "Fungsi Bangunan Gedung", 0, 1, "C");
+$pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(0, 5, $bg['fungsi_bg'], 0, 1, "C");
+$pdf->SetFont('Arial', '', 10);
 $pdf->Cell(0, 5, "Klasifikasi Bangunan Gedung", 0, 1, "C");
+$pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(0, 5, $fungsi['nm_jenis_bg'], 0, 1, "C");
-
+$pdf->SetFont('Arial', 'B', 10);
 if ($bg['no_imb'] !=''){
   $no_izin_mendirikan = $bg['no_imb'];
 }else {
@@ -150,7 +161,17 @@ $pdf->Cell(85, 5, "", 0, 0, "L");
 if($bg['id_dki'] =='1'){
   $pdf->MultiCell(0, 5, "KEPALA DINAS CIPTA KARYA, TATA RUANG DAN PERTANAHAN PROVINSI DKI JAKARTA", 0, "L", 0);
 }else{
-  $pdf->MultiCell(0, 5, "KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+  if($bg['status_pejabat'] == '1'){
+    $pdf->MultiCell(0, 5, "PLT KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+  } else if ($bg['status_pejabat'] == '2'){
+    $pdf->MultiCell(0, 5, "PJS KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+  } else if ($bg['status_pejabat'] == '3'){
+    $pdf->MultiCell(0, 5, "KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+  } else if ($bg['status_pejabat'] == '4'){
+    $pdf->MultiCell(0, 5, "PLH KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+  } else {
+    $pdf->MultiCell(0, 5, "KEPALA " .ucwords(strtoupper($bg['nm_dinas'])), 0, "L", 0);
+  }
 }
 $pdf->Cell(100, 5, "", 0, 0, "L");
 $pdf->Cell(0, 5, "", 0, 1, "L");
@@ -162,6 +183,7 @@ if($bg['id_dki'] =='1'){
 }else{
   $pdf->Cell(0, 5, ($bg['nm_kadis_teknis']), 0, 1, "L");
 }
+
 $pdf->Cell(85, 5, "", 0, 0, "L");
 if($bg['id_dki'] =='1'){
   $pdf->Cell(0, 5, "196803121998031010", 0, 1, "L");
@@ -197,15 +219,23 @@ $pdf->MultiCell(0, 5,$bg['almt_bgn'].", Kel/Desa. ".$bg['nama_kelurahan'].", Kec
 $pdf->Cell(15, 5, "", 0, 0, "L");
 $pdf->Cell(70, 5, "Jumlah Lantai Bangunan Gedung", 0, 0, "L");
 $pdf->Cell(5, 5, ":", 0, 0, "L");
-$pdf->Cell(0, 5, $bg['jml_lantai']. "Lantai", 0, 1, "L");
+$pdf->Cell(0, 5, $bg['jml_lantai']. " Lantai", 0, 1, "L");
 $pdf->Cell(15, 5, "", 0, 0, "L");
 $pdf->Cell(70, 5, "Luas Lantai Bangunan Gedung", 0, 0, "L");
 $pdf->Cell(5, 5, ":", 0, 0, "L");
-$pdf->Cell(0, 5, $bg['luas_bgn']. "m", 0, 1, "L");
+$pdf->Cell(18, 5, number_format($bg['luas_bgn'],2,',','.'), 0, 0, "L");
+$pdf->Cell(4,5,' m',0,0);
+$pdf->subWrite(5,'2','',6,4);
+$pdf->Cell(10,5,'',0,1);
+
 $pdf->Cell(15, 5, "", 0, 0, "L");
 $pdf->Cell(70, 5, "Luas Dasar Bangunan Gedung ", 0, 0, "L");
 $pdf->Cell(5, 5, ":", 0, 0, "L");
-$pdf->Cell(0, 5, "............m", 0, 1, "L");
+$pdf->Cell(18, 5,number_format($bg['luas_dasar'],2,',','.'), 0, 0, "L");
+$pdf->Cell(4,5,' m',0,0);
+$pdf->subWrite(5,'2','',6,4);
+$pdf->Cell(10,5,'',0,1);
+
 $pdf->Cell(15, 5, "", 0, 0, "L");
 $pdf->Cell(70, 5, "Luas Tanah ", 0, 0, "L");
 $pdf->Cell(5, 5, ":", 0, 0, "L");
@@ -276,17 +306,27 @@ $pdf->Cell(70, 5, "Lokasi Bangunan Gedung", 0, 0, "L");
 $pdf->Cell(5, 5, ":", 0, 0, "L");
 $pdf->MultiCell(0, 5,$bg['almt_bgn'].", Kel/Desa. ".$bg['nama_kelurahan'].", Kec ".$bg['nama_kecamatan'].", ".ucwords(strtolower($bg['nama_kabkota'])).", Prov ".$bg['nama_provinsi'], 0, "L", 0);
 $pdf->Cell(15, 5, "", 0, 0, "L");
+
 $pdf->Cell(70, 5, "Jumlah Lantai Bangunan Gedung", 0, 0, "L");
 $pdf->Cell(5, 5, ":", 0, 0, "L");
 $pdf->Cell(0, 5, $bg['jml_lantai']. "Lantai", 0, 1, "L");
 $pdf->Cell(15, 5, "", 0, 0, "L");
+
 $pdf->Cell(70, 5, "Luas Lantai Bangunan Gedung", 0, 0, "L");
 $pdf->Cell(5, 5, ":", 0, 0, "L");
-$pdf->Cell(0, 5, $bg['luas_bgn']. "m", 0, 1, "L");
+$pdf->Cell(18, 5, number_format($bg['luas_bgn'],2,',','.'), 0, 0, "L");
+$pdf->Cell(4,5,' m',0,0);
+$pdf->subWrite(5,'2','',6,4);
+$pdf->Cell(10,5,'',0,1);
+
 $pdf->Cell(15, 5, "", 0, 0, "L");
 $pdf->Cell(70, 5, "Luas Dasar Bangunan Gedung ", 0, 0, "L");
 $pdf->Cell(5, 5, ":", 0, 0, "L");
-$pdf->Cell(0, 5, "............m", 0, 1, "L");
+$pdf->Cell(18, 5,number_format($bg['luas_dasar'],2,',','.'), 0, 0, "L");
+$pdf->Cell(4,5,' m',0,0);
+$pdf->subWrite(5,'2','',6,4);
+$pdf->Cell(10,5,'',0,1);
+
 $pdf->Cell(15, 5, "", 0, 0, "L");
 $pdf->Cell(70, 5, "Luas Tanah ", 0, 0, "L");
 $pdf->Cell(5, 5, ":", 0, 0, "L");

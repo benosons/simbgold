@@ -33,9 +33,15 @@
                 <div id="identitas" style="display: none;">
                     <div class="form-group" id="perorangan" style="display: none;">
                         <label class="col-md-3 control-label">Nama Lengkap</label>
-                        <div class="col-md-2"><input type="text" class="form-control" value="<?php echo set_value('glr_depan', (isset($DataPemilik->glr_depan) ? $DataPemilik->glr_depan : "")) ?>" name="glr_depan" placeholder="Gelar" autocomplete="off"></div>
-                        <div class="col-md-3"><input type="text" class="form-control" value="<?php echo set_value('nama_pemilik', (isset($DataPemilik->nm_pemilik) ? $DataPemilik->nm_pemilik : "")) ?>" name="nama_pemilik" placeholder="Nama Lengkap Pemilik" autocomplete="off"></div>
-                        <div class="col-md-2"><input type="text" class="form-control" value="<?php echo set_value('glr_belakang', (isset($DataPemilik->glr_belakang) ? $DataPemilik->glr_belakang : "")) ?>" name="glr_belakang" placeholder="Gelar" autocomplete="off"></div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" value="<?php echo set_value('glr_depan', (isset($DataPemilik->glr_depan) ? $DataPemilik->glr_depan : "")) ?>" name="glr_depan" placeholder="Gelar" autocomplete="off">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" value="<?php echo set_value('nama_pemilik', (isset($DataPemilik->nm_pemilik) ? $DataPemilik->nm_pemilik : "")) ?>" name="nama_pemilik" placeholder="Nama Lengkap Pemilik" autocomplete="off">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" value="<?php echo set_value('glr_belakang', (isset($DataPemilik->glr_belakang) ? $DataPemilik->glr_belakang : "")) ?>" name="glr_belakang" placeholder="Gelar" autocomplete="off">
+                        </div>
                     </div>
                     <div class="form-group" id="jenis_pengenal">
                         <label class="col-md-3 control-label">Jenis Tanda Pengenal</label>
@@ -129,7 +135,7 @@
                     </div>
                 </div>
                 <div class="form-group last">
-                    <label class="col-md-3 control-label">Alamat E-mail</label>
+                    <label class="col-md-3 control-label">Alamat Email</label>
                     <div class="col-md-7">
                         <input type="email" class="form-control" placeholder="Alamat Email Aktif" value="<?php echo set_value('email', (isset($DataPemilik->email) ? $DataPemilik->email : "")) ?>" name="email">
                     </div>
@@ -180,7 +186,6 @@
                 <div class="form-group">
                     <label class="control-label col-md-3">Jenis Permohonan Konsultasi<span class="required">* </span></label>
                     <div class="col-md-5">
-                        <input type="hidden" class="form-control" value="<?php echo set_value('id_izin', (isset($DataBangunan->id_izin) ? $DataBangunan->id_izin : '')) ?>" name="id_izin" placeholder="id_izin" autocomplete="off">
                         <input type="hidden" class="form-control" value="<?php echo set_value('id_bgn', (isset($DataBangunan->id_bgn) ? $DataBangunan->id_bgn : '')) ?>" name="id_bgn" placeholder="id_bgn" autocomplete="off">
                         <?php echo form_dropdown('id_izin', $list_JnsPer, isset($DataBangunan->id_izin) ? $DataBangunan->id_izin : '', 'class ="form-control" id="id_izin" onchange="getjenisPermohonan(this.value)" disabled'); ?>
                     </div>
@@ -244,30 +249,74 @@
                 <div id="permohonan_slf_show" style="display:none;">
                     <div class="form-group">
                         <label class="control-label col-md-3">Permohonan SLF<span class="required">*</span></label>
-                        <input type="hidden" class="form-control" value="<?php echo set_value('permohonan_slf', (isset($DataBangunan->permohonan_slf) ? $DataBangunan->permohonan_slf : '')) ?>" name="permohonan_slf" placeholder="id_izin" autocomplete="off">
-                        
                         <div class="col-md-5">
                             <?php $list_perSlf = array(
                                 '' => '--Pilih--',
                                 '1' => 'Bangunan Gedung',
-                                '2' => 'Bangunan Prasarana',
-                                '3' => 'Prototipe/Purwarupa SPBU Mikro 3 (TIGA) Kiloliter'
+                                '2' => 'Bangunan Prasarana'
                             );
-                            echo form_dropdown('permohonan_slf', $list_perSlf, isset($DataBangunan->permohonan_slf) ? $DataBangunan->permohonan_slf : '', 'class ="form-control" onchange="set_permohonan_slf(this.value)" id="permohonan_slf" disabled' ); ?>
+                            echo form_dropdown('permohonan_slf', $list_perSlf, isset($DataBangunan->permohonan_slf) ? $DataBangunan->permohonan_slf : '', 'class ="form-control" onchange="set_permohonan_slf(this.value)" id="permohonan_slf"'); ?>
                         </div>
                     </div>
                 </div>
-                <div id="KolektifInduk" style="display:none;">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">Nama Perumahan<span class="required">*</span></label>
-                        <div class="col-md-7">
-                            <input type="text" class="form-control" value="<?php echo set_value('nama_bangunan_kolektif', (isset($DataBangunan->nm_bgn) ? $DataBangunan->nm_bgn : '')) ?>" name="nama_bangunan_kolektif" placeholder="Nama Perumahangunan" autocomplete="off">
-                        </div>
+				 <div id="fungsibg" class="form-group" style="display:none;">
+                    <label class="control-label col-md-3">Fungsi Bangunan<span class="required">* </span></label>
+                    <div class="col-md-5">
+                        <?php $id_fungsi_bg = set_value('id', (isset($DataBangunan->id_fungsi_bg) ? $DataBangunan->id_fungsi_bg : '')); ?>
+                        <?php
+                        $selected = '';
+                        if (isset($id_fungsi_bg) && $id_fungsi_bg != '')
+                            $selected = $id_fungsi_bg;
+                        else
+                            $selected = '';
+                        $js = 'id="id_fungsi_bg" onchange="set_jns_bg(this.value)" class="form-control"';
+                        echo form_dropdown('id_fungsi_bg', $list_fungsi, $selected, $js);
+                        ?>
                     </div>
+                </div>
+				 <div id="jns_bg_toggle" class="form-group" style="display:none;">
+                    <label class="control-label col-md-3">Jenis Bangunan <span class="required">* </span></label>
+                    <div class="col-md-5">
+                        <?php echo form_dropdown('id_jns_bg', array('' => '--Pilih--'), isset($DataBangunan->id_jns_bg) ? $DataBangunan->id_jns_bg : '', 'id="id_jns_bg"  onchange="show_detail(this.value)" class="form-control"'); ?>
+                    </div>
+                </div>
+                <div class="form-group" id="campurincek" style="display: none;">
+                    <?php
+                    $hunian = '';
+                    $keagamaan = '';
+                    $usaha = '';
+                    $sosbud = '';
+                    $khusus = '';
+                    if ($DataBangunan->id_jns_bg != NULL) {
+                        $jenis = json_decode($DataBangunan->id_jns_bg);
+                        foreach ($jenis as $dt_cek) {
+                            if ($dt_cek == 1) $hunian = 'checked';
+                            if ($dt_cek == 2) $keagamaan = 'checked';
+                            if ($dt_cek == 3) $usaha = 'checked';
+                            if ($dt_cek == 4) $sosbud = 'checked';
+                        }
+                    }
+                    ?>
+                    <label class="control-label col-md-3">Jenis Bangunan <span class="required">*minimal 2</span></label>
+                    <div class="col-md-7 checkbox-inline">
+                        <label><input type="checkbox" class="form-control" name="dcampur[]" value="1" <?= $hunian; ?>> Hunian </label>
+                        <label><input type="checkbox" class="form-control" name="dcampur[]" value="2" <?= $keagamaan; ?>> Keagamaan </label>
+                        <label><input type="checkbox" class="form-control" name="dcampur[]" value="3" <?= $usaha; ?>> Usaha </label>
+                        <label><input type="checkbox" class="form-control" name="dcampur[]" value="4" <?= $sosbud; ?>> Sosial & Budaya </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">Nama Bangunan<span class="required">*</span></label>
+                    <div class="col-md-7">
+						<input type="text" class="form-control" value="<?php echo set_value('nama_bangunan', (isset($DataBangunan->nm_bgn) ? $DataBangunan->nm_bgn : '')) ?>" name="nama_bangunan" placeholder="Nama Bangunan" autocomplete="off">
+                    </div>
+                </div>
+				<div id="KolektifInduk" style="display:none;">
                     <div class="form-group">
                         <label class="control-label col-md-3">Tipe Bangunan<span class="required">* </span></label>
                         <div class="col-md-7">
                             <div class="col-md-3">
+                                <!--<div class="form-group"><a class="btn btn-info" href="javascript:void(0);" onclick="addTipe();"><i class="fa fa-plus left-icon"> </i>Tambah Tipe</a></div>-->
                                 <table class="table table-striped table-bordered dt-responsive wrap" id="tipe_bgn">
                                     <tr>
                                         <th>Tipe</th>
@@ -278,12 +327,12 @@
                                         <th width="5%">Aksi</th>
                                     </tr>
                                     <?php
-                                    $tipe = json_decode($DataBangunan->tipeA);
-                                    $jumlah = json_decode($DataBangunan->jumlahA);
-                                    $luas = json_decode($DataBangunan->luasA);
-                                    $tinggi = json_decode($DataBangunan->tinggiA);
-                                    $lantai = json_decode($DataBangunan->lantaiA);
-                                    $bangunan = array();
+                                    $tipe 		= json_decode($DataBangunan->tipeA);
+                                    $jumlah 	= json_decode($DataBangunan->jumlahA);
+                                    $luas 		= json_decode($DataBangunan->luasA);
+                                    $tinggi 	= json_decode($DataBangunan->tinggiA);
+                                    $lantai 	= json_decode($DataBangunan->lantaiA);
+                                    $bangunan 	= array();
                                     if (!empty($tipe))
                                         foreach ($tipe as $noo => $val) {
                                             if ($val != "")
@@ -337,21 +386,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="fungsibg" class="form-group" style="display:none;">
-                    <label class="control-label col-md-3">Fungsi Bangunan<span class="required">* </span></label>
-                    <div class="col-md-5">
-                        <?php $id_fungsi_bg = set_value('id', (isset($DataBangunan->id_fungsi_bg) ? $DataBangunan->id_fungsi_bg : '')); ?>
-                        <?php
-                        $selected = '';
-                        if (isset($id_fungsi_bg) && $id_fungsi_bg != '')
-                            $selected = $id_fungsi_bg;
-                        else
-                            $selected = '';
-                        $js = 'id="id_fungsi_bg" onchange="set_jns_bg(this.value)" class="form-control"';
-                        echo form_dropdown('id_fungsi_bg', $list_fungsi, $selected, $js);
-                        ?>
-                    </div>
-                </div>
+               
                 <div id="jual_bg" style="display:none;">
                     <div class="form-group row">
                         <label class="control-label col-md-3">Bangunan akan dijual perunit bangunan<span class="required">* </span></label>
@@ -363,42 +398,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="jns_bg_toggle" class="form-group" style="display:none;">
-                    <label class="control-label col-md-3">Jenis Bangunan <span class="required">* </span></label>
-                    <div class="col-md-5">
-                        <?php echo form_dropdown('id_jns_bg', array('' => '--Pilih--'), isset($DataBangunan->id_jns_bg) ? $DataBangunan->id_jns_bg : '', 'id="id_jns_bg"  onchange="show_detail(this.value)" class="form-control"'); ?>
-                    </div>
-                </div>
-                <div class="form-group" id="campurincek" style="display: none;">
-                    <?php
-                    $hunian = '';
-                    $keagamaan = '';
-                    $usaha = '';
-                    $sosbud = '';
-                    //$khusus = '';
-                    if ($DataBangunan->id_jns_bg != NULL) {
-                        $jenis = json_decode($DataBangunan->id_jns_bg);
-                        foreach ($jenis as $dt_cek) {
-                            if ($dt_cek == 1) $hunian = 'checked';
-                            if ($dt_cek == 2) $keagamaan = 'checked';
-                            if ($dt_cek == 3) $usaha = 'checked';
-                            if ($dt_cek == 4) $sosbud = 'checked';
-                        }
-                    }
-                    ?>
-                    <label class="control-label col-md-3">Jenis Bangunan <span class="required">*minimal 2</span></label>
-                    <div class="col-md-7 checkbox-inline">
-                        <label><input type="checkbox" class="form-control" name="dcampur[]" value="1" <?= $hunian; ?>> Hunian </label>
-                        <label><input type="checkbox" class="form-control" name="dcampur[]" value="2" <?= $keagamaan; ?>> Keagamaan </label>
-                        <label><input type="checkbox" class="form-control" name="dcampur[]" value="3" <?= $usaha; ?>> Usaha </label>
-                        <label><input type="checkbox" class="form-control" name="dcampur[]" value="4" <?= $sosbud; ?>> Sosial & Budaya </label>
-                    </div>
-                </div>
-                <div id="prasarana" style="display: none;">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">Nama Bangunan Prasarana<span class="required">*</span></label>
-                        <div class="col-md-7"><input type="text" class="form-control" value="<?php echo set_value('nama_bangunan_prasarana', (isset($DataBangunan->nm_bgn) ? $DataBangunan->nm_bgn : '')) ?>" name="nama_bangunan_prasarana" placeholder="" autocomplete="off"></div>
-                    </div>
+               
+				<div id="prasarana" style="display: none;">
                     <div class="form-group">
                         <?php $prasarana_bg = !empty($DataBangunan->id_prasarana_bg) ? $DataBangunan->id_prasarana_bg : ''; ?>
                         <label class="control-label col-md-3">Prasarana<span class="required">* </span></label>
@@ -434,13 +435,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="detail_bg" style="display:none;">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">Nama Bangunan<span class="required">* </span></label>
-                        <div class="col-md-5">
-                            <input type="text" class="form-control" value="<?php echo set_value('nama_bangunan', (isset($DataBangunan->nm_bgn) ? $DataBangunan->nm_bgn : '')) ?>" name="nama_bangunan" placeholder="Nama Bangunan" autocomplete="off">
-                        </div>
-                    </div>
+				 <div id="detail_bg" style="display:none;">
                     <div class="form-group">
                         <label class="control-label col-md-3">Luas Bangunan</label>
                         <div class="col-md-3">
@@ -505,12 +500,12 @@
                 </div>
 
                 <div id="spbu_micro" style="display: none;">
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label class="control-label col-md-3">Nama Bangunan<span class="required">*</span></label>
                         <div class="col-md-7">
                             <input type="text" class="form-control" value="<?php echo set_value('nama_bangunan_pertashop', (isset($DataBangunan->nm_bgn) ? $DataBangunan->nm_bgn : '')) ?>" name="nama_bangunan_pertashop" placeholder="" autocomplete="off">
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                         <label class="control-label col-md-3">Luas Bangunan<span class="required">*</span></label>
                         <div class="col-md-2">
@@ -561,12 +556,9 @@
             </div>
             <?php if (isset($DataPemilik->pernyataan) != 1) { ?>
                 <div class="form-actions">
-                    <center>
-                        <button type="submit" class="btn green">Simpan</button>
-                        <button class="btn red" onClick="window.location.href = '<?php echo base_url(); ?>PerubahanData/UpdateData';return false;">Kembali</button>
-                    </center>
+                    <center><button type="submit" class="btn green">Simpan</button></center>
                 </div>
-            <?php } ?>  
+            <?php } ?>
         </form>
     </div>
     <div class="body">
@@ -600,19 +592,19 @@
                             } else {
                                 $jenis_dokumen = "Bukti Lain - Lain";
                             }
-                            $filename = FCPATH . "/object-storage/dekill/Earth/$key->dir_file";
-                            $filenamephat = FCPATH . "/object-storage/dekill/Earth/$key->dir_file_phat";
+                            $filename = FCPATH . "/dekill/Earth/$key->dir_file";
+                            $filenamephat = FCPATH . "/dekill/Earth/$key->dir_file_phat";
                             $dir = '';
                             if (file_exists($filename)) {
-                                $dir = base_url('object-storage/dekill/Earth/' . $key->dir_file);
+                                $dir = base_url('dekill/Earth/' . $key->dir_file);
                             } else {
-                                $dir = base_url('object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file);
+                                $dir = base_url('file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file);
                             }
 
                             if (file_exists($filenamephat)) {
-                                $dirphat = base_url('object-storage/dekill/Earth/' . $key->dir_file_phat);
+                                $dirphat = base_url('dekill/Earth/' . $key->dir_file_phat);
                             } else {
-                                $dirphat = base_url('object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file_phat);
+                                $dirphat = base_url('file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file_phat);
                             }
                     ?>
                             <tr>
@@ -632,7 +624,8 @@
                                     <td></td>
                                 <?php } ?>
                                 <td align="center">
-                                    <a href="#" class="btn btn-info btn-sm btn-edit" data-id="<?= $key->id;?>" data-detail="<?= $key->id_detail;?>">Edit</a>
+                                <a href="#" class="btn btn-info btn-sm btn-edit" data-id="<?= $key->id;?>" data-detail="<?= $key->id_detail;?>">Edit</a>
+
                                 </td>
                             </tr>
                     <?php }
@@ -1562,16 +1555,13 @@
         } else if (v == '2') {
             document.getElementById('prasarana').style.display = "block";
             document.getElementById('fungsibg').style.display = "none";
+
             document.getElementById('jns_bg_toggle').style.display = "none";
             document.getElementById('detail_bg').style.display = "none";
             document.getElementById('per_doc_tek').style.display = "none";
             document.getElementById('prototype').style.display = "none";
             document.getElementById('jual_bg').style.display = "none";
             document.getElementById('KolektifInduk').style.display = "none";
-        } else if (v == '3') {
-            document.getElementById('fungsibg').style.display = "none";
-			document.getElementById('prasarana').style.display = "none";
-			document.getElementById('spbu_micro').style.display = "block";
         } else {
             document.getElementById('prasarana').style.display = "none";
             document.getElementById('fungsibg').style.display = "none";
@@ -1699,4 +1689,4 @@
                 },
             });
         });
-</script>
+</script> 

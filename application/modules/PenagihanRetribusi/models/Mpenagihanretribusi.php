@@ -11,6 +11,7 @@ class Mpenagihanretribusi extends CI_Model
 		$this->db->where("b.status >= 11 ");
 		$this->db->where("b.status != 25 ");
 		$this->db->where("b.status != 26 ");
+		$this->db->where("b.imb != 1 ");
 		if($Dinas =='31'){
 			$this->db->where('b.id_prov_bgn = 31');
 			$this->db->where('b.jml_lantai > 8');
@@ -24,7 +25,7 @@ class Mpenagihanretribusi extends CI_Model
 		$this->db->join('tr_konsultasi c', 'b.id_jenis_permohonan = c.id','LEFT');
 		$this->db->order_by('b.status','asc');
 		$query = $this->db->get();
-		$this->db->limit(30);
+		//$this->db->limit(30);
 		return $query;
 	}
 	public function  getDataVerifikator($id)
@@ -78,6 +79,37 @@ class Mpenagihanretribusi extends CI_Model
         $this->db->join('tr_fungsi_bg h', 'h.id_fungsi_bg = b.id_fungsi_bg', 'left');
         $this->db->join('tr_klasifikasi_bg i', 'i.id_klasifikasi_bg = c.klasifikasi_bg', 'LEFT');
         $this->db->join('tr_kegiatan j', 'j.id_kegiatan = g.id_kegiatan', 'left');
+        $query = $this->db->get();
+        return $query;
+    }
+
+	public function getDataBangunanRetribusi($id)
+    {
+        $this->db->select('b.*,
+		c.nm_konsultasi,
+        d.nama_kecamatan,
+        e.nama_kabkota,
+        f.nama_provinsi,
+        g.*,
+        h.fungsi_bg,
+        i.*,
+        j.*,
+		k.*,
+		l.nama_kelurahan
+        ');
+        $this->db->from('tmdatapemilik a');
+        $this->db->where('a.id', $id);
+        $this->db->join('tmdatabangunan b', 'a.id = b.id', 'LEFT');
+        $this->db->join('tr_konsultasi c', 'b.id_jenis_permohonan = c.id', 'LEFT');
+        $this->db->join('tr_kecamatan d', 'b.id_kec_bgn = d.id_kecamatan', 'LEFT');
+        $this->db->join('tr_kabkot e', 'b.id_kabkot_bgn = e.id_kabkot', 'LEFT');
+        $this->db->join('tr_provinsi f', 'b.id_prov_bgn = f.id_provinsi', 'LEFT');
+        $this->db->join('tm_retribusi g', 'g.id = b.id', 'LEFT');
+        $this->db->join('tr_fungsi_bg h', 'h.id_fungsi_bg = b.id_fungsi_bg', 'left');
+        $this->db->join('tr_klasifikasi_bg i', 'i.id_klasifikasi_bg = c.klasifikasi_bg', 'LEFT');
+        $this->db->join('tr_kegiatan j', 'j.id_kegiatan = g.id_kegiatan', 'left');
+		$this->db->join('tmdatavalkadintek k', 'k.id = a.id', 'left');
+		$this->db->join('tr_kelurahan l', 'b.id_kel_bgn = l.id_kelurahan', 'LEFT');
         $query = $this->db->get();
         return $query;
     }

@@ -37,10 +37,12 @@
 									}
 								} 
 								if (file_exists($filename)) {
-									$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+									$dir = './object-storage/dekill/Requirement/' . $dir_file;
 								} else {
-									$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+									$dir = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
 								}
+								$dirUmum	= $this->Outh_model->Encryptor('encrypt', $dir);
+											
 								?>
 								<tr class="<?= $clss ?>">
 									<td align="center"><?php echo $no++; ?></td>
@@ -51,7 +53,7 @@
 											Tidak Ada Dokumen
 										<?php } else { ?>
 											<center>						
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+												<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/' . $dirUmum); ?>">Lihat</a>
 											</center>
 										<?php } ?>
 										<?php echo form_close(); ?>

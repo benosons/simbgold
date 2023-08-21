@@ -6,9 +6,7 @@
 <div class="portlet box blue">
 	<div class="portlet-title">
 		<div class="caption"><i class="fa fa-globe"></i>Monitoring IMB</div>
-		<div class="tools">
-			<a href="javascript:;" class="reload"></a>
-		</div>
+		<div class="tools"><a href="javascript:;" class="reload"></a></div>
 	</div>
 	<div class="portlet-body">
 		<table class="table table-striped table-bordered table-hover" id="tablePemeriksaan">
@@ -28,13 +26,13 @@
 				if ($imb->num_rows() > 0) {
 					$no = 1;
 					foreach ($imb->result() as $key) {
-
-						if ($key->status <= 13) {
-							$label = "danger";
-						} else {
+						if ($key->status_progress == 13 || $key->status_progress == 14 || $key->status_progress == 15 || $key->status_progress == 16) {
 							$label = "success";
+						} else if($key->status_progress == 19){
+							$label = "danger";
+						}else{
+							$label = "warning";
 						}
-
 						if ($key->nama_permohonan == "" || $key->nama_permohonan == null) {
 							$jenis_permohonan = "[Belum Memilih Jenis Permohonan]";
 						} else {
@@ -50,12 +48,15 @@
 						} else {
 							$lokasi_bg = $key->alamat_bg;
 						}
-						if ($key->status >= 13) {
+						if ($key->status_progress == 13 || $key->status_progress == 14 || $key->status_progress == 15 || $key->status_progress == 16) {
 							$status = "IMB Terbit";
+						} else if($key->status_progress == 19) {
+							$status = "Permohonan Ditolak";
 						} else {
-							$status = "IMB Belum Terbit";
+							$status = "IMB Belum terbit";
 						}
-				?>
+						$dirstr = base_url('object-storage/file/imb/pengajuan_imb/' . $key->id_permohonan . '/imb_n_lampiran/' . $key->dir_file_imb);
+						?>
 						<tr class="<?php echo $label; ?>">
 							<td align="center"><?php echo $no++; ?></td>
 							<td><?php echo $jenis_permohonan; ?></td>
@@ -64,18 +65,33 @@
 							<td align="center"><? echo $status; ?></td>
 							<td align="center">
 								<a href="javascript:;" class="btn btn-info btn-sm detail-imb" title="Lihat Data" data-id="<?= $key->id_permohonan ?>"><span class="glyphicon glyphicon-user"></span></a>
+								<?php if ($key->status_progress == 13 || $key->status_progress == 14 || $key->status_progress == 15 || $key->status_progress == 16) { ?>
+									<?php if($key->dir_file_imb == null){ ?>
+										<a  href="#" onclick="GetCetakIMB(<? echo $key->id_permohonan ?>)" title="Cetak IMB" id="tombolinver" class="btn default btn-xs blue-stripe">Lihat</a>
+									<?php } else { ?>
+										<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirstr; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+									<?php }?>
+								<?php } else if($key->status_progress == 19) {
+									
+								} else {
+								
+								} ?>
 							</td>
 						</tr>
-				<?php
-					}
-				}
-				?>
+					<?php }
+				} ?>
 			</tbody>
 		</table>
 	</div>
 </div>
-
-
+<script>
+function GetCetakIMB(id)
+{
+	var url = "<?php echo base_url() . index_page() ?>Dokumen/cetak_form_imb/"+id;
+	swin = window.open(url,'win','scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');
+	swin.focus();
+}
+</script>
 <div id="modalDetail" class="modal fade bs-modal-sm" data-width="70%" tabindex="-1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false">
 	<div class="modal-content">
 		<div class="modal-body">
@@ -85,34 +101,23 @@
 					<hr>
 					<br>
 					<div class="row static-info">
-						<div class="col-md-4 name">
-							Nama Pemohon :
-						</div>
+						<div class="col-md-4 name">Nama Pemohon</div>
 						<div class="col-md-8 value nm-pemohon"></div>
 					</div>
 					<div class="row static-info">
-						<div class="col-md-4 name">
-							Alamat Pemilik :
-						</div>
+						<div class="col-md-4 name">Alamat Pemilik</div>
 						<div class="col-md-8 value alamat-pemohon"></div>
 					</div>
 					<div class="row static-info">
-						<div class="col-md-4 name">
-							Jenis Permohonan :
-						</div>
+						<div class="col-md-4 name">Jenis Permohonan</div>
 						<div class="col-md-8 value jenis-permohonan"></div>
 					</div>
-
 					<div class="row static-info">
-						<div class="col-md-4 name">
-							Lokasi Bangunan Gedung :
-						</div>
+						<div class="col-md-4 name">Lokasi Bangunan Gedung</div>
 						<div class="col-md-8 value alamat-bangunan"></div>
 					</div>
 					<div class="row static-info">
-						<div class="col-md-4 name">
-							Fungsi Bangunan Gedung :
-						</div>
+						<div class="col-md-4 name">Fungsi Bangunan Gedung</div>
 						<div class="col-md-8 value fungsi-bangunan-gedung"></div>
 					</div>
 
@@ -130,14 +135,8 @@
 							<ul class="nav nav-tabs nav-justified">
 								<li class="active"><a href="#tabtot" data-toggle="tab">Data Bangunan</a></li>
 								<li><a href="#tab_2_1" data-toggle="tab">Data Tanah </a></li>
-								<li>
-									<a href="#tab_2_2" data-toggle="tab">
-										Persyaratan Administrasi </a>
-								</li>
-								<li>
-									<a href="#tab_2_3" data-toggle="tab">
-										Persyaratan Teknis </a>
-								</li>
+								<li><a href="#tab_2_2" data-toggle="tab">Persyaratan Administrasi </a></li>
+								<li><a href="#tab_2_3" data-toggle="tab">Persyaratan Teknis </a></li>
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane fade active in" id="tabtot">
@@ -317,8 +316,6 @@
 				}
 			},
 		});
-
-
 		$(document).on('click', '.detail-imb', function(e) {
 			e.preventDefault();
 			let dataDetail = $(this).data('id');
@@ -374,21 +371,16 @@
 						} else {
 							$('.data-tanah').html('');
 						}
-
 						var tableAdmin;
 						let numAdmin = 1;
-						response.adm.forEach(obj => {
-							
+						response.adm.forEach(obj => {			
 							tableAdmin += '<tr>';
 							tableAdmin += `<td>${numAdmin++}</td>`;
 							tableAdmin += `<td>${obj.nama_syarat}</td>`;
 							let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('https://103.211.51.151:443/file/imb/pengajuan_imb/${response.id_permohonan}/data_administrasi/${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
 							tableAdmin += `<td style="text-align:center;">${berkas}</td></tr>`;
 						});
-
 						$('.syarat-administrasi').html(tableAdmin);
-
-
 						var tableTeknis;
 						let numTeknis = 1;
 						response.tkn.forEach(obj => {
@@ -398,7 +390,6 @@
 							let berkasTeknis = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('https://103.211.51.151:443/file/imb/pengajuan_imb/${response.id_permohonan}/data_administrasi/${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
 							tableTeknis += `<td style="text-align:center;">${berkasTeknis}</td></tr>`;
 						});
-
 						$('.syarat-teknis').html(tableTeknis);
 						$('#modalDetail').modal('show');
 					} else {
@@ -408,7 +399,6 @@
 				}
 			});
 		});
-
 		function showToast(message, timeout, type) {
 			type = (typeof type === 'undefined') ? 'info' : type;
 			toastr.options = {
@@ -427,10 +417,7 @@
 			}
 			toastr[type](message);
 		}
-
-
 	});
-
 	function popWin(x) {
 		url = x;
 		swin = window.open(url, 'win', 'scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');

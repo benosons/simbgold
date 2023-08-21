@@ -20,6 +20,13 @@ if($result_list['tgl_validasi'] !='' || $result_list['tgl_validasi'] != null){
 } else {
   $tgl_validasi = tgl_eng_to_ind($tgl_skrg);
 }
+$tgl_skrg =  tgl_eng_to_ind(date("Y-m-d"));
+if($result_list['status'] =='10'){
+  $tgl_validasi = $tgl_skrg;
+}else{
+  $tgl_validasi   = tgl_eng_to_ind($result_list['tgl_validasi']);
+}
+
 $no_konsultasi = $result_list['no_konsultasi'];
 $tgl_pernyataan  = tgl_eng_to_ind($result_list['tgl_pernyataan']);
 //membuat halaman baru

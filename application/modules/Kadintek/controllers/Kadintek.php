@@ -35,6 +35,9 @@ class Kadintek extends CI_Controller
         $nama_dinas     = $DataVal['p_nama_dinas'];
         $stat_pejabat   = $DataVal['status_pejabat'];
         $no_konsultasi  = $DataVal['no_konsultasi'];
+
+        //$sk_slf = $this->SK_SLF($id);
+
         $ket = "Proses Masuk Ke Dinas Perizinan Untuk Penerbitan Sertifikat Laik Fungsi (SLF)";
         if (trim($id) != '') {
             $dataStatus = array(
@@ -56,9 +59,27 @@ class Kadintek extends CI_Controller
                 'nama_dinas' => $nama_dinas,
                 'stat_pejabat' => $stat_pejabat,
             );
+            //$cek = $this->Mkadintek->cekNamaNoIzinSLF('a.id,a.no_izin_pbg', $sk_slf);
+			
+
             $this->Mkadintek->updateProgress($dataStatus, $id);
             $this->Mglobals->setDatakol('tmdatavalkadintek', $dataval);
             $this->Mglobals->setDatakol('th_data_konsultasi', $data);
+
+            /*$this->load->library('ciqrcode'); //pemanggilan library QR CODE
+            $config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
+			$config['quality']      = true; //boolean, the default is true
+			$config['size']         = '1024'; //interger, the default is 1024
+			$config['black']        = array(224,255,255); // array, default is array(255,255,255)
+			$config['white']        = array(70,130,180); // array, default is array(0,0,0)
+			$this->ciqrcode->initialize($config);
+			$image_name=$sk_slf.'.png'; //buat name dari qr code sesuai dengan nim
+		    $params['data'] = 'https://simbg.pu.go.id/Main/Berkas/'.$sk_slf; //data yang akan di jadikan QR CODE
+			$params['level'] = 'H'; //H=High
+			$params['size'] = 10;
+			$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+			$data['QR'] = $this->ciqrcode->generate($params);*/
+
         }
         $email = "$email";
         $no_konsultasi = "$no_konsultasi";
@@ -79,6 +100,30 @@ class Kadintek extends CI_Controller
         $this->session->set_flashdata('status', 'success');
         redirect('Kadintek/VerInpeksiBaru');
     }
+
+    function SK_SLF($id=null)
+	{
+        $que = $this->Mkadintek->get_id_kabkot($id);
+		$lokasi = $que['id_kec_bgn'];
+        $tgl_disetujui = date('d').date('m').date('Y');
+		$mydata2 = $this->Mkadintek->getNoDrafSlf($lokasi,$tgl_disetujui);
+        if (count($mydata2) > 0) {
+            $no_baru = SUBSTR($mydata2['no_registrasi_baru'], -3) + 1;
+            if ($no_baru < 10) {
+                $sk_pbg = "SK-SLF-" . $lokasi . "-" . $tgl_disetujui . "-00" . $no_baru;
+            } else if ($no_baru < 99){
+                $sk_pbg = "SK-SLF-" . $lokasi . "-" . $tgl_disetujui . "-0" . $no_baru;
+            }else if($no_baru > 100){
+                $sk_pbg = "SK-SLF-" . $lokasi . "-" . $tgl_disetujui . "-" . $no_baru;
+            }else{
+                $sk_pbg = "SK-SLF-" . $lokasi . "-" . $tgl_disetujui . "-" . $no_baru;
+            }
+        } else {
+            $sk_pbg = "SK-SLF-" . $lokasi . "-" . $tgl_disetujui . "-001";
+        }
+		return $sk_pbg;
+	}
+
     public function RollbackKadis()
     {
         $id    = $this->uri->segment(3);

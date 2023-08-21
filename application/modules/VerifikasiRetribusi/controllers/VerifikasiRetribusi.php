@@ -47,20 +47,24 @@ class VerifikasiRetribusi extends CI_Controller
 		$data['retribusi']          = $this->Mverifikasiretribusi->getRetribusi($id)->row();
 		if($this->input->post('save_ssrd')) {
 			if ($this->input->post('status_validasi_cetak') == 1) {
-				$sk_pbg = $this->Sk_PBG($id);
-				$tgl_sk_pbg = date('Y-m-d');
+				$no_validasi = $id;
+				//$sk_pbg = $this->Sk_PBG($id);
+				//$tgl_sk_pbg = date('Y-m-d');
 				$status_validasi_cetak = $this->input->post('status_validasi_cetak');
 				$dataInKonsultasi = array(
 					'id' => $id,
-					'no_izin_pbg' => $sk_pbg,
-					'tgl_pbg' => $tgl_sk_pbg,
+					'no_validasi' => $id,
+					//'no_izin_pbg' => $sk_pbg,
+					//'tgl_pbg' => $tgl_sk_pbg,
 					'validasi_retri'=>$this->input->post('status_validasi_cetak')
 				);
 				$dataStatus = array(
 					'status' => 13,
+					//'id_sk' => 1,
 				);
 				$this->Mverifikasiretribusi->updateProgress($dataStatus,$id);
 				$this->Mverifikasiretribusi->insertDataPenerbitanPbg($dataInKonsultasi);
+				
 				$this->load->library('ciqrcode'); //pemanggilan library QR CODE
 				$config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
 				$config['quality']      = true; //boolean, the default is true
@@ -68,12 +72,13 @@ class VerifikasiRetribusi extends CI_Controller
 				$config['black']        = array(224,255,255); // array, default is array(255,255,255)
 				$config['white']        = array(70,130,180); // array, default is array(0,0,0)
 				$this->ciqrcode->initialize($config);
-				$image_name=$sk_pbg.'.png'; //buat name dari qr code sesuai dengan nim
-				$params['data'] = 'https://simbg.pu.go.id/Main/VerifikasiPBG/'.$sk_pbg; //data yang akan di jadikan QR CODE
+				$image_name=$no_validasi.'.png'; //buat name dari qr code sesuai dengan nim
+				$params['data'] = 'https://simbg.pu.go.id/Main/DataTeknis/'.$no_validasi; //data yang akan di jadikan QR CODE
 				$params['level'] = 'H'; //H=High
-                $params['size'] = 10;
+			 	$params['size'] = 10;
 			 	$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
 				$data['QR'] = $this->ciqrcode->generate($params);
+				
 				$id_bayar = $this->input->post('id_bayar');
 				$keterangan='';
 				$dataUn = array (
@@ -83,7 +88,7 @@ class VerifikasiRetribusi extends CI_Controller
 					'ket3'=> $keterangan
 				);
 				$dataPemilik 	= $this->Mverifikasiretribusi->getDataVerifikator($id)->row();
-				  if($dataPemilik->oss_id != '' || $dataPemilik->oss_id != null ){
+				if($dataPemilik->oss_id != '' || $dataPemilik->oss_id != null ){
 					$tgl_skrg 		= date('Y-m-d');
 					$kd_status 		= '31';
 					$tgl_status 	= $tgl_skrg;
@@ -117,6 +122,7 @@ class VerifikasiRetribusi extends CI_Controller
         }
 		return $sk_pbg;
 	}
+
 	public function RollbackSSRD() 
     {
         $id	= $this->uri->segment(3);

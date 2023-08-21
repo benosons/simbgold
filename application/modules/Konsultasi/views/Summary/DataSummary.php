@@ -58,7 +58,7 @@
 					?>
 				</div>
 			</div>
-			<?php if ($DataBangunan->id_jenis_permohonan == '11') { ?>
+			<?php if ($DataBangunan->id_izin == '4') { ?>
 				<div class="row static-info">
 					<div class="col-md-3 name">Data Bangunan Kolektif</div>
 					<div class="col-md-8 value">
@@ -98,6 +98,7 @@
 									if ($val != "")
 										$bangunan['lantai'][$noo] = $val;
 								}
+								//$Luas_bg =$bangunan['jumlah'] * $bangunan['luas'];
 							$no = 0;
 							if (!empty($bangunan)) {
 								foreach ($bangunan['tipe'] as $dt) {
@@ -123,7 +124,12 @@
 							<?php } ?>
 						</table>
 					</div>
+					
 				</div>
+				<!--<div class="row static-info">
+					<div class="col-md-3 name">Total Luas</div>
+					<div class="col-md-9 value"><?= $Luas_bg ?></div>
+				</div>-->
 			<?php } else if ($DataBangunan->id_jenis_permohonan == '12') { ?>
 				<div class="row static-info">
 					<div class="col-md-3 name">Fungsi Bangunan</div>
@@ -259,7 +265,7 @@
 				<?php } else{ ?>
 					
 				<?php } ?>
-				<?php if($id_jenis_permohonan =='14'){ ?>
+				<?php if($id_izin =='2'){ ?>
 					<?php if($imb == '1') { ?>
 						
 					<?php } else { ?>
@@ -320,3 +326,20 @@
 		</div>
 	</div>
 </div>
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%">
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+		<div class="modal-footer">
+			<button type="button" data-dismiss="modal" class="btn btn-primary"><i class="fa fa-sign-out"></i> Tutup</button>
+		</div>
+	</div>
+</div>
+<script>
+		$(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
+</script>

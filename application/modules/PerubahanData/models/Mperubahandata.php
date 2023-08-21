@@ -5,10 +5,11 @@ class Mperubahandata extends CI_Model{
 
   function getRegistrasi($cari = null)
 	{
-		$sql = "SELECT 	a.*,b.nm_konsultasi,c.nm_pemilik";
+		$sql = "SELECT 	a.*,b.nm_konsultasi,c.nm_pemilik,d.status_dinas";
 		$sql .= " FROM tmdatabangunan a 
                 LEFT JOIN tr_konsultasi b ON (a.id_jenis_permohonan=b.id)
                 LEFT JOIN tmdatapemilik c ON (a.id=c.id)
+				LEFT JOIN status_sistem d ON (a.status=d.status_progress)
 				WHERE (1=1)  ";
 		if ($cari != null || trim($cari) != '')  $sql .= " $cari ";
 		$hasil = $this->db->query($sql);
@@ -764,4 +765,65 @@ class Mperubahandata extends CI_Model{
 		return $hasil->row_array();
 	}
 	//End Draf
+	//Begin Data TPT
+	function getdataTPT()
+	{
+		$sql ="SELECT a.*
+				FROM tm_personal a
+				/*LEFT JOIN tmdatatanah b ON(b.id = a.id)
+				LEFT JOIN tr_doktanah c ON(c.id = b.id_dokumen)*/
+				WHERE (1=1)";
+		$hasil = $this->db->query($sql);
+		return $hasil;
+	}
+
+	public function listDataPesonilAsn($select = "*", $id_personal = '', $stat = '')
+	{
+		$this->db->select($select, FALSE);
+		if ($id_personal != null || trim($id_personal) != '')  
+		$this->db->where('a.id_personal', $id_personal);
+		if ($id_personal != null || trim($id_personal) != '')  
+		$this->db->join('tm_riwpendidikan b', "a.id_personal = b.id_personal", 'LEFT');
+		if ($id_personal != null || trim($id_personal) != '')  
+		$this->db->join('tm_sertifikasi c', "a.id_personal = c.id_personal", 'LEFT');
+		$this->db->join('tr_kabkot d', "a.id_kota_tabg = d.id_kabkot", 'LEFT');
+		if ($stat != null || trim($stat) != '')  $this->db->where('a.stat', $stat);
+		$this->db->order_by('a.id_kota_tabg', 'asc');
+		$this->db->where("a.id_kota_tabg != 9971 ");
+		$this->db->where("a.stat != 0 ");
+		$query 	= $this->db->get('tm_personal a');
+		return $query;
+	}
+	public function listDataPesonilPenilik($select = "*", $id_personal = '', $stat = '')
+	{
+		$this->db->select($select, FALSE);
+		if ($id_personal != null || trim($id_personal) != '')  
+		$this->db->where('a.id_personal', $id_personal);
+		if ($id_personal != null || trim($id_personal) != '')  
+		$this->db->join('tm_riwpendidikan b', "a.id_personal = b.id_personal", 'LEFT');
+		if ($id_personal != null || trim($id_personal) != '')  
+		$this->db->join('tm_sertifikasi c', "a.id_personal = c.id_personal", 'LEFT');
+		$this->db->join('tr_kabkot d', "a.id_kota_tabg = d.id_kabkot", 'LEFT');
+		if ($stat != null || trim($stat) != '')  $this->db->where('a.stat', $stat);
+		$this->db->order_by('a.id_kota_tabg', 'asc');
+		$this->db->where("a.id_kota_tabg != 9971 ");
+		$query 	= $this->db->get('tm_personal a');
+		return $query;
+	}
+	public function listDataBidang($select = "a.*", $id_bidang = '')
+	{
+		$this->db->select($select, FALSE);
+		if ($id_bidang != null || trim($id_bidang) != '')  
+		$this->db->where('a.id_bidang', $id_bidang);
+		$query 	= $this->db->get('tr_bidang a');
+		return $query;
+	}
+
+	public function listDataProvinsi($select = "a.*")
+	{
+		$this->db->select($select, FALSE);
+		$query 	= $this->db->get('tr_provinsi a');
+		return $query;
+	}
+	//End Data TPT
 }

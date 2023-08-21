@@ -13,16 +13,16 @@ class Mperhitungan extends CI_Model
 	{
 		$Dinas = $this->session->userdata('loc_id_kabkot');
 		$this->db->select('a.id,b.nm_konsultasi,c.id_fungsi_bg,c.no_konsultasi,a.nm_pemilik,c.almt_bgn,
-						c.status,c.id_kabkot_bgn,d.dir_file_konsultasi,e.Status_Perda');
+						c.status,c.id_kabkot_bgn,e.Status_Perda');
 		$this->db->from('tmdatapemilik as a,tr_konsultasi as b,tmdatabangunan as c');
-		$this->db->join('tmdatajadwal d', 'a.id = d.id', 'LEFT');
-		
+		//$this->db->join('tmdatajadwal d', 'a.id = d.id', 'LEFT');
 		$this->db->join('tm_akun_dinas e', 'c.id_kabkot_bgn = e.id_kabkot', 'LEFT');
 		$this->db->where('a.id = c.id');
 		$this->db->where('b.id = c.id_jenis_permohonan');
-		$this->db->where("c.status >= 9 ");
-		$this->db->where("c.status != 25 ");
-		$this->db->where("c.status != 26 ");
+		$this->db->where("c.status 	>= 9 ");
+		$this->db->where("c.status 	!= 25 ");
+		$this->db->where("c.status 	!= 26 ");
+		$this->db->where("c.imb 	!= 1 ");
 		if($Dinas =='31'){
 			$this->db->where('c.id_prov_bgn = 31');
 			$this->db->where('c.jml_lantai > 8');

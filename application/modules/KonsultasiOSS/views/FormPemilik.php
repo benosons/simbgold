@@ -143,7 +143,7 @@
 				<div class="form-group last">
 					<label class="col-md-3 control-label">Alamat Email</label>
 					<div class="col-md-7">
-						<input type="email" class="form-control" placeholder="Alamat Email Aktif" value="<?php echo set_value('email', (isset($DataPemilik->email) ? $DataPemilik->email :  '')) ?>" name="email" readonly>
+						<input type="email" class="form-control" placeholder="Alamat Email Aktif" value="<?php echo set_value('email', (isset($DataPemilik->email) ? $DataPemilik->email :  '')) ?>" name="email" >
 					</div>
 				</div>
 			</div>

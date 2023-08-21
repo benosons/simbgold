@@ -27,7 +27,7 @@ class Konsultasi extends CI_Controller
 		$user_id				= $this->session->userdata('loc_user_id');
 		$data['user_id'] 		= $this->Outh_model->Encryptor('decrypt', $user_id);
 		$user_id				= $this->Outh_model->Encryptor('decrypt', $user_id);
-		$filterQuery			= 'a.*, b.no_konsultasi,b.pernyataan,b.status, b.almt_bgn,c.nm_konsultasi,d.status_pemohon';
+		$filterQuery			= 'a.*, b.no_konsultasi,b.pernyataan,b.status, b.almt_bgn,b.id_izin,c.nm_konsultasi,d.status_pemohon';
 		$data['DataKonsultasi'] = $this->Mkonsultasi->getDataKonsultasi($filterQuery, $user_id);
 		$queFungsi = $this->Mkonsultasi->get_jenis_fungsi_list()->result();
 		$list_fungsi[''] = '--Pilih--';
@@ -100,26 +100,32 @@ class Konsultasi extends CI_Controller
 		}
 		if ($id_izin == '1') {
 			if ($id_fungsi_bg == '1') { //Fungsi Hunian
-				if ($id_doc_tek == '1') {
-					if ($luas_bg <= 72) { // Fungsi Hunian Sederhana Penyedia Jasa
-						if($lantai_bg <= '2'){
+				if($id_jns_bg =='1'){
+					if ($id_doc_tek == '1') {
+						if ($luas_bg <= 72) { // Fungsi Hunian Sederhana Penyedia Jasa
+							if($lantai_bg <= '2'){
+								$jenis_konsultasi = '1';
+								$id_klasifikasi = '1';
+							}
+						} else if ($luas_bg <= 90){ //Fungsi Hunian Sederhana Penyedia Jasa 
+							if($lantai_bg <= '2')
 							$jenis_konsultasi = '1';
 							$id_klasifikasi = '1';
+						}else if($luas_bg > 91) { //Fungsi Hunian Tidak Sederhana Penyedia Jasa
+							$jenis_konsultasi = '2';
+							$id_klasifikasi = '2';
 						}
-					} else if ($luas_bg <= 90){ //Fungsi Hunian Sederhana Penyedia Jasa 
-						if($lantai_bg <= '2')
-						$jenis_konsultasi = '1';
-						$id_klasifikasi = '1';
-					}else if($luas_bg > 91) { //Fungsi Hunian Tidak Sederhana Penyedia Jasa
-						$jenis_konsultasi = '2';
-						$id_klasifikasi = '2';
+					} else if ($id_doc_tek == '2') { //Fungsi Hunian Prototype
+						$jenis_konsultasi = '3';
+					} else if ($id_doc_tek == '3') { //Fungsi Hunian Pengembangan Prototype
+						$jenis_konsultasi = '4';
+					} else if ($id_doc_tek == '4') { //Fungsi Hunian Tahan Gempa
+						$jenis_konsultasi = '5';
 					}
-				} else if ($id_doc_tek == '2') { //Fungsi Hunian Prototype
-					$jenis_konsultasi = '3';
-				} else if ($id_doc_tek == '3') { //Fungsi Hunian Pengembangan Prototype
-					$jenis_konsultasi = '4';
-				} else if ($id_doc_tek == '4') { //Fungsi Hunian Tahan Gempa
-					$jenis_konsultasi = '5';
+				}else if($id_jns_bg =='3'){
+					$jenis_konsultasi = '7';
+				}else{
+					$jenis_konsultasi = '27';
 				}
 			} else if ($id_fungsi_bg == '2') { //Fungsi Non Hunian dan Non Khusus serta Non Campuran
 				$jenis_konsultasi = '6';
@@ -242,6 +248,7 @@ class Konsultasi extends CI_Controller
 			$id_jns_bg			='2';
 			$luas_bgp 			='10.01';
 			$tinggi_bgp 		='2.6';
+			$id_klasifikasi		='2';
 		}
 		$data	= array(
 			'id_izin'			=> $id_izin,
@@ -269,6 +276,7 @@ class Konsultasi extends CI_Controller
 			'id_prototype'		=> $id_prototype,
 			'id_jenis_permohonan' => $jenis_konsultasi,
 			'id_doc_tek'		=> $id_doc_tek,
+			'id_klasifikasi'	=> $id_klasifikasi,
 			'no_imb'			=> $no_imb,
 			'no_slf'			=> $no_slf,
 			'permohonan_slf'	=> $permohonan_slf,
@@ -454,13 +462,19 @@ class Konsultasi extends CI_Controller
 		} else {
 			$nama_bangunan		= $this->input->post('nama_bangunan_prasarana');
 		}
-		$luas_bg		= $this->input->post('luas_bg');
-		$tinggi_bg		= $this->input->post('tinggi_bg');
+		$luas_bg			= $this->input->post('luas_bg');
+		$tinggi_bg			= $this->input->post('tinggi_bg');
 		$almt_bgn			= $this->input->post('almt_bgn');
 		$nama_provinsi		= $this->input->post('nama_provinsi');
 		$nama_kabkota		= $this->input->post('nama_kabkota');
 		$nama_kecamatan		= $this->input->post('nama_kecamatan');
 		$nama_kelurahan 	= $this->input->post('nama_kelurahan');
+		$id_otorita							= $this->input->post('id_otorita');
+		if($id_otorita =='1'){
+			$id_otorita						= $this->input->post('id_otorita');
+		}else{
+			$id_otorita						= '0';
+		}
 		$lantai_bg			= $this->input->post('lantai_bg');
 		$luas_basement		= $this->input->post('luas_basement');
 		$lapis_basement		= $this->input->post('lapis_basement');
@@ -488,7 +502,6 @@ class Konsultasi extends CI_Controller
 			$jns_campur		= $this->input->post('dcampur');
 			$id_jns_bg	= json_encode($jns_campur);
 		}
-
 		if ($nama_kabkota == '9972') {
 			$nama_kabkota  = '9971';
 			$nama_kecamatan  = '997101';
@@ -502,62 +515,68 @@ class Konsultasi extends CI_Controller
 		}
 		if ($id_izin == '1') {
 			if ($id_fungsi_bg == '1') { //Fungsi Hunian
-				if ($id_doc_tek == '1') {
-					if ($luas_bg <= 72) { // Fungsi Hunian Sederhana Penyedia Jasa
-						if($lantai_bg == '1'){
-							$jenis_konsultasi = '23'; // Fungsi Hunian Luas Maksimal 72 dengan 1 Lantai
-							$id_klasifikasi = '1';
-							$tahap_pbg 			= null;
-						}else if($lantai_bg == '2'){
-							$jenis_konsultasi = '25'; // Fungsi Hunian Luas Maksimal 72 dengan 2 Lantai
-							$id_klasifikasi = '2';
-							$tahap_pbg 			= null;
-						}else{
-							$jenis_konsultasi = '27'; // Fungsi Hunian Luas Maksimal 72 dengan 3 Lantai Ke atas
-							$id_klasifikasi = '2';
-							$tahap_pbg 			= null;
+				if($id_jns_bg =='1'){
+					if ($id_doc_tek == '1') {
+						if ($luas_bg <= 72) { // Fungsi Hunian Sederhana Penyedia Jasa
+							if($lantai_bg == '1'){
+								$jenis_konsultasi = '23'; // Fungsi Hunian Luas Maksimal 72 dengan 1 Lantai
+								$id_klasifikasi = '1';
+								$tahap_pbg 			= null;
+							}else if($lantai_bg == '2'){
+								$jenis_konsultasi = '25'; // Fungsi Hunian Luas Maksimal 72 dengan 2 Lantai
+								$id_klasifikasi = '2';
+								$tahap_pbg 			= null;
+							}else{
+								$jenis_konsultasi = '27'; // Fungsi Hunian Luas Maksimal 72 dengan 3 Lantai Ke atas
+								$id_klasifikasi = '2';
+								$tahap_pbg 			= null;
+							}
+						} else if ($luas_bg <= 90){ //Fungsi Hunian Sederhana Penyedia Jasa 
+							if($lantai_bg == '1'){
+								$jenis_konsultasi = '24'; // Fungsi Hunian Luas Maksimal 90 dengan 1 Lantai
+								$id_klasifikasi = '1';
+								$tahap_pbg 			= null;
+							}else if($lantai_bg == '2'){
+								$jenis_konsultasi = '24'; // Fungsi Hunian Luas Maksimal 90 dengan 2 Lantai
+								$id_klasifikasi = '1';
+								$tahap_pbg 			= null;
+							}else{
+								$jenis_konsultasi = '27';
+								$id_klasifikasi = '2';
+								$tahap_pbg 			= null;
+							}
+						}else if($luas_bg <= 1000000){ //Fungsi Hunian Tidak Sederhana Penyedia Jasa
+							if($lantai_bg == '1'){
+								$jenis_konsultasi = '25';
+								$id_klasifikasi = '2';
+								$tahap_pbg 			= null;
+							}else if($lantai_bg == '2'){
+								$jenis_konsultasi = '26';
+								$id_klasifikasi = '2';
+								$tahap_pbg 			= null;
+							}else{
+								$jenis_konsultasi = '27';
+								$id_klasifikasi = '2';
+								$tahap_pbg 			= null;
+							}
 						}
-					} else if ($luas_bg <= 90){ //Fungsi Hunian Sederhana Penyedia Jasa 
-						if($lantai_bg == '1'){
-							$jenis_konsultasi = '24'; // Fungsi Hunian Luas Maksimal 90 dengan 1 Lantai
-							$id_klasifikasi = '1';
-							$tahap_pbg 			= null;
-						}else if($lantai_bg == '2'){
-							$jenis_konsultasi = '24'; // Fungsi Hunian Luas Maksimal 90 dengan 2 Lantai
-							$id_klasifikasi = '1';
-							$tahap_pbg 			= null;
-						}else{
-							$jenis_konsultasi = '27';
-							$id_klasifikasi = '2';
-							$tahap_pbg 			= null;
-						}
-					}else if($luas_bg <= 1000000){ //Fungsi Hunian Tidak Sederhana Penyedia Jasa
-						if($lantai_bg == '1'){
-							$jenis_konsultasi = '25';
-							$id_klasifikasi = '2';
-							$tahap_pbg 			= null;
-						}else if($lantai_bg == '2'){
-							$jenis_konsultasi = '26';
-							$id_klasifikasi = '2';
-							$tahap_pbg 			= null;
-						}else{
-							$jenis_konsultasi = '27';
-							$id_klasifikasi = '2';
-							$tahap_pbg 			= null;
-						}
+					} else if ($id_doc_tek == '2') { //Fungsi Hunian Prototype
+						$jenis_konsultasi 	= '3';
+						$id_klasifikasi 	= '1';
+						$tahap_pbg 			= null;
+					} else if ($id_doc_tek == '3') { //Fungsi Hunian Pengembangan Prototype
+						$jenis_konsultasi = '4';
+						$id_klasifikasi = '1';
+						$tahap_pbg 			= null;
+					} else if ($id_doc_tek == '4') { //Fungsi Hunian Tahan Gempa
+						$jenis_konsultasi = '5';
+						$id_klasifikasi = '1';
+						$tahap_pbg 			= null;
 					}
-				} else if ($id_doc_tek == '2') { //Fungsi Hunian Prototype
-					$jenis_konsultasi = '3';
-					$id_klasifikasi = '1';
-					$tahap_pbg 			= null;
-				} else if ($id_doc_tek == '3') { //Fungsi Hunian Pengembangan Prototype
-					$jenis_konsultasi = '4';
-					$id_klasifikasi = '1';
-					$tahap_pbg 			= null;
-				} else if ($id_doc_tek == '4') { //Fungsi Hunian Tahan Gempa
-					$jenis_konsultasi = '5';
-					$id_klasifikasi = '1';
-					$tahap_pbg 			= null;
+				}else if($id_jns_bg =='3'){
+					$jenis_konsultasi = '7';
+				}else if($id_jns_bg =='2'){
+					$jenis_konsultasi = '27';
 				}
 			} else if ($id_fungsi_bg == '2') { //Fungsi Non Hunian dan Non Khusus serta Non Campuran
 				$jenis_konsultasi = '6';
@@ -578,12 +597,12 @@ class Konsultasi extends CI_Controller
 			if ($imb == '1') {
 				if ($slf == '1') {
 					if($permohonan_slf =='1'){
-						$jenis_konsultasi = '15';
+						$jenis_konsultasi = '15'; //SLF Administrastif atau SLF perpanjangan-> Bangunan
 					}else if($permohonan_slf =='2'){
-						$jenis_konsultasi = '15';
+						$jenis_konsultasi = '15'; //SLF Administrastif atau SLF perpanjangan-> Prasarana
 						$tahap_pbg			= null;
 					}else if($permohonan_slf =='3'){
-						$jenis_konsultasi = '15';
+						$jenis_konsultasi = '15'; //SLF Administrastif atau SLF perpanjangan-> Pertashop
 						$tahap_pbg			= null;
 						$id_fungsi_bg ='3';
 						$id_jns_bg ='2';
@@ -593,6 +612,7 @@ class Konsultasi extends CI_Controller
 						$jenis_konsultasi = '14';
 					}else if($permohonan_slf =='2'){
 						$jenis_konsultasi = '14';
+						$id_klasifikasi		= 2;
 						$tahap_pbg			= null;
 					}else if($permohonan_slf =='3'){
 						$jenis_konsultasi = '35';
@@ -609,11 +629,11 @@ class Konsultasi extends CI_Controller
 			}else if($imb == '0'){
 				if ($slf == '1') {
 					if($permohonan_slf =='1'){
-						$jenis_konsultasi = '15';
+						$jenis_konsultasi = '15'; //SLF Administrastif atau SLF perpanjangan-> Bangunan
 					}else if($permohonan_slf =='2'){
-						$jenis_konsultasi = '15';
+						$jenis_konsultasi = '15'; //SLF Administrastif atau SLF perpanjangan-> Prasarana
 					}else if($permohonan_slf =='3'){
-						$jenis_konsultasi = '15';
+						$jenis_konsultasi = '15'; //SLF Administrastif atau SLF perpanjangan-> Pertashop
 						$tahap_pbg			= null;
 					}
 				} else if($slf == '0'){
@@ -644,41 +664,59 @@ class Konsultasi extends CI_Controller
 					$jenis_konsultasi = '29'; // Fungsi Hunian Luas Maksimal 72m dengan 1 Lantai Kolektif
 					$id_klasifikasi = '1';
 					$tahap_pbg 			= null;
+					$id_jns_bg			= '1';
+					$id_fungsi_bg		= '1';
 				}else if($lantaiA[1] == '2'){
 					$jenis_konsultasi 	= '30'; // Fungsi Hunian Luas Maksimal 72 dengan 2 Lantai
 					$id_klasifikasi 	= '2';
 					$tahap_pbg 			= null;
+					$id_jns_bg			= '1';
+					$id_fungsi_bg		= '1';
 				}else{
 					$jenis_konsultasi 	= '33';
 					$id_klasifikasi 	= '2';
 					$tahap_pbg 			= null;
+					$id_jns_bg			= '1';
+					$id_fungsi_bg		= '1';
 				}
 			} else if ($luasA[1] <= 90){ //Fungsi Hunian SederhanaKolektif dengan Luas Maksimal 90 Penyedia Jasa 
 				if($lantaiA[1] == '1'){
 					$jenis_konsultasi 	= '30'; //Fungsi Hunian Kolektif Luas 90 m dengan 1 Lantai
 					$id_klasifikasi 	= '1';
+					$id_jns_bg			= '1';
+					$id_fungsi_bg		= '1';
 				}else if($lantaiA[1] == '2'){
 					$jenis_konsultasi 	= '30';
 					$id_klasifikasi 	= '1';
 					$tahap_pbg 			= null;
+					$id_jns_bg			= '1';
+					$id_fungsi_bg		= '1';
 				}else{
 					$jenis_konsultasi 	= '33';// Fungsi Hunian Kolektif Bangunan Tidak Sederhana
 					$id_klasifikasi 	= '2';
 					$tahap_pbg 			= null;
+					$id_jns_bg			= '1';
+					$id_fungsi_bg		= '1';
 				}
 			}else{
 				if($lantaiA[1] == '1'){
 					$jenis_konsultasi 	= '31';
 					$id_klasifikasi 	= '2';
 					$tahap_pbg 			= null;
+					$id_jns_bg			= '1';
+					$id_fungsi_bg		= '1';
 				}else if($lantaiA[1] == '2'){
 					$jenis_konsultasi 	= '32';
 					$id_klasifikasi 	= '2';
 					$tahap_pbg 			= null;
+					$id_jns_bg			= '1';
+					$id_fungsi_bg		= '1';
 				}else{
 					$jenis_konsultasi 	= '33';
 					$id_klasifikasi 	= '2';
 					$tahap_pbg 			= null;
+					$id_jns_bg			= '1';
+					$id_fungsi_bg		= '1';
 				}
 			}
 		} else if ($id_izin == '5') {
@@ -686,11 +724,11 @@ class Konsultasi extends CI_Controller
 		} else if ($id_izin == '6') {
 			$jenis_konsultasi = '17';
 		} else if ($id_izin == '7'){
-			$jenis_konsultasi = '34';
-			$id_fungsi_bg ='3';
-			$id_jns_bg ='2';
-			$luas_bgp = '10.01';
-			$tinggi_bgp = '2.6';
+			$jenis_konsultasi 	= '34';
+			$id_fungsi_bg 		='3';
+			$id_jns_bg 			='2';
+			$luas_bgp 			= '10.01';
+			$tinggi_bgp 		= '2.6';
 		} else if($id_izin == '8'){
 			$jenis_konsultasi 	= '8';
 			$tahap_pbg 			= '1';
@@ -729,6 +767,7 @@ class Konsultasi extends CI_Controller
 			'slf'					=> $slf,
 			'id_klasifikasi'		=> $id_klasifikasi,
 			'tahap_pbg'				=> $tahap_pbg,
+			'id_otorita'			=> $id_otorita,
 			'permohonan_slf'		=> $permohonan_slf,
 		);
 		if ($id_bgn != "") {
@@ -760,7 +799,7 @@ class Konsultasi extends CI_Controller
 			$filterPemilik	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi';
 			$data['DataPemilik']	= $this->Mkonsultasi->getPemilik($filterPemilik, $id);
 			$data['DataTanah']		= $this->Mkonsultasi->getTanah('a.*', $id);
-			$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi';
+			$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi,h.nama_kelurahan';
 			$data['DataBangunan']	= $this->Mkonsultasi->getBangunan($filterBangunan, $id);
 			$data['DataTeknisTanah']	= $this->Mkonsultasi->getDataDokumen('a.*', $id);
 			$filterQuery				= 'b.id_detail, b.id_syarat, c.nm_dokumen,c.keterangan';
@@ -921,55 +960,132 @@ class Konsultasi extends CI_Controller
 	}
 	public function FormDataTeknis()
 	{
-		$id			= $this->uri->segment(3);
-		$data['id']	= $id;
-		$permohonan = $this->Mkonsultasi->getDataJnsKonsultasi('a.*', $id)->row_array();
-		$id_jenis_permohonan = $permohonan['id_jenis_permohonan'];
-		$data['id_jenis_permohonan']	= $id_jenis_permohonan;
-		if ($id != '') {
-			$filterPemilik	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi';
-			$data['DataPemilik']	= $this->Mkonsultasi->getPemilik($filterPemilik, $id);
-			$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi,f.dir_file';
-			$data['DataBangunan']	= $this->Mkonsultasi->getBangunan($filterBangunan, $id);
-			//Begin Data Teknis Arsitektur
-			$data['DataTeknisArsitektur']	= $this->Mkonsultasi->getDataDokumen('a.*', $id);
-			$filterQuery				= 'b.id_detail, b.id_syarat,c.id, c.nm_dokumen,c.keterangan';
-			$data['DataArsitektur']	= $this->Mkonsultasi->getDataArsitektur($filterQuery, $id_jenis_permohonan);
-			//End Data Teknis Arsitektur
-			//Begin Data Teknis Struktur
-			$data['DataTeknisStruktur']	= $this->Mkonsultasi->getDataDokumen('a.*', $id);
-			$filterQuery				= 'b.id_detail, b.id_syarat, c.nm_dokumen,c.keterangan';
-			$data['DataStruktur']	= $this->Mkonsultasi->getDataStruktur($filterQuery, $id_jenis_permohonan);
-			//End Data Teknis Struktur
+		$id						= $this->uri->segment(3);
+		//$id 					= $this->secure->decrypt_url($id);
+		$data['id']				= $id;
+		$permohonan 			= $this->Mkonsultasi->getDataJnsKonsultasi('a.*', $id)->row_array();
+		$id_jenis_permohonan 	= $permohonan['id_jenis_permohonan'];
+		$tahap_pbg 				= $permohonan['tahap_pbg'];
+		//echo $tahap_pbg;
+		if($tahap_pbg != ''){
+			$data['id_jenis_permohonan']	= $id_jenis_permohonan;
+			if ($id != '') {
+				$filterPemilik	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi';
+				$data['DataPemilik']	= $this->Mkonsultasi->getPemilik($filterPemilik, $id);
+				$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi,f.dir_file,h.nama_kelurahan';
+				$data['DataBangunan']	= $this->Mkonsultasi->getBangunan($filterBangunan, $id);
+				//Begin Data Teknis Arsitektur
+				$data['DataTeknisArsitektur']	= $this->Mkonsultasi->getDataDokumen('a.*', $id);
+				$filterQuery				= 'b.id_detail, b.id_syarat,c.id, c.nm_dokumen,c.keterangan,c.id_tahap';
+				$data['DataArsitektur']	= $this->Mkonsultasi->getDataArsitekturBertahap($filterQuery, $id_jenis_permohonan, $tahap_pbg);
+				//End Data Teknis Arsitektur
+				//Begin Data Teknis Struktur
+				$data['DataTeknisStruktur']	= $this->Mkonsultasi->getDataDokumen('a.*', $id);
+				$filterQuery				= 'b.id_detail, b.id_syarat,c.id, c.nm_dokumen,c.keterangan,c.id_tahap';
+				$data['DataStruktur']	= $this->Mkonsultasi->getDataStrukturBertahap($filterQuery, $id_jenis_permohonan, $tahap_pbg);
+				//End Data Teknis Struktur
+			}
+			$data['content']	= $this->load->view('FormDataTeknisBertahap', $data, TRUE);
+			$data['title']		=	'';
+			$data['heading']	=	'';
+			$this->load->view('template_pengajuan', $data);
+		}else{
+			$data['id_jenis_permohonan']	= $id_jenis_permohonan;
+			if ($id != '') {
+				$filterPemilik	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi';
+				$data['DataPemilik']	= $this->Mkonsultasi->getPemilik($filterPemilik, $id);
+				$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi,f.dir_file,h.nama_kelurahan';
+				$data['DataBangunan']	= $this->Mkonsultasi->getBangunan($filterBangunan, $id);
+				//Begin Data Teknis Arsitektur
+				$data['DataTeknisArsitektur']	= $this->Mkonsultasi->getDataDokumen('a.*', $id);
+				$filterQuery				= 'b.id_detail, b.id_syarat,c.id, c.nm_dokumen,c.keterangan';
+				$data['DataArsitektur']	= $this->Mkonsultasi->getDataArsitektur($filterQuery, $id_jenis_permohonan);
+				//End Data Teknis Arsitektur
+				//Begin Data Teknis Struktur
+				$data['DataTeknisStruktur']	= $this->Mkonsultasi->getDataDokumen('a.*', $id);
+				$filterQuery				= 'b.id_detail, b.id_syarat,c.id, c.nm_dokumen,c.keterangan';
+				$data['DataStruktur']	= $this->Mkonsultasi->getDataStruktur($filterQuery, $id_jenis_permohonan);
+				//End Data Teknis Struktur
+			}
+			$data['content']	= $this->load->view('FormDataTeknis', $data, TRUE);
+			$data['title']		=	'';
+			$data['heading']	=	'';
+			$this->load->view('template_pengajuan', $data);
 		}
-		$data['content']	= $this->load->view('FormDataTeknis', $data, TRUE);
-		$data['title']		=	'';
-		$data['heading']	=	'';
-		$this->load->view('template_pengajuan', $data);
 	}
 	public function FormDataMEP()
 	{
-		$id			= $this->uri->segment(3);
-		$data['id']	= $id;
+		$id							= $this->uri->segment(3);
+		//$id 						= $this->secure->decrypt_url($id);
+		$data['id']			= $id;
 		$permohonan = $this->Mkonsultasi->getDataJnsKonsultasi('a.*', $id)->row_array();
 		$id_jenis_permohonan = $permohonan['id_jenis_permohonan'];
 		$data['id_jenis_permohonan']	= $id_jenis_permohonan;
+		$tahap_pbg = $permohonan['tahap_pbg'];
+		if($tahap_pbg != ''){
+			$data['id_jenis_permohonan']	= $id_jenis_permohonan;
+			if ($id != '') {
+				$filterPemilik	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi';
+				$data['DataPemilik']	= $this->Mkonsultasi->getPemilik($filterPemilik, $id);
+				$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi,f.dir_file,h.nama_kelurahan';
+				$data['DataBangunan']	= $this->Mkonsultasi->getBangunan($filterBangunan, $id);
+				//Begin Data Teknis MEP
+				$data['DataTeknisMEP']	= $this->Mkonsultasi->getDataDokumen('a.*', $id);
+				$filterQuery				= 'b.id_detail, b.id_syarat, c.nm_dokumen,c.keterangan,c.id_tahap';
+				$data['DataMPE']	= $this->Mkonsultasi->getDataMEPBertahap($filterQuery, $id_jenis_permohonan, $tahap_pbg);
+				//End Data Teknis Struktur
+			}
+			$data['content']	= $this->load->view('FormDataMEPBertahap', $data, TRUE);
+			$data['title']		=	'';
+			$data['heading']	=	'';
+			$this->load->view('template_pengajuan', $data);
+		}else{
+			$data['id_jenis_permohonan']	= $id_jenis_permohonan;
+			if ($id != '') {
+				$filterPemilik	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi';
+				$data['DataPemilik']	= $this->Mkonsultasi->getPemilik($filterPemilik, $id);
+				$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi,h.nama_kelurahan';
+				$data['DataBangunan']	= $this->Mkonsultasi->getBangunan($filterBangunan, $id);
+				//Begin Data Teknis MEP
+				$data['DataTeknisMEP']	= $this->Mkonsultasi->getDataDokumen('a.*', $id);
+				$filterQuery				= 'b.id_detail, b.id_syarat, c.nm_dokumen,c.keterangan,c.id_tahap';
+				//$filterQuery				= 'b.id_detail, b.id_syarat, c.nm_dokumen,c.keterangan';
+				$data['DataMPE']	= $this->Mkonsultasi->getDataMEP($filterQuery, $id_jenis_permohonan);
+				//End Data Teknis MEP
+			}
+			$data['content']	= $this->load->view('FormDataMEP', $data, TRUE);
+			$data['title']		=	'';
+			$data['heading']	=	'';
+			$this->load->view('template_pengajuan', $data);
+		}
+	}
+
+	public function FormDataHijau()
+	{
+		$id							= $this->uri->segment(3);
+		//$id 						= $this->secure->decrypt_url($id);
+		$data['id']			= $id;
+		$permohonan = $this->Mkonsultasi->getDataJnsKonsultasi('a.*', $id)->row_array();
+		$id_jenis_permohonan = $permohonan['id_jenis_permohonan'];
+		$data['id_jenis_permohonan']	= $id_jenis_permohonan;
+		$tahap_pbg = $permohonan['tahap_pbg'];
 		if ($id != '') {
 			$filterPemilik	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi';
 			$data['DataPemilik']	= $this->Mkonsultasi->getPemilik($filterPemilik, $id);
-			$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi';
+			$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi,h.nama_kelurahan';
 			$data['DataBangunan']	= $this->Mkonsultasi->getBangunan($filterBangunan, $id);
 			//Begin Data Teknis MEP
 			$data['DataTeknisMEP']	= $this->Mkonsultasi->getDataDokumen('a.*', $id);
 			$filterQuery				= 'b.id_detail, b.id_syarat, c.nm_dokumen,c.keterangan';
-			$data['DataMPE']	= $this->Mkonsultasi->getDataMEP($filterQuery, $id_jenis_permohonan);
+			$data['DataMPE']	= $this->Mkonsultasi->getDataHijau($filterQuery, $id_jenis_permohonan, $tahap_pbg);
 			//End Data Teknis MEP
 		}
-		$data['content']	= $this->load->view('FormDataMEP', $data, TRUE);
+		$data['content']	= $this->load->view('FormDataHijau', $data, TRUE);
 		$data['title']		=	'';
 		$data['heading']	=	'';
 		$this->load->view('template_pengajuan', $data);
 	}
+
 	public function SaveDokumen()
 	{
 		$id							= $this->uri->segment(3);
@@ -1111,7 +1227,7 @@ class Konsultasi extends CI_Controller
 			$filterPemilik	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi';
 			$data['DataPemilik']	= $this->Mkonsultasi->getPemilik($filterPemilik, $id);
 			$data['DataTanah']		= $this->Mkonsultasi->getTanah('a.*', $id);
-			$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi';
+			$filterBangunan	= '	a.*,b.nama_kecamatan,c.nama_kabkota,d.nama_provinsi,e.nm_konsultasi,h.nama_kelurahan';
 			$data['DataBangunan']	= $this->Mkonsultasi->getBangunan($filterBangunan, $id);
 		}
 		$data['Konsultasi'] = $this->Mkonsultasi->getDataKonsultasi('a.*', $id);
@@ -1124,10 +1240,10 @@ class Konsultasi extends CI_Controller
 	{
 		$user_id		= $this->session->userdata('loc_user_id');
 		$user_id		= $this->Outh_model->Encryptor('decrypt', $user_id);
-		$id	= $this->input->post('id');
+		$id				= $this->input->post('id');
 		$pernyataan		=  $this->input->post('pernyataan');
 		$tgl_skrg 		= date('Y-m-d');
-		$no_konsultasi = $this->nomor_registrasi($id);
+		$no_konsultasi 	= $this->nomor_registrasi($id);
 		if ($pernyataan == '1') {
 			$data	= array(
 				'pernyataan' => $pernyataan,
@@ -1136,10 +1252,38 @@ class Konsultasi extends CI_Controller
 				'status' => '1',
 				'post_date' => date('Y-m-d')
 			);
-			$this->Mglobals->setData('tmdatabangunan', $data, 'id', $id);
-			$this->session->set_flashdata('message', 'Data User Berhasil di Ubah.');
-			$this->session->set_flashdata('status', 'success');
-			$this->load->library('ciqrcode'); //pemanggilan library QR CODE
+			$cek = $this->Mkonsultasi->cekNamaNoKonsultasi('a.id,a.no_konsultasi', $no_konsultasi);
+			if ($cek->num_rows() > 0) {
+				$this->session->set_flashdata('message', 'Gagal Simpan Karena ada kesalahan silahkan simpan ulang!!!');
+				$this->session->set_flashdata('status', 'danger');
+				redirect('Konsultasi/FormPernyataan/'. $id);
+			} else {
+				$query		= $this->Mglobals->setData('tmdatabangunan', $data, 'id', $id);
+				if ($query) {
+					$this->session->set_flashdata('message', 'Data Menu Berhasil di Simpan.');
+					$this->session->set_flashdata('status', 'success');
+
+					$this->load->library('ciqrcode'); //pemanggilan library QR CODE
+					$config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
+					$config['quality']      = true; //boolean, the default is true
+					$config['size']         = '1024'; //interger, the default is 1024
+					$config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+					$config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
+					$this->ciqrcode->initialize($config);
+					$image_name = $no_konsultasi . '.png'; //buat name dari qr code sesuai dengan nim
+					$params['data'] = 'http://simbg.pu.go.id/Main/Konsultasi/' . $no_konsultasi; //data yang akan di jadikan QR CODE
+					$params['level'] = 'H'; //H=High
+					$params['size'] = 10;
+					$params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
+					$data['QR'] = $this->ciqrcode->generate($params);
+					redirect('Konsultasi');
+				} else {
+					$this->session->set_flashdata('message', 'Data Menu Gagal di Simpan.');
+					$this->session->set_flashdata('status', 'danger');
+					redirect('Konsultasi/FormPernyataan/'.$id);
+				}
+			}
+			/*$this->load->library('ciqrcode'); //pemanggilan library QR CODE
 			$config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
 			$config['quality']      = true; //boolean, the default is true
 			$config['size']         = '1024'; //interger, the default is 1024
@@ -1151,7 +1295,7 @@ class Konsultasi extends CI_Controller
 			$params['level'] = 'H'; //H=High
 			$params['size'] = 10;
 			$params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
-			$data['QR'] = $this->ciqrcode->generate($params);
+			$data['QR'] = $this->ciqrcode->generate($params);*/
 		}
 		redirect('Konsultasi');
 	}
@@ -2015,7 +2159,7 @@ class Konsultasi extends CI_Controller
 		$this->session->set_flashdata('status', 'success');
 		redirect('Konsultasi');
 	}
-	public function removeDataPengajuan22($id)
+	public function removeDataPengajuan($id)
 	{
 		$process = $this->Mkonsultasi->removeDataPermohonan($id);
 		if (!$process) {
@@ -2030,21 +2174,23 @@ class Konsultasi extends CI_Controller
 	//End Revisi Dokumen
 	public function QrCode()
 	{
-		$no_konsultasi	= 'PBG-130502-16112022-06';
+		$no_konsultasi	= '452219';
 		$this->load->library('ciqrcode'); //pemanggilan library QR CODE
 		$config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
 		$config['quality']      = true; //boolean, the default is true
 		$config['size']         = '1024'; //interger, the default is 1024
-		$config['black']        = array(224,255,255); // array, default is array(255,255,255)
+		$config['black']        = array(224,255,255); // array, default is arra/y(255,255,255)
 		$config['white']        = array(70,130,180); // array, default is array(0,0,0)
 		$this->ciqrcode->initialize($config);
 		$image_name=$no_konsultasi.'.png'; //buat name dari qr code sesuai dengan nim
-		//$params['data'] 	= 'http://simbg.pu.go.id/Main/Berkas/'.$no_konsultasi; //data yang akan di jadikan QR CODE  SLF SIMBG ver Baru
-		//$params['data'] = 'http://simbg.pu.go.id/Main/VerifikasiPBG/'.$no_konsultasi; //data yang akan di jadikan QR CODE PBG
-		$params['data'] = 'http://simbg.pu.go.id/Main/Konsultasi/'.$no_konsultasi; //data yang akan di jadikan QR CODE PBG
+		//$params['data'] = 'https://simbg.pu.go.id/Main/Berkas/'.$no_konsultasi; //data yang akan di jadikan QR CODE  SLF SIMBG ver Baru
+		//$params['data'] = 'https://simbg.pu.go.id/Main/VerifikasiPBG/'.$no_konsultasi; //data yang akan di jadikan QR CODE PBG
+		//$params['data'] = 'https://simbg.pu.go.id/Main/Konsultasi/'.$no_konsultasi; //data yang akan di jadikan QR CODE PBG
 		//$params['data'] = 'https://simbg.pu.go.id/Main/DraftSLF/'.$sk_slf; //data yang akan di jadikan QR CODE SLF
 		//$params['data'] = 'https://simbg.pu.go.id/Main/VerifikasiBerkas/'.$sk_slf; //data yang akan di jadikan QR CODE IMB Lama
-		
+		//$params['data'] = 'https://simbg.pu.go.id/Main/Retribusi/'.$no_konsultasi; //data yang akan di jadikan QR CODE
+		$params['data'] = 'https://simbg.pu.go.id/Main/DataTeknis/'.$no_konsultasi; //data yang akan di jadikan QR CODE
+					
 		$params['level'] 	= 'H'; //H=High
 		$params['size'] 	= 10;
 		$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
@@ -2053,10 +2199,9 @@ class Konsultasi extends CI_Controller
 	}
 	public function FormPengecekan($id=null)
 	{
-		//$this->load->model('DinasTeknis/MDinasTeknis');
 		$user_id				= $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'));
-		$id 						= $this->secure->decrypt_url($id);
-		//$id 						= $this->uri->segment(3);
+		//$id 					= $this->secure->decrypt_url($id);
+		$id 					= $this->uri->segment(3);
 		$data['id']			= $id;
 		$data['daftar_provinsi']	= $this->Mglobal->listDataProvinsi('id_provinsi,nama_provinsi');
 		$data['prof'] 	= $this->Mkonsultasi->getDataUserProfil('a.*', $user_id);
@@ -2205,6 +2350,16 @@ class Konsultasi extends CI_Controller
 		}else{
 			$this->load->view('Dokumen/FormDokumen', $data);
 		}
+	}
+	public function getDataOtorita()
+	{
+		$crsf = $this->security->get_csrf_hash();
+		$id_kelurahan	= $this->uri->segment(3);
+		$value		= array();
+		$query		= $this->Mglobal->listDataKelurahan('a.status', $id_kelurahan)->row();
+		$value['id_otorita']  = !empty($query->status)?$query->status:'';
+		$value['csrf']  = $crsf;
+		echo json_encode($value);
 	}
 
 }

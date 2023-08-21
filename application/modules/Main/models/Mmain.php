@@ -80,7 +80,7 @@ class Mmain extends CI_Model{
 	{
 		$sql = "SELECT a.id,a.nm_pemilik,
 				b.almt_bgn,b.id_jenis_permohonan,b.status,b.nm_bgn,b.id_fungsi_bg,b.luas_bgn,b.tinggi_bgn,b.jml_lantai,b.luas_bgp,b.tinggi_bgp,
-				b.tipeA,b.tinggiA,b.luasA,b.jumlahA,b.lantaiA,
+				b.tipeA,b.tinggiA,b.luasA,b.jumlahA,b.lantaiA,b.id_dki,b.permohonan_slf,b.tinggi_bgp,
 				c.no_izin_pbg,c.nm_kadis,c.nip_kadis,
 				d.nama_kelurahan,
 				e.nama_kecamatan,
@@ -142,7 +142,7 @@ class Mmain extends CI_Model{
 	{
 		$sql = "SELECT a.id,a.nm_pemilik,
 				b.almt_bgn,b.id_jenis_permohonan,b.status,b.nm_bgn,b.id_fungsi_bg,b.luas_bgn,b.tinggi_bgn,b.jml_lantai,b.luas_bgp,b.tinggi_bgp,
-				b.tipeA,b.tinggiA,b.luasA,b.jumlahA,b.lantaiA,b.no_imb,
+				b.tipeA,b.tinggiA,b.luasA,b.jumlahA,b.lantaiA,b.no_imb,b.permohonan_slf,b.id_dki,
 				c.no_slf,c.nm_kadis_teknis,c.nip_kadis_teknis,
 				d.no_izin_pbg,
 				o.fungsi_bg,o.id_pemanfaatan_bg
@@ -273,7 +273,7 @@ class Mmain extends CI_Model{
 	public function getDataKonsultasi($no_konsultasi=null) 
 	{
 		$sql = "SELECT a.id,a.nm_pemilik,
-				b.almt_bgn,b.status,b.nm_bgn,b.id_fungsi_bg,b.luas_bgn,b.tipeA,b.tinggiA,b.luasA,b.jumlahA,b.lantaiA,
+				b.almt_bgn,b.status,b.nm_bgn,b.id_fungsi_bg,b.luas_bgn,b.tipeA,b.tinggiA,b.luasA,b.jumlahA,b.lantaiA,b.id_izin,b.id_dki,
 				c.nm_kadis,c.nip_kadis,c.no_sk_tk,c.date_sk_tk,c.dir_file_konsultasi,
 				d.nama_kelurahan,
 				e.nama_kecamatan,
@@ -288,7 +288,7 @@ class Mmain extends CI_Model{
 			LEFT JOIN tr_kabkot f ON(f.id_kabkot=b.id_kabkot_bgn)
 			LEFT JOIN tr_provinsi g ON(g.id_provinsi=b.id_prov_bgn)
 			LEFT JOIN tr_fungsi_bg o ON(o.id_fungsi_bg=b.id_fungsi_bg)
-			WHERE (1=1)";
+			WHERE (1=1) and b.status != '26' ";
 		if ($no_konsultasi != null || trim($no_konsultasi) != '')  $sql .= " AND b.no_konsultasi = '$no_konsultasi' ";
 		$hasil  = $this->db->query($sql);
 		return $hasil ;

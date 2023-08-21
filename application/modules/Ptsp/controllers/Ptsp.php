@@ -316,7 +316,7 @@ class Ptsp extends CI_Controller
 		$nama_perda			= $this->input->post('nama_perda');
 		
 		$config = [
-			'upload_path' => './dekill/Perda/',
+			'upload_path' => './object-storage/dekill/Perda/',
 			'allowed_types' => 'pdf|PDF',
 			'max_size' => '50000',
 			'encrypt_name' =>  TRUE,
@@ -378,7 +378,7 @@ class Ptsp extends CI_Controller
 			$this->session->set_flashdata('message', 'Data Gagal Dihapus.');
 			$this->session->set_flashdata('status', 'error');
 		} else {
-					$path = FCPATH . '/dekill/Perda/'. $nama_file;
+					$path = FCPATH . '/object-storage/dekill/Perda/'. $nama_file;
 					//$berkas = $path . $this->upload->data('file_name');
 					if (!unlink($path)) {
 						$this->session->set_flashdata('message', 'Data Berhasil di Hapus.');

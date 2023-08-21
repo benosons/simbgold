@@ -9,6 +9,7 @@ function resetCari() {
 	);
 	$('#loading').fadeOut();
 }
+
 </script>
 <div class="portlet box blue">
 	<div class="portlet-title">
@@ -21,13 +22,30 @@ function resetCari() {
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group col-md-12">
-						<label class="control-label col-md-3"><b>Provinsi</b></label>
+						<label class="control-label col-md-3"><b>Provinsi.</b></label>
 						<div class="col-md-9">
 							<div class="col-md-5">
 								<?php echo form_dropdown('provinsi', $opt_prov, ($select_prov != '0') ? $select_prov : '', 'class="form-control select2me"'); ?>
 							</div>
 						</div>
 					</div>
+					
+					<div class="form-group col-md-12">
+						<label class="control-label col-md-3"><b>Tgl. Permohonan Konsultasi</b></label>
+						<div class="col-md-9">
+							<div class="col-md-2">
+								<input type="text" class="form-control date-picker" data-date-format="dd-mm-yyyy" name="tanggalawal" value="<?= (isset($tanggalawal) ? tgl_eng_to_ind($tanggalawal) : ''); ?>" placeholder="01-01-2018" />
+							</div>
+							<label class="control-label col-md-1">
+								<center><b>s/d</b></center>
+							</label>
+							<div class="col-md-2">
+								<input type="text" class="form-control date-picker" data-date-format="dd-mm-yyyy" name="tanggalakhir" value="<?= (isset($tanggalakhir) ? tgl_eng_to_ind($tanggalakhir) : ''); ?>" placeholder="31-12-2020" />
+							</div>
+						</div>
+					</div>
+					
+					
 					<div class="form-group col-md-12">
 						<label class="control-label col-md-3"><b></b></label>
 						<div class="col-md-9">

@@ -38,13 +38,14 @@
 						$filename = FCPATH . "/object-storage/dekill/Requirement/$dir";
 						$dirum = '';
 						if (file_exists($filename)) {
-							$dirars = base_url('object-storage/dekill/Requirement/' . $dir);
+							$dirars = './object-storage/dekill/Requirement/' . $dir;
 						} else {
-							$dirars = base_url('object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir);
+							$dirars = './object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir;
 						}
+						$dirArsT	= $this->Outh_model->Encryptor('encrypt', $dirars);
 						?>
 						<?php if($dir != ''){ ?>
-							<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirars; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+							<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirArsT); ?>">Lihat</a>
 						<?php } else { ?>
 							[Tidak Ada Dokumen]
 						<?php } ?>

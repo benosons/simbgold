@@ -28,16 +28,17 @@
 									$filenamephat = FCPATH . "/object-storage/dekill/Earth/$key->dir_file_phat";
 									$dir = '';
 									if (file_exists($filename)) {
-										$dir = base_url('object-storage/dekill/Earth/' . $key->dir_file);
+										$dir ='./object-storage/dekill/Earth/' . $key->dir_file;
 									} else {
-										$dir = base_url('object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file);
+										$dir = './object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file;
 									}
 									if (file_exists($filenamephat)) {
-										$dirphat = base_url('object-storage/dekill/Earth/' . $key->dir_file_phat);
+										$dirphat = './object-storage/dekill/Earth/' . $key->dir_file_phat;
 									} else {
-										$dirphat = base_url('object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file_phat);
+										$dirphat = './object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file_phat;
 									}
-									
+									$dir1	= $this->Outh_model->Encryptor('encrypt', $dir);
+									$dirphat1	= $this->Outh_model->Encryptor('encrypt', $dirphat);
 									?>
 									<tr>
 										<td align="center"> <?php echo $no++; ?></td>
@@ -46,12 +47,12 @@
 										<td align="center"> <?php echo $key->luas_tanah; ?></td>
 										<td align="center"> <?php echo $key->atas_nama_dok; ?></td>
 										<td align="center">
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-										</td>
+										<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dir1); ?>">Lihat</a>
+											</td>
 										<?php if ($key->dir_file_phat != "") { ?>
 											<td align="center">
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirphat ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-											</td>
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirphat1); ?>">Lihat</a>
+												</td>
 										<?php } else { ?>
 											<td align="center"> Tidak Ada Dokumen</td>
 										<?php } ?>
@@ -99,10 +100,12 @@
 									}
 								} 
 								if (file_exists($filename)) {
-									$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+									$dir = './object-storage/dekill/Requirement/' . $dir_file;
 								} else {
-									$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+									$dir = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
 								}
+								$dirTnh	= $this->Outh_model->Encryptor('encrypt', $dir);
+								
 								?>
 								<tr class="<?= $clss ?>">
 									<td align="center"><?php echo $no++; ?></td>
@@ -113,8 +116,8 @@
 											Tidak Ada Dokumen
 										<?php } else { ?>
 											<center>						
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a></center>
-										<?php } ?>
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/' . $dirTnh); ?>">Lihat</a>
+											<?php } ?>
 										<?php echo form_close(); ?>
 									</td>
 								</tr>

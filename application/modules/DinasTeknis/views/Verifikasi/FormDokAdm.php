@@ -22,11 +22,13 @@
 			<tr >
 				<td align="center"><?php echo $i?></td>
 				<?php
+					$id		= $this->uri->segment('3');
+					$ids 	= $this->secure->decrypt_url($id);
 					$detail = $row->id_jenis_persyaratan;
 					$status = "";
 					$dir	= "";
 					$ipk	= "";
-					$query = $this->MDinasTeknis->getSyarat($row->id_detail,$this->uri->segment('3'))->result_array();
+					$query = $this->MDinasTeknis->getSyarat($row->id_detail,$ids)->result_array();
 					for($n=0;$n<count($query);$n++) {
 						$cek = $query[$n]['id_persyaratan_detail'];
 						$dir = $query[$n]['dir_file'];
@@ -36,19 +38,18 @@
 					$filename = FCPATH . "/object-storage/dekill/Requirement/$dir";
 					$dirum = '';
 					if (file_exists($filename)) {
-						$dirum = base_url('object-storage/dekill/Requirement/' . $dir);
+						$dirum = './object-storage/dekill/Requirement/' . $dir;
 					} else {
-						$dirum = base_url('object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir);
+						$dirum = './object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir;
 					}
-					$dir1	= $this->Outh_model->Encryptor('encrypt', $dir);
+					$dirUmum	= $this->Outh_model->Encryptor('encrypt', $dirum);
 				?>
 				<td><?php echo $row->nm_dokumen;?></td>
 				<td><?php echo $row->keterangan;?></td>
 				<td align="center">
 					<? if($row->id_detail == $cek){?>
 						<? if($dir != '' || $dir != null){?>
-							<!--<a href="<?php echo site_url('Docreader/PDFRead/' . $dir1); ?>" class="btn default btn-xs blue-stripe" data-toggle="modal" data-target="#modal-edit">Lihat</a>-->
-							<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirum; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+							<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirUmum); ?>">Lihat</a>
 						<?php } else {?>
 							[Tidak Ada Dokumen]
 						<?php }?>
@@ -97,11 +98,13 @@
 			<tr >
 				<td align="center"><?php echo $i?></td>
 				<?php
+					$id		= $this->uri->segment('3');
+					$ids 	= $this->secure->decrypt_url($id);
 					$detail = $row->id_jenis_persyaratan;
 					$status = "";
 					$dir	= "";
 					$ipk	= "";
-					$query = $this->MDinasTeknis->getSyarat($row->id_detail,$this->uri->segment('3'))->result_array();
+					$query = $this->MDinasTeknis->getSyarat($row->id_detail,$ids)->result_array();
 					for($n=0;$n<count($query);$n++) {
 						$cek = $query[$n]['id_persyaratan_detail'];
 						$dir = $query[$n]['dir_file'];
@@ -112,11 +115,11 @@
 					$filename = FCPATH . "/object-storage/dekill/Requirement/$dir";
 					$dirars = '';
 					if (file_exists($filename)) {
-						$dirars = base_url('object-storage/dekill/Requirement/' . $dir);
+						$dirars = './object-storage/dekill/Requirement/' . $dir;
 					} else {
-						$dirars = base_url('object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir);
+						$dirars = './object-storage/file/Konsultasi/' . $ipk . '/Dokumen/' . $dir;
 					}
-					$dir1	= $this->Outh_model->Encryptor('encrypt', $dir);
+					$dirArsitek	= $this->Outh_model->Encryptor('encrypt', $dirars);
 				?>
 				<td><?php echo $row->nm_dokumen;?></td>
 				<td><?php echo $row->keterangan;?></td>
@@ -130,7 +133,7 @@
 					<?php }else{ ?>
 						<? if($row->id_detail == $cek){?>
 						<? if($dir != ''){?>
-							<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirars; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+							<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirArsitek); ?>">Lihat</a>
 						<?php } else {?>
 							[Tidak Ada Dokumen]
 						<?php }?>
@@ -150,12 +153,4 @@
 		} ?>          
     </tbody>
 </table>
-<div id="modal-edit" class="modal fade bs-modal-sm" data-width="60%" tabindex="-1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false">
-	<div class="modal-content" >
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Tutup</button>
-		</div>
-		<div class="modal-body"></div>
-	</div>
-</div>
 <!-- End Data Arsitektur -->

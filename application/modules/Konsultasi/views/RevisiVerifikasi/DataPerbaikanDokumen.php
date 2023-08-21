@@ -26,15 +26,17 @@
 									$filenamephat = FCPATH . "/object-storage/dekill/Earth/$key->dir_file_phat";
 									$dirt = '';
 									if (file_exists($filename)) {
-										$dirt = base_url('object-storage/dekill/Earth/' . $key->dir_file);
+										$dirt = './object-storage/dekill/Earth/' . $key->dir_file;
 									} else {
-										$dirt = base_url('object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file);
+										$dirt = './object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file;
 									}
 									if (file_exists($filenamephat)) {
-										$dirphat = base_url('object-storage/dekill/Earth/' . $key->dir_file_phat);
+										$dirphat = './object-storage/dekill/Earth/' . $key->dir_file_phat;
 									} else {
-										$dirphat = base_url('object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file_phat);
+										$dirphat = './object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file_phat;
 									}
+									$dir1		= $this->Outh_model->Encryptor('encrypt', $dirt);
+									$dirphat1	= $this->Outh_model->Encryptor('encrypt', $dirphat);
 									?>
 									<tr>
 										<td align="center"> <?php echo $no++; ?></td>
@@ -43,12 +45,12 @@
 										<td align="center"> <?php echo $key->luas_tanah; ?></td>
 										<td align="center"> <?php echo $key->atas_nama_dok; ?></td>
 										<td align="center">
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirt; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dir1); ?>">Lihat</a>
 										</td>
 										<?php if ($key->dir_file_phat != "") { ?>
 											<td align="center">
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirphat ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-											</td>
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirphat1); ?>">Lihat</a>
+										</td>
 										<?php } else { ?>
 											<td align="center"> Tidak Ada Dokumen</td>
 										<?php } ?>
@@ -111,10 +113,11 @@
 								$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
 								$dirtanah = '';
 								if (file_exists($filename)) {
-									$dirtanah = base_url('object-storage/dekill/Requirement/' . $dir_file);
+									$dirtanah = './object-storage/dekill/Requirement/' . $dir_file;
 								} else {
-									$dirtanah = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+									$dirtanah = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
 								}
+								$dirTnh		= $this->Outh_model->Encryptor('encrypt', $dirtanah);
 								?>
 								<tr class="<?= $clss ?>">
 									<td align="center"><?php echo $no++; ?></td>
@@ -126,7 +129,7 @@
 											<?php if($dir_file == null)  {?>
 												<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 											<?php } else { ?>
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirtanah; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+												<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirTnh); ?>">Lihat</a>
 												|
 												<a href="<?php echo site_url('Konsultasi/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											<?php } ?>
@@ -190,10 +193,15 @@
 							$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
 							$dir = '';
 							if (file_exists($filename)) {
-								$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+								$dir = './object-storage/dekill/Requirement/' . $dir_file;
 							} else {
-								$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+								$dir = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
 							}
+							$dirUmum	= $this->Outh_model->Encryptor('encrypt', $dir);
+							
+							
+						
+							
 							?>
 							<tr class="<?= $clss ?>">
 								<td align="center"><?php echo $no++; ?></td>
@@ -205,15 +213,16 @@
 										<?php if($dir_file == null)  {?>
 											<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 										<?php } else { ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+										
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirUmum); ?>">Lihat</a>
 											|
 											<a href="<?php echo site_url('Konsultasi/DeleteDokumenRev/' . $id_administrasi . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 										<?php } ?>
 									<?php } else if($dir_file == null){ ?>
 										Sudah di Verifikasi
 									<?php } else{ ?>
-										<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-									<?php }?>
+									<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirUmum); ?>">Lihat</a>
+											<?php }?>
 									<?php echo form_close(); ?>
 								</td>
 							</tr>
@@ -268,10 +277,11 @@
 							$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
 							$dir = '';
 							if (file_exists($filename)) {
-								$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+								$dir = './object-storage/dekill/Requirement/' . $dir_file;
 							} else {
-								$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+								$dir = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
 							}
+							$dirArst	= $this->Outh_model->Encryptor('encrypt', $dir);
 							?>
 							<tr class="<?= $clss ?>">
 								<td align="center"><?php echo $no++; ?></td>
@@ -283,14 +293,14 @@
 											<?php if($dir_file == null)  {?>
 												<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 											<?php } else { ?>
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+												<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirArst); ?>">Lihat</a>
 												|
 												<a href="<?php echo site_url('Konsultasi/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											<?php } ?>
 										<?php } else if($dir_file == null){ ?>
 										Sudah di Verifikasi
 										<?php } else{ ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirArst); ?>">Lihat</a>
 										<?php }?>
 									<?php echo form_close(); ?>
 								</td>
@@ -344,10 +354,12 @@
 								$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
 								$dir = '';
 								if (file_exists($filename)) {
-									$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+									$dir = './object-storage/dekill/Requirement/' . $dir_file;
 								} else {
-									$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
-								}?>
+									$dir = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
+								}
+								$dirStr	= $this->Outh_model->Encryptor('encrypt', $dir);
+								?>
 								<tr class="<?= $clss ?>">
 									<td align="center"><?php echo $no++; ?></td>
 									<td align="left"><?php echo $key->nm_dokumen; ?></td>
@@ -358,12 +370,12 @@
 											<?php if($dir_file == null)  {?>
 												<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 											<?php } else { ?>
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-													|
+												<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirStr); ?>">Lihat</a>
+												|
 												<a href="<?php echo site_url('Konsultasi/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											<?php } ?>
 										<?php } else { ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirStr); ?>">Lihat</a>
 										<?php } ?>
 										<?php echo form_close(); ?>
 									</td>
@@ -427,10 +439,12 @@
 							$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
 							$dir = '';
 							if (file_exists($filename)) {
-								$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+								$dir = './object-storage/dekill/Requirement/' . $dir_file;
 							} else {
-								$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
-							}?>
+								$dir = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
+							}
+							$dirMEP	= $this->Outh_model->Encryptor('encrypt', $dir);
+							?>
 							<tr class="<?= $clss ?>">
 								<td align="center"><?php echo $no++; ?></td>
 								<td align="left"><?php echo $key->nm_dokumen; ?></td>
@@ -441,12 +455,12 @@
 											<?php if($dir_file == null)  {?>
 												<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 											<?php } else { ?>
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-													|
+												<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirMEP); ?>">Lihat</a>
+												|
 												<a href="<?php echo site_url('Konsultasi/DeleteDokumenRev/' . $id_teknis . '/tek/' . $id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											<?php } ?>
 										<?php } else { ?>
-											<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirMEP); ?>">Lihat</a>
 										<?php } ?>
 										<?php echo form_close(); ?>
 								</td>

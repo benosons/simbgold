@@ -1,7 +1,9 @@
 <script src="<?php echo base_url(); ?>assets/global/plugins/jquery-repeater/jquery.repeater.js"></script>
 <div class="portlet box blue-hoki">
   <div class="portlet-title">
-    <div class="caption">Form Input Bukti Pembayaran Retribusi</div>
+    <div class="caption">
+      Form Input Bukti Pembayaran Retribusi
+    </div>
   </div>
   <div class="portlet-body">
     <div class="form-group">
@@ -25,37 +27,63 @@
         </style>
         <div class="row">
           <div class="col-md-12">
-            <form action="<?php echo site_url('Konsultasi/bayar_retribusi') ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
-              <input type="text" style="display: none;" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>">        
+            <form action="<?php echo site_url('KonsultasiOSS/bayar_retribusi') ?>" method="POST" class="form-horizontal" enctype="multipart/form-data">
+              <input type="text" style="display: none;" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" >          
               <div class="form-body">
                 <div class="col-md-12">
                   <div class="portlet-body">
-                      <div class="row">
-                        <input type="hidden" class="form-control" value="<?php echo set_value('id', (isset($id) ? $id : '')) ?>" name="id" placeholder="id" autocomplete="off">
-                        <div class="col-md-12 pembayaran-retribusi">
-                          <div class="form-group">
-                            <label class="control-label col-md-4" style="text-align:left;">Total  Retribusi</label>
-                            <div class="col-md-4"><p class="form-control-static shst">Rp. <?php echo number_format(str_replace('.', ',', $retribusi->nilai_retribusi_keseluruhan)) ?></p></div>
+                    <div class="row">
+                      <input type="hidden" class="form-control" value="<?php echo set_value('id', (isset($id) ? $id : '')) ?>" name="id" placeholder="id" autocomplete="off">
+                      <div class="col-md-12 pembayaran-retribusi">
+                            <div class="form-group">
+                              <label class="control-label col-md-4" style="text-align:left;">Total  Retribusi</label>
+                              <div class="col-md-4">
+                                <p class="form-control-static shst">Rp. <?php echo number_format(str_replace('.', ',', $retribusi->nilai_retribusi_keseluruhan)) ?></p>
+                              </div>
+                            </div>
                           </div>
-                        </div>
                         <div class="col-md-12 upload-retribusi">
                           <div class="form-group">
                             <label class="control-label col-md-4" style="text-align:left;">SKRD</label>
-                            <div class="col-md-4">
-                              <a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/'.$id.'/SKRD/'.$retribusi->dir_file_penagihan);?>')" class="btn default btn-md blue-stripe" >Berkas SKRD</a>
+                            <div class="col-md-4"> 
+                              <?php
+                                $filename = FCPATH . "object-storage/dekill/Retribution/$skrd->dir_file_penagihan";
+                                $dir = '';
+                                if (file_exists($filename)) {
+                                  $dir = './object-storage/dekill/Retribution/' . $skrd->dir_file_penagihan;
+                                } else {
+                                  $dir = './object-storage/file/Konsultasi/' . $id . '/SKRD/' . $skrd->dir_file_penagihan;
+                                }
+                                $dirRetri	= $this->Outh_model->Encryptor('encrypt', $dir);
+                              ?>
+                              <a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/' . $dirRetri); ?>">Lihat</a>
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-12 upload-retribusi">
-                          <div class="form-group">
-                            <label class="control-label col-md-4" style="text-align:left;">Bukti Pembayaran</label>
-                            <?php if ($retribusi->bukti_pembayaran =='' || $retribusi->bukti_pembayaran == null){ ?>
-                              <div class="col-md-4"><input type="file" name="bukti_upload" id="bukti" class="bukti-upload"></div>  
-                            <?php }else { ?>
-                                <div class="col-md-4"><a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('file/Konsultasi/'.$id.'/retribusi/'.$retribusi->bukti_pembayaran);?>')" class="btn default btn-md blue-stripe" >Berkas SKRD</a></div>
-                            <?php }?>
+                          <div class="col-md-12 upload-retribusi">
+                            <div class="form-group">
+                              <label class="control-label col-md-4" style="text-align:left;">Bukti Pembayaran</label>
+                              <?php if ($retribusi->bukti_pembayaran =='' || $retribusi->bukti_pembayaran == null){ ?>
+                                <div class="col-md-4">
+                                  <input type="file" name="bukti_upload" id="bukti" class="bukti-upload">
+                                </div>  
+                                <?php }else { ?>
+                                  <div class="col-md-4">
+                                  <?php
+                                  $filename = FCPATH . "/dekill/Retribution/$retribusi->bukti_pembayaran";
+                                  $dir = '';
+                                  if (file_exists($filename)) {
+                                    $dir_bayar = base_url('dekill/Retribution/' . $retribusi->bukti_pembayaran);
+                                  } else {
+                                    $dir_bayar = base_url('file/Konsultasi/' . $id . '/retribusi/' . $retribusi->bukti_pembayaran);
+                                  }
+                                  ?>
+                                    <a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir_bayar; ?>')" class="btn default btn-xs blue-stripe">Berkas Bukti Bayar</a>
+                                  </div>
+                                <?php }?>
+                              </div>
                           </div>
-                        </div>
+
                           <div class="row">
                             <div class="col-md-6">
                               <div class="row">
@@ -67,6 +95,7 @@
                             </div>
                             <div class="col-md-6"> </div>
                           </div>
+                      
                       </div>
                     </div>
                   </div>

@@ -105,6 +105,8 @@ class Main extends CI_Controller
 				$data['lantaiA'] = $mydata['lantaiA'];
 				$data['nm_kadis'] = $mydata['nm_kadis'];
 				$data['nip_kadis'] = $mydata['nip_kadis'];
+				$data['id_dki']	= $mydata['id_dki'];
+				$data['permohonan_slf']	= $mydata['permohonan_slf'];
 			}else{
 				$data['status'] = "Tidak Ditemukan";
 			}
@@ -183,14 +185,14 @@ class Main extends CI_Controller
 			$mydata = $query->row_array();
 			$baris = $query->num_rows();
 			if ($baris >= 1 ) {
-				$data['status'] = "SLF Terverifikasi";
-				$data['nama'] = $mydata['nm_pemilik'];
-				$data['fungsi_bg'] = $mydata['fungsi_bg'];
-				$data['nama_bangunan'] = $mydata['nm_bgn'];
-				$data['alamat_bg'] = $mydata['almt_bgn'];
+				$data['status'] 		= "SLF Terverifikasi";
+				$data['nama'] 			= $mydata['nm_pemilik'];
+				$data['fungsi_bg'] 		= $mydata['fungsi_bg'];
+				$data['nama_bangunan'] 	= $mydata['nm_bgn'];
+				$data['alamat_bg'] 		= $mydata['almt_bgn'];
 
-				$data['luas_bgn'] = $mydata['luas_bgn'];
-				$data['luas_bgp'] = $mydata['luas_bgp'];
+				$data['luas_bgn'] 		= $mydata['luas_bgn'];
+				$data['luas_bgp'] 		= $mydata['luas_bgp'];
 				$data['tinggi_bgn'] = $mydata['tinggi_bgn'];
 				$data['tinggi_bgp'] = $mydata['tinggi_bgp'];
 				$data['jml_lantai'] = $mydata['jml_lantai'];
@@ -205,6 +207,9 @@ class Main extends CI_Controller
 				$data['no_imb'] = $mydata['no_imb'];
 				$data['no_izin_pbg'] = $mydata['no_izin_pbg'];
 				$data['no_slf'] = $mydata['no_slf'];
+				$data['permohonan_slf'] = $mydata['permohonan_slf'];
+				$data['id_jenis_permohonan'] = $mydata['id_jenis_permohonan'];
+				$data['id_dki'] = $mydata['id_dki'];
 			}else{
 				$data['status'] = "Tidak Ditemukan";
 			}
@@ -228,7 +233,7 @@ class Main extends CI_Controller
 		$data['uuck'] = $this->Mmain->undang2ck()->result_array();
 		$data['result_per'] = $this->Mmain->perda($id)->result_array();
 		//End Dasar Hukum
-       	$this->load->view('Dokumen/DokumenPBG', $data);
+		$this->load->view('Dokumen/DokumenPBG', $data);
     }
 
 	public function Konsultasi() {
@@ -253,6 +258,8 @@ class Main extends CI_Controller
 				$data['lampiran'] = $mydata['dir_file_konsultasi'];
 				$data['nm_kadis'] = $mydata['nm_kadis'];
 				$data['nip_kadis'] = $mydata['nip_kadis'];
+				$data['id_izin'] = $mydata['id_izin'];
+				$data['id_dki'] = $mydata['id_dki'];
 			}else{
 				$data['status'] = "Tidak Ditemukan";
 			}
@@ -296,6 +303,25 @@ class Main extends CI_Controller
 		$data['result_per'] = $this->Mmain->perda($id)->result_array();
 		//End Dasar Hukum
         $this->load->view('Dokumen/DokumenPBGPemohon', $data);
+	}
+
+	function Retribusi() // Data PBG
+	{	
+		$SPPST 				= $this->uri->segment(3);
+		$data['SPPST'] 		= $SPPST;
+		$data['head_title'] = '';
+		$data['content'] 	= $this->load->view('DataRetribusi', $data, TRUE);
+		$this->load->view('Front_Info_Validasi', $data);
+		
+	}
+
+	function DataTeknis() // Data PBG
+	{	
+		$id 				= $this->uri->segment(3);
+		$data['id'] 		= $id;
+		$data['head_title'] = '';
+		$data['content'] 	= $this->load->view('DataLoginTeknis', $data, TRUE);
+		$this->load->view('Front_Info_Validasi', $data);
 	}
 
 	

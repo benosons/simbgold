@@ -320,11 +320,14 @@ class Pemeriksaan extends CI_Controller
                         } else {
                             $dir = 'object-storage/dekill/Requirement/' . $berkas;
                         }
+                        $encryptedDir		= $this->Outh_model->Encryptor('encrypt', $dir);
+                        $reader 	= 'Docreader/ReaderDok/'.$encryptedDir;
+
                         $result[] = [
                             'nm_dokumen' => $g->nm_dokumen,
                             'kesesuaian' => $kesesuaian,
                             'catatan' => $catatan == NULL ? '' : $catatan,
-                            'dir_file' => $berkas == NULL ? false : $dir,
+                            'dir_file' => $berkas == NULL ? false : $reader,
                             'id_detail' => $g->id_detail,
                             'id_detail_jenis_persyaratan' => $g->id_detail_jenis_persyaratan
                         ];
@@ -662,7 +665,7 @@ class Pemeriksaan extends CI_Controller
         $config = [
             'upload_path' =>  "./{$this->pathBerkas}",
             'allowed_types' => 'pdf|PDF',
-            'max_size' => '50000',
+            'max_size' => '150000',
             'max_width' => 5000,
             'max_height' => 5000,
             'encrypt_name' =>  TRUE,
@@ -685,13 +688,16 @@ class Pemeriksaan extends CI_Controller
                         'dir_file' => $this->upload->data('file_name')
                     ];
                     $cekFile = $this->Mpemeriksaan->cekBerkas($dataKonsultasi, $dataVal, $dataId)->row()->dir_file;
+                    $dokumenNew     = "object-storage/dekill/Requirement/" . $this->upload->data('file_name');
+                    $encryptedDir	= $this->Outh_model->Encryptor('encrypt', $dokumenNew);
+                    $readerNew 	    = 'Docreader/ReaderDok/'.$encryptedDir;
                     if ($cekFile == NULL) {
                         $this->Mpemeriksaan->updateBerkas($dataKonsultasi, $dataVal, $dataId, $data);
                         $output = [
                             'status' => true,
                             'type' => 'success',
                             'message' => 'Data Berkas Berhasil Diupload!',
-                            'result' => "object-storage/dekill/Requirement/" . $this->upload->data('file_name')
+                            'result' => $readerNew,
                         ];
                         header('Content-Type: application/json');
                         echo json_encode($output);
@@ -699,11 +705,14 @@ class Pemeriksaan extends CI_Controller
                         $path = $this->pathBerkas;
                         $fileLama = $path . $cekFile;
                         $this->Mpemeriksaan->updateBerkas($dataKonsultasi, $dataVal, $dataId, $data);
+                        $dokumenNew     = "object-storage/dekill/Requirement/" . $this->upload->data('file_name');
+                        $encryptedDir	= $this->Outh_model->Encryptor('encrypt', $dokumenNew);
+                        $readerNew 	    = 'Docreader/ReaderDok/'.$encryptedDir;
                         $output = [
                             'status' => true,
                             'type' => 'success',
                             'message' => 'Data Berkas Berhasil Diupload!',
-                            'result' => "object-storage/dekill/Requirement/" . $this->upload->data('file_name')
+                            'result' => $readerNew,
                         ];
                         header('Content-Type: application/json');
                         echo json_encode($output);
@@ -752,11 +761,14 @@ class Pemeriksaan extends CI_Controller
                         'dir_file' => $this->upload->data('file_name')
                     ];
                     $this->Mpemeriksaan->insertBerkas($data);
+                    $dokumenNew     = "object-storage/dekill/Requirement/" . $this->upload->data('file_name');
+                    $encryptedDir	= $this->Outh_model->Encryptor('encrypt', $dokumenNew);
+                    $readerNew 	    = 'Docreader/ReaderDok/'.$encryptedDir;
                     $output = [
                         'status' => true,
                         'type' => 'success',
                         'message' => 'Data Berkas Berhasil Diupload!',
-                        'result' => "object-storage/dekill/Requirement/" . $this->upload->data('file_name')
+                        'result' => $readerNew,
                     ];
                     header('Content-Type: application/json');
                     echo json_encode($output);
@@ -900,7 +912,6 @@ class Pemeriksaan extends CI_Controller
             }
         }
     }
-    
     public function SavePenilaian()
     {
         $id_kabkot		        = $this->session->userdata('loc_id_kabkot');
@@ -918,25 +929,26 @@ class Pemeriksaan extends CI_Controller
         $sk_slf                 = "";
         if ($imb == '1') {
             $status = '10';
-            $ket = "Akan Masuk Ketahap Validasi Kepala Dinas Teknis";
+            $ket    = "Akan Masuk Ketahap Validasi Kepala Dinas Teknis";
         } else {
             $status = '9';
-            $ket = "Akan Masuk Ketahap Perhitungan Retribusi";
+            $ket    = "Akan Masuk Ketahap Perhitungan Retribusi";
         }
         $config = [
-            'upload_path' => "./{$this->pathBerita}",
+            'upload_path'   => "./{$this->pathBerita}",
             'allowed_types' => 'pdf|PDF',
-            'max_size' => '150000',
-            'max_width' => 5000,
-            'max_height' => 5000,
-            'encrypt_name' =>  TRUE,
-            'remove_space' => TRUE,
+            'max_size'      => '150000',
+            'max_width'     => 5000,
+            'max_height'    => 5000,
+            'encrypt_name'  =>  TRUE,
+            'remove_space'  => TRUE,
         ];
         //$ttd                = $this->Mpemeriksaan->get_pejabat_sk($id_kabkot);
         $ttd                = $this->Mpemeriksaan->get_pejabat($id);
         $ttd_pejabat_sk     = $ttd['kepala_dinas'];
         $nip_kadis_teknis   = $ttd['nip_kepala_dinas'];
         $nm_dinas           = $ttd['p_nama_dinas'];
+
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload('berkas')) {
             $this->session->set_flashdata('message', $this->upload->display_errors());
@@ -980,8 +992,6 @@ class Pemeriksaan extends CI_Controller
                     $query = $this->Mpemeriksaan->updateHasilPenilaian($id, $data);
                     $this->Mglobals->setDatakol('th_data_konsultasi', $datalog);
                     $this->Mpemeriksaan->insertdataslf($dataInSLF);
-					
-					
                     $this->load->library('ciqrcode'); //pemanggilan library QR CODE
                     $config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
                     $config['quality']      = true; //boolean, the default is true
@@ -989,12 +999,12 @@ class Pemeriksaan extends CI_Controller
                     $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
                     $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
                     $this->ciqrcode->initialize($config);
-                    $image_name = $sk_slf . '.png'; //buat name dari qr code sesuai dengan nim
-                    $params['data'] = 'http://simbg.pu.go.id/Main/Berkas/' . $sk_slf; //data yang akan di jadikan QR CODE
-                    $params['level'] = 'H'; //H=High
-                    $params['size'] = 10;
-                    $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
-                    $data['QR'] = $this->ciqrcode->generate($params);
+                    $image_name             = $sk_slf . '.png'; //buat name dari qr code sesuai dengan nim
+                    $params['data']         = 'http://simbg.pu.go.id/Main/Berkas/' . $sk_slf; //data yang akan di jadikan QR CODE
+                    $params['level']        = 'H'; //H=High
+                    $params['size']         = 10;
+                    $params['savename']     = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
+                    $data['QR']             = $this->ciqrcode->generate($params);
                     if ($query) {
                         $email          = "$email";
                         $no_konsultasi  = "$no_konsultasi";
@@ -1088,127 +1098,6 @@ class Pemeriksaan extends CI_Controller
         }
     }
     // End Pemeriksaan Konsultasi
-    //Begin Validasi Kadis Teknis
-    public function ValidasiKadis()
-    {
-        $id_kabkot    = $this->session->userdata('loc_id_kabkot');
-        $data['id_kabkot'] =
-            $SQLcari     = "";
-        $data['Kadis'] = $this->Mpemeriksaan->getListValidasi(null, $SQLcari);
-        $data['content']    = $this->load->view('Validasi/ListValidasi', $data, TRUE);
-        $data['title']        =    '';
-        $data['heading']    =    '';
-        $this->template->load('template/template_backend', 'Pemeriksaan/Validasi/ListValidasi', $data);
-    }
-    //End Validasi Kadis Teknis
-
-    public function CetakVerifikasi($id = NULL)
-    {
-        $DataVal                = $this->Mpemeriksaan->getdatapermohonan($id)->row_array();
-        $id_izin                = $DataVal['id_izin'];
-        $id_fungsi              = $DataVal['id_fungsi_bg'];
-        $id_prasarana           = $DataVal['id_prasarana_bg'];
-        $jns_bg                 = $DataVal['id_jns_bg'];
-        $fg_bg                  = $DataVal['id_fungsi_bg'];
-        $data['pg']             = $this->Mpemeriksaan->getdatapemilikDok($id);
-        $data['result_list']    = $this->Mpemeriksaan->getDataVerifikasi($id);
-        if ($id_izin == '4' || $id_izin == '3') {
-            //$data['fungsi'] = $this->Mpemeriksaan->getDataFungsi($fg_bg, $jns_bg);
-        } else if ($id_izin == '2') {
-            if ($fg_bg == '6') {
-                $data['fungsi'] = $this->Mpemeriksaan->getDataFungsiCampuran($fg_bg);
-            } else if ($fg_bg == '0') {
-            } else {
-                $data['fungsi'] = $this->Mpemeriksaan->getDataFungsi($fg_bg, $jns_bg);
-            }
-        } else if ($id_izin == '5') {
-            $data['fungsi'] = $this->Mpemeriksaan->getDataFungsiPrasarana($id_prasarana);
-        } else {
-            if ($id_fungsi == '6') {
-                $data['fungsi'] = $this->Mpemeriksaan->getDataFungsiCampuran($fg_bg);
-            } else {
-                $data['fungsi'] = $this->Mpemeriksaan->getDataFungsi($fg_bg, $jns_bg);
-            }
-        }
-        //$data['fungsi'] = $this->Mpemeriksaan->getDataFungsi($fg_bg, $jns_bg);
-        $tanah = $this->Mpemeriksaan->tanah($id);
-        $data['result_tanah'] = $tanah->result_array();
-        $data['count_tanah'] = $tanah->num_rows();
-        $data['slf'] = $this->Mpemeriksaan->getdataslf($id);
-        $data['head_title'] = '.:: Verifikasi Rekomtek ::.';
-        if ($id_izin == "2") {
-            $this->load->view('Validasi/CetakVerSLFRekom', $data);
-        } else {
-            $this->load->view('Validasi/CetakVerifikasi', $data);
-        }
-    }
-
-    public function FormVerifikasi()
-    {
-        $user_id        = $this->session->userdata('loc_user_id');
-        $user_id        = $this->Outh_model->Encryptor('decrypt', $user_id);
-        $id = $this->input->post('id');
-        $tgl_skrg         = date('Y-m-d');
-        $data['id'] = $id;
-        $DataVal = $this->Mpemeriksaan->getdatapermohonan($id)->row_array();
-        $imb = $DataVal['imb'];
-        $email = $DataVal['email'];
-        $no_konsultasi = $DataVal['no_konsultasi'];
-        if ($imb != '1') {
-            $ket = "Proses masuk Ke Dinas Perizinan Untuk Penagihan Retribusi";
-        } else {
-            $ket = "Proses masuk Ke Dinas Perizinan Untuk Divalidasi Oleh Kepala Dinas Perizinan";
-        }
-        if (trim($id) != '') {
-            if ($imb != '1') {
-                $dataStatus = array(
-                    'status' => 11,
-                );
-                $data    = array(
-                    'tgl_status' => $tgl_skrg,
-                    'status' => '11',
-                    'id' => $id,
-                    'catatan' => "Telah Selesai di Validasi Kepala Dinas Teknis dan Masuk Ke Proses Penagihan Retribusi",
-                    'user_id' => $user_id,
-                    'modul' => 'Validasi Kepala Dinas Teknis'
-                );
-            } else {
-                $dataStatus = array(
-                    'status' => 13,
-                );
-                $data    = array(
-                    'tgl_status' => $tgl_skrg,
-                    'status' => '13',
-                    'id' => $id,
-                    'catatan' => "Telah Selesai di Validasi Kepala Dinas Teknis dan akan di Validasi Kepala Dinas Perizinan",
-                    'user_id' => $user_id,
-                    'modul' => 'Validasi Kepala Dinas Teknis'
-                );
-            }
-
-            $this->Mpemeriksaan->updateProgress($dataStatus, $id);
-            $this->Mglobals->setDatakol('th_data_konsultasi', $data);
-        }
-        $email = "$email";
-        $no_konsultasi = "$no_konsultasi";
-        $ket    = "$ket";
-        //$catatan = "$catatan";
-        $subject     = "Status Progress Permohonan $no_konsultasi";
-        $text         = "";
-        $text .= "Yth Bapak/Ibu,<br>";
-        $text .= "<br>";
-        $text .= "Dengan ini kami memberitahukan bahwa Permohonan dengan No.Registrasi $no_konsultasi <br>";
-        $text .= "Dengan keterangan Telah Selesai di Validasi Kepala Dinas Teknis<br>";
-        $text .= "Catatan : $ket";
-        $text .= "<br>";
-        $text .= "<br>";
-        $text .= "Hormat Kami <br>";
-        $text .= "Admin SIMBG ";
-        $this->simbg_lib->sendEmail($email, $subject, $text);
-        $this->session->set_flashdata('message', 'Rekomandasi Teknis Terverifikasi');
-        $this->session->set_flashdata('status', 'success');
-        redirect('Pemeriksaan/ValidasiKadis');
-    }
     // finalisasi data bangunan
     public function getDataKabKota()
     {
@@ -1235,7 +1124,6 @@ class Pemeriksaan extends CI_Controller
         }
         echo json_encode($value);
     }
-
     public function getDataKelurahan()
     {
         $id_kecamatan    = $this->uri->segment(3);
@@ -1276,19 +1164,30 @@ class Pemeriksaan extends CI_Controller
         } else {
             $nama_bangunan              = $this->input->post('nama_bangunan_prasarana');
         }
-
         $luas_bg                        = $this->input->post('luas_bg');
         $tinggi_bg                      = $this->input->post('tinggi_bg');
         $almt_bgn                       = $this->input->post('almt_bgn');
-
         $nama_kecamatan                 = $this->input->post('nama_kecamatan');
         $nama_kelurahan                 = $this->input->post('nama_kelurahan');
         $lantai_bg                      = $this->input->post('lantai_bg');
         $luas_basement                  = $this->input->post('luas_basement');
         $lapis_basement                 = $this->input->post('lapis_basement');
         $lantai_bg                      = $this->input->post('lantai_bg');
-        $id_jns_bg                      = $this->input->post('id_jns_bg');
+        $id_jenis_permohonan           	= $this->input->post('id_jenis_permohonan');
+        if($id_jenis_permohonan =='21' || $id_jenis_permohonan =='34' || $id_jenis_permohonan =='35' || $id_jenis_permohonan =='36'){
+			$id_jns_bg     	            = '2';
+		}else{
+			$id_jns_bg                  = $this->input->post('id_jns_bg');
+		}
         $id_izin                        = $this->input->post('id_izin');
+        if ($id_jenis_permohonan =='21' || $id_jenis_permohonan =='34' || $id_jenis_permohonan =='35' || $id_jenis_permohonan =='36'){
+			$id_jns_bg                  ='2';
+			$luas_bgp                   = '10.01';
+			$tinggi_bgp                 = '2.6';
+		}else if($id_jenis_permohonan =='29' || $id_jenis_permohonan =='30' || $id_jenis_permohonan =='31' || $id_jenis_permohonan =='32' || $id_jenis_permohonan =='33'){
+			$id_fungsi_bg              	='1';
+			$id_jns_bg                  ='1';
+		}
         $id_kolektif                    = $this->input->post('id_kolektif');
         $tipeA                          = $this->input->post('tipeA');
         $jumlahA                        = $this->input->post('jumlahA');
@@ -1299,8 +1198,11 @@ class Pemeriksaan extends CI_Controller
         $luas_bgp                       = $this->input->post('luas_bgp');
         $tinggi_bgp                     = $this->input->post('tinggi_bgp');
         $jual                           = $this->input->post('jual');
-        $imb                            = $this->input->post('imb');
-        $slf                            = $this->input->post('slf');
+        $imb                            = $this->input->post('checked_imb');
+        $no_imb                         = $this->input->post('no_imb');
+        $slf                            = $this->input->post('checked_slf');
+        $no_slf                         = $this->input->post('no_slf');
+
         $id_prototype                   = $this->input->post('id_prototype');
         $cetak                          = $this->input->post('cetak');
         $id_doc_tek                     = $this->input->post('id_doc_tek');
@@ -1312,11 +1214,11 @@ class Pemeriksaan extends CI_Controller
         $kecamatanPemilik               = $this->input->post('kecamatanPemilik');
         $kelurahanPemilik               = $this->input->post('kelurahanPemilik');
         $jns_kepemilikan                = $this->input->post('jns_kepemilikan');
-        if ($id_izin == '7'){
-			$id_jns_bg ='2';
-			$luas_bgp = '10.01';
-			$tinggi_bgp = '2.6';
-		}
+        $resiko = $this->input->post('resiko');
+        $lokasi = $this->input->post('lokasi');
+        $kelas = $this->input->post('kelas');
+
+        
         $data    = array(
             'id'                    => $id,
             'id_kec_bgn'            => $nama_kecamatan,
@@ -1329,21 +1231,27 @@ class Pemeriksaan extends CI_Controller
             'tinggi_bgn'            => $tinggi_bg,
             'jml_lantai'            => $lantai_bg,
             'luas_basement'         => $luas_basement,
-            'lapis_basement'     => $lapis_basement,
-            'last_update'        => date("Y-m-d h:i:sa"),
-            'id_kolektif'        => $id_kolektif,
-            'tipeA'              => json_encode($tipeA),
-            'jumlahA'            => json_encode($jumlahA),
-            'luasA'              => json_encode($luasA),
-            'tinggiA'            => json_encode($tinggiA),
-            'lantaiA'            => json_encode($lantaiA),
-            'id_prasarana_bg'    => $id_prasarana_bg,
-            'luas_bgp'           => $luas_bgp,
-            'tinggi_bgp'         => $tinggi_bgp,
-            'id_doc_tek'         => $id_doc_tek,
-            'id_prototype'       => $id_prototype,
-            'imb'                => $imb,
-            'slf'                => $slf
+            'lapis_basement'        => $lapis_basement,
+            'last_update'           => date("Y-m-d h:i:sa"),
+            'id_kolektif'           => $id_kolektif,
+            'tipeA'                 => json_encode($tipeA),
+            'jumlahA'               => json_encode($jumlahA),
+            'luasA'                 => json_encode($luasA),
+            'tinggiA'               => json_encode($tinggiA),
+            'lantaiA'               => json_encode($lantaiA),
+            'id_prasarana_bg'       => $id_prasarana_bg,
+            'luas_bgp'              => $luas_bgp,
+            'tinggi_bgp'            => $tinggi_bgp,
+            'id_doc_tek'            => $id_doc_tek,
+            'id_prototype'          => $id_prototype,
+            'imb'                   => $imb,
+            'no_imb'                => $no_imb,
+            'slf'                   => $slf,
+            'no_slf'                => $no_slf,
+            'id_resiko'            => $resiko,
+            'id_lokasi'            => $lokasi,
+            'id_kelas'                => $kelas,
+
         );
         $dataPemilik = [
             'jns_pemilik'       => $jns_kepemilikan,
@@ -1394,9 +1302,13 @@ class Pemeriksaan extends CI_Controller
         $mydata2 = $this->Mpemeriksaan->getNoDrafSlf($lokasi, $tgl_disetujui);
         if (count($mydata2) > 0) {
             $no_baru = SUBSTR($mydata2['no_registrasi_baru'], -3) + 1;
-            if ($no_baru < 100) {
+            if ($no_baru < 10) {
                 $sk_pbg = "SK-SLF-" . $lokasi . "-" . $tgl_disetujui . "-00" . $no_baru;
-            } else {
+            } else if ($no_baru < 99){
+                $sk_pbg = "SK-SLF-" . $lokasi . "-" . $tgl_disetujui . "-0" . $no_baru;
+            }else if($no_baru > 100){
+                $sk_pbg = "SK-SLF-" . $lokasi . "-" . $tgl_disetujui . "-" . $no_baru;
+            }else{
                 $sk_pbg = "SK-SLF-" . $lokasi . "-" . $tgl_disetujui . "-" . $no_baru;
             }
         } else {
@@ -1404,22 +1316,18 @@ class Pemeriksaan extends CI_Controller
         }
         return $sk_pbg;
     }
-
     // tolak permohonan
-
     public function tolakPermohonan()
     {
         $konsultasi = $this->secure->decrypt_url($this->input->post('konsultasi', TRUE));
         $getId = $this->Mpemeriksaan->getDataKonsultasi($konsultasi)->row()->id_pemilik;
         $tanggal  = $this->input->post('tanggal', TRUE);
         $catatan = $this->input->post('catatan', TRUE);
-
         $data = [
-            'id' => $getId,
-            'tgl_ditolak' => $tanggal,
-            'catatan_ditolak' => $catatan
+            'id'                => $getId,
+            'tgl_ditolak'       => $tanggal,
+            'catatan_ditolak'   => $catatan
         ];
-
         $update = [
             'status' => 25
         ];
@@ -1429,22 +1337,21 @@ class Pemeriksaan extends CI_Controller
         $this->session->set_flashdata('status', 'success');
         redirect('Pemeriksaan/Penilaian', 'refresh');
     }
-
     public function Rollback()
     {
-        $id    = $this->uri->segment(3);
-        $pernyataan = '1';
-        $tgl_skrg     = date('Y-m-d');
+        $id             = $this->uri->segment(3);
+        $pernyataan     = '1';
+        $tgl_skrg       = date('Y-m-d');
         if ($pernyataan == '1') {
             $data    = array(
                 'status' => '5',
             );
             $datalog    = [
-                'id' => $id,
-                'tgl_status' => $tgl_skrg,
-                'status' => '5',
-                'catatan' => 'Kabid/Kasie melakukan Mengembalikan Permohonan  Ke Tahap Penjadwalan',
-                'modul' => 'Permohonan Dikembalikan ke Tahap Penjadwalan TPA/TPT'
+                'id'            => $id,
+                'tgl_status'    => $tgl_skrg,
+                'status'        => '5',
+                'catatan'       => 'Kabid/Kasie melakukan Mengembalikan Permohonan  Ke Tahap Penjadwalan',
+                'modul'         => 'Permohonan Dikembalikan ke Tahap Penjadwalan TPA/TPT'
             ];
             $this->Mglobals->setData('tmdatabangunan', $data, 'id', $id);
             $this->Mpemeriksaan->removeDataJadwal($id);
@@ -1454,7 +1361,6 @@ class Pemeriksaan extends CI_Controller
         }
         redirect('Pemeriksaan/Penilaian');
     }
-
     public function RollbackKadis()
     {
         $id    = $this->uri->segment(3);
@@ -1479,7 +1385,6 @@ class Pemeriksaan extends CI_Controller
         }
         redirect('Pemeriksaan/Penilaian');
     }
-
     public function Catatan($id = null)
     {
         $id                 = $this->uri->segment(3);
@@ -1488,7 +1393,4 @@ class Pemeriksaan extends CI_Controller
         $this->load->view('Validasi/kosong', $data);
     }
 }
-
-
-
 /* End of file Pemeriksaan.php */

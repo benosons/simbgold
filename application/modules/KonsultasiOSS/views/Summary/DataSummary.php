@@ -2,60 +2,37 @@
 	<div class="col-md-12">
 		<div class="portlet box blue">
 			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-gift"></i>Data Summary Permohonan
-				</div>
+				<div class="caption"><i class="fa fa-gift"></i>Data Summary Permohonan</div>
 			</div>
 		</div>
 		<div class="portlet light bordered margin-top-20">
 			<h4 align="center" class="caption-subject font-blue bold uppercase">Data <?= $row->no_konsultasi ?></h4>
-
 			<div class="row static-info">
-				<div class="col-md-3 name">
-					Nama Lengkap Pemilik
-				</div>
-				<div class="col-md-9 value">
-					<?= $row->nm_pemilik ?>
-				</div>
+				<div class="col-md-3 name">Nama Lengkap Pemilik</div>
+				<div class="col-md-9 value"><?= $row->nm_pemilik ?></div>
 			</div>
-
 			<div class="row static-info">
-				<div class="col-md-3 name">
-					No. Indentitas Pemilik
-				</div>
-				<div class="col-md-9 value">
-					<?= $row->no_ktp ?>
-				</div>
+				<div class="col-md-3 name">No. Indentitas Pemilik</div>
+				<div class="col-md-9 value"><?= $row->no_ktp ?></div>
 			</div>
-
 			<div class="row static-info">
-				<div class="col-md-3 name">
-					Alamat Pemilik Bangunan
-				</div>
+				<div class="col-md-3 name">Alamat Pemilik Bangunan</div>
 				<div class="col-md-9 value">
 					<?= (isset($row->alamat) ? $row->alamat : ''); ?>, Kec. <?= (isset($row->nama_kecamatan) ? $row->nama_kecamatan : ''); ?>, <?= (isset($row->nama_kabkota) ? ucwords(strtolower($row->nama_kabkota)) : ''); ?>, <?= (isset($row->nama_provinsi) ? $row->nama_provinsi : ''); ?>
 				</div>
 			</div>
-
 			<div class="row static-info">
 				<div class="col-md-3 name">No. Kontak</div>
 				<div class="col-md-9 value"><?= (isset($row->no_hp) ? $row->no_hp : ''); ?></div>
 			</div>
-
 			<div class="row static-info">
 				<div class="col-md-3 name">Email</div>
 				<div class="col-md-8 value"><?= (isset($row->email) ? $row->email : ''); ?></div>
 			</div>
-
 			<div class="row static-info">
-				<div class="col-md-3 name">
-					Jenis Konsultasi
-				</div>
-				<div class="col-md-9 value">
-					<?= $row->nm_konsultasi ?>
-				</div>
+				<div class="col-md-3 name">Jenis Konsultasi</div>
+				<div class="col-md-9 value"><?= $row->nm_konsultasi ?></div>
 			</div>
-
 			<div class="row static-info">
 				<div class="col-md-3 name">Jenis Permohonan</div>
 				<div class="col-md-8 value">
@@ -66,7 +43,8 @@
 						"3" => "Bangunan Gedung Perubahan",
 						"4" => "Bangunan Gedung Kolektif",
 						"5" => "Bangunan Gedung Prasarana",
-						"6" => "Bangunan Gudang 1300 Meter Persegi"
+						"6" => "Bangunan Gudang 1300 Meter Persegi",
+						"7" => "Desain Prototipe/Purwarupa SPBU Mikro 3 (TIGA) Kiloliter"
 					);
 					foreach ($list_izin as $key => $val) {
 						if ($key == $row->id_izin) {
@@ -80,26 +58,7 @@
 					?>
 				</div>
 			</div>
-
-			<div class="row static-info">
-				<div class="col-md-3 name">
-					Luas, Tinggi & Jumlah Lantai
-				</div>
-				<div class="col-md-9 value">
-					<?= (isset($row->luas_bgn) ? $row->luas_bgn : '') ?> m<sup>2</sup>, dengan tinggi <?= (isset($row->tinggi_bgn) ? $row->tinggi_bgn : '') ?> meter dan berjumlah <?= (isset($row->jml_lantai) ? $row->jml_lantai : '') ?> lantai.
-				</div>
-			</div>
-
-			<div class="row static-info">
-				<div class="col-md-3 name">
-					Luas & Lapis Basement
-				</div>
-				<div class="col-md-9 value">
-					<?php echo set_value('luas_basement', (isset($row->luas_basement) ? $row->luas_basement : '')) ?> m<sup>2</sup> dan berjumlah <?php echo set_value('lantai_basement', (isset($row->lapis_basement) ? $row->lapis_basement : '')) ?> lapis.
-				</div>
-			</div>
-
-			<?php if ($DataBangunan->id_jenis_permohonan == '11') { ?>
+			<?php if ($DataBangunan->id_izin == '4') { ?>
 				<div class="row static-info">
 					<div class="col-md-3 name">Data Bangunan Kolektif</div>
 					<div class="col-md-8 value">
@@ -139,6 +98,7 @@
 									if ($val != "")
 										$bangunan['lantai'][$noo] = $val;
 								}
+								//$Luas_bg =$bangunan['jumlah'] * $bangunan['luas'];
 							$no = 0;
 							if (!empty($bangunan)) {
 								foreach ($bangunan['tipe'] as $dt) {
@@ -164,7 +124,12 @@
 							<?php } ?>
 						</table>
 					</div>
+					
 				</div>
+				<!--<div class="row static-info">
+					<div class="col-md-3 name">Total Luas</div>
+					<div class="col-md-9 value"><?= $Luas_bg ?></div>
+				</div>-->
 			<?php } else if ($DataBangunan->id_jenis_permohonan == '12') { ?>
 				<div class="row static-info">
 					<div class="col-md-3 name">Fungsi Bangunan</div>
@@ -178,7 +143,48 @@
 						<?php echo $DataBangunan->luas_bgp; ?> m<sup>2</sup> dengan Tinggi <?php echo $DataBangunan->tinggi_bgp; ?> Meter
 					</div>
 				</div>
-			<?php } else { ?>
+			<?php } else if ($DataBangunan->id_jenis_permohonan == '21'){ ?>
+				<div class="row static-info">
+				<div class="col-md-3 name">Luas dan Tinggi Bangunan </div>
+					<div class="col-md-8 value">
+						<?php echo $DataBangunan->luas_bgp; ?> m<sup>2</sup> dengan Tinggi <?php echo $DataBangunan->tinggi_bgp; ?> Meter
+					</div>
+				</div>
+			<?php } else if($DataBangunan->id_jenis_permohonan == '14'){
+				if($DataBangunan->id_prasarana_bg != '0'){ ?>
+					<div class="row static-info">
+					<div class="col-md-3 name">Fungsi Bangunan</div>
+					<div class="col-md-8 value">
+						<?php echo $DataBangunan->jns_prasarana; ?>
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">Luas dan Tinggi Bangunan Prasarana</div>
+					<div class="col-md-8 value">
+						<?php echo $DataBangunan->luas_bgp; ?> m<sup>2</sup> dengan Tinggi <?php echo $DataBangunan->tinggi_bgp; ?> Meter
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						Lokasi Bangunan Gedung
+					</div>
+					<div class="col-md-9 value">
+						<?= (isset($row->almt_bgn) ? $row->almt_bgn : ''); ?>, Kel. <?= (isset($row->nm_kelurahan) ? $row->nm_kelurahan : ''); ?>, Kec. <?= (isset($row->nama_kec_bg) ? $row->nama_kec_bg : ''); ?>, <?= (isset($row->nama_kabkota_bg) ? ucwords(strtolower($row->nama_kabkota_bg)) : ''); ?>, <?= (isset($row->nama_provinsi_bg) ? $row->nama_provinsi_bg : ''); ?>
+					</div>
+				</div>
+				<?php } else{ ?>
+					<div class="row static-info">
+					<div class="col-md-3 name">Luas, Tinggi & Jumlah Lantai</div>
+					<div class="col-md-9 value">
+						<?= (isset($row->luas_bgn) ? $row->luas_bgn : '') ?> m<sup>2</sup>, dengan tinggi <?= (isset($row->tinggi_bgn) ? $row->tinggi_bgn : '') ?> meter dan berjumlah <?= (isset($row->jml_lantai) ? $row->jml_lantai : '') ?> lantai.
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">Luas & Lapis Basement</div>
+					<div class="col-md-9 value">
+						<?php echo set_value('luas_basement', (isset($row->luas_basement) ? $row->luas_basement : '')) ?> m<sup>2</sup> dan berjumlah <?php echo set_value('lantai_basement', (isset($row->lapis_basement) ? $row->lapis_basement : '')) ?> lapis.
+					</div>
+				</div>
 				<div class="row static-info">
 					<div class="col-md-3 name">
 						Fungsi Bangunan Gedung
@@ -193,7 +199,39 @@
 						Lokasi Bangunan Gedung
 					</div>
 					<div class="col-md-9 value">
-						<?= (isset($row->almt_bgn) ? $row->almt_bgn : ''); ?>, Kec. <?= (isset($row->nama_kec_bg) ? $row->nama_kec_bg : ''); ?>, <?= (isset($row->nama_kabkota_bg) ? ucwords(strtolower($row->nama_kabkota_bg)) : ''); ?>, <?= (isset($row->nama_provinsi_bg) ? $row->nama_provinsi_bg : ''); ?>
+						<?= (isset($row->almt_bgn) ? $row->almt_bgn : ''); ?>, Kel. <?= (isset($row->nm_kelurahan) ? $row->nm_kelurahan : ''); ?>, Kec. <?= (isset($row->nama_kec_bg) ? $row->nama_kec_bg : ''); ?>, <?= (isset($row->nama_kabkota_bg) ? ucwords(strtolower($row->nama_kabkota_bg)) : ''); ?>, <?= (isset($row->nama_provinsi_bg) ? $row->nama_provinsi_bg : ''); ?>
+					</div>
+				</div>
+				<?php }
+
+			}else{ ?>
+				<div class="row static-info">
+					<div class="col-md-3 name">Luas, Tinggi & Jumlah Lantai</div>
+					<div class="col-md-9 value">
+						<?= (isset($row->luas_bgn) ? $row->luas_bgn : '') ?> m<sup>2</sup>, dengan tinggi <?= (isset($row->tinggi_bgn) ? $row->tinggi_bgn : '') ?> meter dan berjumlah <?= (isset($row->jml_lantai) ? $row->jml_lantai : '') ?> lantai.
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">Luas & Lapis Basement</div>
+					<div class="col-md-9 value">
+						<?php echo set_value('luas_basement', (isset($row->luas_basement) ? $row->luas_basement : '')) ?> m<sup>2</sup> dan berjumlah <?php echo set_value('lantai_basement', (isset($row->lapis_basement) ? $row->lapis_basement : '')) ?> lapis.
+					</div>
+				</div>
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						Fungsi Bangunan Gedung
+					</div>
+					<div class="col-md-9 value">
+						<?php echo set_value('fungsi_bg', (isset($row->fungsi_bg) ? $row->fungsi_bg : '')) ?>
+					</div>
+				</div>
+
+				<div class="row static-info">
+					<div class="col-md-3 name">
+						Lokasi Bangunan Gedung
+					</div>
+					<div class="col-md-9 value">
+						<?= (isset($row->almt_bgn) ? $row->almt_bgn : ''); ?>, Kel. <?= (isset($row->nm_kelurahan) ? $row->nm_kelurahan : ''); ?>, Kec. <?= (isset($row->nama_kec_bg) ? $row->nama_kec_bg : ''); ?>, <?= (isset($row->nama_kabkota_bg) ? ucwords(strtolower($row->nama_kabkota_bg)) : ''); ?>, <?= (isset($row->nama_provinsi_bg) ? $row->nama_provinsi_bg : ''); ?>
 					</div>
 				</div>
 			<?php } ?>
@@ -214,55 +252,45 @@
 						<span class="desc"><i class="fa fa-check"></i> Data Teknis Arsitektur dan Struktur</span>
 					</a>
 				</li>
-				<?php if ($id_jenis_permohonan != '3' && $id_jenis_permohonan != '4' && $id_jenis_permohonan != '5' && $id_jenis_permohonan != '12') : ?>
-					<li>
-						<a href="#tab5" data-toggle="tab" class="step">
-							<?php if ($id_izin != '2') : ?>
-								<span class="desc"><i class="fa fa-check"></i> Data Teknis MEP</span>
-							<?php else : ?>
-								<span class="desc"><i class="fa fa-check"></i> Data Teknis Gedung Eksisting</span>
-							<?php endif; ?>
+				<?php if ($id_jenis_permohonan !='3' && $id_jenis_permohonan !='4' && $id_jenis_permohonan !='5' && $id_jenis_permohonan !='12' && $id_jenis_permohonan !='21'){?>
+				<li>
+					<a href="#tab5" data-toggle="tab" class="step">
+						<?php if($id_izin != '2'){ ?>
+							<span class="desc"><i class="fa fa-check"></i> Data Teknis MEP</span>
+						<?php } else { ?>
+							<span class="desc"><i class="fa fa-check"></i> Data Teknis Gedung Eksisting</span>
+						<?php } ?>
+					</a>
+				</li>
+				<?php } else{ ?>
+					
+				<?php } ?>
+				<?php if($id_izin =='2'){ ?>
+					<?php if($imb == '1') { ?>
+						
+					<?php } else { ?>
+						<li>
+						<a href="#tab6" data-toggle="tab" class="step">
+							<span class="desc"><i class="fa fa-check"></i>Retribusi</span>
 						</a>
 					</li>
-				<?php endif; ?>
-				<?php if ($id_jenis_permohonan == '14') : ?>
-					<?php if ($imb != '1') : ?>
-						<?php if ($status >= 10) : ?>
-							<li>
-								<a href="#tab7" data-toggle="tab" class="step">
-									<span class="desc"><i class="fa fa-check"></i>Hasil Perhitungan Retribusi</span>
-								</a>
-							</li>
-						<?php else : ?>
-							<li>
-								<a href="#tab6" data-toggle="tab" class="step">
-									<span class="desc"><i class="fa fa-check"></i>Simulasi Perhitungan Retribusi</span>
-								</a>
-							</li>
-						<?php endif; ?>
-					<?php endif; ?>
-				<?php else : ?>
-					<?php if ($status >= 10) : ?>
-						<li>
-							<a href="#tab7" data-toggle="tab" class="step">
-								<span class="desc"><i class="fa fa-check"></i>Hasil Perhitungan Retribusi</span>
-							</a>
-						</li>
-					<?php else : ?>
-						<li>
-							<a href="#tab6" data-toggle="tab" class="step">
-								<span class="desc"><i class="fa fa-check"></i>Simulasi Perhitungan Retribusi</span>
-							</a>
-						</li>
-					<?php endif; ?>
-				<?php endif; ?>
-				<?php if ($status >= '17') : ?>
+					<?php } ?>
+				<?php } else { ?>
+					<li>
+						<a href="#tab6" data-toggle="tab" class="step">
+							<span class="desc"><i class="fa fa-check"></i>Retribusi</span>
+						</a>
+					</li>
+				<?php } ?>
+				<?php if ($status >='17'){?>
 					<!--<li>
 						<a href="#tab7" data-toggle="tab" class="step">
 							<span class="desc"><i class="fa fa-check"></i>Rencana Kontruksi</span>
 						</a>
 					</li>-->
-				<?php endif; ?>
+				<?php } else { ?>
+
+				<?php } ?>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="tab1">
@@ -277,20 +305,41 @@
 				<div class="tab-pane" id="tab5">
 					<?php include "DataMEPSummary.php"; ?>
 				</div>
-				<?php if ($status >= 12) : ?>
+				<?php if ($status >= 12){ ?>
 					<div class="tab-pane" id="tab6">
 						<?php include "BayarRetribusi.php"; ?>
 					</div>
-				<?php elseif ($status <= 9) : ?>
+				<?php }else { ?>
 					<div class="tab-pane" id="tab6">
 						<?php include "KalkulatorRetribusi.php"; ?>
 					</div>
-				<?php else : ?>
-					<div class="tab-pane" id="tab7">
-						<?php include "DetailRetribusi.php"; ?>
-					</div>
-				<?php endif; ?>
+				<?php } ?>
+
+				<?php if ($status >='17'){ ?>
+					<!--<div class="tab-pane" id="tab7">
+						<?php include "RenKontruksi.php"; ?>
+					</div>-->
+				<?php } else { ?>
+					
+				<?php } ?>	
 			</div>
 		</div>
 	</div>
 </div>
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%">
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+		<div class="modal-footer">
+			<button type="button" data-dismiss="modal" class="btn btn-primary"><i class="fa fa-sign-out"></i> Tutup</button>
+		</div>
+	</div>
+</div>
+<script>
+		$(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
+</script>

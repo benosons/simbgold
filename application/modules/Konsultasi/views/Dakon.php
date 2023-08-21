@@ -35,10 +35,10 @@
 								<th width="17%"><center>No. Registrasi</center></th>
 								<th width="">Lokasi BG</th>
 								<th width="14%">Status Permohonan</th>
-								<?php if($user_id == '33'){ ?>
+								<?php if($key->id_izin != '2'){ ?>
 									<th width="">Dokumen</th>
 								<?php }else{ ?>
-
+									<th width="">Dokumen</th>
 								<?php }?>
 								<th width="9%">Aksi</th>
 							</tr>
@@ -59,17 +59,19 @@
 										<td><?php echo $no_konsultasi; ?></td>
 										<td><?php echo $key->almt_bgn; ?></td>
 										<td align=""><?php echo $key->status_pemohon; ?></td>
-										<?php if($user_id =='33' ){ ?>
+										<?php if($key->id_izin !='2'){ ?>
 											<td>	
 												<a href="<?php echo site_url('Konsultasi/CetakDokumen/' . $key->id); ?>" data-toggle="modal" data-target="#CetakDokumen" onclick="show_keyID(<?php echo $key->id; ?>);" class="btn btn-md btn-primary">Dokumen</a>
 											</td>
 										<?php }else{ ?>
-
+											<td>	
+												<a href="<?php echo site_url('Konsultasi/CetakDokumen/' . $key->id); ?>" data-toggle="modal" data-target="#CetakDokumen" onclick="show_keyID(<?php echo $key->id; ?>);" class="btn btn-md btn-primary">Dokumen</a>
+											</td>
 										<?php }?>
 										<td align="center">
 											<?php if ($key->status == 0 || $key->status == null) { ?>
 												<a href="<?php echo site_url('Konsultasi/FormPendaftaran/' . $key->id); ?>" class="btn btn-warning btn-sm" title="Ubah Data"><span class="glyphicon glyphicon-pencil"></span></a>
-												<!--<a href="<?php echo site_url('Konsultasi/removeDataPengajuan/' . $key->id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>-->
+												<a href="<?php echo site_url('Konsultasi/removeDataPengajuan/' . $key->id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 											<?php } else if ($key->status == '3') { ?>
 												<a href="<?php echo site_url('Konsultasi/FormPerbaikan/' . $key->id); ?>" class="btn btn-primary btn-sm" title="Verifikasi Data"><span class="glyphicon glyphicon-edit"></span></a>
 												<!--<a href="<?php echo site_url('Konsultasi/removeDataPengajuan/' . $key->id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>-->
@@ -79,15 +81,13 @@
 												<a href="<?php echo site_url('Konsultasi/removeDataPengajuan/' . $key->id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>-->
 											<?php } else if($key->status == '10'){ 
 													if ($key->data_step <= '6') { ?>
-														<a href="<?php echo site_url("Konsultasi/FormPengecekan/{$this->secure->encrypt_url($key->id)}"); ?>" class="btn btn-primary btn-sm" title="Perbaikan Dokumen Teknis"><span class="glyphicon glyphicon-edit"></span></a>
+														<a href="<?php echo site_url('Konsultasi/FormPengecekan/' .$key->id); ?>" class="btn btn-primary btn-sm" title="Perbaikan Dokumen Teknis"><span class="glyphicon glyphicon-edit"></span></a>
 													<?php } else { ?>
 														
 													<?php } ?>
 											<?php }else { ?>
 												<a href="<?php echo site_url('Konsultasi/FormSummary/' . $key->id); ?>" class="btn btn-primary btn-sm" title="Verifikasi Data"><span class="glyphicon glyphicon-edit"></span></a>
-												<!--<a href="<?php echo site_url('Konsultasi/removeDataPengajuan/' . $key->id); ?>"
-										class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')"
-										title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>-->
+												<!--<a href="<?php echo site_url('Konsultasi/removeDataPengajuan/' . $key->id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>-->
 											<?php } ?>
 										</td>
 									</tr>
@@ -157,13 +157,6 @@
 							<a href="javascript:;" class="btn blue" disabled><span>Pendataan Bangunan Gedung</span></a>
 						</div>
 					</div>
-					<div class="col-sm-12">
-						<div class="top-news">
-							<a href="<?= base_url() ?>Bgh/Dashboard" class="btn blue">
-								<span>Permohonan Bangunan Gedung Hijau</span>
-							</a>
-						</div>
-					</div>
 					<br>
 				</div>
 			</div>
@@ -171,28 +164,6 @@
 	</div>
 	<div class="modal-footer">
 		<center><button type="button" data-dismiss="modal" class="btn yellow-crusta">Batal</button></center>
-	</div>
-</div>
-
-<div class="modal fade modal-lg" id="modal-bgh" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 500px !important;">
-	<div class="modal-body">
-		<div class="row">
-			<div class="col-md-12">
-				<h4>
-					Data yang anda masukan memerlukan sertifikasi BGH
-				</h4>
-				<div class="form-group">
-					<label for="" class="form-control-label">Silahkan Masukan Nomor Sertifikat BGH Anda</label>
-					<input type="text" class="form-control">
-				</div>
-				<button class="btn btn-primary btn-sm" id="btn-sub-bgh" data-dismiss="modal">Submit</button>
-				<h6 class="text-center">Atau</h6>
-				<div class="text-center">
-					<a href="<?= base_url()?>Bgh/BangunanGedung/BangunanBaru/permohonan" class="link-primary text-primary">AJukan Permohonan BGH</a>
-				</div>
-				
-			</div>
-		</div>
 	</div>
 </div>
 
@@ -342,7 +313,7 @@
 							<div class="form-group">
 								<label class="control-label col-md-3">Nama Bangunan<span class="required">*</span></label>
 								<div class="col-md-7">
-									<input type="text" class="form-control"  name="nama_bangunan_kolektif" placeholder="Nama Bangunan" autocomplete="off">
+									<input type="text" class="form-control"  name="nama_bangunan_kolektif" placeholder="Nama Bangunan" maxlength="255" autocomplete="off">
 								</div>
 							</div>
 							<div class="form-group">
@@ -421,7 +392,7 @@
 							$usaha = '';
 							$sosbud = '';
 							$khusus = '';
-							if ($DataBangunan!= NULL || $DataBangunan->id_jns_bg != NULL) {
+							if ($DataBangunan->id_jns_bg != NULL) {
 								$jenis = json_decode($DataBangunan->id_jns_bg);
 								foreach ($jenis as $dt_cek) {
 									if ($dt_cek == 1) $hunian = 'checked';
@@ -432,7 +403,7 @@
 								}
 							}
 							?>
-							<label class="control-label col-md-3">Jenis Bangunan <span class="required">*minimal 2</span></label>
+							<label class="control-label col-md-3"><span class="required">*Perlu memilih minimal 2</span></label>
 							<div class="col-md-7 checkbox-inline">
 								<label>
 									<input type="checkbox" class="form-control" name="dcampur[]" value="1" <?= $hunian; ?>>Fungsi Hunian </label>
@@ -513,10 +484,10 @@
 								<label class="control-label">m<sup>2</sup></label>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-3">Jumlah Lantai Bangunan<span class="required">* </span></label>
+								<label class="control-label col-md-3">Jumlah Lantai / Ketinggian Bangunan<span class="required">* </span></label>
 								<div class="col-md-5">
 									<div class="checkbox-list">
-										<select name="lantai_bg" id="lantai_bg" onchange="cek()" class="form-control dropdown-lantai">
+										<select name="lantai_bg" id="lantai_bg" class="form-control dropdown-lantai">
 											<?php
 											for ($i = 1; $i < 11; $i++) {
 												$selectedLantai = $i == $DataBangunan->jml_lantai ? 'selected' : '';
@@ -537,10 +508,10 @@
 										<input type="text" class="form-control input-comma" value="<?php echo set_value('tinggi_bg', (isset($DataBangunan->tinggi_bgn) ? $DataBangunan->tinggi_bgn : '')) ?>" name="tinggi_bg" onblur="cek()" placeholder="Tinggi Bangunan" autocomplete="off" pattern="[0-9]+,">
 									</div>
 								</div>
-								<label class="control-label">M</label>
+								<label class="control-label">m</label>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-3">Luas Basement Bangunan</label>
+								<label class="control-label col-md-3">Luas Basemen Bangunan</label>
 								<div class="col-md-4">
 									<div class="checkbox-list">
 										<input type="text" class="form-control input-comma" value="<?php echo set_value('luas_basement', (isset($DataBangunan->luas_basement) ? $DataBangunan->luas_basement : '')) ?>" name="luas_basement" placeholder="Luas Basement Bangunan" autocomplete="off">
@@ -549,7 +520,7 @@
 								<label class="control-label">m<sup>2</sup></label>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-3">Jumlah Lantai Basement Bangunan</label>
+								<label class="control-label col-md-3">Jumlah Lantai Basemen Bangunan</label>
 								<div class="col-md-5">
 									<div class="checkbox-list">
 										<select name="lapis_basement" id="lapis_basement" class="form-control dropdown-basement">
@@ -1096,31 +1067,6 @@
 
 		var luas_bg = $('#luas_bg').val();
 		var lantai_bg = $('#lantai_bg').val();
-		if (luas_bg >= 50000 && lantai_bg >= 4) {
-					// alert('Anda masuk ke klas 4 dan 5')
-			$('#modal-bgh').modal({
-				'show': true,
-				'backdrop':'static'
-			});
-		}else if(luas_bg>= 5000 && lantai_bg >=4){
-			$('#modal-bgh').modal({
-				'show': true,
-				'backdrop':'static'
-			});
-			// alert('Anda Masuk ke klas 6, 7 dan 8');
-		}else if(luas_bg >= 20000){
-			$('#modal-bgh').modal({
-				'show': true,
-				'backdrop':'static'
-			});
-			// alert('Anda Masuk ke klas 9a');
-		}else if(luas_bg >= 10000){
-			$('#modal-bgh').modal({
-				'show': true,
-				'backdrop':'static'
-			});
-			// alert('Anda Masuk ke klas 9b');
-		}
 		if ($("#id_izin").val() == 1) {
 			if ($("#id_fungsi_bg").val() == 1) {
 				if (luas_bg <= 100 && lantai_bg <= 2) {

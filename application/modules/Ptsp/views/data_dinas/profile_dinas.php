@@ -99,12 +99,17 @@
 						<tbody>
 							<?php if($data_perda->num_rows() > 0){
 								//$no = 1;
-								foreach ($data_perda->result() as $key) { ?>
+								foreach ($data_perda->result() as $key) { 
+									$dir = base_url('dekill/Perda/' . $key->file_perda);
+									$dir1		= $this->Outh_model->Encryptor('encrypt', $dir);
+									?>
 									<tr>
 										<td><center>#</center></td>
 										<td><?php echo $key->nama_perda;?></td>
 										<td align="center">
-											<a class="btn btn-info btn-xs" onClick="javascript:lihat_lampiran_perda('<?php echo $key->file_perda;?>')" title="Lihat Lampiran Perda" ><span class="glyphicon glyphicon-file"></span></a> 
+											<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/PDFRead/' . $dir1); ?>">Lihat</a>
+											
+											<!--<a class="btn btn-info btn-xs" onClick="javascript:lihat_lampiran_perda('<?php echo $key->file_perda;?>')" title="Lihat Lampiran Perda" ><span class="glyphicon glyphicon-file"></span></a>-->
 											<a data-href="<?php echo site_url('Ptsp/removeDataPerda/'.$key->id_per.'/'.$key->file_perda);?>" class="btn btn-danger btn-xs" data-confirm="Anda yakin ingin menghapus data ini ?" title="Hapus Perda"><span class="glyphicon glyphicon-trash"></span></a>
 										</td>
 									</tr>
@@ -193,6 +198,14 @@
 	</div>				
 </div> 
 <!-- /.modal -->
+
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%">
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+	</div>
+</div>
 <div id="responsivedinas" class="modal fade" tabindex="-1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false">
 	<form action="<?php echo site_url('Ptsp/create_sub_akun'); ?>" class="form-horizontal" role="form" method="post" id="sub_ptsp">
 		<input type="hidden" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" style="display: none">
@@ -415,6 +428,13 @@
 			
 <?php } ?>
 <script> 
+$(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
+	
+	
 	 // Setup form validation on the #register-form element
 	$("#sub_ptsp").validate({
 		rules: {

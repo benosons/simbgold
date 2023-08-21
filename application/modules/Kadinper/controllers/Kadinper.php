@@ -26,7 +26,8 @@ class Kadinper extends CI_Controller
 		$id             = $this->input->post('id');
 		$data['id']     = $id;
         $tgl_skrg       = date('Y-m-d');
-		$ttd            = $this->Mkadinper->getPejabatTtd($id);
+        $sk_pbg         = $this->Sk_PBG($id);
+        $ttd            = $this->Mkadinper->getPejabatTtd($id);
 		$ttd_pejabat_sk = $ttd['kepala_dinas'];
 		$nip_pejabat_sk = $ttd['nip_kepala_dinas'];
 		$status_pejabat = $ttd['status_pejabat'];
@@ -50,15 +51,49 @@ class Kadinper extends CI_Controller
 				'nm_kadis'          => $ttd_pejabat_sk,
 				'nip_kadis'         => $nip_pejabat_sk,
 				'status_pejabat'    => $status_pejabat,
-                'tgl_validasi'      => $tgl_skrg
+                'tgl_pbg'      => $tgl_skrg,
+                'no_izin_pbg'       => $sk_pbg
 			);
 			$this->Mkadinper->updateProgress($dataStatus,$id);
 			$this->Mkadinper->updateValidasi($datavalidasi,$id);
+
+            $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+			$config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
+			$config['quality']      = true; //boolean, the default is true
+			$config['size']         = '1024'; //interger, the default is 1024
+			$config['black']        = array(224,255,255); // array, default is array(255,255,255)
+			$config['white']        = array(70,130,180); // array, default is array(0,0,0)
+			$this->ciqrcode->initialize($config);
+			$image_name=$sk_pbg.'.png'; //buat name dari qr code sesuai dengan nim
+			$params['data'] = 'https://simbg.pu.go.id/Main/VerifikasiPBG/'.$sk_pbg; //data yang akan di jadikan QR CODE
+			$params['level'] = 'H'; //H=High
+            $params['size'] = 10;
+			$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+			$data['QR'] = $this->ciqrcode->generate($params);
 		}
 		$this->session->set_flashdata('message','Persetujuan Bangunan gedung Tervalidasi');
 		$this->session->set_flashdata('status','success');
 		redirect('Kadinper/ValidasiBangunanBaru');
 	}
+    function Sk_PBG($id=null)
+	{
+        $que            = $this->Mkadinper->get_id_kabkot($id);
+		$lokasi         = $que['id_kec_bgn'];
+		$tgl_disetujui  = date('d').date('m').date('Y');
+		$mydata2        = $this->Mkadinper->getNoDrafPbg($lokasi,$tgl_disetujui);
+        if(count($mydata2)>0){
+            $no_baru = SUBSTR($mydata2['no_registrasi_baru'],-2)+1;
+            if ($no_baru < 10){
+                $sk_pbg = "SK-PBG-".$lokasi."-".$tgl_disetujui."-00".$no_baru;
+            } else {
+                $sk_pbg = "SK-PBG-".$lokasi."-".$tgl_disetujui."-".$no_baru;
+            }
+        } else {
+            $sk_pbg = "SK-PBG-".$lokasi."-".$tgl_disetujui."-001";
+        }
+		return $sk_pbg;
+	}
+
     public function RollbackKadis()
     {
         $id             = $this->uri->segment(3);

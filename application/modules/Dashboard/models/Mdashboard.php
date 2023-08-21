@@ -176,28 +176,16 @@ class Mdashboard extends CI_Model
 	
 	public function get_rekapIMB($cari=null)
 	{
-		// $sql = "SELECT a.id_provinsi, a.nama_provinsi,b.id_fungsi_bg,
-		// 		SUM(CASE  when (b.nib !='') then 1 else 0 END ) AS Memiliki_NIB,
-		// 		SUM(CASE  when (b.nib ='0') then 1 else 0 END ) AS Memiliki_NIB2,
-		// 		SUM(CASE  when (b.nib is null) then 1 else 0 END ) AS Non_NIB1,
-		// 		SUM(CASE  when (b.nib ='') then 1 else 0 END ) AS Non_NIB2
-		// 		FROM tr_provinsi a 
-		// 		LEFT JOIN tm_imb_permohonan b ON ( a.id_provinsi = b.id_provinsi_bg )
-		// 		Where (a.id_provinsi)  AND b.pernyataan = '1'
-		// 		$cari
-		// 		GROUP BY a.id_provinsi";
 		$sql = "SELECT a.id_provinsi, a.nama_provinsi,b.id_fungsi_bg,
-				1 AS Memiliki_NIB,
-				1 AS Memiliki_NIB2,
-				1 AS Non_NIB1,
-				1 AS Non_NIB2
-				
+				SUM(CASE  when (b.nib !='') then 1 else 0 END ) AS Memiliki_NIB,
+				SUM(CASE  when (b.nib ='0') then 1 else 0 END ) AS Memiliki_NIB2,
+				SUM(CASE  when (b.nib is null) then 1 else 0 END ) AS Non_NIB1,
+				SUM(CASE  when (b.nib ='') then 1 else 0 END ) AS Non_NIB2
 				FROM tr_provinsi a 
 				LEFT JOIN tm_imb_permohonan b ON ( a.id_provinsi = b.id_provinsi_bg )
 				Where (a.id_provinsi)  AND b.pernyataan = '1'
 				$cari
-				
-				";
+				GROUP BY a.id_provinsi";
 		//echo $sql;
 		$hasil  = $this->db->query($sql);
 		return $hasil;
@@ -429,6 +417,41 @@ class Mdashboard extends CI_Model
 	}
 	//End Model Dashboard TPA
 	//Begin Model Dashboard Dinas
+	public function GetJumlahTpaTotBalai($id_kabkot=null)
+	{
+		$sql = "SELECT
+				SUM(CASE  when (a.status ='1') then 1 else 0 END ) AS CalonTpa,
+				SUM(CASE  when (a.status >='3') then 1 else 0 END ) AS TPA,
+				SUM(CASE  when (a.status ='1' and a.id_lembaga='1') then 1 else 0 END ) AS CalonAka,
+				SUM(CASE  when (a.status >='3' and a.id_lembaga='1') then 1 else 0 END ) AS TpaAka,
+				SUM(CASE  when (a.status ='1' and a.id_lembaga='3') then 1 else 0 END ) AS CalonAso,
+				SUM(CASE  when (a.status >='3' and a.id_lembaga='3') then 1 else 0 END ) AS TpaAso,
+				SUM(CASE  when (a.status ='1' and a.id_lembaga='2') then 1 else 0 END ) AS CalonPakar,
+				SUM(CASE  when (a.status >='3' and a.id_lembaga='2') then 1 else 0 END ) AS TpaPakar
+				FROM tm_tpa a
+				where(1=1) and a.status !='2'
+				";
+		if ($id_kabkot != null || trim($id_kabkot) != '')  $sql .= " AND a.id_provinsi = '$id_kabkot' ";
+		$hasil  = $this->db->query($sql);
+		return $hasil->row();
+	}
+
+	public function GetJmlPbgBalai($id_kabkot=null)
+	{
+		$sql = "SELECT
+				SUM(CASE  when (b.pernyataan ='1') then 1 else 0 END ) AS Total,
+				SUM(CASE  when (b.status between '1' AND '10' and b.pernyataan ='1') then 1 else 0 END ) AS DinasTeknis,
+				SUM(CASE  when (b.status between '11' AND '14' and b.pernyataan ='1') then 1 else 0 END ) AS DinasPerizinan,
+				SUM(CASE  when (b.status between '15' AND '24' and b.pernyataan ='1') then 1 else 0 END ) AS TelahTerbit,
+				SUM(CASE  when (b.status ='25' and b.pernyataan ='1') then 1 else 0 END ) AS Ditolak
+				FROM tmdatabangunan b 
+				Where(1=1) and b.pernyataan='1' and b.id_jenis_permohonan !='14'
+				";
+		if ($id_kabkot != null || trim($id_kabkot) != '')  $sql .= " AND b.id_prov_bgn = '$id_kabkot' ";
+		$hasil  = $this->db->query($sql);
+		return $hasil->row();
+	}
+
 	public function GetJmlPbgDinas($id_kabkot=null)
 	{
 		$sql = "SELECT
@@ -444,6 +467,39 @@ class Mdashboard extends CI_Model
 		$hasil  = $this->db->query($sql);
 		return $hasil->row();
 	}
+
+	public function GetJmlPbgDinasOtorita($id_kabkot=null)
+	{
+		$sql = "SELECT
+				SUM(CASE  when (b.pernyataan ='1') then 1 else 0 END ) AS Total,
+				SUM(CASE  when (b.status between '1' AND '10' and b.pernyataan ='1') then 1 else 0 END ) AS DinasTeknis,
+				SUM(CASE  when (b.status between '11' AND '14' and b.pernyataan ='1') then 1 else 0 END ) AS DinasPerizinan,
+				SUM(CASE  when (b.status between '15' AND '24' and b.pernyataan ='1') then 1 else 0 END ) AS TelahTerbit,
+				SUM(CASE  when (b.status ='25' and b.pernyataan ='1') then 1 else 0 END ) AS Ditolak
+				FROM tmdatabangunan b 
+				Where(1=1) and b.pernyataan='1' and b.id_jenis_permohonan !='14'
+				";
+		if ($id_kabkot != null || trim($id_kabkot) != '')  $sql .= " AND b.id_kabkot_bgn = '$id_kabkot' ";
+		$hasil  = $this->db->query($sql);
+		return $hasil->row();
+	}
+
+	public function GetJmlSLFBalai($id_kabkot=null)
+	{
+		$sql = "SELECT
+				SUM(CASE  when (b.pernyataan ='1') then 1 else 0 END ) AS Total,
+				SUM(CASE  when (b.status between '1' AND '10' and b.pernyataan ='1') then 1 else 0 END ) AS DinasTeknis,
+				SUM(CASE  when (b.status between '11' AND '14' and b.pernyataan ='1') then 1 else 0 END ) AS DinasPerizinan,
+				SUM(CASE  when (b.status between '15' AND '24' and b.pernyataan ='1') then 1 else 0 END ) AS TelahTerbit,
+				SUM(CASE  when (b.status ='25' and b.pernyataan ='1') then 1 else 0 END ) AS Ditolak
+				FROM tmdatabangunan b 
+				Where(1=1) and b.id_jenis_permohonan ='14'
+				";
+				if ($id_kabkot != null || trim($id_kabkot) != '')  $sql .= " AND b.id_prov_bgn = '$id_kabkot' ";
+		$hasil  = $this->db->query($sql);
+		return $hasil->row();
+	}
+
 
 	public function GetJmlSLFDinas($id_kabkot=null)
 	{

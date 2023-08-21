@@ -75,12 +75,13 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => getenv('DB_HOSTNAME'),
-	'username' => getenv('DB_USERNAME'),
-	'password' => getenv('DB_PASSWORD'),
-	'database' => getenv('DB_DATABASE'),
-	'dbdriver' => getenv('DB_DRIVER'),
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '12345',
+	'database' => 'db_simbg',
+	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
+	'port'		=> 3307,
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,

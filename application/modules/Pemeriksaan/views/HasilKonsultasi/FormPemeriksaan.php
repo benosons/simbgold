@@ -42,8 +42,7 @@
               <li class="active">
                 <a href="#tab1" data-toggle="tab" data-step="0" class="step" aria-expanded="true">
                   <span class="number"> 1 </span>
-                  <span class="desc">
-                    <i class="fa fa-check"></i> Pemeriksaan Arsitektur </span>
+                  <span class="desc"><i class="fa fa-check"></i> Pemeriksaan Arsitektur </span>
                 </a>
               </li>
               <?php
@@ -56,7 +55,6 @@
                     <span class="desc"><i class="fa fa-check"></i> Pemeriksaan Struktur</span>
                   </a>
                 </li>
-
                 <li>
                   <a href="#tab3" data-toggle="tab" data-step="2" class="step">
                     <span class="number"> 3 </span>
@@ -82,9 +80,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="portlet box blue">
-                      <div class="portlet-title">
-                        <div class="caption">Pemeriksaan Arsitektur</div>
-                      </div>
+                      <div class="portlet-title"><div class="caption">Pemeriksaan Arsitektur</div></div>
                       <div class="portlet-body">
                         <form action="#" role="form" method="post" class="step-wizard" id="formOne" enctype="multipart/form-data">
                           <div class="form-body">
@@ -125,9 +121,7 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="portlet box blue">
-                        <div class="portlet-title">
-                          <div class="caption">Pemeriksaan Struktur</div>
-                        </div>
+                        <div class="portlet-title"><div class="caption">Pemeriksaan Struktur</div></div>
                         <div class="portlet-body">
                           <form action="#" role="form" method="post" class="step-wizard" id="formTwo" enctype="multipart/form-data">
                             <div class="form-body">
@@ -216,6 +210,7 @@
                         <form action="#" role="form" method="post" class="final-identity form-horizontal" id="formFourth">
                           <input type="hidden" class="form-control" name="id" id="idPemilik" placeholder="id" autocomplete="off">
                           <input type="hidden" class="form-control" name="id_bgn" id="idBangunan" placeholder="id Bangunan" autocomplete="off">
+                          <input type="hidden" name="id_jenis_permohonan" value="<?php echo $id_jenis_permohonan; ?>">
                           <div class="portlet-title margin-bottom-10">
                             <div class="page-title" align="center">
                               <span class="caption font-blue-hoki bold" style="font-size: 22px;"> Data Kepemilikan Bangunan</span>
@@ -223,7 +218,7 @@
                           </div>
                           <div class="form-group">
                             <label class="control-label col-md-3" for="jenisKepemilikan">Jenis Kepemilikan<span class="required">* </span></label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="jns_kepemilikan" id="jenisKepemilikan" class="form-control">
                                 <option value="0">-Pilih-</option>
                                 <option value="1">Pemerintah</option>
@@ -240,10 +235,11 @@
                           </div>
                           <div class="form-group">
                             <label class="col-md-3 control-label">Jenis ID</label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="jenis_id" class="form-control" id="jenisID" aria-invalid="false">
                                 <option value="1">KTP</option>
                                 <option value="2">KITAS</option>
+                                <option value="3">NIB</option>
                               </select>
                             </div>
                           </div>
@@ -261,14 +257,14 @@
                           </div>
                           <div class="form-group">
                             <label class="col-md-3 control-label" for="provinsiPemilik">Provinsi<span class="required">*</label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="provinsiPemilik" id="provinsiPemilik" class="form-control select2" data-placeholder="Select...">
                               </select>
                             </div>
                           </div>
                           <div class="form-group">
                             <label class="col-md-3 control-label">Kabupaten/Kota<span class="required">*</label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="kabkotaPemilik" id="kabKotaPemilik" class="form-control select2" data-placeholder="Select...">
                                 <option value="">-- Pilih Kabupaten / Kota --</option>
                               </select>
@@ -276,7 +272,7 @@
                           </div>
                           <div class="form-group">
                             <label class="col-md-3 control-label">Kecamatan<span class="required">*</label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="kecamatanPemilik" id="kecamatanPemilik" class="form-control select2" data-placeholder="Select...">
                                 <option value="">-- Pilih Kecamatan --</option>
                               </select>
@@ -284,7 +280,7 @@
                           </div>
                           <div class="form-group">
                             <label class="col-md-3 control-label">Kelurahan/Desa<span class="required">*</label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="kelurahanPemilik" id="kelurahanPemilik" class="form-control select2" data-placeholder="Select...">
                                 <option value="">-- Pilih Kelurahan/Desa --</option>
                               </select>
@@ -303,14 +299,14 @@
                           </div>
                           <div class="form-group">
                             <label class="col-md-3 control-label" for="nama_provinsi">Provinsi<span class="required">*</label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="nama_provinsi" id="nama_provinsi" class="form-control select2" data-placeholder="Select...">
                               </select>
                             </div>
                           </div>
                           <div class="form-group">
                             <label class="col-md-3 control-label">Kabupaten/Kota<span class="required">*</label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="nama_kabkota" id="nama_kabkota" class="form-control select2" data-placeholder="Select...">
                                 <option value="">-- Pilih Kabupaten / Kota --</option>
                               </select>
@@ -318,7 +314,7 @@
                           </div>
                           <div class="form-group">
                             <label class="col-md-3 control-label">Kecamatan<span class="required">*</label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="nama_kecamatan" id="nama_kecamatan" class="form-control select2" data-placeholder="Select...">
                                 <option value="">-- Pilih Kecamatan --</option>
                               </select>
@@ -326,7 +322,7 @@
                           </div>
                           <div class="form-group">
                             <label class="col-md-3 control-label">Kelurahan/Desa<span class="required">*</label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="nama_kelurahan" id="nama_kelurahan" class="form-control select2" data-placeholder="Select...">
                                 <option value="">-- Pilih Kelurahan/Desa --</option>
                               </select>
@@ -341,7 +337,7 @@
                           <div class="form-group">
                             <input type="hidden" name="jenis_konsultasi" id="jenisKonsultasi">
                             <label class="control-label col-md-3">Jenis Permohonan Konsultasi<span class="required">* </span></label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="id_izin" class="form-control" id="selectJenisKonsultasi">
                                 <option value="">--Pilih--</option>
                               </select>
@@ -350,10 +346,12 @@
                           <div id="perIMB" style="display: none;">
                             <div class="form-group row">
                               <label class="control-label col-md-3">Memiliki IMB/PBG <span class="required" aria-required="true">* </span></label>
-                              <div class="col-md-7">
+                              <div class="col-md-4">
                                 <div class="radio-list">
                                   <label><input type="radio" name="imb" class="radio-imb" value="1"> Iya</label>
                                   <label><input type="radio" name="imb" class="radio-imb" value="0"> Tidak</label>
+                                  <input type="hidden" name="checked_imb" id="checkedIMB">
+
                                 </div>
                               </div>
                             </div>
@@ -375,6 +373,7 @@
                                 <div class="radio-list">
                                   <label><input type="radio" name="slf" class="radio-slf" value="1"> Iya</label>
                                   <label><input type="radio" name="slf" class="radio-slf" value="0"> Tidak</label>
+                                  <input type="hidden" name="checked_slf" id="checkedSLF">
                                 </div>
                               </div>
                             </div>
@@ -393,7 +392,7 @@
                           <div id="perCetak" style="display:none;">
                             <div class="form-group row">
                               <label class="control-label col-md-3">Cetak Ulang<span class="required">* </span></label>
-                              <div class="col-md-7">
+                              <div class="col-md-4">
                                 <div class="radio-list">
                                   <label><input type="checkbox" name="cetak[]" value="1"> IMB/PBG</label>
                                   <label><input type="checkbox" name="cetak[]" value="2"> SLF</label>
@@ -405,7 +404,7 @@
                           <div id="permohonan_slf_show" style="display: block;">
                             <div class="form-group">
                               <label class="control-label col-md-3">Permohonan SLF<span class="required" aria-required="true">*</span></label>
-                              <div class="col-md-7">
+                              <div class="col-md-4">
                                 <select name="permohonan_slf" class="form-control" id="permohonanSLF">
                                   <option value="">--Pilih--</option>
                                   <option value="1">Bangunan Gedung</option>
@@ -450,14 +449,14 @@
                           </div>
                           <div id="fungsibg" class="form-group" style="display:none;">
                             <label class="control-label col-md-3">Fungsi Bangunan<span class="required">* </span></label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="id_fungsi_bg" id="selectFungsiBG" class="form-control"></select>
                             </div>
                           </div>
                           <div id="jual_bg" style="display:none;">
                             <div class="form-group row">
                               <label class="control-label col-md-3">Bangunan akan dijual perunit bangunan<span class="required">* </span></label>
-                              <div class="col-md-5">
+                              <div class="col-md-4">
                                 <div class="radio-list">
                                   <label><input type="radio" name="jual" class="radio-jual" value="1"> Iya</label>
                                   <label><input type="radio" name="jual" class="radio-jual" value="0"> Tidak</label>
@@ -467,7 +466,7 @@
                           </div>
                           <div id="jns_bg_toggle" class="form-group" style="display:none;">
                             <label class="control-label col-md-3">Jenis Bangunan <span class="required">* </span></label>
-                            <div class="col-md-7">
+                            <div class="col-md-4">
                               <select name="id_jns_bg" id="selectJenisBangunan" class="form-control"></select>
                             </div>
                           </div>
@@ -483,7 +482,7 @@
                           <div id="prasarana" style="display: none;">
                             <div class="form-group">
                               <label class="control-label col-md-3">Prasarana<span class="required">* </span></label>
-                              <div class="col-md-5">
+                              <div class="col-md-4">
                                 <select class="form-control" name="id_prasarana_bg" id="idPrasaranaBG">
                                   <option value="">--Pilih--</option>
                                   <option value="1">Kontruksi Pembatas/Penahan/Pengaman</option>
@@ -515,7 +514,7 @@
                             </div>
                             <div class="form-group">
                               <label class="control-label col-md-3">Tinggi Bangunan Prasarana<span class="required">* </span></label>
-                              <div class="col-md-3">
+                              <div class="col-md-4">
                                 <div class="checkbox-list">
                                   <input type="text" class="form-control tinggi-bgp" value="" name="tinggi_bgp" placeholder="Tinggi Bangunan" autocomplete="off">
                                 </div>
@@ -531,7 +530,7 @@
                             </div>
                             <div class="form-group">
                               <label class="control-label col-md-3">Luas Bangunan</label>
-                              <div class="col-md-7">
+                              <div class="col-md-4">
                                 <div class="checkbox-list">
                                   <input type="text" class="form-control input-comma" name="luas_bg" id="luasBG" onblur="loadDocTeknis()" placeholder="Luas Bangunan" autocomplete="off">
                                 </div>
@@ -540,10 +539,9 @@
                             </div>
                             <div class="form-group">
                               <label class="control-label col-md-3">Jumlah Lantai Bangunan<span class="required">* </span></label>
-                              <div class="col-md-7">
+                              <div class="col-md-4">
                                 <div class="checkbox-list">
                                   <select name="lantai_bg" id="selectLantaiBG" onblur="loadDocTeknis()" class="form-control dropdown-lantai">
-
                                   </select>
                                   <input type="number" class="form-control input-lantai input-number" style="display: none;" name="lantai_bg" id="lantaiBG" onblur="loadDocTeknis()" placeholder="Jumlah Lantai Bangunan Gedung" autocomplete="off" disabled="">
                                 </div>
@@ -554,7 +552,7 @@
                             </div>
                             <div class="form-group">
                               <label class="control-label col-md-3">Tinggi Bangunan<span class="required">* </span></label>
-                              <div class="col-md-7">
+                              <div class="col-md-4">
                                 <div class="checkbox-list">
                                   <input type="text" class="form-control input-comma" name="tinggi_bg" id="tinggiBG" onblur="loadDocTeknis()" placeholder="Tinggi Bangunan" autocomplete="off">
                                 </div>
@@ -563,7 +561,7 @@
                             </div>
                             <div class="form-group">
                               <label class="control-label col-md-3">Luas Basement Bangunan</label>
-                              <div class="col-md-7">
+                              <div class="col-md-4">
                                 <div class="checkbox-list">
                                   <input type="text" class="form-control input-comma" id="luasBasement" name="luas_basement" placeholder="Luas Basement Bangunan" autocomplete="off">
                                 </div>
@@ -572,7 +570,7 @@
                             </div>
                             <div class="form-group">
                               <label class="control-label col-md-3">Jumlah Lapis Basement Bangunan</label>
-                              <div class="col-md-7">
+                              <div class="col-md-4">
                                 <div class="checkbox-list">
                                   <select name="lapis_basement" id="selectBasement" class="form-control dropdown-basement">
                                   </select>
@@ -609,9 +607,7 @@
                                   <input type="text" class="form-control tinggi-bgp" name="tinggi_bgp1" placeholder="Tinggi Bangunan" autocomplete="off" readonly="">
                                 </div>
                               </div>
-                              <div class="col-md-2">
-                                m<sup>2</sup>
-                              </div>
+                              <div class="col-md-2">m<sup>2</sup></div>
                             </div>
                             <div class="form-group">
                               <label class="control-label col-md-3">Lantai Bangunan<span class="required" aria-required="true">*</span></label>
@@ -635,6 +631,64 @@
                               <label class="col-md-3 control-label">Pilih Prototype</label>
                               <div class="col-md-7">
                                 <select name="id_prototype" id="selectPrototype" class="form-control" data-placeholder="Select..."></select>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="resikoKebakaran" style="display: block;">
+                            <div class="form-group">
+                              <label class="col-md-3 control-label">Tingkat Resiko Bahaya</label>
+                              <div class="col-md-4">
+                                <select class="form-control" name="resiko" id="resikoBahaya" required>
+                                  <option value="">--Pilih--</option>
+                                  <option value="1">Rendah</option>
+                                  <option value="2">Sedang</option>
+                                  <option value="3">Tinggi</option>
+                                </select>
+                              </div>
+                              <div class="col-md-2">
+                                <a class="btn btn-info" data-toggle="modal" data-target="#ResikoBahaya" iclass="fa fa-search">Info</a>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="lokasi" style="display: block;">
+                            <div class="form-group">
+                              <label class="col-md-3 control-label">Lokasi</label>
+                              <div class="col-md-4">
+                                <select class="form-control" name="lokasi" id="lokasiBangunan" required>
+                                  <option value="">--Pilih--</option>
+                                  <option value="1">Renggang</option>
+                                  <option value="2">Sedang</option>
+                                  <option value="3">Padat</option>
+                                </select>
+                              </div>
+                              <div class="col-md-2">
+                                <a class="btn btn-info" data-toggle="modal" data-target="#InfoLokasi" iclass="fa fa-search">Info</a>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="kelas" style="display: block;">
+                            <div class="form-group">
+                              <label class="col-md-3 control-label">Klas Bangunan</label>
+                              <div class="col-md-4">
+                                <select class="form-control" name="kelas" id="kelasBangunan" required>
+                                <option value="">--Pilih--</option>
+                                  <option value="1">Klas 1a</option>
+                                  <option value="2">Klas 1b</option>
+                                  <option value="3">Klas 2</option>
+                                  <option value="4">Klas 3</option>
+                                  <option value="5">Klas 4</option>
+                                  <option value="6">Klas 5</option>
+                                  <option value="7">Klas 6</option>
+                                  <option value="8">Klas 7</option>
+                                  <option value="9">Klas 8</option>
+                                  <option value="10">Klas 9a</option>
+                                  <option value="11">Klas 9b</option>
+                                  <option value="12">Klas 10a</option>
+                                  <option value="13">Klas 10b</option>
+                                </select>
+                              </div>
+                              <div class="col-md-2">
+                                <a class="btn btn-info" data-toggle="modal" data-target="#KlasBangunan" iclass="fa fa-search">Info</a>
                               </div>
                             </div>
                           </div>
@@ -772,6 +826,96 @@
     </div>
   </div>
 </div>
+<div id="ResikoBahaya" class="modal fade" tabindex="-1" aria-hidden="true" data-width="65%" data-height="80%" data-backdrop="static" data-keyboard="false">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	</div>
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-12 ">
+				<div class="form-body">
+					<div class="col-md-12"><br>
+						<div class="col-md-12"><br><br><br><br><br><br>
+							<left><h4><b>Panduan Untuk Mengisi Tingkat Resiko Bahaya:</b></h4></left>
+						</div>
+						<ol>
+							<b><li>Tingkat Risiko Bahaya Kebakaran Tinggi</li></b>
+								Klasifikasi bangunan tingkat risiko kebakaran tinggi adalah bangunan gedung yang karena fungsinya, desain penggunaan bahan dan komponen unsur pembentukannya, serta kuantitas dan kualitas bahan yang ada di dalamnya tingkat mudah terbakarnya sangat tinggi.Termasuk klasifikasi bangunan dengan tingkat risiko bahaya kebakaran tinggi adalah:<br>
+								a) bangunan fungsi khusus;<br>
+								b) bangunan dengan ketinggian melebihi 8 (delapan) lantai;<br>
+								c) bangunan umum dengan luas lebih dari 5000 m2; atau<br>
+								d) bangunan umum dengan jumlah pengguna di atas 500 orang<br>
+							<b><li>Tingkat Risiko Bahaya Kebakaran Sedang</li></b>
+								Klasifikasi bangunan tingkat risiko kebakaran sedang adalah bangunan gedung yang karena fungsinya, desain penggunaan bahan dan komponen unsur pembentukannya, serta kuantitas dan kualitas bahan yang ada di dalamnya tingkat mudah terbakarnya sedang. Termasuk klasifikasi bangunan dengan tingkat risiko bahaya kebakaran sedang adalah:<br>
+								a) hunian tunggal dengan luas melebihi 250 m2, hunian tunggal bertingkat dan hunian deret dengan panjang lebih dari 45 m;<br>
+								b) bangunan dengan ketinggian 4-8 lantai;<br>
+								c) bangunan umum dengan luas antara 500 m2 hingga 5000 m2; atau<br>
+								e) bangunan umum dengan jumlah pengguna kurang dari 500 orang.<br>
+							<b><li>Tingkat Risiko Bahaya Kebakaran Rendah</li></b>
+								Klasifikasi bangunan tingkat risiko kebakaran rendah adalah bangunan gedung yang karena fungsinya, desain penggunaan bahan dan komponen unsur pembentukannya, serta kuantitas dan kualitas bahan yang ada di dalamnya tingkat mudah terbakarnya rendah.Termasuk klasifikasi bangunan dengan tingkat risiko bahaya kebakaran rendah adalah:<br>
+								a) hunian tunggal tidak bertingkat dengan luas maksimal 250 m2 dan hunian deret tidak bertingkat dengan panjang tidak lebih dari 45 m;<br>
+								b) bangunan dengan ketinggian di bawah 4 (empat) lantai; atau<br>
+								c) bangunan umum dengan luas maksimal 500 m2.
+						</ol>
+					</div>
+					<div class="modal-footer">
+						<center><button type="button" data-dismiss="modal" class="btn yellow-crusta">Tutup</button></center>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="InfoLokasi" class="modal fade" tabindex="-1" aria-hidden="true" data-width="45%" data-height="80%" data-backdrop="static" data-keyboard="true">
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-12 ">
+				<div class="form-body">
+					<div class="col-md-12"><br>
+						<div class="col-md-12">
+							<left><h4><b>Panduan Untuk Mengisi Lokasi:</b></h4></left>
+						</div>
+						<ol>
+							<b><li>Lokasi Padat</li></b>
+								Lokasi padat pada umumnya lokasi yang terletak di daerah perdagangan/pusat kota dan/atau kawasan dengan Koefisien Dasar Bangunan (KDB) lebih dari 60%.
+							<b><li>Lokasi Sedang</li></b>
+								Lokasi sedang pada umumnya lokasi yang terletak di daerah permukiman dan/atau kawasan dengan KDB antara 40% hingga 60%.
+							<b><li>Lokasi Renggang</li></b>
+								Lokasi renggang pada umumnya lokasi yang terletak di daerah pinggiran/luar kota atau daerah yang berfungsi sebagai resapan dan/atau kawasan dengan KDB 40% atau di bawahnya.
+						</ol>
+					</div>
+					<div class="modal-footer">
+						<center><button type="button" data-dismiss="modal" class="btn yellow-crusta">Tutup</button></center>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="KlasBangunan" class="modal fade" tabindex="-1" aria-hidden="true" data-width="45%" data-height="80%" data-backdrop="static" data-keyboard="true">
+	<div class="modal-body">
+		<div class="row">
+			<div class="col-md-12 ">
+				<div class="form-body">
+					<div class="col-md-12"><br>
+						<div class="col-md-12">
+							<left><h4><b>Panduan Untuk Mengisi Klas Bangunan:</b></h4></left>
+						</div>
+						<ol>
+							<b><li>Agar mengacu ke Lampiran PP Nomor 16 Tahun 2021 Halaman 28 Tabel I.5. Tabel Klas Bangunan Gedung</li></b>
+						</ol>
+					</div>
+					<div class="modal-footer">
+						<center><button type="button" data-dismiss="modal" class="btn yellow-crusta">Tutup</button></center>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 
 <div id="responsive" class="modal fade" tabindex="-1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false">
   <form action="#" role="form" method="post" id="changeBerkas" enctype="multipart/form-data">
@@ -875,6 +1019,14 @@
       </div>
     </div>
     <?php echo form_close() ?>
+</div>
+
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%">
+  <div class="modal-body">
+    <div>
+      <embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+    </div>
+  </div>
 </div>
 <script>
   var site_url = '<?php echo site_url(); ?>';

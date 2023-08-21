@@ -487,6 +487,15 @@ function get_jenis_fungsi_list($id = null, $fungsi_bg = null, $id_pemanfaatan_bg
         $hasil = $this->db->query($sql)->row_array();
         return $hasil;
     }
+    
+    public function cekNamaNoIzinSLF($select = "a.*", $sk_slf)
+	{
+		$this->db->select($select, FALSE);
+		$this->db->where('a.no_slf', $sk_slf);
+		$query 	= $this->db->get('tmdataslf a');
+		return $query;
+	}
+
 
     function get_pejabat($id)
     {

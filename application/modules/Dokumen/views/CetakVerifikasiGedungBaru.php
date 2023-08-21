@@ -24,6 +24,13 @@ if($result_list['id_jenis_permohonan'] =='14'){
 }else{
   $permohonan2= "Pemohon Persetujuan Bangunan Gedung (PBG)";
 }
+$tgl_skrg =  tgl_eng_to_ind(date("Y-m-d"));
+if($result_list['status'] =='10'){
+  $tgl_validasi = $tgl_skrg;
+}else{
+  $tgl_validasi   = tgl_eng_to_ind($result_list['tgl_validasi']);
+}
+
 //membuat halaman baru
 $pdf->SetMargins(10, 10, 10);
 $pdf->AddPage();
@@ -40,7 +47,7 @@ $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(0, 5, "PERNYATAAN PEMENUHAN STANDAR", 0, 1, "C");
 $pdf->Cell(0, 5, "", 0, 1, "L");
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(100, 5, "Nomor : " . $result_list['no_sk_tk'], 0, 0, "L");
+$pdf->Cell(100, 5, "Nomor     : " . $result_list['no_sk_tk'], 0, 0, "L");
 $pdf->Cell(0, 5, "", 0, 1, "R");
 $pdf->Cell(0, 5, "Lampiran : 1 (satu) berkas", 0, 1, "L");
 $pdf->Cell(0, 5, "Kepada Yth.", 0, 1, "L");
@@ -98,7 +105,8 @@ if ($result_list['id_izin'] == '5') {
     $pdf->Cell(20, 5, "", 0, 0, "L");
     $pdf->Cell(60, 5, "Jenis Bangunan Gedung ", 0, 0, "L");
     $pdf->Cell(2, 5, ":", 0, 0, "L");
-    $pdf->Cell(0, 5, "Hunian dan Usaha", 0, 1, "L"); // Perlu di cek untuk Jenis Bangunan
+	$pdf->Cell(0, 5, $fungsi, 0, 1, "L"); // Perlu di cek untuk Jenis Bangunan    
+//$pdf->Cell(0, 5, "Hunian dan Usaha", 0, 1, "L"); // Perlu di cek untuk Jenis Bangunan
   }else{
   $pdf->Cell(20, 5, "", 0, 0, "L");
   $pdf->Cell(60, 5, "Jenis Bangunan Gedung ", 0, 0, "L");
@@ -177,7 +185,7 @@ if($result_list['id_izin'] == '4'){
 }else{
   if($result_list['id_izin'] == '5'){
     $pdf->Cell(20, 5, "", 0, 0, "L");
-    $pdf->Cell(60, 5, "Luas Bangunan Prasrana", 0, 0, "L");
+    $pdf->Cell(60, 5, "Luas Bangunan Prasarana", 0, 0, "L");
     $pdf->Cell(2, 5, ":", 0, 0, "L");
     $pdf->Cell(0, 5, $result_list['luas_bgp'], 0, 1, "L");
       /*$pdf->Cell(1,5,'m',0,0,"L");
@@ -278,7 +286,6 @@ $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(0, 5, "", 0, 1, "L");
 
 $pdf->MultiCell(0, 5, "Demikian surat pernyataan ini kami sampaikan. Atas perhatian dan kerja sama Saudara, kami ucapkan terima kasih.", 0, "L", 0);
-
 $pdf->Cell(0,5,'',0,1);
 $pdf->Cell(45);
 $pdf->Cell(0,0,$pdf->image(BASE_FILE_PATH2.'QR_Code/'.$result_list['no_konsultasi'].'.png', $pdf->GetX(), $pdf->GetY(), 30,30),0,1);
@@ -296,10 +303,25 @@ if($result_list['id_dki'] == '1'){
   }
 }
 
+if($result_list['status'] == '10'){
+  //$kepala_dinas = $result_list['nm_kadis'];
+  //$nipkadis     = $result_list['nip_kadis'];
+  //$nama_dinas   = $result_list['p_nama_dinas'];
+}else{
+  //$kepala_dinas = $result_list['nama_kadis'];
+  //$nipkadis     = $result_list['nip_kadin'];
+  //$nama_dinas   = $result_list['nama_dinas'];
+}
+
+
+/*if(){
+
+}*/
+
 $pdf->Cell(100, 5, "", 0, 0, "L");
-$pdf->Cell(0, 5, "DITETAPKAN DI  : ".$wilayah, 0, 1, "L");
+$pdf->Cell(0, 5, "DITETAPKAN DI : ".$wilayah, 0, 1, "L");
 $pdf->Cell(100, 5, "", 0, 0, "L");
-$pdf->Cell(0, 5, "PADA TANGGAL : ".tgl_eng_to_ind($result_list['date_sk_tk']), 0, 1, "L");
+$pdf->Cell(0, 5, "PADA TANGGAL : ".$tgl_validasi, 0, 1, "L");
 $pdf->Cell(100, 5, "", 0, 0, "L");
 $pdf->Cell(0,5,'ATAS NAMA '.$pejabat.' '.$kabkota,0,1,"L");
 

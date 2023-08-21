@@ -105,10 +105,12 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Requirement/' . $dir_file;
 				}
+				$encryptedDirTanah		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$reader 	= 'Docreader/ReaderDok/'.$encryptedDirTanah;
 				$syarat_tanah[] = [
 					'nm_dokumen' => $g->nm_dokumen,
 					'keterangan' => $g->keterangan,
-					'dir_file' => $berkas == NULL ? false : $dir,
+					'dir_file' => $berkas == NULL ? false : $reader,
 				];
 			}
 			$getDataUmum = $this->MDataDetail->getSyaratList($id_jenis_permohonan, '5', null)->result();
@@ -124,10 +126,12 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Requirement/' . $dir_file;
 				}
+				$encryptedDirUmum		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$reader 	= 'Docreader/ReaderDok/'.$encryptedDirUmum;
 				$syarat_umum[] = [
 					'nm_dokumen' => $g->nm_dokumen,
 					'keterangan' => $g->keterangan,
-					'dir_file' => $berkas == NULL ? false : $dir,
+					'dir_file' => $berkas == NULL ? false : $reader,
 				];
 			}
 			$getArsitektur = $this->MDataDetail->getSyaratList($id_jenis_permohonan, '2', null)->result();
@@ -143,10 +147,12 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Requirement/' . $dir_file;
 				}
+				$encryptedDirArs		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$reader 	= 'Docreader/ReaderDok/'.$encryptedDirArs;
 				$syarat_arsitektur[] = [
 					'nm_dokumen' 	=> $g->nm_dokumen,
 					'keterangan' 	=> $g->keterangan,
-					'dir_file' 		=> $berkas == NULL ? false : $dir,
+					'dir_file' 		=> $berkas == NULL ? false : $reader,
 				];
 			}
 			$getStruktur = $this->MDataDetail->getSyaratList($id_jenis_permohonan, '3', null)->result();
@@ -162,10 +168,12 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Requirement/' . $dir_file;
 				}
+				$encryptedDirStr		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$reader 	= 'Docreader/ReaderDok/'.$encryptedDirStr;
 				$syarat_struktur[] = [
 					'nm_dokumen' 	=> $g->nm_dokumen,
 					'keterangan' 	=> $g->keterangan,
-					'dir_file' 		=> $berkas == NULL ? false : $dir,
+					'dir_file' 		=> $berkas == NULL ? false : $reader,
 				];
 			}
 			$getMep = $this->MDataDetail->getSyaratList($id_jenis_permohonan, '4', null)->result();
@@ -181,10 +189,12 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Requirement/' . $dir_file;
 				}
+				$encryptedDirMep		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$reader 	= 'Docreader/ReaderDok/'.$encryptedDirMep;
 				$syarat_mep[] = [
 					'nm_dokumen' 	=> $g->nm_dokumen,
 					'keterangan' 	=> $g->keterangan,
-					'dir_file' 		=> $berkas == NULL ? false : $dir,
+					'dir_file' 		=> $berkas == NULL ? false : $reader,
 				];
 			}
 			$tanah = [];
@@ -197,6 +207,9 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Earth/' . $dir_file;
 				}
+				$encryptedDirTnh		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$readerTnh 	= 'Docreader/ReaderDok/'.$encryptedDirTnh;
+
 				$dir_file_phat = $t->dir_file_phat == NULL ? false : $t->dir_file_phat;
 				$oldFIlePhat = FCPATH . 'object-storage/file/Konsultasi/' . $id . '/data_tanah/' . $dir_file_phat;
 				$dir_phat = '';
@@ -205,14 +218,16 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir_phat = 'object-storage/dekill/Earth/' . $dir_file_phat;
 				}
+				$encryptedDirPhatTnh		= $this->Outh_model->Encryptor('encrypt', $dir_phat);
+				$readerPhatTnh 	= 'Docreader/ReaderDok/'.$encryptedDirPhatTnh;
 				$tanah[] = [
 					'no_dok' => $t->no_dok,
 					'tanggal_dok' => $t->tanggal_dok,
 					'jenis_dokumen' => $t->jenis_dokumen,
 					'luas_tanah' => $t->luas_tanah,
 					'atas_nama_dok' => $t->atas_nama_dok,
-					'dir_file' => $t->dir_file == NULL ? false : $dir,
-					'dir_file_phat' => $t->dir_file_phat == NULL ? false : $dir_phat,
+					'dir_file' => $t->dir_file == NULL ? false : $readerTnh,
+					'dir_file_phat' => $t->dir_file_phat == NULL ? false : $readerPhatTnh,
 				];
 			}
 			$history = [];
@@ -226,11 +241,13 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Consultation/' . $dir_file;
 				}
+				$encryptedDirHistrory		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$readerHistory 	= 'Docreader/ReaderDok/'.$encryptedDirHistrory;
 				$history[] = [
 					'tgl_status' => $h->tgl_status,
 					'catatan' => $h->catatan,
 					'post_by' => $h->post_by,
-					'dir_file' => $h->dir_file == NULL ? false : $dir,
+					'dir_file' => $h->dir_file == NULL ? false : $dirHistory,
 				];
 			}
 			$data = [
@@ -461,6 +478,9 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Retribution/' . $retribusi->file_retribusi;
 				}
+				$encryptedDirRetribusi		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$readerRetribusi 	= 'Docreader/ReaderDok/'.$encryptedDirRetribusi;
+
 				$data = [
 					'no_konsultasi' => $row->no_konsultasi,
 					'id_jenis_permohonan' => $row->id_jenis_permohonan,
@@ -497,7 +517,7 @@ class DataDetail extends CI_Controller
 					'nilai_retribusi_keseluruhan' => str_replace(',', '.', number_format($retribusi->nilai_retribusi_keseluruhan)),
 					'stats_retribusi' => $retribusi->status_perhitungan,
 					'res' => true,
-					'berkas_retribusi' => $dir,
+					'berkas_retribusi' => $readerRetribusi,
 					'permanensi' => $retribusi->id_permanensi == 1 ? 'Permanen' : 'Non Permanen',
 					'parameter_permanensi' => "0.2 x {$retribusi->id_permanensi}",
 					'parameter_fungsi' => $retribusi->parameter_fungsi,
@@ -782,7 +802,9 @@ class DataDetail extends CI_Controller
 					$rew =  $this->MDataDetail->getByIdPtugas($id); //TPT
 				}
 				$rew =  $this->MDataDetail->getByIdPtugas($id); //TPT
-			} else {
+			} else if($id_izin == '4'){
+				$rew =  $this->MDataDetail->getByIdPtugasTPA($id); //TPA
+			}else {
 				if ($id_fbg == '1') {
 					$rew =  $this->MDataDetail->getByIdPtugas($id); //TPT
 				} else {
@@ -799,7 +821,9 @@ class DataDetail extends CI_Controller
 						$gb =  $p->glr_belakang; //TPT
 					}
 					$gb =  $p->glr_belakang; //TPT
-				} else {
+				} else if($id_izin == '4'){
+					$gb =  $p->glr_blkg; //TPA
+				}else {
 					if ($id_fbg == '1') {
 						$gb =  $p->glr_belakang; //TPT
 					} else {
@@ -814,7 +838,9 @@ class DataDetail extends CI_Controller
 						$nm =  $p->nama_personal; //TPT
 					}
 					$nm =  $p->nama_personal; //TPT
-				} else {
+				} else if($id_izin == '4'){
+					$nm =  $p->nm_tpa; //TPA
+				}else {
 					if ($id_fbg == '1') {
 						$nm =  $p->nama_personal; //TPT
 					} else {
@@ -829,7 +855,9 @@ class DataDetail extends CI_Controller
 						$id_p =  $p->id_personal; //TPT
 					}
 					$id_p =  $p->id_personal; //TPT
-				} else {
+				} else if($id_izin == '4'){
+					$id_p =  $p->id; //TPA
+				}else {
 					if ($id_fbg == '1') {
 						$id_p =  $p->id_personal; //TPT
 					} else {
@@ -1069,10 +1097,14 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Requirement/' . $dir_file;
 				}
+				$encryptedDirTanah		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$reader 	= 'Docreader/ReaderDok/'.$encryptedDirTanah;
+
 				$syarat_tanah[] = [
 					'nm_dokumen' => $g->nm_dokumen,
 					'keterangan' => $g->keterangan,
-					'dir_file' => $dir,
+					'dir_file' => $berkas == NULL ? false : $reader,
+					//'dir_file' => $reader,
 				];
 			}
 			$getDataUmum = $this->MDataDetail->getSyaratList($id_jenis_permohonan, '5', null)->result();
@@ -1088,10 +1120,15 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Requirement/' . $dir_file;
 				}
+
+				$encryptedDirUmum		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$readerUmum 	= 'Docreader/ReaderDok/'.$encryptedDirUmum;
+				
 				$syarat_umum[] = [
 					'nm_dokumen' => $g->nm_dokumen,
 					'keterangan' => $g->keterangan,
-					'dir_file' => $dir,
+					'dir_file' => $berkas == NULL ? false : $readerUmum,
+					//'dir_file' => $readerUmum,
 				];
 			}
 			$getArsitektur = $this->MDataDetail->getSyaratList($id_jenis_permohonan, '2', null)->result();
@@ -1120,11 +1157,15 @@ class DataDetail extends CI_Controller
 					}
 					$resultDirFile = $dir_file == NULL ? false : $dir;
 				}
+				$encryptedDirArsitektur		= $this->Outh_model->Encryptor('encrypt', $resultDirFile);
+				$readerArsitektur 	= 'Docreader/ReaderDok/'.$encryptedDirArsitektur;
+
 				$syarat_arsitektur[] = [
 					'nm_dokumen' => $g->nm_dokumen,
 					'kesesuaian' => $kesesuaian,
 					'catatan' => $catatan == NULL ? '-' : $catatan,
-					'dir_file' => $resultDirFile,
+					'dir_file' => $berkas == NULL ? false : $readerArsitektur,
+					//'dir_file' => $readerArsitektur,
 				];
 			}
 			$getStruktur = $this->MDataDetail->getSyaratList($id_jenis_permohonan, '3', null)->result();
@@ -1143,11 +1184,15 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Requirement/' . $dir_file;
 				}
+				$encryptedDirStruktur		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$readerStruktur 	= 'Docreader/ReaderDok/'.$encryptedDirStruktur;
+
 				$syarat_struktur[] = [
 					'nm_dokumen' => $g->nm_dokumen,
 					'kesesuaian' => $kesesuaian,
 					'catatan' => $catatan == NULL ? '-' : $catatan,
-					'dir_file' => $dir,
+					'dir_file' => $berkas == NULL ? false : $readerStruktur,
+					//'dir_file' => $readerStruktur,
 				];
 			}
 			$getMep = $this->MDataDetail->getSyaratList($id_jenis_permohonan, '4', null)->result();
@@ -1167,11 +1212,14 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir = 'object-storage/dekill/Requirement/' . $dir_file;
 				}
+				$encryptedDirMep		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$readerMep 	= 'Docreader/ReaderDok/'.$encryptedDirMep;
 				$syarat_mep[] = [
 					'nm_dokumen' => $g->nm_dokumen,
 					'kesesuaian' => $kesesuaian,
 					'catatan' => $catatan == NULL ? '-' : $catatan,
-					'dir_file' => $dir,
+					'dir_file' => $berkas == NULL ? false : $readerMep,
+					//'dir_file' => $readerMep,
 				];
 			}
 			$tanah = [];
@@ -1192,21 +1240,26 @@ class DataDetail extends CI_Controller
 				} else {
 					$dir_phat = 'object-storage/dekill/Earth/' . $dir_file_phat;
 				}
+				$encryptedDirDataTanah		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$readerTanah 	= 'Docreader/ReaderDok/'.$encryptedDirDataTanah;
+
+				$encryptedDirPhat		= $this->Outh_model->Encryptor('encrypt', $dir_phat);
+				$readerPhat 	= 'Docreader/ReaderDok/'.$encryptedDirPhat;
 				$tanah[] = [
 					'no_dok' => $t->no_dok,
 					'tanggal_dok' => $t->tanggal_dok,
 					'jenis_dokumen' => $t->jenis_dokumen,
 					'luas_tanah' => $t->luas_tanah,
 					'atas_nama_dok' => $t->atas_nama_dok,
-					'dir_file' => $dir,
-					'dir_file_phat' => $dir_phat,
+					'dir_file' => $readerTanah,
+					'dir_file_phat' => $readerPhat,
 				];
 			}
 			$data = [
 				'no_konsultasi' => $row->no_konsultasi,
 				'id_jenis_permohonan' => $row->id_jenis_permohonan,
 				'nm_pemilik' => $row->nm_pemilik,
-				'fungsi_bg' => $row->fungsi_bg,
+				'fungsi_bg' => $row->id_fungsi_bg,
 				'almt_bgn' => $row->almt_bgn,
 				'nama_kec_bg' => $row->nama_kec_bg,
 				'nama_kabkota_bg' => $row->nama_kabkota_bg,
@@ -1220,7 +1273,7 @@ class DataDetail extends CI_Controller
 				'nama_kec_bg' => $row->nama_kec_bg,
 				'nama_kabkota_bg' => $row->nama_kabkota_bg,
 				'nama_provinsi_bg' => $row->nama_provinsi_bg,
-				'fungsi_bg' => $row->fungsi_bg,
+				'fungsi_bg' => $row->id_fungsi_bg,
 				'luas_bgn' => $row->luas_bgn,
 				'luas_bgp' => $row->luas_bgp,
 				'tinggi_bgn' => $row->tinggi_bgn,
@@ -1403,27 +1456,31 @@ class DataDetail extends CI_Controller
 			if ($getRetribusi->num_rows() > 0) {
 				$retribusi = $getRetribusi->row();
 				$retribusi_bangunan = str_replace(',', '.', (number_format($retribusi->nilai_retribusi_bangunan)));
+				
 				$oldFIle = FCPATH . 'object-storage/file/konsultasi/' . $id . '/retribusi/berkas_retribusi/' . $retribusi->file_retribusi;;
 				$dir = '';
 				if (file_exists($oldFIle)) {
-					$dir = 'object-storage/file/konsultasi/' . $id . '/retribusi/berkas_retribusi/' . $retribusi->file_retribusi;
+					$dir = './object-storage/file/konsultasi/' . $id . '/retribusi/berkas_retribusi/' . $retribusi->file_retribusi;
 				} else {
-					$dir = 'object-storage/dekill/Retribution/' . $retribusi->file_retribusi;
+					$dir = './object-storage/dekill/Retribution/' . $retribusi->file_retribusi;
 				}
+				$encryptedDirretribusi		= $this->Outh_model->Encryptor('encrypt', $dir);
+				$readerRetribusi 	= 'Docreader/ReaderDok/'.$encryptedDirretribusi;
 				
-				//$oldFIleBerkas = FCPATH . 'public/uploads/penilaian/berita_acara/' . $getDataBerkas->dir_file_konsultasi;
 				$oldFIleBerkas = FCPATH . 'dekill/Consultation/berita_acara/' . $getDataBerkas->dir_file_konsultasi;
 				$dirFile = '';
 				if (file_exists($oldFIleBerkas)) {
-					$dirFile = 'object-storage/dekill/Consultation/berita_acara/' . $getDataBerkas->dir_file_konsultasi;
-					//$dirFile = 'public/uploads/penilaian/berita_acara/' . $getDataBerkas->dir_file_konsultasi;
+					$dirFile = './object-storage/dekill/Consultation/berita_acara/' . $getDataBerkas->dir_file_konsultasi;
 				} else {
-					$dirFile = 'object-storage/dekill/Consultation/' . $getDataBerkas->dir_file_konsultasi;
+					$dirFile = './object-storage/dekill/Consultation/' . $getDataBerkas->dir_file_konsultasi;
 				}
+				$encryptedDirBA		= $this->Outh_model->Encryptor('encrypt', $dirFile);
+				$readerBeritaAcara 	= 'Docreader/ReaderDok/'.$encryptedDirBA;
+
 				$data = [
 					'no_konsultasi' 		=> $row->no_konsultasi,
 					'nm_pemilik' 			=> $row->nm_pemilik,
-					'dir_file_konsultasi' 	=> $dirFile,
+					'dir_file_konsultasi' 	=> $readerBeritaAcara,
 					'almt_bgn' => $row->almt_bgn,
 					'nama_kec_bg' => $row->nama_kec_bg,
 					'nama_kabkota_bg' => $row->nama_kabkota_bg,
@@ -1455,7 +1512,7 @@ class DataDetail extends CI_Controller
 					'nilai_retribusi_keseluruhan' => str_replace(',', '.', number_format($retribusi->nilai_retribusi_keseluruhan)),
 					'stats_retribusi' => $retribusi->status_perhitungan,
 					'res' => true,
-					'berkas_retribusi' => $dir,
+					'berkas_retribusi' => $readerRetribusi,
 					'permanensi' => $retribusi->id_permanensi == 1 ? 'Permanen' : 'Non Permanen',
 					'parameter_permanensi' => "0.2 x {$retribusi->id_permanensi}",
 					'parameter_fungsi' => $retribusi->parameter_fungsi,

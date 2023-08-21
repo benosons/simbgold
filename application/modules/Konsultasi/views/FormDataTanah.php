@@ -45,18 +45,20 @@
 										$filename = FCPATH . "/object-storage/dekill/Earth/$key->dir_file";
 										$filenamephat = FCPATH . "/object-storage/dekill/Earth/$key->dir_file_phat";
 										$dir = '';
+										$dirphat = '';
 										if (file_exists($filename)) {
-											$dir = base_url('object-storage/dekill/Earth/' . $key->dir_file);
+											$dir = './object-storage/dekill/Earth/' . $key->dir_file;
 										} else {
-											$dir = base_url('object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file);
+											$dirphat = './object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file;
 										}
 
 										if (file_exists($filenamephat)) {
-											$dirphat = base_url('object-storage/dekill/Earth/' . $key->dir_file_phat);
+											$dirphat = './object-storage/dekill/Earth/' . $key->dir_file_phat;
 										} else {
-											$dirphat = base_url('object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file_phat);
+											$dirphat = './object-storage/file/Konsultasi/' . $key->id . '/data_tanah/' . $key->dir_file_phat;
 										}
 											$dir1	= $this->Outh_model->Encryptor('encrypt', $dir);
+											$dirphat1	= $this->Outh_model->Encryptor('encrypt', $dirphat);
 										?>
 										<tr>
 											<td align="center"> <?php echo $no++; ?></td>
@@ -65,13 +67,11 @@
 											<td align="center"> <?php echo $key->luas_tanah; ?></td>
 											<td align="center"> <?php echo $key->atas_nama_dok; ?></td>
 											<td align="center">
-												<!--<a href="<?php echo site_url('Docreader/PDFRead/' . $dir1); ?>" class="btn default btn-xs blue-stripe" data-toggle="modal" data-target="#modal-edit">Lihat</a>-->
-												
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+												<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dir1); ?>">Lihat</a>
 											</td>
 											<?php if ($key->dir_file_phat != "") { ?>
 												<td align="center">
-													<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dirphat ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+													<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirphat1); ?>">Lihat</a>
 												</td>
 											<?php } else { ?>
 												<td></td>
@@ -131,20 +131,20 @@
 										<td align="left"><?php echo $key->keterangan; ?></td>
 										<td align="center">
 											<?php echo form_open_multipart('Konsultasi/SaveDokumen/' . $id . '/' . $key->id_detail . '/1/' . $id_teknis, array('name' => 'frmup' . $no, 'id' => 'frmup' . $no)); ?>
-
 											<?php if ($dir_file == '' or $dir_file == null) { ?>
 												<input type="file" name="d_file" id="d_file" placeholder="Unggah Berkas Disini" accept="application/pdf" onchange="form.submit()">
 											<?php } else {
 												$filename = FCPATH . "/object-storage/dekill/Requirement/$dir_file";
 												$dir = '';
 												if (file_exists($filename)) {
-													$dir = base_url('object-storage/dekill/Requirement/' . $dir_file);
+													$dir = './object-storage/dekill/Requirement/' . $dir_file;
 												} else {
-													$dir = base_url('object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file);
+													$dir = './object-storage/file/Konsultasi/' . $id . '/Dokumen/' . $dir_file;
 												}
+												$dir5		= $this->Outh_model->Encryptor('encrypt', $dir);	
 											?>
 												<center>
-													<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
+													<a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/' . $dir5); ?>">Lihat</a>
 													|
 													<a href="<?php echo site_url('Konsultasi/DeleteTeknisTanah/' . $id_teknis . '/tek/' . $id ); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Hapus Data ini?')" title="Hapus Data"><span class="glyphicon glyphicon-trash"></span></a>
 												</center>
@@ -293,14 +293,14 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group form-md-line-input">
-									<div class="input-group">
+									<div class="input-group" style="padding-top: 26px !important">
 										<span class="input-group-addon"><i class="fa fa-circle"></i></span>
 										<select name="hat2" id="hat2" class="form-control" onclick="set_status_izin_pemanfaatan(this.value)">
 											<option value="">Pilih</option>
-											<option value="1">YA</option>
-											<option value="2">Tidak</option>
+											<option value="1">Ada</option>
+											<option value="2">Tidak Ada</option>
 										</select>
-										<label for="form_control_1">Izin pemanfaatan dari pemegang hak atas tanah</label>
+										<label for="form_control_1">Perjanjian Tertulis Pemanfaatan Tanah (dalam hal bangunan berdiri diatas tanah milik orang lain)</label>
 									</div>
 								</div>
 							</div>
@@ -311,7 +311,7 @@
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-circle"></i></span>
 											<input class="form-control" id="no_dok_izin_pemanfaatan" name="no_dok_izin_pemanfaatan" type="text" placeholder="0-9 / A-Z" autocomplete="off">
-											<label for="form_control_1">Nomor Dokumen Izin Pemanfaatan</label>
+											<label for="form_control_1">Nomor Dokumen Izin Pemanfaatan Tanah</label>
 										</div>
 									</div>
 								</div>
@@ -320,7 +320,7 @@
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 											<input class="form-control date-picker" type="text" id="tgl_terbit_phat" name="tgl_terbit_phat" data-date-format="yyyy-mm-dd" placeholder="2000/12/31" autocomplete="off" />
-											<label for="form_control_1">Tanggal Terbit Izin Pemanfaatan</label>
+											<label for="form_control_1">Tanggal Terbit Izin Pemanfaatan Tanah</label>
 										</div>
 									</div>
 								</div>
@@ -329,7 +329,7 @@
 										<div class="input-group">
 											<span class="input-group-addon"><i class="fa fa-circle"></i></span>
 											<input class="form-control" id="nama_penerima_kuasa" name="nama_penerima_kuasa" type="text" placeholder="Nama Penerima Izin Pemanfaatan" autocomplete="off">
-											<label for="form_control">Nama Penerima Izin Pemanfaatan</label>
+											<label for="form_control">Nama Penerima Izin Pemanfaatan Tanah</label>
 										</div>
 									</div>
 								</div>
@@ -339,7 +339,7 @@
 											<span class="input-group-addon"><i class="fa fa-circle"></i></span>
 											<input style="display: none;" name="dir_file_phat" id="dir_file_phat" onchange='cokphat()'>
 											<input type="file" class="form-control" name="d_file_phat" id="d_file_phat" accept="application/pdf" onchange='cokphat()'>
-											<label for="form_control_1">Berkas Izin Pemanfaatan</label>
+											<label for="form_control_1">Berkas Izin Pemanfaatan Tanah</label>
 										</div>
 									</div>
 								</div>
@@ -361,7 +361,20 @@
 		</div>
 	</div>
 </div>
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%" >
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+	</div>
+</div>
 <script>
+	$(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
+	
 	function popWin(x) {
 		url = x;
 		swin = window.open(url, 'win', 'scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');

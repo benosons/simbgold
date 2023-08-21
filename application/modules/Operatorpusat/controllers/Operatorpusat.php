@@ -36,6 +36,7 @@ class Operatorpusat extends CI_Controller
     {
         $id	= $this->input->post('id');
 		$email = $this->input->post('email');
+        //$email = 'ming.clan07@gmail.com';
         if($this->input->post('xstileng')) {
         $linknya	=	base_url() . "Front/verfikasi_user/" . sha1($email . $this->config->item('encryption_key'));
 		$textnya	=	"Yth Bapak/Ibu,<br><br>
@@ -47,7 +48,31 @@ class Operatorpusat extends CI_Controller
 			$subject 	=	"Verifikasi User Pengajuan Permohonan IMB | CS SIMBG";
 			$link		=	$linknya;
 			$text 		= 	$textnya;
-			$this->simbg_lib->sendEmail($email, $subject, $text);
+            $this->simbg_lib->sendEmailPendaftaran($email, $subject, $text);
+			
+			//$this->simbg_lib->sendEmail($email, $subject, $text);
+			$this->session->set_flashdata('message','Selesai Kirim Ulang');
+			$this->session->set_flashdata('status','success');
+			redirect('Operatorpusat/Kirimulang');
+        }
+    }
+    public function Kirim_Ulang_Email_Reset()
+    {
+        $id	= $this->input->post('id');
+		$email = 'ming.clan07@gmail.com';
+        //$email = $this->input->post('email');
+        if($this->input->post('xstileng')) {
+        $linknya	=	base_url() . "Front/verfikasi_user/" . sha1($email . $this->config->item('encryption_key'));
+		$textnya	=	"Yth Bapak/Ibu,<br><br>
+							Kami menerima permintaan pembuatan akun untuk mengakses layanan SIMBG <br>
+							Jika anda merasa melakukan pengajuan pembuatan akun SIMBG Silahkan Klik Tautan
+							berikut ini : <br> <a href='$linknya' >Verifikasi</a> <br>
+							Username Anda Adalah : $email <br><br>
+							Hormat Kami <br> Admin SIMBG";
+			$subject 	=	"Verifikasi User Pengajuan Permohonan IMB | CS SIMBG";
+			$link		=	$linknya;
+			$text 		= 	$textnya;
+			$this->simbg_lib->sendEmailPendaftaran($email, $subject, $text);
 			$this->session->set_flashdata('message','Selesai Kirim Ulang');
 			$this->session->set_flashdata('status','success');
 			redirect('Operatorpusat/Kirimulang');

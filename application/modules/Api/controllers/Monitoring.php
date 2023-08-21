@@ -89,6 +89,12 @@ class Monitoring2 extends RestController
         ];
         $this->response($response);
     }
+	
+	public function reports() 
+    {
+		echo "disini";
+	}
+	
 }
 
 /* End of file Monitoring.php */

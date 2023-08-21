@@ -123,6 +123,14 @@ class Mmonitoring extends CI_Model
 		$query = $this->db->get();
 		return $query;
 	}
+	
+	public function reports_datoss()
+	{
+		$sql = "SELECT * FROM v_reportsoss";
+		$hasil = $this->db->query($sql)->row_array();
+		return $hasil;
+		
+	}
 }
 
 /* End of file Mmonitoring2.php */

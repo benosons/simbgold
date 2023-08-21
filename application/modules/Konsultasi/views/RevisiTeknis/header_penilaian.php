@@ -132,10 +132,11 @@
 									$filename = FCPATH . "/object-storage/dekill/Consultation/$key->lampiran_perbaikan";
 									$dir = '';
 									if (file_exists($filename)) {
-										$dir = base_url('object-storage/dekill/Consultation/' . $key->lampiran_perbaikan);
+										$dir = './object-storage/dekill/Consultation/' . $key->lampiran_perbaikan;
 									} else {
-										$dir = base_url('public/uploads/penilaian/perbaikan/' . $key->lampiran_perbaikan);
+										$dir = './public/uploads/penilaian/perbaikan/' . $key->lampiran_perbaikan;
 									}
+                                    $dirPen	= $this->Outh_model->Encryptor('encrypt', $dir);
 									?>
 									<tr>
 										<td align="center"> <?php echo $no++; ?></td>
@@ -143,8 +144,8 @@
 										<td align="left"> <?php echo $key->catatan; ?></td>
 										<td align="center">
                                             <?php if($key->lampiran_perbaikan !='' && $key->lampiran_perbaikan !=null) { ?>
-												<a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Lihat</a>
-											<?php } else { ?>
+                                                <a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirPen); ?>">Lihat</a>
+												<?php } else { ?>
                                                 Tidak Ada Dokumen
                                             <?php } ?>
                                         </td>

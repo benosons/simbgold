@@ -110,11 +110,15 @@
 							</td>
 							<?php if ($Konsultasi->status == 1) { ?>
 								<td align="center">
-									<a href="#" onClick="href='<?php echo site_url('DinasTeknis/FormVerifikasi/' . $Konsultasi->id); ?>'" class="btn btn-success btn-sm" title="Verifikasi Data" id="tombolver" data-toggle="modal" data-target="#modal-edit"><span class="glyphicon glyphicon-edit"></span></a>
+									<a href="<?php echo site_url("DinasTeknis/FormVerifikasi/{$this->secure->encrypt_url($Konsultasi->id)}"); ?>" class="btn btn-warning btn-sm" title="Ubah Data"><span class="glyphicon glyphicon-pencil"></span></a>
+									
+									<!--<a href="#" onClick="href='<?php echo site_url('DinasTeknis/FormVerifikasi/' . $Konsultasi->id); ?>'" class="btn btn-success btn-sm" title="Verifikasi Data" id="tombolver" data-toggle="modal" data-target="#modal-edit"><span class="glyphicon glyphicon-edit"></span></a>-->
 								</td>
 							<?php } else if ($Konsultasi->status == 2){ ?>
 								<td align="center">
-									<a href="#" onClick="href='<?php echo site_url('DinasTeknis/FormVerifikasi/' . $Konsultasi->id); ?>'" class="btn btn-success btn-sm" title="Verifikasi Data" id="tombolver" data-toggle="modal" data-target="#modal-edit"><span class="glyphicon glyphicon-edit"></span></a>
+									<a href="<?php echo site_url("DinasTeknis/FormVerifikasi/{$this->secure->encrypt_url($Konsultasi->id)}"); ?>" class="btn btn-warning btn-sm" title="Ubah Data"><span class="glyphicon glyphicon-pencil"></span></a>
+									
+									<!--<a href="#" onClick="href='<?php echo site_url('DinasTeknis/FormVerifikasi/' . $Konsultasi->id); ?>'" class="btn btn-success btn-sm" title="Verifikasi Data" id="tombolver" data-toggle="modal" data-target="#modal-edit"><span class="glyphicon glyphicon-edit"></span></a>-->
 								</td>
 							<?php } else { ?>
 								<td align="center">
@@ -129,11 +133,15 @@
 	</div>
 </div>
 <!-- /.modaledit -->
-<div id="modal-edit" class="modal fade" tabindex="-1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" data-focus-on="input:first">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
+<div id="modal-edit" class="modal fade bs-modal-sm" tabindex="-1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 		</div>
-		<!-- /.modal-content -->
+		<div class="modal-body">
+			<div id="content">
+			</div>
+		</div>
 	</div>
 </div>
 <div id="modal-detail" class="modal fade" tabindex="-1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" data-focus-on="input:first">

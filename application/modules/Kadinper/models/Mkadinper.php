@@ -257,6 +257,23 @@ class Mkadinper extends CI_Model
 		return $query;
 	}
 	//End alidasi Sertifikat Laik Fungsi Bangunan Eksisting
+
+	function getNoDrafPbg($id_kec_bgn,$tgl_skrg)
+	{
+			$sql = "SELECT max(no_izin_pbg) as no_registrasi_baru 
+			FROM tmdatapbg 
+			WHERE SUBSTR(no_izin_pbg,8,6) = '$id_kec_bgn' and SUBSTR(no_izin_pbg,15,8) = '$tgl_skrg'";
+			$hasil = $this->db->query($sql)->row_array();
+			return $hasil;
+	}
+	function get_id_kabkot($id)
+	{
+			$sql = "SELECT id, id_kabkot_bgn, id_kec_bgn 
+					FROM tmdatabangunan where id = ".$id;
+			$hasil = $this->db->query($sql)->row_array();
+			return $hasil;
+	}
+
 }
 
 /* End of file Mpemeriksaan.php */

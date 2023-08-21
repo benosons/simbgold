@@ -15,46 +15,47 @@ class Dashboard extends CI_Controller
 	}
 	public function index()
 	{
-
 		if ($this->session->userdata('loc_role_id') != 0) {
 			$tahun = date('Y');
 			if ($this->session->userdata('loc_role_id') == 1) { //Dashboard Untuk Super Admin
-				$content =  $this->DashboardSuperAdmin();
-			} else if ($this->session->userdata('loc_role_id') == 2) { // Dashboard untuk  Pemerintah Pusat
-				$content =  $this->dashboardEksekutif();
-			} else if ($this->session->userdata('loc_role_id') == 3) { // Dashboard untuk Sekretariat PUPR Pusat
+				$content =  $this->DashboardSuperAdmin(); 
+			} else if ($this->session->userdata('loc_role_id') == 2){ // Dashboard untuk  Pemerintah Pusat
+				$content =  $this->dashboardEksekutif(); 
+			} else if ($this->session->userdata('loc_role_id') == 3){ // Dashboard untuk Sekretariat PUPR Pusat
 				$content = $this->dashboardEksekutif();
-			} else if ($this->session->userdata('loc_role_id') == 4) { // Dashboard Dinas Balai Provinsi Jika sudah ada
+			} else if ($this->session->userdata('loc_role_id') == 4){ // Dashboard Dinas Balai Provinsi Jika sudah ada
 				$content =  $this->dashboardBalai();
-			} else if ($this->session->userdata('loc_role_id') == 5) { //Dashboard Kepala Dinas Perizinan
+			} else if ($this->session->userdata('loc_role_id') == 5){ //Dashboard Kepala Dinas Perizinan
 				$content = $this->DashboardDinasPerizinan();
-			} else if ($this->session->userdata('loc_role_id') == 6) { //Dashboard Kepala Dinas Teknis 
+			} else if ($this->session->userdata('loc_role_id') == 6){ //Dashboard Kepala Dinas Teknis 
 				$content = $this->DashboardKadisTek();
-			} else if ($this->session->userdata('loc_role_id') == 7) { // Dashboard Pengawas Dinas Perizinan
+			} else if ($this->session->userdata('loc_role_id') == 7){ // Dashboard Pengawas Dinas Perizinan
 				$content = $this->DashboardDinasPerizinan();
-			} else if ($this->session->userdata('loc_role_id') == 8) { // Dashboard untuk Pengawas Dinas Teknis Kab/Kota
+			} else if ($this->session->userdata('loc_role_id') == 8){ // Dashboard untuk Pengawas Dinas Teknis Kab/Kota
 				$content = $this->DashboardDinasTeknis();
-			} else if ($this->session->userdata('loc_role_id') == 9) { //Dashboard Operator Dinas Perizinan
+			} else if ($this->session->userdata('loc_role_id') == 9){ //Dashboard Operator Dinas Perizinan
 				$content = $this->DashboardDinasPerizinan();
-			} else if ($this->session->userdata('loc_role_id') == 10) { // Dashboard untuk Pemohon
+			} else if ($this->session->userdata('loc_role_id') == 10){ // Dashboard untuk Pemohon
 				redirect('Konsultasi');
-			} else if ($this->session->userdata('loc_role_id') == 11) { // Dashboard Untuk Operator Dinas Teknis
+			} else if ($this->session->userdata('loc_role_id') == 11){ // Dashboard Untuk Operator Dinas Teknis
 				$content = $this->DashboardOpDinasTeknis();
-			} else if ($this->session->userdata('loc_role_id') == 12) { // Dashboard Operator Pusat PUPR
+			} else if($this->session->userdata('loc_role_id') == 12){ // Dashboard Operator Pusat PUPR
 				$content = $this->DashboardSuperAdmin();
-			} else if ($this->session->userdata('loc_role_id') == 13) { // Dashboard TPT/Penilik
+			} else if ($this->session->userdata('loc_role_id') == 13){ // Dashboard TPT/Penilik
 				$content = $this->DashboardTPT();
-			} else if ($this->session->userdata('loc_role_id') == 14) { //Dashboard Aso/Akademisi Profesi
+			} else if ($this->session->userdata('loc_role_id') == 14){ //Dashboard Aso/Akademisi Profesi
 				$content = $this->dashboardAS();
-			} else if ($this->session->userdata('loc_role_id') == 17) { // Dashboard Calon TPA/TPA
+			} else if ($this->session->userdata('loc_role_id') == 17){ // Dashboard Calon TPA/TPA
 				$content = $this->dashboardTPA();
-			} else if ($this->session->userdata('loc_role_id') == 18) { //Dashboard Pimpinan
+			} else if ($this->session->userdata('loc_role_id') == 18){ //Dashboard Pimpinan
 				$content = $this->dashboardPimpinan();
-			} else if ($this->session->userdata('loc_role_id') == 19) {
+			} else if ($this->session->userdata('loc_role_id') == 19){
 				$content = $this->DashboardSuperAdmin();
-			} else if ($this->session->userdata('loc_role_id') == 26) {
+			} else if ($this->session->userdata('loc_role_id') == 20){ //Dashboard Kepala Teknis Otorita
+				$content = $this->DashboardKadisTekOtorita();
+			}else if($this->session->userdata('loc_role_id') == 26){
 				redirect('KonsultasiOSS');
-			} else {
+			}else {
 				$content =  $this->dashboardDinas(); //Role lain belum ditentukan sementara kosong
 			}
 			$title		=	'Dashboard';
@@ -74,22 +75,20 @@ class Dashboard extends CI_Controller
 	//Begin Dashboard Akun SuperAdmin/Pengembangan
 	protected function DashboardSuperAdmin()
 	{
-
 		$id_kabkot = $this->session->userdata('loc_id_kabkot');
 		$pbg_rekap = $this->mdashboard->GetJmlPbgDinas($id_kabkot);
-
 		$data['pbg_rekap'] = $pbg_rekap;
 		$slf_rekap = $this->mdashboard->GetJmlSLFDinas($id_kabkot);
 		$data['slf_rekap'] = $slf_rekap;
 		$SQLcari = "";
 		$query = $this->mdashboard->get_rekapIMB($SQLcari);
 		$querySLF = $this->mdashboard->get_rekapSLF($SQLcari);
-		$data['jum_data'] = $query->num_rows();
+		$data['jum_data'] = $query->num_rows();	
 		$data['result'] = $query->result();
-		$data['jum_dataSLF'] = $querySLF->num_rows();
+		$data['jum_dataSLF'] = $querySLF->num_rows();	
 		$data['resultSLF'] = $querySLF->result();
 		$data['daftar_kecamatan']	= $this->mglobal->listDataKecamatan('a.id_kecamatan,a.nama_kecamatan', '', $id_kabkot);
-
+		
 		$content 			= $this->load->view('DashboardSuperAdmin', $data, TRUE);
 		return $content;
 	}
@@ -104,9 +103,9 @@ class Dashboard extends CI_Controller
 		$SQLcari = "";
 		$query = $this->mdashboard->get_rekapIMB($SQLcari);
 		$querySLF = $this->mdashboard->get_rekapSLF($SQLcari);
-		$data['jum_data'] = $query->num_rows();
+		$data['jum_data'] = $query->num_rows();	
 		$data['result'] = $query->result();
-		$data['jum_dataSLF'] = $querySLF->num_rows();
+		$data['jum_dataSLF'] = $querySLF->num_rows();	
 		$data['resultSLF'] = $querySLF->result();
 		$data['daftar_kecamatan']	= $this->mglobal->listDataKecamatan('a.id_kecamatan,a.nama_kecamatan', '', $id_kabkot);
 		$content 		= $this->load->view('dashboardOpt', $data, TRUE);
@@ -162,10 +161,10 @@ class Dashboard extends CI_Controller
 		$berjalan     = '-'; //belum
 		$selesai      = '-'; //belum
 		$data = array(
-			'datatpa' => array(),
-			'dataproyek' => array(),
-			'dataLokasi' => array(),
-			'Verifkasi' => array(),
+			'datatpa' => $datatpa,
+			'dataproyek' => $dataproyek,
+			'dataLokasi' => $dataLokasi,
+			'Verifkasi' => $Verifkasi,
 			'berjalan'     => $berjalan,
 			'selesai'      => $selesai,
 		);
@@ -183,12 +182,12 @@ class Dashboard extends CI_Controller
 		$SQLcari = "";
 		$query = $this->mdashboard->get_rekapIMB($SQLcari);
 		$querySLF = $this->mdashboard->get_rekapSLF($SQLcari);
-		$data['jum_data'] = $query->num_rows();
+		$data['jum_data'] = $query->num_rows();	
 		$data['result'] = $query->result();
-		$data['jum_dataSLF'] = $querySLF->num_rows();
+		$data['jum_dataSLF'] = $querySLF->num_rows();	
 		$data['resultSLF'] = $querySLF->result();
 		$data['daftar_kecamatan']	= $this->mglobal->listDataKecamatan('a.id_kecamatan,a.nama_kecamatan', '', $id_kabkot);
-
+		
 		$content 			= $this->load->view('DashboardSuperAdmin', $data, TRUE);
 		return $content;
 	}
@@ -196,11 +195,11 @@ class Dashboard extends CI_Controller
 
 	protected function dashboardEksekutif()
 	{
-		$data['j_Pengguna']  = ''; //Belom
-		$data['j_PBGterbit'] = ''; //Belom
-		$data['j_PBGtolak']  = ''; //Belom			
-		$data['j_Retribusi'] = ''; //Belom
-		$data['notifikasi']  = ''; //Belom
+		$data['j_Pengguna']  = '';//Belom
+		$data['j_PBGterbit'] = '';//Belom
+		$data['j_PBGtolak']  = '';//Belom			
+		$data['j_Retribusi'] = '';//Belom
+		$data['notifikasi']  = '';//Belom
 		$content 		= $this->load->view('DashboardEksekutif', $data, TRUE);
 		return $content;
 	}
@@ -226,7 +225,7 @@ class Dashboard extends CI_Controller
 		return $content;
 	}
 
-
+	
 	protected function dashboardDinasPusat()
 	{
 		$id_kabkot = $this->session->userdata('loc_id_kabkot');
@@ -235,9 +234,9 @@ class Dashboard extends CI_Controller
 		$slf_rekap = $this->mdashboard->GetJmlSLFDinas($id_kabkot);
 		$data['slf_rekap'] = $slf_rekap;
 		$query = $this->mdashboard->getDataRekapKec($id_kabkot);
-		$data['jum_data'] = $query->num_rows();
+		$data['jum_data'] = $query->num_rows();	
 		$data['results'] = $query->result();
-		$data['jum_data'] = $query->num_rows();
+		$data['jum_data'] = $query->num_rows();	
 		$data['result'] = $query->result();
 		$content 		= $this->load->view('DashboardPusat', $data, TRUE);
 		return $content;
@@ -247,19 +246,19 @@ class Dashboard extends CI_Controller
 	{
 		//$user_id	= $this->Outh_model->Encryptor('decrypt', $this->session->userdata('loc_user_id'));
 		$kabkot = $this->session->userdata('loc_id_kabkot');
-		$data['j_Pengguna']  = ''; //Belom
-		$data['j_PBGterbit'] = ''; //Belom
-		$data['j_PBGtolak']  = ''; //Belom			
-		$data['j_Retribusi'] = ''; //Belom
-		$data['notifikasi']  = ''; //Belom
-
+		$data['j_Pengguna']  = '';//Belom
+		$data['j_PBGterbit'] = '';//Belom
+		$data['j_PBGtolak']  = '';//Belom			
+		$data['j_Retribusi'] = '';//Belom
+		$data['notifikasi']  = '';//Belom
+		
 		$SQLcari = "";
 		$query = $this->mdashboard->get_rekapIMB($SQLcari);
 		$querySLF = $this->mdashboard->get_rekapSLF($SQLcari);
-
-		$data['jum_data'] = $query->num_rows();
+			
+		$data['jum_data'] = $query->num_rows();	
 		$data['result'] = $query->result();
-		$data['jum_dataSLF'] = $querySLF->num_rows();
+		$data['jum_dataSLF'] = $querySLF->num_rows();	
 		$data['resultSLF'] = $querySLF->result();
 		$data['daftar_kecamatan']	= $this->mglobal->listDataKecamatan('a.id_kecamatan,a.nama_kecamatan', '', $kabkot);
 		$content 		= $this->load->view('dashboardOpt', $data, TRUE);
@@ -293,6 +292,7 @@ class Dashboard extends CI_Controller
 		);
 		$content 		= $this->load->view('dashboardDinas2', $data, TRUE);
 		return $content;
+
 	}
 
 	protected function viewKosong()
@@ -322,9 +322,9 @@ class Dashboard extends CI_Controller
 	}
 	//End Dashboard
 	//Begin Data Dashboard Pimpinan PUPR
-	public function DatProv()
+	public function DatProv ()
 	{
-		$id_provinsi = $this->input->get('id');
+		$id_provinsi= $this->input->get('id');
 		$value		= array();
 		$query		= $this->mglobal->listDataKabKota('id_kabkot,nama_kabkota', '', $id_provinsi);
 		if ($query->num_rows() > 0) {
@@ -334,16 +334,16 @@ class Dashboard extends CI_Controller
 		}
 		echo json_encode($value);
 	}
-
+	
 	public function DatProv2()
-	{
-		$id_provinsi = $this->uri->segment(3);
+    {
+        $id_provinsi= $this->uri->segment(3);
 		$value		= array();
 		$query		= $this->mglobal->listDataKabKota('id_kabkot,nama_kabkota', '', $id_provinsi);
-		$no = 1;
-		foreach ($query->result() as $person) {
-			$jum_imb = $this->Mglobals->getData('*', 'tm_imb_permohonan', array('id_kabkot' => $person->id_kabkot, 'status_progress >= 13' => null))->num_rows();
-			$verivikasi = $this->Mglobals->getData('*', 'tmdatabangunan', array('id_kabkot_bgn' => $person->id_kabkot, 'id_jenis_permohonan' => '14', 'status' => '1 and 2)'))->num_rows();
+        $no = 1;
+        foreach ($query->result() as $person) {
+            $jum_imb = $this->Mglobals->getData('*', 'tm_imb_permohonan', array('id_kabkot' => $person->id_kabkot, 'status_progress >= 13' => null))->num_rows();
+			$verivikasi = $this->Mglobals->getData('*', 'tmdatabangunan', array('id_kabkot_bgn' => $person->id_kabkot,'id_jenis_permohonan' => '14', 'status' => '1 and 2)'))->num_rows();
 			$penugasan = $this->Mglobals->getData('*', 'tmdatabangunan', array('id_kabkot_bgn' => $person->id_kabkot, 'status' => 4))->num_rows();
 			$jadwal = $this->Mglobals->getData('*', 'tmdatabangunan', array('id_kabkot_bgn' => $person->id_kabkot, 'status' => '(5 and 7)'))->num_rows();
 			$konsultasi = $this->Mglobals->getData('*', 'tmdatabangunan', array('id_kabkot_bgn' => $person->id_kabkot, 'status' => '6'))->num_rows();
@@ -359,9 +359,9 @@ class Dashboard extends CI_Controller
 			$row[] = $perhirungan;
 			$row[] = $validasi;
 			$tt[] = $row;
-		}
-		echo json_encode($tt);
-	}
+        }
+        echo json_encode($tt);
+    }
 	//End Data Dashboard Pimpinan PUPR
 	//Begin Dashboard TPA
 	protected function dashboardAS()
@@ -371,7 +371,7 @@ class Dashboard extends CI_Controller
 		$id_asosiasi	= $this->session->userdata('loc_id_asosiasi');
 		//echo $asosiasi;
 		$profile_user = $this->mdashboard->getDataUserPemohon('a.*,b.*', $user_id);
-		$tpa_result = $this->mdashboard->listDataTpa('a.*,b.keterangan,c.dir_file', $asosiasi, $id_asosiasi);
+		$tpa_result = $this->mdashboard->listDataTpa('a.*,b.keterangan,c.dir_file', $asosiasi,$id_asosiasi);
 		$tpa_rekap = $this->mdashboard->GetJumlahTpa($id_asosiasi);
 		$total_proyek = '-'; //belum
 		$berjalan     = '-'; //belum
@@ -411,9 +411,9 @@ class Dashboard extends CI_Controller
 		$id	= $this->input->post('id');
 		$email = $this->input->post('email');
 		//Begin Ya
-		if ($this->input->post('xstileng')) {
-			$dataProgress = array(
-				'status' => 3,
+		if($this->input->post('xstileng')) {
+			$dataProgress = array (
+					'status' => 3,
 			);
 			$email = "$email";
 			$subject 	= "Status Verifikasi Calon TPA";
@@ -426,18 +426,18 @@ class Dashboard extends CI_Controller
 			$text .= "<br>";
 			$text .= "Hormat Kami <br>";
 			$text .= "Admin SIMBG ";
-			$this->mdashboard->updateProgress($dataProgress, $id);
+			$this->mdashboard->updateProgress($dataProgress,$id);
 			$this->simbg_lib->sendEmail($email, $subject, $text);
-
-			$this->session->set_flashdata('message', 'Selesai Verifikasi');
-			$this->session->set_flashdata('status', 'success');
+		
+			$this->session->set_flashdata('message','Selesai Verifikasi');
+			$this->session->set_flashdata('status','success');
 			redirect('Dashboard');
 		}
 		//Begin Tidak
-		if ($this->input->post('xsleng')) {
-			$dataProgress = array(
-				'status' => 2,
-			);
+		if($this->input->post('xsleng')) {			
+			$dataProgress = array (
+					'status' => 2,
+				);
 			$email = "$email";
 			$subject 	= "Status Verifikasi Calon TPA";
 			$text 		= "";
@@ -450,10 +450,10 @@ class Dashboard extends CI_Controller
 			$text .= "<br>";
 			$text .= "Hormat Kami <br>";
 			$text .= "Admin SIMBG ";
-			$this->mdashboard->updateProgress($dataProgress, $id);
+			$this->mdashboard->updateProgress($dataProgress,$id);
 			$this->simbg_lib->sendEmail($email, $subject, $text);
-			$this->session->set_flashdata('message', 'Selesai Verifikasi');
-			$this->session->set_flashdata('status', 'success');
+			$this->session->set_flashdata('message','Selesai Verifikasi');
+			$this->session->set_flashdata('status','success');
 			redirect('Dashboard');
 		}
 	}
@@ -515,39 +515,32 @@ class Dashboard extends CI_Controller
 	//Begin Dashboard Baru
 	protected function dashboardBalai()
 	{
-		$kabkot = $this->session->userdata('loc_id_kabkot');
-		$cekProv = $this->mglobal->getId('id_kabkot', $kabkot, 'tr_kabkot')->row()->id_provinsi;
-		$data['j_Pengguna']  = ''; //Belom
-		$data['j_PBGterbit'] = ''; //Belom
-		$data['j_PBGtolak']  = ''; //Belom			
-		$data['j_Retribusi'] = ''; //Belom
-		$data['notifikasi']  = ''; //Belom
+		$id_kabkot 			= $this->session->userdata('loc_id_kabkot');
+		$tpa_rekap 			= $this->mdashboard->GetJumlahTpaTotBalai($id_kabkot);
+		$data['tpa_rekap'] 	= $tpa_rekap;
+		$pbg_rekap = $this->mdashboard->GetJmlPbgBalai($id_kabkot);
+		$data['pbg_rekap'] = $pbg_rekap;
+		$slf_rekap = $this->mdashboard->GetJmlSLFBalai($id_kabkot);
+		$data['slf_rekap'] = $slf_rekap;
 
-		$SQLcari = "";
-		$query = $this->mdashboard->get_rekapIMB($SQLcari);
-		$querySLF = $this->mdashboard->get_rekapSLF($SQLcari);
-
-		$data['jum_data'] = $query->num_rows();
-		$data['result'] = $query->result();
-		$data['jum_dataSLF'] = $querySLF->num_rows();
-		$data['resultSLF'] = $querySLF->result();
-		$data['daftar_kabkota']	= $this->mglobal->listDataKabKota('id_kabkot,nama_kabkota', '', $cekProv);
-		$content 		= $this->load->view('dashboardBalai', $data, TRUE);
+		$content 			= $this->load->view('DashboardPimpinan', $data, TRUE);
 		return $content;
 	}
 
-	public function check_status()
+	public function check_status() 
 	{
-		$id_nya = $this->uri->segment(3);
+		$id_nya= $this->uri->segment(3);
 		$data['id_nya'] = $id_nya;
-		$dataIn = array('status' => '2');
-		try {
-			$this->mdashboard->updateKesediaan($dataIn, $id_nya);
-			$this->session->set_flashdata('message', 'Data Sukses Di Verifikasi');
-			$this->session->set_flashdata('status', 'success');
-		} catch (Exception $e) {
-			$this->session->set_flashdata('message', 'Data Gagal Di Verifikasi');
-			$this->session->set_flashdata('status', 'error');
+		$dataIn = array ('status' => '2');
+		try
+		{
+			$this->mdashboard->updateKesediaan($dataIn,$id_nya);
+			$this->session->set_flashdata('message','Data Sukses Di Verifikasi');
+			$this->session->set_flashdata('status','success');
+		}catch(Exception $e) 
+		{
+			$this->session->set_flashdata('message','Data Gagal Di Verifikasi');
+			$this->session->set_flashdata('status','error');
 		}
 		$crsf = $this->security->get_csrf_hash();
 		$token['csrf']  = $crsf;
@@ -616,7 +609,7 @@ class Dashboard extends CI_Controller
 		//$dataProyek = $this->mdashboard->getDataProyek('f.nm_konsultasi, e.no_konsultasi, e.status, e.id_fungsi_bg', $user_id);
 		$dataLokasi = $this->mdashboard->getDataLokasi('*', $id_tpa);
 		$Verifkasi = $this->mdashboard->getDataVerifikasi('*', $id_tpa);
-
+		
 		$t_tpa = '-'; //belum
 		$berjalan     = '-'; //belum
 		$selesai      = '-'; //belum
@@ -647,6 +640,19 @@ class Dashboard extends CI_Controller
 		return $content;
 	}
 
+	protected function DashboardKadisTekOtorita()
+	{
+		$id_kabkot = $this->session->userdata('loc_id_kabkot');
+		$pbg_rekap = $this->mdashboard->GetJmlPbgDinasOtorita($id_kabkot);
+		$data['pbg_rekap'] = $pbg_rekap;
+
+		$slf_rekap = $this->mdashboard->GetJmlSLFDinas($id_kabkot);
+		$data['slf_rekap'] = $slf_rekap;
+
+		$content 		= $this->load->view('DashboardKadisTekOtorita', $data, TRUE);
+		return $content;
+	}
+
 	protected function DashboardPengTek()
 	{
 		$id_kabkot 			= $this->session->userdata('loc_id_kabkot');
@@ -655,7 +661,7 @@ class Dashboard extends CI_Controller
 		$slf_rekap 			= $this->mdashboard->GetJmlSLFDinas($id_kabkot);
 		$data['slf_rekap'] 	= $slf_rekap;
 		$query 				= $this->mdashboard->getDataRekapKecamatan($id_kabkot);
-		$data['jum_data'] 	= $query->num_rows();
+		$data['jum_data'] 	= $query->num_rows();	
 		$data['result'] 	= $query->result();
 		$content 			= $this->load->view('DashboardPengTek', $data, TRUE);
 		return $content;
@@ -669,7 +675,7 @@ class Dashboard extends CI_Controller
 		$slf_rekap 			= $this->mdashboard->GetJmlSLFDinas($id_kabkot);
 		$data['slf_rekap'] 	= $slf_rekap;
 		$query 				= $this->mdashboard->getDataRekapKecamatan($id_kabkot);
-		$data['jum_data'] 	= $query->num_rows();
+		$data['jum_data'] 	= $query->num_rows();	
 		$data['result'] 	= $query->result();
 		$content 			= $this->load->view('DashboardOptTek', $data, TRUE);
 		return $content;

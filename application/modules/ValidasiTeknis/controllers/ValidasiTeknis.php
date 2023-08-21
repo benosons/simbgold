@@ -40,16 +40,34 @@ class ValidasiTeknis extends CI_Controller
         $imb                = $DataVal['imb'];
         $email              = $DataVal['email'];
         $no_konsultasi      = $DataVal['no_konsultasi'];
-
-        $ttd                = $this->Mvalidasiteknis->get_pejabat($id);
+        $id_dki             = $DataVal['id_dki'];
+        if($id_dki !=1){
+            $ttd                = $this->Mvalidasiteknis->get_pejabat($id);
+        }else{
+            $ttd                = $this->Mvalidasiteknis->get_pejabat_dki($id);
+        }
         $ttd_pejabat_sk     = $ttd['kepala_dinas'];
         $nip_kadis_teknis   = $ttd['nip_kepala_dinas'];
         $nm_dinas           = $ttd['p_nama_dinas'];
         $stat_pejabat       = $ttd['status_pejabat'];
+        $no_sppst 			= $this->No_Sppst($id);
         $ket                = "Proses masuk Ke Dinas Perizinan Untuk Penagihan Retribusi";
         if (trim($id) != '') {
             $dataStatus = array(
                 'status' => 11,
+                'id_sk' => 1,
+            );
+            $datavalidasi   = array(
+                'id' => $id,
+                'tgl_validasi'  => $tgl_skrg,
+                'stat_pejabat'  => $stat_pejabat,
+                'nip_kadis'     => $nip_kadis_teknis,
+                'nama_kadis'    => $ttd_pejabat_sk,
+                'nama_dinas'    => $nm_dinas,
+                'no_sppst'      => $no_sppst,
+                'stat_sppst'    => '1',
+                'post_date'     => $tgl_skrg,
+                'post_by'       => $user_id,
             );
             $data       = array(
                 'tgl_status' => $tgl_skrg,
@@ -68,18 +86,29 @@ class ValidasiTeknis extends CI_Controller
                         $keterangan 	= 'Validasi Kadis Teknis';
                 $this->oss_lib->receiveLicenseStatusNew($id,$kd_status,$tgl_status,$nama_status,$keterangan);
             }
-            
+            $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+			$config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
+			$config['quality']      = true; //boolean, the default is true
+			$config['size']         = '1024'; //interger, the default is 1024
+			$config['black']        = array(224,255,255); // array, default is array(255,255,255)
+			$config['white']        = array(70,130,180); // array, default is array(0,0,0)
+			$this->ciqrcode->initialize($config);
+			$image_name				= $no_sppst.'.png'; //buat name dari qr code sesuai dengan nim
+			$params['data'] 		= 'https://simbg.pu.go.id/Main/Retribusi/'.$no_sppst; //data yang akan di jadikan QR CODE
+			$params['level'] 		= 'H'; //H=High
+			$params['size'] 		= 10;
+			$params['savename'] 	= FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+			$data['QR'] 			= $this->ciqrcode->generate($params);
+            $this->Mvalidasiteknis->insertDataValidasi($datavalidasi);
             $this->Mvalidasiteknis->updateProgress($dataStatus, $id);
             $this->Mglobals->setDatakol('th_data_konsultasi', $data);
-           
-            
         }
-        $email = "$email";
-        $no_konsultasi = "$no_konsultasi";
-        $ket    = "$ket";
+        $email          = "$email";
+        $no_konsultasi  = "$no_konsultasi";
+        $ket            = "$ket";
         //$catatan = "$catatan";
-        $subject     = "Status Progress Permohonan $no_konsultasi";
-        $text         = "";
+        $subject        = "Status Progress Permohonan $no_konsultasi";
+        $text           = "";
         $text .= "Yth Bapak/Ibu,<br>";
         $text .= "<br>";
         $text .= "Dengan ini kami memberitahukan bahwa Permohonan dengan No.Registrasi $no_konsultasi <br>";
@@ -94,6 +123,29 @@ class ValidasiTeknis extends CI_Controller
         $this->session->set_flashdata('status', 'success');
         redirect('ValidasiTeknis/VerifikasiDok');
     }
+
+    function No_Sppst($id=null)
+	{
+        $que 			= $this->Mvalidasiteknis->get_id_kabkot($id);
+		$lokasi 		= $que['id_kec_bgn'];
+		$tgl_validasi 	= date('d').date('m').date('Y');
+		$mydata2 		= $this->Mvalidasiteknis->getNoDrafSPPST($lokasi,$tgl_validasi);
+        if(count($mydata2)>0){ 
+            $no_baru = SUBSTR($mydata2['no_registrasi_baru'],-3)+1;
+            if ($no_baru < 10){
+                $sk_pbg = "SPPST-".$lokasi."-".$tgl_validasi."-00".$no_baru;
+            } else if ($no_baru < 99){
+				$sk_pbg = "SPPST-".$lokasi."-".$tgl_validasi."-0".$no_baru;
+			}else if($no_baru > 100){
+				$sk_pbg = "SPPST-".$lokasi."-".$tgl_validasi."-".$no_baru;
+			}else{
+                $sk_pbg = "SPPST-".$lokasi."-".$tgl_validasi."-".$no_baru;
+            }
+        } else {
+            $sk_pbg = "SPPST-".$lokasi."-".$tgl_validasi."-001";
+        }
+		return $sk_pbg;
+	}
 
     public function RollbackKadis()
     {
@@ -137,51 +189,70 @@ class ValidasiTeknis extends CI_Controller
         $id                 = $this->input->post('id');
         $tgl_skrg           = date('Y-m-d');
         $data['id']         = $id;
-        $DataVal            = $this->Mvalidasiteknis->getdatapermohonan($id)->row_array();
         $imb                = $DataVal['imb'];
         $email              = $DataVal['email'];
         $no_konsultasi      = $DataVal['no_konsultasi'];
-        if ($imb != '1') {
-            $ket = "Proses masuk Ke Dinas Perizinan Untuk Penagihan Retribusi";
-        } else {
-            $ket = "Proses masuk Ke Dinas Perizinan Untuk Divalidasi Oleh Kepala Dinas Perizinan";
+        $id_dki             = $DataVal['id_dki'];
+        if($id_dki !=1){
+            $ttd            = $this->Mvalidasiteknis->get_pejabat($id);
+        }else{
+            $ttd            = $this->Mvalidasiteknis->get_pejabat_dki($id);
         }
+        $ttd_pejabat_sk     = $ttd['kepala_dinas'];
+        $nip_kadis_teknis   = $ttd['nip_kepala_dinas'];
+        $nm_dinas           = $ttd['p_nama_dinas'];
+        $stat_pejabat       = $ttd['status_pejabat'];
+        $no_sppst 			= $this->No_Sppst($id);
+        $ket = "Proses masuk Ke Dinas Perizinan Untuk Penagihan Retribusi";
+        
         if (trim($id) != '') {
-            if ($imb != '1') {
-                $dataStatus = array(
-                    'status' => 11,
-                );
-                $data    = array(
-                    'tgl_status' => $tgl_skrg,
-                    'status' => '11',
-                    'id' => $id,
-                    'catatan' => "Telah Selesai di Validasi Kepala Dinas Teknis dan Masuk Ke Proses Penagihan Retribusi",
-                    'user_id' => $user_id,
-                    'modul' => 'Validasi Kepala Dinas Teknis'
-                );
-            } else {
-                $dataStatus = array(
-                    'status' => 13,
-                );
-                $data    = array(
-                    'tgl_status' => $tgl_skrg,
-                    'status' => '13',
-                    'id' => $id,
-                    'catatan' => "Telah Selesai di Validasi Kepala Dinas Teknis dan akan di Validasi Kepala Dinas Perizinan",
-                    'user_id' => $user_id,
-                    'modul' => 'Validasi Kepala Dinas Teknis'
-                );
-            }
-
+            $dataStatus = array(
+                'status' => 11,
+                'id_sk' => 1,
+            );
+            $data    = array(
+                'tgl_status'    => $tgl_skrg,
+                'status'        => '11',
+                'id'            => $id,
+                'catatan'       => "Telah Selesai di Validasi Kepala Dinas Teknis dan Masuk Ke Proses Penagihan Retribusi",
+                'user_id'       => $user_id,
+                'modul'         => 'Validasi Kepala Dinas Teknis'
+            );
+            $datavalidasi   = array(
+                'id' => $id,
+                'tgl_validasi'  => $tgl_skrg,
+                'stat_pejabat'  => $stat_pejabat,
+                'nip_kadis'     => $nip_kadis_teknis,
+                'nama_kadis'    => $ttd_pejabat_sk,
+                'nama_dinas'    => $nm_dinas,
+                'no_sppst'      => $no_sppst,
+                'stat_sppst'    => '1',
+                'post_date'     => $tgl_skrg,
+                'post_by'       => $user_id,
+            );
+            $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+			$config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
+			$config['quality']      = true; //boolean, the default is true
+			$config['size']         = '1024'; //interger, the default is 1024
+			$config['black']        = array(224,255,255); // array, default is array(255,255,255)
+			$config['white']        = array(70,130,180); // array, default is array(0,0,0)
+			$this->ciqrcode->initialize($config);
+			$image_name				= $no_sppst.'.png'; //buat name dari qr code sesuai dengan nim
+			$params['data'] 		= 'https://simbg.pu.go.id/Main/Retribusi/'.$no_sppst; //data yang akan di jadikan QR CODE
+			$params['level'] 		= 'H'; //H=High
+			$params['size'] 		= 10;
+			$params['savename'] 	= FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+			$data['QR'] 			= $this->ciqrcode->generate($params);
+            $this->Mvalidasiteknis->insertDataValidasi($datavalidasi);
             $this->Mvalidasiteknis->updateProgress($dataStatus, $id);
             $this->Mglobals->setDatakol('th_data_konsultasi', $data);
         }
-        $email = "$email";
-        $no_konsultasi = "$no_konsultasi";
-        $ket    = "$ket";
+        $email          = "$email";
+        $no_konsultasi  = "$no_konsultasi";
+        $ket            = "$ket";
         //$catatan = "$catatan";
-        $subject     = "Status Progress Permohonan $no_konsultasi";
-        $text         = "";
+        $subject        = "Status Progress Permohonan $no_konsultasi";
+        $text           = "";
         $text .= "Yth Bapak/Ibu,<br>";
         $text .= "<br>";
         $text .= "Dengan ini kami memberitahukan bahwa Permohonan dengan No.Registrasi $no_konsultasi <br>";
@@ -242,6 +313,17 @@ class ValidasiTeknis extends CI_Controller
         $imb                = $DataVal['imb'];
         $email              = $DataVal['email'];
         $no_konsultasi      = $DataVal['no_konsultasi'];
+        $id_dki             = $DataVal['id_dki'];
+        if($id_dki !=1){
+            $ttd            = $this->Mvalidasiteknis->get_pejabat($id);
+        }else{
+            $ttd            = $this->Mvalidasiteknis->get_pejabat_dki($id);
+        }
+        $ttd_pejabat_sk     = $ttd['kepala_dinas'];
+        $nip_kadis_teknis   = $ttd['nip_kepala_dinas'];
+        $nm_dinas           = $ttd['p_nama_dinas'];
+        $stat_pejabat       = $ttd['status_pejabat'];
+        $no_sppst 			= $this->No_Sppst($id);
         if ($imb != '1') {
             $ket = "Proses masuk Ke Dinas Perizinan Untuk Penagihan Retribusi";
         } else {
@@ -250,7 +332,8 @@ class ValidasiTeknis extends CI_Controller
         if (trim($id) != '') {
             if ($imb != '1') {
                 $dataStatus = array(
-                    'status' => 11,
+                    'status'    => 11,
+                    'id_sk'     => 1,
                 );
                 $data    = array(
                     'tgl_status' => $tgl_skrg,
@@ -262,26 +345,52 @@ class ValidasiTeknis extends CI_Controller
                 );
             } else {
                 $dataStatus = array(
-                    'status' => 13,
+                    'status'    => 13,
+                    'id_sk'     => 1,
                 );
                 $data    = array(
-                    'tgl_status' => $tgl_skrg,
-                    'status' => '13',
-                    'id' => $id,
-                    'catatan' => "Telah Selesai di Validasi Kepala Dinas Teknis dan akan di Validasi Kepala Dinas Perizinan",
-                    'user_id' => $user_id,
-                    'modul' => 'Validasi Kepala Dinas Teknis'
+                    'tgl_status'    => $tgl_skrg,
+                    'status'        => '13',
+                    'id'            => $id,
+                    'catatan'       => "Telah Selesai di Validasi Kepala Dinas Teknis dan akan di Validasi Kepala Dinas Perizinan",
+                    'user_id'       => $user_id,
+                    'modul'         => 'Validasi Kepala Dinas Teknis'
                 );
             }
+            $datavalidasi   = array(
+                'id' => $id,
+                'tgl_validasi'  => $tgl_skrg,
+                'stat_pejabat'  => $stat_pejabat,
+                'nip_kadis'     => $nip_kadis_teknis,
+                'nama_kadis'    => $ttd_pejabat_sk,
+                'nama_dinas'    => $nm_dinas,
+                'no_sppst'      => $no_sppst,
+                'stat_sppst'    => '1',
+                'post_date'     => $tgl_skrg,
+                'post_by'       => $user_id,
+            );
+            $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+			$config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
+			$config['quality']      = true; //boolean, the default is true
+			$config['size']         = '1024'; //interger, the default is 1024
+			$config['black']        = array(224,255,255); // array, default is array(255,255,255)
+			$config['white']        = array(70,130,180); // array, default is array(0,0,0)
+			$this->ciqrcode->initialize($config);
+			$image_name				= $no_sppst.'.png'; //buat name dari qr code sesuai dengan nim
+			$params['data'] 		= 'https://simbg.pu.go.id/Main/Retribusi/'.$no_sppst; //data yang akan di jadikan QR CODE
+			$params['level'] 		= 'H'; //H=High
+			$params['size'] 		= 10;
+			$params['savename'] 	= FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+			$data['QR'] 			= $this->ciqrcode->generate($params);
+            $this->Mvalidasiteknis->insertDataValidasi($datavalidasi);
             $this->Mvalidasiteknis->updateProgress($dataStatus, $id);
             $this->Mglobals->setDatakol('th_data_konsultasi', $data);
         }
-        $email = "$email";
-        $no_konsultasi = "$no_konsultasi";
-        $ket    = "$ket";
-        //$catatan = "$catatan";
-        $subject     = "Status Progress Permohonan $no_konsultasi";
-        $text         = "";
+        $email          = "$email";
+        $no_konsultasi  = "$no_konsultasi";
+        $ket            = "$ket";
+        $subject        = "Status Progress Permohonan $no_konsultasi";
+        $text           = "";
         $text .= "Yth Bapak/Ibu,<br>";
         $text .= "<br>";
         $text .= "Dengan ini kami memberitahukan bahwa Permohonan dengan No.Registrasi $no_konsultasi <br>";
@@ -298,20 +407,38 @@ class ValidasiTeknis extends CI_Controller
     }
     public function RollbackKadisEksis()
     {
-        $id    = $this->uri->segment(3);
-        $pernyataan = '1';
-        $tgl_skrg     = date('Y-m-d');
+        $id             = $this->uri->segment(3);
+		$data['id']     = $id;
+        $pernyataan     = '1';
+        $tgl_skrg       = date('Y-m-d');
+		$DataVal        = $this->Mvalidasiteknis->getdatapermohonan($id)->row_array();
+        $imb            = $DataVal['imb'];
+		
         if ($pernyataan == '1') {
-            $data    = array(
-                'status' => '9',
-            );
-            $datalog    = [
-                'id' => $id,
-                'tgl_status' => $tgl_skrg,
-                'status' => '5',
-                'catatan' => 'Kabid/Kasie melakukan Mengembalikan Permohonan  Ke Tahap Perhitungan Retribusi',
-                'modul' => 'Permohonan Dikembalikan ke Tahap Perhitungan Retribusi'
-            ];
+			if($imb == '1'){
+				$data    = array(
+					'status' => '6',
+				);
+				 $datalog    = [
+					'id' => $id,
+					'tgl_status' => $tgl_skrg,
+					'status' => '5',
+					'catatan' => 'Kabid/Kasie melakukan Mengembalikan Permohonan  Ke Tahap Input Hasil Konsultasi',
+					'modul' => 'Permohonan Dikembalikan ke Tahap Perhitungan Retribusi'
+				];
+			}else{
+				$data    = array(
+					'status' => '9',
+				);
+				 $datalog    = [
+					'id' => $id,
+					'tgl_status' => $tgl_skrg,
+					'status' => '5',
+					'catatan' => 'Kabid/Kasie melakukan Mengembalikan Permohonan  Ke Tahap Perhitungan Retribusi',
+					'modul' => 'Permohonan Dikembalikan ke Tahap Perhitungan Retribusi'
+				];
+			}
+           
             $this->Mglobals->setData('tmdatabangunan', $data, 'id', $id);
             $this->Mvalidasiteknis->removeDataRetribusi($id);
             $this->Mglobals->setDatakol('th_data_konsultasi', $datalog);
@@ -342,6 +469,17 @@ class ValidasiTeknis extends CI_Controller
         $imb                = $DataVal['imb'];
         $email              = $DataVal['email'];
         $no_konsultasi      = $DataVal['no_konsultasi'];
+        $id_dki             = $DataVal['id_dki'];
+        if($id_dki !=1){
+            $ttd                = $this->Mvalidasiteknis->get_pejabat($id);
+        }else{
+            $ttd                = $this->Mvalidasiteknis->get_pejabat_dki($id);
+        }
+        $ttd_pejabat_sk     = $ttd['kepala_dinas'];
+        $nip_kadis_teknis   = $ttd['nip_kepala_dinas'];
+        $nm_dinas           = $ttd['p_nama_dinas'];
+        $stat_pejabat       = $ttd['status_pejabat'];
+        $no_sppst 			= $this->No_Sppst($id);
         if ($imb != '1') {
             $ket = "Proses masuk Ke Dinas Perizinan Untuk Penagihan Retribusi";
         } else {
@@ -350,38 +488,78 @@ class ValidasiTeknis extends CI_Controller
         if (trim($id) != '') {
             if ($imb != '1') {
                 $dataStatus = array(
-                    'status' => 11,
+                    'status'    => 11,
+                    'id_sk'     => 1,
                 );
                 $data    = array(
-                    'tgl_status' => $tgl_skrg,
-                    'status' => '11',
+                    'tgl_status'    => $tgl_skrg,
+                    'status'        => '11',
+                    'id'            => $id,
+                    'catatan'       => "Telah Selesai di Validasi Kepala Dinas Teknis dan Masuk Ke Proses Penagihan Retribusi",
+                    'user_id'       => $user_id,
+                    'modul'         => 'Validasi Kepala Dinas Teknis'
+                );
+                $datavalidasi   = array(
                     'id' => $id,
-                    'catatan' => "Telah Selesai di Validasi Kepala Dinas Teknis dan Masuk Ke Proses Penagihan Retribusi",
-                    'user_id' => $user_id,
-                    'modul' => 'Validasi Kepala Dinas Teknis'
+                    'tgl_validasi'  => $tgl_skrg,
+                    'stat_pejabat'  => $stat_pejabat,
+                    'nip_kadis'     => $nip_kadis_teknis,
+                    'nama_kadis'    => $ttd_pejabat_sk,
+                    'nama_dinas'    => $nm_dinas,
+                    'no_sppst'      => $no_sppst,
+                    'stat_sppst'    => '1',
+                    'post_date'     => $tgl_skrg,
+                    'post_by'       => $user_id,
                 );
             } else {
                 $dataStatus = array(
-                    'status' => 13,
+                    'status'    => 13,
+                    'id_sk'     => 1,
                 );
                 $data    = array(
-                    'tgl_status' => $tgl_skrg,
-                    'status' => '13',
+                    'tgl_status'    => $tgl_skrg,
+                    'status'        => '13',
+                    'id'            => $id,
+                    'catatan'       => "Telah Selesai di Validasi Kepala Dinas Teknis dan akan di Validasi Kepala Dinas Perizinan",
+                    'user_id'       => $user_id,
+                    'modul'         => 'Validasi Kepala Dinas Teknis'
+                );
+                $datavalidasi   = array(
                     'id' => $id,
-                    'catatan' => "Telah Selesai di Validasi Kepala Dinas Teknis dan akan di Validasi Kepala Dinas Perizinan",
-                    'user_id' => $user_id,
-                    'modul' => 'Validasi Kepala Dinas Teknis'
+                    'tgl_validasi'  => $tgl_skrg,
+                    'stat_pejabat'  => $stat_pejabat,
+                    'nip_kadis'     => $nip_kadis_teknis,
+                    'nama_kadis'    => $ttd_pejabat_sk,
+                    'nama_dinas'    => $nm_dinas,
+                    'no_sppst'      => $no_sppst,
+                    'stat_sppst'    => '1',
+                    'post_date'     => $tgl_skrg,
+                    'post_by'       => $user_id,
                 );
             }
+            $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+			$config['imagedir']     = 'object-storage/dekill/QR_Code/'; //direktori penyimpanan qr code
+			$config['quality']      = true; //boolean, the default is true
+			$config['size']         = '1024'; //interger, the default is 1024
+			$config['black']        = array(224,255,255); // array, default is array(255,255,255)
+			$config['white']        = array(70,130,180); // array, default is array(0,0,0)
+			$this->ciqrcode->initialize($config);
+			$image_name				= $no_sppst.'.png'; //buat name dari qr code sesuai dengan nim
+			$params['data'] 		= 'https://simbg.pu.go.id/Main/Retribusi/'.$no_sppst; //data yang akan di jadikan QR CODE
+			$params['level'] 		= 'H'; //H=High
+			$params['size'] 		= 10;
+			$params['savename'] 	= FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+			$data['QR'] 			= $this->ciqrcode->generate($params);
+            $this->Mvalidasiteknis->insertDataValidasi($datavalidasi);
             $this->Mvalidasiteknis->updateProgress($dataStatus, $id);
             $this->Mglobals->setDatakol('th_data_konsultasi', $data);
         }
-        $email = "$email";
-        $no_konsultasi = "$no_konsultasi";
-        $ket    = "$ket";
+        $email          = "$email";
+        $no_konsultasi  = "$no_konsultasi";
+        $ket            = "$ket";
         //$catatan = "$catatan";
-        $subject     = "Status Progress Permohonan $no_konsultasi";
-        $text         = "";
+        $subject        = "Status Progress Permohonan $no_konsultasi";
+        $text           = "";
         $text .= "Yth Bapak/Ibu,<br>";
         $text .= "<br>";
         $text .= "Dengan ini kami memberitahukan bahwa Permohonan dengan No.Registrasi $no_konsultasi <br>";
@@ -406,11 +584,11 @@ class ValidasiTeknis extends CI_Controller
                 'status' => '9',
             );
             $datalog    = [
-                'id' => $id,
-                'tgl_status' => $tgl_skrg,
-                'status' => '5',
-                'catatan' => 'Kabid/Kasie melakukan Mengembalikan Permohonan  Ke Tahap Perhitungan Retribusi',
-                'modul' => 'Permohonan Dikembalikan ke Tahap Perhitungan Retribusi'
+                'id'            => $id,
+                'tgl_status'    => $tgl_skrg,
+                'status'        => '5',
+                'catatan'       => 'Kabid/Kasie melakukan Mengembalikan Permohonan  Ke Tahap Perhitungan Retribusi',
+                'modul'         => 'Permohonan Dikembalikan ke Tahap Perhitungan Retribusi'
             ];
             $this->Mglobals->setData('tmdatabangunan', $data, 'id', $id);
             $this->Mvalidasiteknis->removeDataRetribusi($id);
@@ -446,7 +624,8 @@ class ValidasiTeknis extends CI_Controller
         $ket                = "Proses masuk Ke Dinas Perizinan Untuk Penagihan Retribusi";
         if (trim($id) != '') {
                 $dataStatus = array(
-                    'status' => 11,
+                    'status'    => 11,
+                    'id_sk'     => 1,
                 );
                 $data    = array(
                     'tgl_status' => $tgl_skrg,
@@ -488,3 +667,4 @@ class ValidasiTeknis extends CI_Controller
         $this->load->view('kosong', $data);
     }
 }
+ 

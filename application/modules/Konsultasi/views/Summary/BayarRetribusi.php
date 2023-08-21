@@ -42,20 +42,21 @@
                               </div>
                             </div>
                           </div>
-                         <div class="col-md-12 upload-retribusi">
+                        <div class="col-md-12 upload-retribusi">
                           <div class="form-group">
                             <label class="control-label col-md-4" style="text-align:left;">SKRD</label>
                             <div class="col-md-4"> 
                               <?php
                                 $filename = FCPATH . "object-storage/dekill/Retribution/$skrd->dir_file_penagihan";
-                                  $dir = '';
-                                  if (file_exists($filename)) {
-                                    $dir = base_url('object-storage/dekill/Retribution/' . $skrd->dir_file_penagihan);
-                                  } else {
-                                    $dir = base_url('object-storage/file/Konsultasi/' . $id . '/SKRD/' . $skrd->dir_file_penagihan);
-                                  }
-                                  ?>
-                                  <a href="javascript:void(0);" onClick="javascript:popWin('<?php echo $dir; ?>')" class="btn default btn-xs blue-stripe">Berkas SKRD</a>
+                                $dir = '';
+                                if (file_exists($filename)) {
+                                  $dir = './object-storage/dekill/Retribution/' . $skrd->dir_file_penagihan;
+                                } else {
+                                  $dir = './object-storage/file/Konsultasi/' . $id . '/SKRD/' . $skrd->dir_file_penagihan;
+                                }
+                                $dirRetri	= $this->Outh_model->Encryptor('encrypt', $dir);
+                              ?>
+                              <a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/' . $dirRetri); ?>">Lihat</a>
                             </div>
                           </div>
                         </div>

@@ -4,9 +4,7 @@
 			<div class="panel-heading">
 				<h2 class="panel-title"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_SK"><b>Hapus Data Permohonan PBG/SLF</b></a></h2>
 			</div>
-			<?php
-						echo ($this->session->flashdata('message') != '') ? '<div id="infoMessage" align="center" style="margin-bottom:0px;" class="alert alert-' . $this->session->flashdata('status') . '">' . $this->session->flashdata('message') . '</div>' : '';
-					?>
+			<?php echo ($this->session->flashdata('message') != '') ? '<div id="infoMessage" align="center" style="margin-bottom:0px;" class="alert alert-' . $this->session->flashdata('status') . '">' . $this->session->flashdata('message') . '</div>' : ''; ?>
 			<div id="" class="panel-collapse collapse in">
 				<div class="panel-body">
 					<div class="form-group">
@@ -141,13 +139,10 @@
 		$('#id_bgn').val(id);
 		$('#ModalHapus').modal('show');
 	}
-
-
 	$('.item_hapus').on('click', function() {
 		alert($(this).attr('data-id'));
 		// get data from button edit
 		const id = $(this).data('id');
-
 		//Ajax Load data from ajax
 		$.ajax({
 			url: "<?php echo site_url('PerubahanData/popupFormDelete/') ?>/" + id,

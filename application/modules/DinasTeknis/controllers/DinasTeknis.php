@@ -70,14 +70,44 @@ class DinasTeknis extends CI_Controller
 		$data['heading']	=	'';
 		$this->load->view('backend_adm', $data);
 	}
-
-	public function VerifikasiBGH()
-	{
-		header('Location:https://bios-studio.com/bgh/verifikator/');
-	}
 	//End List Data Verifikasi Operator
 	//Begin Form Verifikasi Kelengkapan Dokumen
 	public function FormVerifikasi()
+	{
+		$id 					= $this->uri->segment(3);
+		$id 					= $this->secure->decrypt_url($id);
+		//$data['id']			= $id;
+		$data['id']				= $id;
+		$query 					= $this->MDinasTeknis->getDataVerifikator($id);
+		$data['data'] 			= $query->row();
+		$bangunan				= $this->MDinasTeknis->getDataBangunan($id);
+		$data['bangunan']		= $bangunan->row();
+		
+		/*$bangunanKu 					= $this->MDinasTeknis->getDataRecord($id);
+		$id_jenis_permohonan 	= $bangunanKu['id_jenis_permohonan'];
+		$id_izin 				= $bangunanKu['id_izin'];
+		$File_Protype 			= $bangunanKu['dir_file'];*/
+		
+		$data['DataTanah']		= $this->MDinasTeknis->getTanahVerifikasi($id);
+		$data['History']		= $this->MDinasTeknis->getHistoryVerifikasi($id);
+		$this->getDataTanah();
+		$this->getDataUmum();
+		$this->getDataArsitektur();
+		$this->getDataStruktur();
+		$this->getDataMEP();
+		//$data['content']	= $this->load->view('Verifikasi/FormVerifikasi', $data, TRUE);
+		//$data['title']		=	'';
+		//$data['heading']	=	'';
+		//$this->load->view('backend_adm', $data);
+		
+		$data['content']	= $this->load->view('Verifikasi/FormVerifikasi', $data, TRUE);
+		$data['title']		=	'';
+		$data['heading']	=	'';
+		$this->load->view('template_pengajuan', $data);
+		
+		//$this->load->view('Verifikasi/FormVerifikasi', $data);
+	}
+	public function FormVerifikasi1()
 	{
 		$id 				= $this->uri->segment(3);
 		$data['id']			= $id;
@@ -127,6 +157,7 @@ class DinasTeknis extends CI_Controller
 	function getDataTanah()
 	{
 		$id = $this->uri->segment('3');
+		$id 					= $this->secure->decrypt_url($id);
 		$data['id'] = $id;
 		$permohonan = $this->MDinasTeknis->getJenisKonsultasi($id)->row_array();
 		$id_j_per = $permohonan['id_jenis_permohonan'];
@@ -151,6 +182,7 @@ class DinasTeknis extends CI_Controller
 	function getDataUmum()
 	{
 		$id = $this->uri->segment('3');
+		$id 					= $this->secure->decrypt_url($id);
 		$data['id'] = $id;
 		$permohonan = $this->MDinasTeknis->getJenisKonsultasi($id)->row_array();
 		$id_j_per = $permohonan['id_jenis_permohonan'];
@@ -175,6 +207,7 @@ class DinasTeknis extends CI_Controller
 	public function getDataArsitektur()
 	{
 		$id 		= $this->uri->segment('3');
+		$id 		= $this->secure->decrypt_url($id);
 		$data['id'] = $id;
 		$permohonan = $this->MDinasTeknis->getJenisKonsultasi($id)->row_array();
 		$id_j_per 	= $permohonan['id_jenis_permohonan'];
@@ -199,6 +232,7 @@ class DinasTeknis extends CI_Controller
 	public function getDataStruktur()
 	{
 		$id = $this->uri->segment('3');
+		$id 					= $this->secure->decrypt_url($id);
 		$data['id'] = $id;
 		$permohonan = $this->MDinasTeknis->getJenisKonsultasi($id)->row_array();
 		$id_j_per = $permohonan['id_jenis_permohonan'];
@@ -236,6 +270,7 @@ class DinasTeknis extends CI_Controller
 	public function getDataMEP()
 	{
 		$id = $this->uri->segment('3');
+		$id 					= $this->secure->decrypt_url($id);
 		$data['id'] = $id;
 		$permohonan = $this->MDinasTeknis->getJenisKonsultasi($id)->row_array();
 		$id_j_per = $permohonan['id_jenis_permohonan'];
@@ -395,8 +430,10 @@ class DinasTeknis extends CI_Controller
 		$filean = $this->input->post('dir_dokumen');
 		$thisdir = getcwd();
 		$dirPath = $thisdir . "/object-storage/dekill/Consultation/";
+		if (!file_exists($dirPath)) {
+		}
 		$config['upload_path'] 		= $dirPath;
-		$config['allowed_types'] 	= 'pdf|png|jpg';
+		$config['allowed_types'] 	= 'pdf|png|jpg|PDF';
 		$config['max_size']			= '50240';
 		$config['remove_spaces']	= False;
 		$config['encrypt_name']		= TRUE;
@@ -421,26 +458,26 @@ class DinasTeknis extends CI_Controller
 		if ($status == '1') {
 			if($id_kabkot == '31'){
 				$data	= array(
-					'tgl_status' => $tgl_skrg,
-					'status' => '4',
-					'id_dki' => '1',
-					'no_surat' => $no_surat,
-					'id' => $id_pemilik,
-					'catatan' => $catatan,
-					'dir_file' => $filean,
-					'user_id' => $user_id,
-					'modul' => 'verifikasi'
+					'tgl_status' 	=> $tgl_skrg,
+					'status' 		=> '4',
+					'id_dki' 		=> '1',
+					'no_surat' 		=> $no_surat,
+					'id' 			=> $id_pemilik,
+					'catatan' 		=> $catatan,
+					'dir_file' 		=> $filean,
+					'user_id' 		=> $user_id,
+					'modul' 		=> 'verifikasi'
 				);
 			}else{
 				$data	= array(
-					'tgl_status' => $tgl_skrg,
-					'status' => '4',
-					'no_surat' => $no_surat,
-					'id' => $id_pemilik,
-					'catatan' => $catatan,
-					'dir_file' => $filean,
-					'user_id' => $user_id,
-					'modul' => 'verifikasi'
+					'tgl_status' 	=> $tgl_skrg,
+					'status' 		=> '4',
+					'no_surat' 		=> $no_surat,
+					'id'			=> $id_pemilik,
+					'catatan' 		=> $catatan,
+					'dir_file' 		=> $filean,
+					'user_id' 		=> $user_id,
+					'modul' 		=> 'verifikasi'
 				);
 			}
 		} else {
@@ -503,6 +540,99 @@ class DinasTeknis extends CI_Controller
 		redirect('DinasTeknis/Verifikasi');
 	}
 	// End Verifikasi Operator
+	public function status_dt_teknis_bertahap()
+	{
+		$user_id		= $this->session->userdata('loc_user_id');
+		$user_id		= $this->Outh_model->Encryptor('decrypt', $user_id);
+		$status			= $this->input->post('status_syarat');
+		$no_surat		= $this->input->post('no_surat');
+		$catatan		= $this->input->post('catatan');
+		$id_pemilik		= $this->input->post('id_pemilik');
+		$email			= $this->input->post('email');
+		$no_konsultasi	= $this->input->post('no_konsultasi');
+		$tgl_skrg 		= date('Y-m-d');
+		if ($status == '2') {
+			$ket = "Dikembalikan ke Pemohon agar di perbaiki/dilengkapi";
+		} else if ($status == '1') {
+			$ket = "Sudah Lengkap dan akan masuk ketahap Penugasan TPT/TPA";
+		} else {
+			$ket = "Belum ditentukan";
+		}
+		$filean = $this->input->post('dir_dokumen');
+		$thisdir = getcwd();
+		$dirPath = $thisdir . "/object-storage/dekill/Consultation/";
+		if (!file_exists($dirPath)) {
+		}
+		$config['upload_path'] 		= $dirPath;
+		$config['allowed_types'] 	= 'pdf|PDF';
+		$config['max_size']			= '50240';
+		$config['encrypt_name'] 	=  TRUE;
+		$config['remove_spaces']	= False;
+		$this->load->library('upload', $config);
+		$this->upload->initialize($config);
+		$file = preg_replace("/[^a-zA-Z0-9.]/", "", $_FILES["dir_file"]['name']);
+		if ($_FILES["dir_file"]["name"]) {
+			$config["file_name"] = $file;
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+			$dir_file = $this->upload->do_upload('dir_file');
+			$filean = $this->upload->data();
+			$filean = $filean['file_name'];
+			if (!$dir_file) {
+				$data['err_msg'] = $this->upload->display_errors('', '');
+				$this->session->set_flashdata('message', 'Jenis Berkas atau Ukuran Berkas tidak Sesuai !');
+				$this->session->set_flashdata('status', 'warning');
+				redirect('DinasTeknis/VerifikasiBertahap');
+			}
+		}
+		if ($status == '1') {
+			$data	= array(
+				'tgl_status' => $tgl_skrg,
+				'status' => '4',
+				'no_surat' => $no_surat,
+				'id' => $id_pemilik,
+				'catatan' => $catatan,
+				'dir_file' => $filean,
+				'user_id' => $user_id,
+				'modul' => 'verifikasi'
+			);
+		} else {
+			$data	= array(
+				'tgl_status' => $tgl_skrg,
+				'status' => '3',
+				'no_surat' => $no_surat,
+				'id' => $id_pemilik,
+				'catatan' => $catatan,
+				'dir_file' => $filean,
+				'user_id' => $user_id,
+				'modul' => 'verifikasi'
+			);
+		}
+		$this->Mglobals->setData('tmdatabangunan', ['status' => $data['status']], 'id', $id_pemilik);
+		$this->Mglobals->setDatakol('th_data_konsultasi', $data);
+		$this->session->set_flashdata('message', 'Data User Berhasil di Diperbaharui.');
+		$this->session->set_flashdata('status', 'success');
+		$email = "$email";
+		$no_konsultasi = "$no_konsultasi";
+		$catatan = "$catatan";
+		$subject 	= "Status Verifikasi $no_konsultasi";
+		$text 		= "";
+		$text .= "Yth Bapak/Ibu,<br>";
+		$text .= "<br>";
+		$text .= "Dengan ini kami memberitahukan bahwa Permohonan dengan No.Registrasi $no_konsultasi <br>";
+		$text .= "Dengan keterangan $ket<br>";
+		$text .= "Catatan : $catatan";
+		$text .= "<br>";
+		$text .= "<br>";
+		$text .= "Hormat Kami <br>";
+		$text .= "Admin SIMBG ";
+		if ($status == '1') {
+			$this->simbg_lib->sendEmail($email, $subject, $text);
+		} else {
+			$this->simbg_lib->sendEmail($email, $subject, $text);
+		}
+		redirect('DinasTeknis/VerifikasiBertahap');
+	}
 	// Begin Konsultasi Dokumen
 	public function cetak()
 	{

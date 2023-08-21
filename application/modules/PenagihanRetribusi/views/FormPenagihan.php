@@ -109,6 +109,55 @@
                         </div>
                     </div>
                 <?php } ?>
+                <div class="sistem-retribusi">
+                    <h5 class="caption-subject font-red bold uppercase">Detail Konsultasi Teknis</h5>
+					<!--<div class="row static-info">
+                        <div class="col-md-4 name"></b>Berita Acara Konsultasi</b></div>
+                        <div class="col-md-8 value parameter-fungsi"></div>
+                    </div>
+					<div class="row static-info">
+                        <div class="col-md-4 name">&nbsp;&nbsp;1. No. berita Acara Konsultasi</div>
+                        <div class="col-md-8 value parameter-fungsi">
+							<?php echo "{$databgn->no_sppst}"; ?>
+						</div>
+                    </div>
+					<div class="row static-info">
+                        <div class="col-md-4 name">&nbsp;&nbsp;2. Tgl. Berita Acara</div>
+                        <div class="col-md-8 value parameter-fungsi"></div>
+                    </div>
+					<div class="row static-info">
+                        <div class="col-md-4 name">&nbsp;&nbsp;3. Dokumen Berita Acara</div>
+                        <div class="col-md-8 value parameter-fungsi">
+						
+						</div>
+                    </div>-->
+					<div class="row static-info">
+                        <div class="col-md-9 name"></b>Surat Pernyataan Pemenuhan Standar Teknis (SPPST)</b></div>
+                        <div class="col-md-8 value parameter-fungsi"></div>
+                    </div>
+					<div class="row static-info">
+                        <div class="col-md-4 name">&nbsp;&nbsp;1. No. SPPST</div>
+                        <div class="col-md-8 value parameter-fungsi">
+							<?php echo "{$databgn->no_sppst}"; ?>
+						</div>
+                    </div>
+					<div class="row static-info">
+                        <div class="col-md-4 name">&nbsp;&nbsp;2. Tgl. SSPST</div>
+                        <div class="col-md-8 value parameter-fungsi">
+							<?php
+								$tgl_validasi = tgl_eng_to_ind($databgn->tgl_validasi);
+							?>
+							 <?php echo "{$tgl_validasi}"; ?>
+						</div>
+                    </div>
+					<div class="row static-info">
+                        <div class="col-md-4 name">&nbsp;&nbsp;3. Dokumen SSPST</div>
+                        <div class="col-md-8 value parameter-fungsi">
+							    <a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url('Dokumen/CetakVerifikasiBgnBaru/' . $databgn->id); ?>')" class="btn default btn-md blue-stripe">Lihat SPPST</a>   
+						</div>
+                    </div>
+				</div>
+
                 <?php if ($databgn->status_perhitungan == null) { ?>
 
                 <?php } else { ?>
@@ -241,13 +290,14 @@
 								$oldFIle = FCPATH . 'object-storage/file/konsultasi/' . $databgn->id . '/retribusi/berkas_retribusi/' . $databgn->file_retribusi;;
 								$dir = '';
 								if (file_exists($oldFIle)) {
-									$dir = 'object-storage/file/konsultasi/' . $id . '/retribusi/berkas_retribusi/' . $databgn->file_retribusi;
+									$dir = './object-storage/file/konsultasi/' . $id . '/retribusi/berkas_retribusi/' . $databgn->file_retribusi;
 								} else {
-									$dir = 'object-storage/dekill/Retribution/' . $databgn->file_retribusi;
+									$dir = './object-storage/dekill/Retribution/' . $databgn->file_retribusi;
 								}
+                                $dirRetribusi	= $this->Outh_model->Encryptor('encrypt', $dir);
 								?>
-                                <a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url($dir); ?>')" class="btn default btn-xs blue-stripe">Lihat Perhitungan Retribusi</a>
-                            </div>
+                                <a href="#PDFViewer" role="button" class="open-PDFViewer btn default btn-xs blue-stripe" data-toggle="modal" data-id="<?php echo site_url('Docreader/ReaderDok/'.$dirRetribusi); ?>">Lihat</a>
+							</div>
                         </div>
                     <?php endif; ?>
                     <!-- end update penerbitan retribusi otomaatis -->
@@ -297,13 +347,15 @@
                                 <div class="input-group"><br>
                                     <span class="input-group-addon"><i class="fa fa-file-pdf-o"></i></span>
                                     <?php if (isset($dir_file_penagihan) != '' or $dir_file_penagihan != null) { 
-                                        $oldFIle = FCPATH . 'object-storage/file/Konsultasi/' . $id . '/SKRD/' . $dir_file_penagihan;
+                                        
+                                        $oldFIle = FCPATH . 'object-storage/dekill/Retribution/'. $dir_file_penagihan;
                                         $dirf = '';
                                         if (file_exists($oldFIle)) {
-                                            $dirf = 'object-storage/file/Konsultasi/' . $id . '/SKRD/' . $dir_file_penagihan;
-                                        } else {
                                             $dirf = 'object-storage/dekill/Retribution/' . $dir_file_penagihan;
-                                        } ?>
+                                        } else {
+                                            $dirf = 'object-storage/file/Konsultasi/' . $id . '/SKRD/' . $dir_file_penagihan;
+                                        } 
+                                        ?>
                                         <a href="javascript:void(0);" onClick="javascript:popWin('<?php echo base_url($dirf); ?>')" class="btn default btn-xs blue-stripe">Lihat SKRD</a>
                                         <?php } else { ?>
                                         <input style="display: none;" name="dir_file" id="dir_file" onchange='cekik()'>
@@ -325,8 +377,22 @@
     </div>
     <!-- End Penagihan -->
 </div>
-
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%">
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+		<div class="modal-footer">
+			<button type="button" data-dismiss="modal" class="btn btn-primary"><i class="fa fa-sign-out"></i> Tutup</button>
+		</div>
+	</div>
+</div>
 <script type="text/javascript">
+    $(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
     function popWin(x) {
         url = x;
         swin = window.open(url, 'win', 'scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');

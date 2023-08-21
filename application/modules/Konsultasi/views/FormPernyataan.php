@@ -5,44 +5,7 @@
                 <div class="caption">Data Konsultasi</div>
             </div>
             <div class="portlet box blue">
-                <div class="portlet-body form">
-                    <form class="form-horizontal">
-                        <div class="form-body">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">Nama Permohonan :</label>
-                                        <div class="col-md-8">
-                                             <p class="form-control-static"><?php echo $DataBangunan->nm_konsultasi; ?></p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">Nama Pemilik :</label>
-                                        <div class="col-md-8">
-                                            <p class="form-control-static"><?php echo $DataPemilik->nm_pemilik; ?></p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">Alamat Pemilik Bangunan :</label>
-                                        <div class="col-md-9">
-                                            <p class="form-control-static">
-                                                <?php echo $DataPemilik->alamat; ?>, Kec. <?php echo $DataPemilik->nama_kecamatan; ?>, <?php echo ucwords(strtolower($DataPemilik->nama_kabkota)); ?>, Prov. <?php echo $DataPemilik->nama_provinsi; ?>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">Lokasi Bangunan Gedung :</label>
-                                        <div class="col-md-9">
-                                            <p class="form-control-static">
-                                                <?php echo $DataBangunan->almt_bgn; ?>, Kec. <?php echo $DataBangunan->nama_kecamatan; ?>, <?php echo ucwords(strtolower($DataBangunan->nama_kabkota)); ?>, Prov. <?php echo $DataBangunan->nama_provinsi; ?>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+            <?php $this->load->view('HeaderData') ?>
                 <div class="portlet box blue-hoki">
                     <div class="portlet-title">
                         <div class="caption">Konfirmasi Pernyataan Permohonan</div>
@@ -69,8 +32,9 @@
                                     - Apabila di kemudian hari terjadi kesalahan terhadap data yang saya sampaikan, maka saya bersedia menerima sanksi sesuai peraturan perundang-undangan.<br>
                             </h5></b>
                         </div>
+                        <?php echo ($this->session->flashdata('message') != '') ? '<div id="infoMessage" align="center" class="alert alert-' . $this->session->flashdata('status') . '">' . $this->session->flashdata('message') . '</div>' : ''; ?>
                         <div class="col-md-12 note note-success">
-                             <left>
+                            <left>
                                 <h4><b><input type="checkbox" name="dir_1" id="dir_1" value="1"> Pernyataan mematuhi KRK/KKPR</h4></b>
                             </left>
                             <left>

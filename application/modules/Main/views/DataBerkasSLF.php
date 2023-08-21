@@ -17,17 +17,37 @@
                 $luas_bg = $luas_bgp;
                 $tinggi_bg = $tinggi_bgp;
                 $fungsi = "Prasarana";
-              } else {
+              } else if($id_jenis_permohonan =='14'){
+                  if($permohonan_slf =='1'){
+                    $luas_bg = $luas_bgn;
+                    $tinggi_bg = $tinggi_bgn;
+                    $fungsi = $fungsi_bg;
+                  } else if($permohonan_slf =='2'){
+                    $luas_bg = $luas_bgp;
+                    $tinggi_bg = $tinggi_bgp;
+                    $fungsi = "Prasarana";
+                  }  else if($permohonan_slf =='3'){
+                    $luas_bg = $luas_bgp;
+                    $tinggi_bg = $tinggi_bgp;
+                    $fungsi = "Usaha";
+                  }
+              }else{
                 $luas_bg = $luas_bgn;
                 $tinggi_bg = $tinggi_bgn;
                 $fungsi = $fungsi_bg;
-              } ?>
+              } 
+              if($no_imb =='' || $no_imb == null){
+                $sk_imb = $no_izin_pbg;
+              }else{
+                $sk_imb = $no_imb;
+              }
+              ?>
+              
           <li> <i class="m-icon-swapright m-icon-black"></i>Nama Pemilik : <?=(isset($nama) ? $nama : 'Nama Pemilik : -');?></li>
-          <li> <i class="m-icon-swapright m-icon-black"></i> <?=(isset($fungsi_bg) ? $fungsi_bg : 'Fungsi Bangunan Gedung : -')?> </li>
+          <li> <i class="m-icon-swapright m-icon-black"></i> Fungsi Bangunan : <?=(isset($fungsi) ? $fungsi : 'Fungsi Bangunan Gedung : -')?> </li>
           <li> <i class="m-icon-swapright m-icon-black"></i> <?=(isset($nama_bangunan) ? $nama_bangunan : 'Nama Bangunan : -')?></li>
           <li> <i class="m-icon-swapright m-icon-black"></i>Lokasi Bangunan Gedung : <?=(isset($alamat_bg)? $alamat_bg : 'Lokasi Bangunan : -') ;?></li>
-          <li> <i class="m-icon-swapright m-icon-black"></i>No IMB/PBG : <?=(isset($no_imb) ? $no_imb : 'No Izin PBG: -');?></li>
-        
+          <li> <i class="m-icon-swapright m-icon-black"></i>No IMB/PBG : <?=(isset($sk_imb) ? $sk_imb : 'No Izin PBG: -');?></li>
           <?php if($id_jenis_permohonan =='11' || $id_jenis_permohonan =='29' || $id_jenis_permohonan =='30' || $id_jenis_permohonan =='31' || $id_jenis_permohonan =='32' || $id_jenis_permohonan =='33'){ ?>
                 <h4><b>Data Bangunan Kolektif</b></h4>
                 <table class="table table-striped table-bordered dt-responsive wrap" id="tipe_bgn">
@@ -90,8 +110,23 @@
                     </tr>
                   <?php } ?>
                 </table> 
+              <?php } else if($id_jenis_permohonan == '14'){ 
+                  if($permohonan_slf == '1'){ ?>
+                    <li> <i class="m-icon-swapright m-icon-black"></i>Luas Bangunan : <?=(isset($luas_bg )? $luas_bg : '-') ;?> m<sup>2</sup></li>
+                    <li> <i class="m-icon-swapright m-icon-black"></i>Tinggi Bangunan : <?=(isset($tinggi_bg)? $tinggi_bg : '-') ;?> Meter</li>
+                    <li> <i class="m-icon-swapright m-icon-black"></i>Jumlah Lantai : <?=(isset($jml_lantai)? $jml_lantai : '-') ;?> Lantai</li>
+                 <?php }else if($permohonan_slf =='2'){ ?>
+                    <li> <i class="m-icon-swapright m-icon-black"></i>Luas Bangunan Prasarana : <?=(isset($luas_bgp )? $luas_bgp : '-') ;?> m<sup>2</sup></li>
+                    <li> <i class="m-icon-swapright m-icon-black"></i>Tinggi Bangunan Prasarana: <?=(isset($tinggi_bgp)? $tinggi_bgp : '-') ;?> Meter</li>
+                    <li> <i class="m-icon-swapright m-icon-black"></i>Jumlah Lantai : <?=(isset($jml_lantai)? $jml_lantai : '-') ;?> Lantai</li>
+                 <?php }else if($permohonan_slf == '3'){ ?>
+                    <li> <i class="m-icon-swapright m-icon-black"></i>Luas Bangunan  : <?=(isset($luas_bgp )? $luas_bgp : '-') ;?> m<sup>2</sup></li>
+                    <li> <i class="m-icon-swapright m-icon-black"></i>Tinggi Bangunan : <?=(isset($tinggi_bgp)? $tinggi_bgp : '-') ;?> Meter</li>
+                    <li> <i class="m-icon-swapright m-icon-black"></i>Jumlah Lantai : <?=(isset($jml_lantai)? $jml_lantai : '-') ;?> Lantai</li>
+                 <?php } ?>
+               
               <?php } else { ?>
-              <li> <i class="m-icon-swapright m-icon-black"></i>Luas Bangunan : <?=(isset($luas_bg)? $luas_bg : '-') ;?> m<sup>2</sup></li>
+              <li> <i class="m-icon-swapright m-icon-black"></i>Luas Bangunan : <?=(isset($luas_bg )? $luas_bg : '-') ;?> m<sup>2</sup></li>
               <li> <i class="m-icon-swapright m-icon-black"></i>Tinggi Bangunan : <?=(isset($tinggi_bg)? $tinggi_bg : '-') ;?> Meter</li>
               <li> <i class="m-icon-swapright m-icon-black"></i>Jumlah Lantai : <?=(isset($jml_lantai)? $jml_lantai : '-') ;?> Lantai</li>
             <?php } ?> 
@@ -100,10 +135,17 @@
       </ul>
 		  <br>
       <h3><b>Data Pejabat</b></h3>
+	  <?php if($id_dki =='1'){
+			$nama_kadis 		="Heru Hermawanto";
+			$nip_kepala_dinas 	="196803121998031010";
+	  }else{
+			$nama_kadis 		= $nm_kadis;
+			$nip_kepala_dinas 	= $nip_kadis;
+	  } ?>
       <ul>
         <b>
-          <li> <i class="m-icon-swapright m-icon-black"></i>Nama Kepala Dinas : <?=(isset($nm_kadis) ? $nm_kadis : 'Nama Kepala Dinas : -');?></li>
-          <li> <i class="m-icon-swapright m-icon-black"></i>Nip. Kepala Dinas : <?=(isset($nip_kadis) ? $nip_kadis : 'NIP. Kepala Dinas : -')?> </li>
+          <li> <i class="m-icon-swapright m-icon-black"></i>Nama Kepala Dinas : <?=(isset($nama_kadis) ? $nama_kadis : 'Nama Kepala Dinas : -');?></li>
+          <li> <i class="m-icon-swapright m-icon-black"></i>Nip. Kepala Dinas : <?=(isset($nip_kepala_dinas) ? $nip_kepala_dinas : 'NIP. Kepala Dinas : -')?> </li>
         </b>
       </ul>
       <br><br>

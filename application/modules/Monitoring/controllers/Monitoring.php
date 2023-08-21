@@ -67,6 +67,36 @@ class Monitoring extends CI_Controller
 		$this->load->view('backend_adm', $data);
 	}
 
+	public function DataProvinsi()
+	{
+		$search = $this->input->post('search');
+		$id_kabkot	= $this->session->userdata('loc_id_kabkot');
+		$SQLcari 	= "";
+		if ($search != '') {
+			$SQLcari = array(
+				'id_fungsi_bg' => trim($this->input->post('id_fungsi_bg')),
+				'id_proses' => trim($this->input->post('id_proses')),
+				'tanggalawal' => trim($this->input->post('tanggalawal')),
+				'tanggalakhir' => trim($this->input->post('tanggalakhir'))
+			);
+			$this->session->set_userdata($SQLcari);
+			$data = array(
+				'id_fungsi_bg' => trim($this->input->post('id_fungsi_bg')),
+				'id_proses' => trim($this->input->post('id_proses')),
+				'tanggalawal' => trim(tgl_ind_to_eng($this->input->post('tanggalawal'))),
+				'tanggalakhir' => trim(tgl_ind_to_eng($this->input->post('tanggalakhir')))
+			);			
+		}
+		$data['fungsi'] = !empty($this->input->post('id_fungsi_bg'))? $this->input->post('id_fungsi_bg'):0;
+		$data['awal'] = !empty($this->input->post('tanggalawal'))? $this->input->post('tanggalawal'):0;
+		$data['akhir'] = !empty($this->input->post('tanggalakhir'))? $this->input->post('tanggalakhir'):0;
+		$data['Verifikasi'] = $this->Mmonitoring->getListVerifikatorBalai($SQLcari);
+		$data['content']	= $this->load->view('DataMonitoringBalai', $data, TRUE);
+		$data['title']		=	'';
+		$data['heading']	=	'';
+		$this->load->view('backend_adm', $data);
+	}
+
 	public function MonHapus()
 	{
 		$search = $this->input->post('search');
@@ -93,8 +123,6 @@ class Monitoring extends CI_Controller
 		$data['heading']	=	'';
 		$this->load->view('backend_adm', $data);
 	}
-
-	
 
 	public function removeDataPengajuan($id)
 	{

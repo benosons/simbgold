@@ -17,6 +17,8 @@ class SimbgServices extends RestController
         $this->load->model('SS_Model');
         // $this->key = $this->SimbgLibrary->authentication();
     }
+
+
     // authentication for API
     private function getAuth($userName, $userKey)
     {
@@ -27,6 +29,9 @@ class SimbgServices extends RestController
         $result = $this->SS_Model->getSecurityKey($where);
         return $result;
     }
+
+
+
     public function getDataIMB_get()
     {
         $username =  $this->input->get_request_header('userName', TRUE);
@@ -71,9 +76,9 @@ class SimbgServices extends RestController
 
     public function getDataPBGRow_get()
     {
-        $username =  $this->input->get_request_header('userName', TRUE);
-        $userkey =  $this->input->get_request_header('userKey', TRUE);
-        $getAuh = $this->getAuth($username, $userkey);
+        $username   =  $this->input->get_request_header('userName', TRUE);
+        $userkey    =  $this->input->get_request_header('userKey', TRUE);
+        $getAuh     = $this->getAuth($username, $userkey);
         if ($getAuh->num_rows() > 0) {
             $pbg = $this->uri->segment(4);
             $cekDataBangunan = $this->SS_Model->getDataBangunan($pbg);
@@ -269,132 +274,6 @@ class SimbgServices extends RestController
         ];
         echo json_encode($output);
     }
-
-    public function receiveDataOSS_post()
-    {
-        $username =  $this->input->get_request_header('userName', TRUE);
-        $userkey =  $this->input->get_request_header('userKey', TRUE);
-        $id_insert = '';
-        $getAuh = $this->getAuth($username, $userkey);
-        if ($getAuh->num_rows() > 0) {
-            $responses = [];
-            $getInputData = json_decode(file_get_contents('php://input'), true);
-            if ($getInputData !== NULL) {
-                if ($getInputData['dataNIB']['oss_id'] != '' || $getInputData['dataNIB']['oss_id'] != null) {
-                    $query = $this->SS_Model->getOSSID($getInputData['dataNIB']['oss_id']);
-                    if ($query->num_rows() > 0) {
-                        $row = $query->row();
-                        $id_insert = $row->update_oss_data_id;
-                    }
-                }
-                $dataOSS = [
-                    'oss_id' => $getInputData['dataNIB']['oss_id'],
-                    'nib' => $getInputData['dataNIB']['nib'],
-                    'kd_izin' => $getInputData['dataNIB']['kd_izin'],
-                    'status_badan_hukum' => $getInputData['dataNIB']['status_badan_hukum'],
-                    'status_penanaman_modal' => $getInputData['dataNIB']['status_penanaman_modal'],
-                    'npwp_perseroan' => $getInputData['dataNIB']['npwp_perseroan'],
-                    'nama_perseroan' => $getInputData['dataNIB']['nama_perseroan'],
-                    'alamat_perseroan' => $getInputData['dataNIB']['alamat_perseroan'],
-                    'rt_rw_perseroan' => $getInputData['dataNIB']['rt_rw_perseroan'],
-                    'kelurahan_perseroan' => $getInputData['dataNIB']['kelurahan_perseroan'],
-                    'perseroan_daerah_id' => $getInputData['dataNIB']['perseroan_daerah_id'],
-                    'kode_pos_perseroan' => $getInputData['dataNIB']['kode_pos_perseroan'],
-                    'jenis_api' => $getInputData['dataNIB']['jenis_api'],
-                    'jenis_id_user_proses' => $getInputData['dataNIB']['jenis_id_user_proses'],
-                    'no_id_user_proses' => $getInputData['dataNIB']['no_id_user_proses'],
-                    'nama_user_proses' => $getInputData['dataNIB']['nama_user_proses'],
-                    'email_user_proses' => $getInputData['dataNIB']['email_user_proses'],
-                    'hp_user_proses' => $getInputData['dataNIB']['hp_user_proses'],
-                    'post_date' => date('Y-m-d')
-                ];
-                $this->SS_Model->insertDataOSS($dataOSS);
-                if (count($getInputData['dataNIB']['data_proyek']) > 0 && ($id_insert != '' || $id_insert != null)) {
-                    for ($i = 0; $i < count($getInputData['dataNIB']['data_proyek']); $i++) {
-                        $detailOSS = [
-                            'update_oss_data_id' => $id_insert,
-                            'nib' => $getInputData['dataNIB']['nib'],
-                            'kd_izin' => $getInputData['dataNIB']['data_checklist'][$i]['kd_izin'],
-                            'id_izin' => $getInputData['dataNIB']['data_checklist'][$i]['id_izin'],
-                            'post_date' => date('Y-m-d H:i:s')
-                        ];
-                        $this->SS_Model->insertUpdateDataOSSDetail($detailOSS);
-                    }
-                }
-                if (isset($getInputData['dataNIB']['legalitas'])) {
-                    if (count($getInputData['dataNIB']['legalitas']) > 0 && ($id_insert != '' || $id_insert != null)) {
-                        for ($i = 0; $i < count($getInputData['dataNIB']['legalitas']); $i++) {
-                            $data_legalitas = [
-                                'update_oss_data_id' => $id_insert,
-                                'jenis_legal' => $getInputData['dataNIB']['legalitas'][$i]['jenis_legal'],
-                                'no_legal' => $getInputData['dataNIB']['legalitas'][$i]['no_legal'],
-                                'tgl_legal' => $getInputData['dataNIB']['legalitas'][$i]['tgl_legal'],
-                                'post_date' => date('Y-m-d H:i:s')
-                            ];
-                            $this->SS_Model->insertDataOSSLegalitas($data_legalitas);
-                        }
-                    }
-                }
-                if (isset($getInputData['dataNIB']['data_lokasi_proyek'])) {
-                    if (count($getInputData['dataNIB']['data_lokasi_proyek']) > 0 && ($id_insert != '' || $id_insert != null)) {
-                        for ($i = 0; $i < count($getInputData['dataNIB']['legalitas']); $i++) {
-                            $data_lokasi_proyek = [
-                                'update_oss_data_id' => $id_insert,
-                                'id_proyek_lokasi' => $getInputData['dataNIB']['data_lokasi_proyek'][$i]['id_proyek_lokasi'],
-                                'proyek_daerah_id' => $getInputData['dataNIB']['data_lokasi_proyek'][$i]['proyek_daerah_id'],
-                                'kd_kawasan' => $getInputData['dataNIB']['data_lokasi_proyek'][$i]['kd_kawasan'],
-                                'jenis_kegiatan' => $getInputData['dataNIB']['data_lokasi_proyek'][$i]['jenis_kegiatan'],
-                                'jenis_lokasi' => $getInputData['dataNIB']['data_lokasi_proyek'][$i]['jenis_lokasi'],
-                                'status_lokasi' => $getInputData['dataNIB']['data_lokasi_proyek'][$i]['status_lokasi'],
-                                'post_date' => date('Y-m-d H:i:s')
-                            ];
-                            $this->SS_Model->insertDataOSSLokasiProyek($data_lokasi_proyek);
-                        }
-                    }
-                }
-                if (count($getInputData['dataNIB']['data_checklist']) > 0 && ($id_insert != '' || $id_insert != null)) {
-                    for ($i = 0; $i < count($getInputData['dataNIB']['data_checklist']); $i++) {
-                        $kd_izin = $getInputData['dataNIB']['data_checklist'][$i]['kd_izin'];
-                        $data_log_detail_checklist = [
-                            'update_oss_data_id' => $id_insert,
-                            'nib' => $getInputData['dataNIB']['nib'],
-                            'id_izin' => $getInputData['dataNIB']['data_checklist'][$i]['id_izin'],
-                            'kd_izin' => $getInputData['dataNIB']['data_checklist'][$i]['kd_izin'],
-                            'post_date' => date('Y-m-d H:i:s')
-                        ];
-                        if ($kd_izin == "033000000001" || $kd_izin == "033000000007") {
-                            $this->SS_Model->InsertDataOssChecklist($data_log_detail_checklist);
-                        }
-                        $this->SS_Model->InsertDataOssChecklist($data_log_detail_checklist);
-                    }
-                }
-                $responses = [
-                    'responreceiveNIB' => [
-                        'status' => '1',
-                        'keterangan' => 'Data Berhasil di Input'
-                    ]
-                ];
-            } else {
-                $responses = [
-                    'responreceiveNIB' => [
-                        'status' => '2',
-                        'keterangan' => 'Data Gagal di Input'
-                    ]
-                ];
-            }
-            header("Content-type: application/json");
-            echo json_encode($responses);
-        } else {
-            $response = [
-                'status' => 401,
-                'error' => true,
-                'message' => 'Authentication failed'
-            ];
-            $this->response($response);
-        }
-    }
-
-    
 }
 
 /* End of file SimbgApi.php */

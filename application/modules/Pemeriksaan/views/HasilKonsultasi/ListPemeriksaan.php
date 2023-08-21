@@ -357,6 +357,15 @@
         </div>
     </div>
 </div>
+
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%">
+    <div class="modal-body">
+        <div>
+            <embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+        </div>
+    </div>
+</div>
+
 <script>
     var site_url = "<?= site_url() ?>";
     $(document).ready(function() {
@@ -474,8 +483,8 @@
                                 tableTanah += `<td>${obj.no_dok}<br>${obj.tanggal_dok}</td>`;
                                 tableTanah += `<td>${obj.luas_tanah} m<sup>2</sup></td>`;
                                 tableTanah += `<td>${obj.atas_nama_dok}</td>`;
-                                let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn btn-success btn-sm" title="Lihat Berkas" onclick="javascript:popWin('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span></a>`;
-                                let pemanfaatan = obj.dir_file_phat == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn btn-success btn-sm" title="Lihat Berkas" onclick="javascript:popWin('${site_url}${obj.dir_file_phat}')"><span class="glyphicon glyphicon-file"></span></a>`;
+                                let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn btn-success btn-sm" title="Lihat Berkas" onclick="javascript:docReader('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span></a>`;
+                                let pemanfaatan = obj.dir_file_phat == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn btn-success btn-sm" title="Lihat Berkas" onclick="javascript:docReader('${site_url}${obj.dir_file_phat}')"><span class="glyphicon glyphicon-file"></span></a>`;
                                 tableTanah += `	<td>${berkas}</td>`;
                                 tableTanah += `	<td>${pemanfaatan}</td></tr>`;
                             });
@@ -492,7 +501,7 @@
                                 teknisTanah += `<td style="text-align:center;">${numTanahTeknis++}</td>`;
                                 teknisTanah += `<td>${obj.nm_dokumen}</td>`;
                                 teknisTanah += `<td>${obj.keterangan}</td>`;
-                                let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
+                                let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:docReader('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
                                 teknisTanah += `<td style="text-align:center;">${berkas}</td></tr>`;
                             });
                             $('.ketentuan-tanah').html(teknisTanah);
@@ -507,7 +516,7 @@
                             tableUmum += `<td style="text-align:center;">${numTableUmum++}</td>`;
                             tableUmum += `<td>${obj.nm_dokumen}</td>`;
                             tableUmum += `<td>${obj.keterangan}</td>`;
-                            let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
+                            let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:docReader('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
                             tableUmum += `<td style="text-align:center;">${berkas}</td></tr>`;
                         });
                         $('.data-umum').html(tableUmum);
@@ -519,7 +528,7 @@
                             tableArsitektur += `<td style="text-align:center;">${numArsitektur++}</td>`;
                             tableArsitektur += `<td>${obj.nm_dokumen}</td>`;
                             tableArsitektur += `<td>${obj.catatan}</td>`;
-                            let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
+                            let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:docReader('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
                             tableArsitektur += `<td style="text-align:center;">${berkas}</td>`;
                             tableArsitektur += `<td>${status}</td></tr>`;
                         });
@@ -532,7 +541,7 @@
                             tableStruktur += `<td style="text-align:center;">${numStruktur++}</td>`;
                             tableStruktur += `<td>${obj.nm_dokumen}</td>`;
                             tableStruktur += `<td>${obj.catatan}</td>`;
-                            let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
+                            let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:docReader('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
                             tableStruktur += `<td style="text-align:center;">${berkas}</td>`;
                             tableStruktur += `<td>${status}</td></tr>`;
                         });
@@ -545,7 +554,7 @@
                             tableMep += `<td style="text-align:center;">${numMep++}</td>`;
                             tableMep += `<td>${obj.nm_dokumen}</td>`;
                             tableMep += `<td>${obj.catatan}</td>`;
-                            let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
+                            let berkas = obj.dir_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:docReader('${site_url}${obj.dir_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
                             tableMep += `<td style="text-align:center;">${berkas}</td>`;
                             tableMep += `<td>${status}</td></tr>`;
                         });
@@ -559,11 +568,12 @@
             });
         });
     });
-    function popWin(x) {
-        url = x;
-        swin = window.open(url, 'win', 'scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');
-        swin.focus();
-    }
+
+    docReader = (file) => {
+        $(".modal-body #pdfdataid").attr("src", file);
+        $("#PDFViewer").modal("show");
+    };
+
     function showToast(message, timeout, type) {
         type = (typeof type === 'undefined') ? 'info' : type;
         toastr.options = {

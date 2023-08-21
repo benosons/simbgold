@@ -22,3 +22,17 @@
 		</div>
 	</div>
 </div>
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%" >
+	<div class="modal-body">
+		<div>
+			<embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+		</div>
+	</div>
+</div>
+<script>
+	$(document).on("click",".open-PDFViewer", function(){
+		var datapdf = $(this).data("id");
+		$(".modal-body #pdfdataid").attr("src", datapdf);
+		
+	});
+</script>

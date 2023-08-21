@@ -70,7 +70,6 @@
 		</div>
 	</div>
 </div>
-
 <div id="Pemberitahuan" class="modal fade" tabindex="-1" aria-hidden="true" data-width="800px"
 	data-backdrop="static" data-keyboard="false">
 		<div class="modal-header">
@@ -87,8 +86,10 @@
 						<!--Sehubungan dengan telah diundangkan Peraturan Pemerintah Nomor 16 Tahun 2021 Tentang Peraturan Pelaksanaan
 						Undang – Undang Nomor 28 Tahun 2002 Tentang Bangunan Gedung. Untuk Mempermudah Penggunaan SIMBG bagi Pemilik Akun Pengawas Dinas Teknis:-->
 						<ol><br>
-							Sehubungan dengan permasalahan tidak munculnya penugasan TPA/TPT pada beberapa daerah, mohon Operator/Pengawas agar memperbarui isian <b>Tahun berlaku SK TPA/TPT menjadi Tahun 2023</b> pada menu pengaturan
-							<!--<li>Proses Kerja serta dokumen output pada SIMBG sangat bergantung kepada Validitas Data yang diinput dari Menu Pengaturan Pada Akun Kepala Dinas Teknis maupun Kepala Dinas PTSP.Dalam hal terjadi perubahan data (Misal ada pergantian kepala dinas), agar segera dilakukan perbaikan data pada Menu Pengaturan sebagaimana dimaksud sebelum proses pelayanan dilaksanakan.</li>
+							<li>Tanggal Surat Pernyataan Pemenuhan Standar Teknis adalah sesuai dengan tanggal validasi permohonan PBG di dalam SIMBG.</li>	
+							<li>Sehubungan dengan permasalahan tidak munculnya penugasan TPA/TPT pada beberapa daerah, mohon Operator/Pengawas agar memperbarui isian <b>Tahun berlaku SK TPA/TPT menjadi Tahun 2023</b> pada menu pengaturan</li>
+							<li>Apabila terdapat pergantian pejabat Kepala Dinas Teknis baik pejabat definitif maupun Pelaksana Tugas (Plt.), Penjabat Sementara (Pjs.), atau Pelaksana Harian (Plh,), Dinas Teknis harus segera melakukan pemutakhiran (update) di Data Profile Dinas Karena akan mempengaruhi pejabat penandatangan SK-PBG yang terbit ketika proses validasi.</li>
+							<!--<li>ditas Data yang diinput dari Menu Pengaturan Pada Akun Kepala Dinas Teknis maupun Kepala Dinas PTSP.Dalam hal terjadi perubahan data (Misal ada pergantian kepala dinas), agar segera dilakukan perbaikan data pada Menu Pengaturan sebagaimana dimaksud sebelum proses pelayanan dilaksanakan.</li>
 							<li>Apabila diperlukan untuk kembali ke tahap sebelumnya dalam perbaikan data, Pengawas dapat melakukan kembali (roll back) pada Menu:<br>
 								a. Penugasan TPA/TPT <br>
 								b. Penjadwalan Konsultasi <br>

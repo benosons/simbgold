@@ -21,18 +21,23 @@ class Mpemeriksaan extends CI_Model
         $this->db->where_not_in('c.status', 8);
         $this->db->where_not_in('c.status', 7);
         $this->db->where_not_in("c.status", 25);
-        if ($dev != 1)
-            if ($Dinas == '31') {
-                $this->db->where('c.id_prov_bgn', $Dinas);
-            } else {
-                $this->db->where('c.id_kabkot_bgn', $Dinas);
-            }
-        //$this->db->where('id_kabkot_bgn', $Dinas);
+        $this->db->where_not_in("c.status", 26);
+        if($Dinas =='31'){
+			$this->db->where('c.id_prov_bgn = 31');
+			$this->db->where('c.jml_lantai > 8');
+		} else if ($Dinas =='3101' || $Dinas =='3171' || $Dinas =='3172' || $Dinas =='3173' || $Dinas =='3174' || $Dinas =='3175'){
+			$this->db->where('c.id_kabkot_bgn', $Dinas);
+			$this->db->where('c.jml_lantai < 9');
+		} else if($Dinas =='100'){
+			$this->db->where('c.id_otorita', 1);
+		} else {
+			$this->db->where('c.id_kabkot_bgn', $Dinas);
+		}
         $this->db->order_by('c.status', 'asc');
         return $this->db->get();
     }
 	
-	 public function  getDataVerifikator($id)
+	public function  getDataVerifikator($id)
 	{
 		$this->db->select('a.*,d.*,e.*,f.*,k.nama_kelurahan');
 		$this->db->from('tmdatapemilik a');
@@ -104,7 +109,8 @@ class Mpemeriksaan extends CI_Model
         b.slf,
         b.permohonan_slf,
         b.jual,
-        b.id_doc_tek
+        b.id_doc_tek,
+        b.id_resiko,b.id_lokasi,b.id_kelas
         ');
         $this->db->from('tmdatapemilik a');
         $this->db->where('a.id', $id);
@@ -776,8 +782,6 @@ class Mpemeriksaan extends CI_Model
     {
         return $this->db->insert('tmpenolakan', $data);
     }
-
-
     function getcatatan($select = "*", $id)
     {
         $this->db->select($select, FALSE);
@@ -786,7 +790,6 @@ class Mpemeriksaan extends CI_Model
         $query     = $this->db->get('tmdatabangunan a');
         return $query->row();
     }
-
     public function removeDataRetribusi($id)
 	{
 		$this->db->query("DELETE FROM tm_retribusi WHERE id = $id");

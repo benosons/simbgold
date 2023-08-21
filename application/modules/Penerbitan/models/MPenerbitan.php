@@ -155,14 +155,14 @@ class MPenerbitan extends CI_Model{
 	
 	public function getPejabatTtd($id)
 	{
-		$sql = "SELECT a.id,a.id_kabkot_bgn, b.kepala_dinas, b.nip_kepala_dinas, b.id_dinas, b.status_pejabat
+		$sql = "SELECT a.id,a.id_kabkot_bgn,a.imb,
+			b.kepala_dinas, b.nip_kepala_dinas, b.id_dinas, b.status_pejabat
 			FROM tmdatabangunan a 
 			left join tm_profile_dinas b On (a.id_kabkot_bgn = b.id_kabkot)
 			where a.id = ".$id;
 		$hasil = $this->db->query($sql)->row_array();
 		return $hasil;
 	}
-	
 	function get_id_kabkot($id)
 	{
 			$sql = "SELECT id, id_kabkot_bgn, id_kec_bgn 
@@ -170,7 +170,6 @@ class MPenerbitan extends CI_Model{
 			$hasil = $this->db->query($sql)->row_array();
 			return $hasil;
 	}
-	
 	function getNoDrafPbg($id_kec_bgn,$tgl_skrg)
 	{
 			$sql = "SELECT max(no_izin_pbg) as no_registrasi_baru 
@@ -179,7 +178,6 @@ class MPenerbitan extends CI_Model{
 			$hasil = $this->db->query($sql)->row_array();
 			return $hasil;
 	}
-	
 	function insertDataPenerbitanPbg($dataInKonsultasi)
 	{
 		$this->db->insert('tmdatapbg',$dataInKonsultasi);
@@ -208,16 +206,6 @@ class MPenerbitan extends CI_Model{
 		$this->db->where("b.status != 25 ");
 		$this->db->where("b.status != 26 ");
 		$this->db->where("b.id_jenis_permohonan != 14 ");
-		//$this->db->where("b.id_jenis_permohonan != 9 ");
-		/*if($Dinas =='31'){
-			$this->db->where('b.id_prov_bgn = 31');
-			$this->db->where('b.jml_lantai > 8');
-		}else if ($Dinas =='3101' || $Dinas =='3171' || $Dinas =='3172' || $Dinas =='3173' || $Dinas =='3174' || $Dinas =='3175'){
-			$this->db->where('b.id_kabkot_bgn', $Dinas);
-			$this->db->where('b.jml_lantai < 9');
-		}else {
-			$this->db->where('b.id_kabkot_bgn', $Dinas);
-		}*/
 		if($Dinas =='31'){
 			$this->db->where('b.id_prov_bgn = 31');
 			$this->db->where('b.jml_lantai > 8');
@@ -229,12 +217,6 @@ class MPenerbitan extends CI_Model{
 		}else{
 			$this->db->where('b.id_kabkot_bgn', $Dinas);
 		}
-		/*if($Dinas =='31'){
-			$this->db->where('b.id_prov_bgn = 31');
-		}else{
-			$this->db->where('b.id_kabkot_bgn', $Dinas);
-		}*/
-		//$this->db->where('id_kabkot_bgn',$Dinas);
 		$this->db->join('tmdatabangunan b', 'a.id = b.id','LEFT');
 		$this->db->join('tr_konsultasi c', 'b.id_jenis_permohonan = c.id','LEFT');
 		$this->db->join('tmdatapbg d', 'a.id = d.id','LEFT');
@@ -663,7 +645,7 @@ class MPenerbitan extends CI_Model{
 
 	function getdatapemilikDok($id='null')
 	{
-		$sql = "SELECT a.id,a.nm_pemilik,a.alamat,
+		$sql = "SELECT a.id,a.nm_pemilik,a.alamat,a.jns_pemilik,
 				b.nama_kelurahan,c.nama_kecamatan,d.nama_kabkota,e.nama_provinsi
 				FROM tmdatapemilik a
 				LEFT JOIN tr_kelurahan b ON(b.id_kelurahan = a.id_kelurahan)
@@ -681,7 +663,7 @@ class MPenerbitan extends CI_Model{
 	{
 		$sql = "SELECT a.id,
 				b.id_prov_bgn,b.id_kabkot_bgn,b.id_izin,b.id_jenis_permohonan,b.nm_bgn,b.almt_bgn,b.luas_bgn,b.id_fungsi_bg,b.jml_lantai,
-				b.tipeA,b.luasA,b.tinggiA,b.lantaiA,b.jumlahA,b.luas_bgp,b.status,b.id_dki,
+				b.tipeA,b.luasA,b.tinggiA,b.lantaiA,b.jumlahA,b.luas_bgp,b.status,b.id_dki,b.id_kec_bgn,
 				c.nama_kelurahan,
 				d.nama_kecamatan,
 				e.nama_kabkota,
@@ -744,8 +726,8 @@ class MPenerbitan extends CI_Model{
 	function getdatabangunanDokSLF($id='null')
 	{
 		$sql = "SELECT a.id,
-				b.id_kabkot_bgn,b.id_izin,b.id_jenis_permohonan,b.nm_bgn,b.almt_bgn,b.luas_bgn,b.id_fungsi_bg,
-				b.jml_lantai,b.tipeA,b.luasA,b.tinggiA,b.lantaiA,b.jumlahA,b.no_imb,b.status,b.id_dki,
+				b.id_kabkot_bgn,b.id_izin,b.id_jenis_permohonan,b.nm_bgn,b.almt_bgn,b.luas_bgn,b.id_fungsi_bg,b.luas_bgp,b.id_kec_bgn,b.id_jns_bg,
+				b.jml_lantai,b.tipeA,b.luasA,b.tinggiA,b.lantaiA,b.jumlahA,b.no_imb,b.status,b.id_dki,b.permohonan_slf,b.id_klasifikasi,
 				c.nama_kelurahan,
 				d.nama_kecamatan,
 				e.nama_kabkota,
@@ -754,7 +736,7 @@ class MPenerbitan extends CI_Model{
 				h.no_izin_pbg,h.nm_kadis,h.nip_kadis,h.tgl_pbg,h.status_pejabat,
 				i.fungsi_bg,i.id_pemanfaatan_bg,
 				j.no_sk_tk,j.date_sk_tk,
-                k.no_slf,k.nm_kadis_teknis,k.nip_kadis_teknis,k.nm_dinas,k.tgl_penerbitan_slf,k.okupansi,k.luas_dasar,
+                k.no_slf,k.nm_kadis_teknis,k.nip_kadis_teknis,k.nm_dinas,k.tgl_penerbitan_slf,k.okupansi,k.luas_dasar,k.status_pejabat as stat_pjbt,
 				l.kepala_dinas,l.nip_kepala_dinas,l.p_nama_dinas,l.status_pejabat as stat_pejabat
 				FROM tmdatapemilik a
 				LEFT JOIN tmdatabangunan b ON(b.id = a.id)
@@ -775,12 +757,80 @@ class MPenerbitan extends CI_Model{
 		return $hasil->row_array();
 	}
 	//End Draf
-	
-
 	public function removeDataSK($id)
 	{
 		$this->db->query("DELETE FROM tmdatapbg WHERE id = $id");
 		$this->db->where('id',$id);
 		return $query;
 	}
+
+	public function cekNamaNoIzin($select = "a.*", $sk_pbg)
+	{
+		$this->db->select($select, FALSE);
+		$this->db->where('a.no_izin_pbg', $sk_pbg);
+		$query 	= $this->db->get('tmdatapbg a');
+		return $query;
+	}
+	//Begin Model Untuk PBG dan Lampiran
+	function getdatapemilikBangunan($id = 'null')
+    {
+        $sql = "SELECT a.id,a.nm_pemilik,a.alamat,b.nama_kelurahan,c.nama_kecamatan,d.nama_kabkota,e.nama_provinsi
+				FROM tmdatapemilik a
+				LEFT JOIN tr_kelurahan b ON(b.id_kelurahan = a.id_kelurahan)
+				LEFT JOIN tr_kecamatan c ON(c.id_kecamatan = a.id_kecamatan)
+				LEFT JOIN tr_kabkot d ON(d.id_kabkot = a.id_kabkota)
+				LEFT JOIN tr_provinsi e ON(e.id_provinsi = a.id_provinsi)
+				WHERE (a.id=$id)
+			limit 1
+			";
+        $hasil = $this->db->query($sql);
+        return $hasil->row_array();
+    }
+	function getdatabangunanGedung($id = 'null')
+    {
+        $sql = "SELECT a.id,
+				b.id_kabkot_bgn,b.id_izin,b.nm_bgn,b.almt_bgn,b.luas_bgn,b.id_fungsi_bg,b.jml_lantai,b.tinggi_bgn,b.luas_basement,b.lapis_basement,b.status,b.id_kec_bgn,b.id_klasifikasi,
+                b.id_jenis_permohonan,b.imb,b.no_konsultasi,b.id_resiko,b.id_lokasi,b.id_kelas,
+                b.tipeA,b.luasA,b.lantaiA,b.tinggiA,b.jumlahA,b.no_imb,b.luas_bgp,b.tinggi_bgp,
+				c.nama_kelurahan,
+				d.nama_kecamatan,
+				e.nama_kabkota,
+				f.nama_provinsi,
+				g.nilai_retribusi_bangunan,g.nilai_retribusi_prasarana,g.nilai_retribusi_keseluruhan,g.id_permanensi,
+				h.no_izin_pbg,h.nm_kadis,h.nip_kadis,h.tgl_validasi,h.status_pejabat,h.tgl_pbg,h.no_validasi,
+				i.fungsi_bg,i.id_pemanfaatan_bg,i.fungsi_bg,
+				j.no_sk_tk,j.date_sk_tk,
+				k.stat_pejabat,k.nama_dinas,k.no_sppst,k.tgl_validasi,
+                l.p_nama_dinas,l.kepala_dinas,l.nip_kepala_dinas,l.status_pejabat as status_pej,
+				m.jns_prasarana
+				FROM tmdatapemilik a
+				LEFT JOIN tmdatabangunan b ON(b.id = a.id)
+				LEFT JOIN tr_kelurahan c On(c.id_kelurahan = b.id_kel_bgn)
+				LEFT JOIN tr_kecamatan d On(d.id_kecamatan = b.id_kec_bgn)
+				LEFT JOIN tr_kabkot e On(e.id_kabkot = b.id_kabkot_bgn)
+				LEFT JOIN tr_provinsi f On(f.id_provinsi = b.id_prov_bgn)
+				LEFT JOIN tm_retribusi g On(b.id = g.id)
+				LEFT JOIN tmdatapbg h On(h.id = b.id)
+				LEFT JOIN tr_fungsi_bg i On(b.id_fungsi_bg = i.id_fungsi_bg)
+				LEFT JOIN tmdatajadwal j On(b.id = j.id)
+				LEFT JOIN tmdatavalkadintek k On (b.id=k.id)
+                LEFT JOIN tm_profile_dinas l on(b.id_kabkot_bgn =l.id_kabkot)
+				LEFT JOIN tr_prasarana m On (b.id_prasarana_bg=m.idp)
+				WHERE (a.id=$id)
+			limit 1
+			";
+        $hasil = $this->db->query($sql);
+        return $hasil->row_array();
+    }
+	function getDataTanah($id = 'null')
+    {
+        $sql = "SELECT a.id, b.*,c.Jns_dok
+				FROM tmdatapemilik a
+				LEFT JOIN tmdatatanah b ON(b.id=a.id)
+                LEFT JOIN tr_doktanah c ON(c.id=b.id_dokumen)
+                WHERE (a.id=$id)";
+        $hasil = $this->db->query($sql);
+        return $hasil;
+    }
+	//End Model Untuk PBG dan Lampiran
 }

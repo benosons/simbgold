@@ -5,7 +5,6 @@ if (!defined('BASEPATH'))
 
 class Front extends CI_Controller
 {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -32,12 +31,10 @@ class Front extends CI_Controller
 	//Begin Login Logout
 	public function Skill()
 	{
-		
 		$this->load->library('form_validation');
 		$this->load->helper('security');
 		$this->form_validation->set_rules('saya','Saya','required|max_length[50]|xss_clean');
 		$this->form_validation->set_rules('bukan','Bukan','required|min_length[6]|max_length[20]|xss_clean');
-		
 		if($this->form_validation->run() == false){
 			$this->session->set_flashdata('message', 'Periksa Kembali Data Anda.');
 			$this->session->set_flashdata('status', 'danger');
@@ -55,7 +52,6 @@ class Front extends CI_Controller
 		$email		= $email;
 		$password 	= sha1($password . $this->config->item('encryption_key'));
 		$query	= $this->Mauth->getLoginData('a.id,a.username,a.email,a.id_kabkot,a.level,a.role_id,a.asosiasi,a.id_asosiasi,b.group', $email, $password);
-		
 		if ($query->num_rows() > 0) {
 			$row	= $query->row();
 			$data	= array(
@@ -112,6 +108,131 @@ class Front extends CI_Controller
 			redirect(site_url());
 		}
 	}
+	// Login untuk QrCode Retribusi
+	public function LoginAkses() 
+	{
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('saya','Saya','required|max_length[50]');
+		$this->form_validation->set_rules('bukan','Bukan','required|min_length[6]|max_length[20]');
+		if($this->form_validation->run() == false)
+		{
+			$this->session->set_flashdata('message', 'URL TIDAK DITEMUKAN');
+			$this->session->set_flashdata('status', 'danger');
+			redirect(site_url());
+			
+		}else{
+			$password 	= str_replace("'", "", htmlspecialchars($this->input->post('bukan'), ENT_QUOTES));
+			$email		= str_replace("'", "", htmlspecialchars($this->input->post('saya'), ENT_QUOTES));
+			$SPPST		= $this->input->post('SPPST');
+			$this->LoginAgain($email,$password,$SPPST);	
+		}
+	}
+	private function LoginAgain($email,$password,$SPPST)
+	{
+		$email		= $email;
+		$SPPST		= $SPPST;
+		$password 	= sha1($password . $this->config->item('encryption_key'));
+		$query		= $this->Mauth->getLoginDataAkses('a.id,a.username,a.email,a.id_kabkot,a.level,a.role_id', $email, $password);
+		if ($query->num_rows() > 0) {
+			$row	= $query->row();
+			$data	= array(
+				'loc_user_id' 		=> $this->Outh_model->Encryptor('encrypt', $row->id),
+				'loc_role_id' 		=> $row->role_id,
+				'loc_id_kabkot' 	=> $row->id_kabkot,
+				'loc_level' 		=> $row->level,
+				'loc_email' 		=> $row->email,
+				'loc_username' 		=> $row->username,
+				'loc_login' 		=> TRUE
+			);
+			$this->session->set_userdata($data);
+			if($row->role_id == 5 || $row->role_id == 6 || $row->role_id == 7 || $row->role_id == 8 || $row->role_id == 9 || $row->role_id == 11){
+				$data_r = $this->Mauth->getDataRetribusi($row->id_kabkot,$SPPST);
+				$baris 	= $data_r->num_rows();
+				//print $baris;
+				if ($baris >= 1 ) {
+					redirect('DataValidasi/DataRetribusi/'.$SPPST);
+				}else{
+					redirect('Front/LogOut');
+				}	
+			}else if($row->role_id == 10){
+				$data_r = $this->Mauth->getDataRetribusiPemohon($row->id,$SPPST);
+				$baris 	= $data_r->num_rows();
+				if ($baris >= 1 ) {
+					redirect('DataValidasi/DataRetribusi/'.$SPPST);
+				}else{
+					redirect('Front/LogOut');
+				}	
+				
+			}else{
+				redirect('Front/LogOut');
+			}
+		}else{
+			redirect(site_url());
+		}
+	}
+	//End Login QrCode Retribusi
+	//Begin Login QrCode DataTeknis
+	public function LoginAksesTeknis()
+	{
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('saya','Saya','required|max_length[50]');
+		$this->form_validation->set_rules('bukan','Bukan','required|min_length[6]|max_length[20]');
+		if($this->form_validation->run() == false)
+		{
+			$this->session->set_flashdata('message', 'URL TIDAK DITEMUKAN');
+			$this->session->set_flashdata('status', 'danger');
+			redirect(site_url());
+			
+		}else{
+			$password 	= str_replace("'", "", htmlspecialchars($this->input->post('bukan'), ENT_QUOTES));
+			$email		= str_replace("'", "", htmlspecialchars($this->input->post('saya'), ENT_QUOTES));
+			$id			= $this->input->post('id');
+			$this->LoginAgainTeknis($email,$password,$id);	
+		}
+	}
+	
+	private function LoginAgainTeknis($email,$password,$id)
+	{
+		$email		= $email;
+		$id			= $id;
+		$password 	= sha1($password . $this->config->item('encryption_key'));
+		$query		= $this->Mauth->getLoginDataAkses('a.id,a.username,a.email,a.id_kabkot,a.level,a.role_id', $email, $password);
+		if ($query->num_rows() > 0) {
+			$row	= $query->row();
+			$data	= array(
+				'loc_user_id' 		=> $this->Outh_model->Encryptor('encrypt', $row->id),
+				'loc_role_id' 		=> $row->role_id,
+				'loc_id_kabkot' 	=> $row->id_kabkot,
+				'loc_level' 		=> $row->level,
+				'loc_email' 		=> $row->email,
+				'loc_username' 		=> $row->username,
+				'loc_login' 		=> TRUE
+			);
+			$this->session->set_userdata($data);
+			if($row->role_id == 5 || $row->role_id == 6 || $row->role_id == 7 || $row->role_id == 8 || $row->role_id == 9 || $row->role_id == 11){
+				$data_r = $this->Mauth->getDataDataTeknis($id,$row->id_kabkot);
+				$baris 	= $data_r->num_rows();
+				if ($baris >= 1 ) {
+					redirect('DataValidasi/DataTeknis/'.$id);
+				}else{
+					redirect('Front/LogOut');
+				}	
+			}else if($row->role_id == 10){
+				$data_r = $this->Mauth->getDataRetribusiPemohon($row->id,$id);
+				$baris 	= $data_r->num_rows();
+				if ($baris >= 1 ) {
+					redirect('DataValidasi/DataTeknis/'.$id);
+				}else{
+					redirect(site_url());
+				}	
+				
+			}else{
+				redirect(site_url());
+			}
+		}
+	}
+	//End Login QrCode DataTeknis
+
 	public function logout()
 	{
 		$this->session->sess_destroy();
@@ -159,12 +280,11 @@ class Front extends CI_Controller
 					$pesanan = "Pendaftaran Berhasil!<br>Silahkan Lakukan Konfrimasi Tahap Akhir Pendaftaran Dengan Cara
 					mengKlik Link Aktivasi Yang Telah Terkirim ke Alamat Email Anda <br> (<b>$email</b>).
 					<br/>
-					<br>Terima Kasih. 
-					<br>".$ceksave;
+					<br>Terima Kasih.";
 					$this->session->set_flashdata('message', $pesanan);
 					$this->session->set_flashdata('status', 'success');
 				}
-				header("Location:$ceksave");
+				redirect(site_url());
 			}
 		}
 		
@@ -197,7 +317,6 @@ class Front extends CI_Controller
 		$role_id = $role_id;
 		$password_user 	= $password_user;
 		$email = $email;
-			
 		$data	= array(
 				'username' => $email,
 				'password' => sha1($password_user . $this->config->item('encryption_key')),
@@ -221,8 +340,8 @@ class Front extends CI_Controller
 			$subject 	=	"Verifikasi User Pengajuan Permohonan IMB | CS SIMBG";
 			$link		=	$linknya;
 			$text 		= 	$textnya;
-			// $this->simbg_lib->sendEmail($email, $subject, $text);
-
+			//$this->simbg_lib->sendEmail($email, $subject, $text);
+			$this->simbg_lib->sendEmailPendaftaran($email, $subject, $text);
 			$pesan = "Link aktivasi berhasil dikirim ulang. Silahkan buka email $email untuk proses aktivasi.";
 
 			$data_kirimulang = array(
@@ -233,7 +352,7 @@ class Front extends CI_Controller
 			);
 			$this->session->set_userdata('sku', $data_kirimulang); //sku = session kirim ulang
 			//
-			$ceksave = $linknya;
+			$ceksave = "true";
 		} else {
 			//
 			$ceksave = "false";
@@ -379,10 +498,9 @@ class Front extends CI_Controller
 				$text .= "<br>";
 				$text .= "Hormat Kami <br>";
 				$text .= "Admin SIMBG ";
-				$this->simbg_lib->sendEmail($query->row()->email, $subject, $text);
-
+				$this->simbg_lib->sendEmailPendaftaran($email, $subject, $text);
+				//$this->simbg_lib->sendEmail($query->row()->email, $subject, $text);
 				$pesan = "Kata sandi baru berhasil dikirim ulang. Silahkan buka email $email dan masuk dengan kata sandi baru Anda.";
-
 				$data_kirimulang = array(
 					's_email' => $email,
 					's_subject' => $subject,

@@ -47,7 +47,6 @@
 								<td align="left"><?php echo $key->nm_dokumen; ?></td>
 								<td align="left"><?php echo $key->keterangan; ?></td>
 								<td align="center">
-						
 									<?php if ($dir_file == '' or $dir_file == null) { ?>
 										Tidak Ada Dokumen
 										<?php } else { ?>

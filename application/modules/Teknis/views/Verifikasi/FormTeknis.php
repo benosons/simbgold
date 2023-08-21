@@ -31,7 +31,8 @@
 						$dir = $query[$n]['dir_file'];
 						$status = $query[$n]['status'];
 						$ipk=$this->uri->segment('3');
-					} ?>
+					} 
+					?>
 				<td><?php echo $row->nm_dokumen;?></td>
 				<td><?php echo $row->keterangan;?></td>
 				<td align="center">

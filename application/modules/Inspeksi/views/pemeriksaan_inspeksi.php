@@ -233,7 +233,12 @@
                                 </td>
                                 <td>
                                   <?php if ($berkas_file != '') : ?>
-                                    <a href="javascript:void(0);" id="lihatBerkas" class="btn btn-info info-berkas" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathInspeksi . '/' . $berkas_file); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                    
+                                    <?php 
+                                    $dirBerkas = $pathInspeksi . '/' . $berkas_file;
+                                    $encryptBerkas	= $this->Outh_model->Encryptor('encrypt', $dirBerkas);
+                                    ?>
+                                    <a href="javascript:void(0);" id="lihatBerkas" class="btn btn-info info-berkas" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptBerkas); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                     <div class="fileupload fileupload-new input-berkas" data-provides="fileupload" style="display:none;">
                                       <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                         <span class="fileupload-exists">Ubah</span> <input type="file" name="berkas" /></span><br>
@@ -251,7 +256,11 @@
                                 </td>
                                 <td>
                                   <?php if ($catatan_berkas != '') : ?>
-                                    <a href="javascript:void(0);" id="catatanBerkas" class="btn btn-info info-catatan" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathCatatan . '/' . $catatan_berkas); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                    <?php 
+                                    $dirCatatan = $pathCatatan . '/' . $catatan_berkas;
+                                    $encryptCatatan	= $this->Outh_model->Encryptor('encrypt', $dirCatatan);
+                                    ?>
+                                    <a href="javascript:void(0);" id="catatanBerkas" class="btn btn-info info-catatan" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptCatatan); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                     <div class="fileupload fileupload-new input-catatan" data-provides="fileupload" style="display:none;">
                                       <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                         <span class="fileupload-exists">Ubah</span> <input type="file" name="catatan" /></span><br>
@@ -270,7 +279,11 @@
 
                                 <td>
                                   <?php if ($berkas_justifikasi != '') : ?>
-                                    <a href="javascript:void(0);" id="berkasJustifikasi" class="btn btn-info info-justifikasi" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathJustifikasi . '/' . $berkas_justifikasi); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                    <?php
+                                    $dirJustifikasi = $pathJustifikasi . '/' . $berkas_justifikasi;
+                                    $encryptJustifikasi	= $this->Outh_model->Encryptor('encrypt', $dirJustifikasi);
+                                    ?>
+                                    <a href="javascript:void(0);" id="berkasJustifikasi" class="btn btn-info info-justifikasi" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptJustifikasi); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                     <div class="fileupload fileupload-new input-justifikasi" data-provides="fileupload" style="display:none;">
                                       <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                         <span class="fileupload-exists">Ubah</span> <input type="file" name="justifikasi" /></span><br>
@@ -370,7 +383,11 @@
                                 </td>
                                 <td>
                                   <?php if ($berkas_file2 != '') : ?>
-                                    <a href="javascript:void(0);" id="lihatBerkas" class="btn btn-info info-berkas" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathInspeksi . '/' . $berkas_file2); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                    <?php 
+                                    $dirBerkas2 = $pathInspeksi . '/' . $berkas_file2;
+                                    $encryptBerkas2	= $this->Outh_model->Encryptor('encrypt', $dirBerkas2);
+                                    ?>
+                                    <a href="javascript:void(0);" id="lihatBerkas" class="btn btn-info info-berkas" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptBerkas2); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                     <div class="fileupload fileupload-new input-berkas" data-provides="fileupload" style="display:none;">
                                       <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                         <span class="fileupload-exists">Ubah</span> <input type="file" name="berkas" /></span><br>
@@ -388,7 +405,11 @@
                                 </td>
                                 <td>
                                   <?php if ($catatan_berkas2 != '') : ?>
-                                    <a href="javascript:void(0);" id="catatanBerkas" class="btn btn-info info-catatan" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathCatatan . '/' . $catatan_berkas2); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                    <?php 
+                                    $dirCatatan2 = $pathCatatan . '/' . $catatan_berkas2;
+                                    $encryptCatatan	= $this->Outh_model->Encryptor('encrypt', $dirCatatan2);
+                                    ?>
+                                    <a href="javascript:void(0);" id="catatanBerkas" class="btn btn-info info-catatan" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptCatatan2); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                     <div class="fileupload fileupload-new input-catatan" data-provides="fileupload" style="display:none;">
                                       <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                         <span class="fileupload-exists">Ubah</span> <input type="file" name="catatan" /></span><br>
@@ -407,7 +428,11 @@
 
                                 <td>
                                   <?php if ($berkas_justifikasi2 != '') : ?>
-                                    <a href="javascript:void(0);" id="berkasJustifikasi" class="btn btn-info info-justifikasi" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathJustifikasi . '/' . $berkas_justifikasi2); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                    <?php
+                                    $dirJustifikasi2 = $pathJustifikasi . '/' . $berkas_justifikasi2;
+                                    $encryptJustifikasi2	= $this->Outh_model->Encryptor('encrypt', $dirJustifikasi2);
+                                    ?>
+                                    <a href="javascript:void(0);" id="berkasJustifikasi" class="btn btn-info info-justifikasi" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptJustifikasi); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                     <div class="fileupload fileupload-new input-justifikasi" data-provides="fileupload" style="display:none;">
                                       <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                         <span class="fileupload-exists">Ubah</span> <input type="file" name="justifikasi" /></span><br>
@@ -508,7 +533,11 @@
 
                                   <td>
                                     <?php if ($berkas_file3 != '') : ?>
-                                      <a href="javascript:void(0);" id="lihatBerkas" class="btn btn-info info-berkas" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathInspeksi . '/' . $berkas_file3); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                      <?php 
+                                      $dirBerkas3 = $pathInspeksi . '/' . $berkas_file3;
+                                      $encryptBerkas3	= $this->Outh_model->Encryptor('encrypt', $dirBerkas3);
+                                      ?>
+                                      <a href="javascript:void(0);" id="lihatBerkas" class="btn btn-info info-berkas" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptBerkas3); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                       <div class="fileupload fileupload-new input-berkas" data-provides="fileupload" style="display:none;">
                                         <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                           <span class="fileupload-exists">Ubah</span> <input type="file" name="berkas" /></span><br>
@@ -526,7 +555,11 @@
                                   </td>
                                   <td>
                                     <?php if ($catatan_berkas3 != '') : ?>
-                                      <a href="javascript:void(0);" id="catatanBerkas" class="btn btn-info info-catatan" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathCatatan . '/' . $catatan_berkas3); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                      <?php 
+                                    $dirCatatan3 = $pathCatatan . '/' . $catatan_berkas3;
+                                    $encryptCatatan3	= $this->Outh_model->Encryptor('encrypt', $dirCatatan3);
+                                    ?>
+                                      <a href="javascript:void(0);" id="catatanBerkas" class="btn btn-info info-catatan" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptCatatan3); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                       <div class="fileupload fileupload-new input-catatan" data-provides="fileupload" style="display:none;">
                                         <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                           <span class="fileupload-exists">Ubah</span> <input type="file" name="catatan" /></span><br>
@@ -544,7 +577,11 @@
                                   </td>
                                   <td>
                                     <?php if ($berkas_justifikasi3 != '') : ?>
-                                      <a href="javascript:void(0);" id="berkasJustifikasi" class="btn btn-info info-justifikasi" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathJustifikasi . '/' . $berkas_justifikasi3); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                      <?php
+                                    $dirJustifikasi3 = $pathJustifikasi . '/' . $berkas_justifikasi3;
+                                    $encryptJustifikasi3	= $this->Outh_model->Encryptor('encrypt', $dirJustifikasi3);
+                                    ?>
+                                      <a href="javascript:void(0);" id="berkasJustifikasi" class="btn btn-info info-justifikasi" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptJustifikasi3); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                       <div class="fileupload fileupload-new input-justifikasi" data-provides="fileupload" style="display:none;">
                                         <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                           <span class="fileupload-exists">Ubah</span> <input type="file" name="justifikasi" /></span><br>
@@ -654,7 +691,11 @@
                                 </td>
                                 <td>
                                   <?php if ($berkas_file4 != '') : ?>
-                                    <a href="javascript:void(0);" id="lihatBerkas" class="btn btn-info info-berkas" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathInspeksi . '/' . $berkas_file4); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                    <?php 
+                                    $dirBerkas4 = $pathInspeksi . '/' . $berkas_file4;
+                                    $encryptBerkas4	= $this->Outh_model->Encryptor('encrypt', $dirBerkas4);
+                                    ?>
+                                    <a href="javascript:void(0);" id="lihatBerkas" class="btn btn-info info-berkas" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptBerkas4); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                     <div class="fileupload fileupload-new input-berkas" data-provides="fileupload" style="display:none;">
                                       <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                         <span class="fileupload-exists">Ubah</span> <input type="file" name="berkas" /></span><br>
@@ -672,7 +713,11 @@
                                 </td>
                                 <td>
                                   <?php if ($catatan_berkas4 != '') : ?>
-                                    <a href="javascript:void(0);" id="catatanBerkas" class="btn btn-info info-catatan" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathCatatan . '/' . $catatan_berkas4); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                    <?php 
+                                    $dirCatatan4 = $pathCatatan . '/' . $catatan_berkas4;
+                                    $encryptCatatan4	= $this->Outh_model->Encryptor('encrypt', $dirCatatan4);
+                                    ?>
+                                    <a href="javascript:void(0);" id="catatanBerkas" class="btn btn-info info-catatan" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptCatatan4); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                     <div class="fileupload fileupload-new input-catatan" data-provides="fileupload" style="display:none;">
                                       <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                         <span class="fileupload-exists">Ubah</span> <input type="file" name="catatan" /></span><br>
@@ -690,7 +735,11 @@
                                 </td>
                                 <td>
                                   <?php if ($berkas_justifikasi4 != '') : ?>
-                                    <a href="javascript:void(0);" id="berkasJustifikasi" class="btn btn-info info-justifikasi" style="margin-bottom:10px;" onClick="javascript:popWin('<?php echo base_url($pathJustifikasi . '/' . $berkas_justifikasi4); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
+                                    <?php
+                                    $dirJustifikasi4 = $pathJustifikasi . '/' . $berkas_justifikasi4;
+                                    $encryptJustifikasi4	= $this->Outh_model->Encryptor('encrypt', $dirJustifikasi4);
+                                    ?>
+                                    <a href="javascript:void(0);" id="berkasJustifikasi" class="btn btn-info info-justifikasi" style="margin-bottom:10px;" onClick="javascript:docReader('<?php echo site_url('Docreader/ReaderDok/'.$encryptJustifikasi4); ?>')"><i class="fa fa-eye"></i> Lihat File</a>
                                     <div class="fileupload fileupload-new input-justifikasi" data-provides="fileupload" style="display:none;">
                                       <span class="btn btn-primary btn-file"><span class="fileupload-new"><i class="fa fa-file"></i> Pilih File</span>
                                         <span class="fileupload-exists">Ubah</span> <input type="file" name="justifikasi" /></span><br>
@@ -879,8 +928,6 @@
     </div>
   </div>
 </div>
-
-
 <div id="pemohon" class="modal modal-pemohon fade" tabindex="-1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false">
   <form action="#" role="form" method="post" id="perbaikanBerkas" class="form-horizontal" enctype="multipart/form-data">
     <div class="modal-content">
@@ -918,6 +965,14 @@
       </div>
     </div>
   </form>
+</div>
+
+<div id="PDFViewer" class="modal fade" aria-hidden="true" data-width="75%">
+  <div class="modal-body">
+    <div>
+      <embed id="pdfdataid" src="" frameborder="1" width="100%" height="750px">
+    </div>
+  </div>
 </div>
 
 <script>
@@ -987,6 +1042,7 @@
 </script>
 <script>
   var segment = segments;
+  var site_url = '<?php echo site_url(); ?>';
   $(() => {
     getCSRFtoken();
     getStep();
@@ -1033,7 +1089,7 @@
         let l = Ladda.create(document.querySelector('.next-step')),
           wizard = $('#form_wizard_1').bootstrapWizard(),
           res,
-          current = wizard.bootstrapWizard('currentIndex'),
+          current = wizard.bootstrapWizard('currentIndex'),encryptJustifikasi
           nextStep = current + 1;
         l.start();
         setTimeout(function() {
@@ -1074,6 +1130,11 @@
     url = x;
     swin = window.open(url, 'win', 'scrollbars,width=1000,height=600,top=80,left=140,status=yes,toolbar=no,menubar=yes,location=no');
     swin.focus();
+  }
+
+  const docReader = (file) => {
+        $(".modal-body #pdfdataid").attr("src", file);
+        $("#PDFViewer").modal("show");
   }
 
   // Dealing with Textarea Height
@@ -1168,7 +1229,6 @@
   $(document).on('submit', 'form.step-wizard', function(e) {
     e.preventDefault();
     var $form = $(this);
-
     $.ajax({
       type: 'POST',
       url: `${base_url}Inspeksi/simpan_inspeksi`,
@@ -1214,27 +1274,11 @@
                 tableResult += `<td>${obj.pemeriksaan}</td>`;
                 tableResult += `<td><span class="badge badge-${label}"> ${status}</span></td>`;
                 let oldFileBerkas = `${base_url}file/Konsultasi/${obj.id_pemilik}/Inspeksi/Dokumen/${obj.berkas_file}`;
-                let newFileBerkas = `${base_url}dekill/Inspection/berkas/${obj.berkas_file}`;
-                let resultBerkas = !checkFileExist(oldFileBerkas) ? newFileBerkas : oldFileBerkas;
-                 //  baca file masih belum jalan / bug
-                var resultOutput;
-                function checkFileExist(url) {
-                  var http = new XMLHttpRequest();
-
-                    http.open('HEAD', url, false);
-                    http.send();
-                    if (http.status === 200) {
-                      resultOutput = true;
-                    } else {
-                      resultOutput = false;
-                    }
-                  return resultOutput;
-                }
-
-                console.log(checkFileExist(oldFileBerkas));
-                let berkas = obj.berkas_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('${base_url}file/Konsultasi/${obj.id_pemilik}/Inspeksi/Dokumen/${obj.berkas_file}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
-                let catatan = obj.catatan == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('${base_url}file/Konsultasi/${obj.id_pemilik}/Inspeksi/Catatan/${obj.catatan}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
-                let justifikasi = obj.berkas_justifikasi == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:popWin('${base_url}file/Konsultasi/${obj.id_pemilik}/Inspeksi/Justifikasi/${obj.berkas_justifikasi}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
+                let newFileBerkas = `${base_url}object-storage/dekill/Inspection/berkas/${obj.berkas_file}`;
+                
+                let berkas = obj.berkas_file == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:docReader('${site_url}/Docreader/ReaderDok/${obj.dirBerkas}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
+                let catatan = obj.catatan == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:docReader('${site_url}/Docreader/ReaderDok/${obj.dirCatatan}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
+                let justifikasi = obj.berkas_justifikasi == false ? 'Tidak ada dokumen' : `<a href="javascript:void(0);" class="btn default btn-xs blue-stripe" title="Lihat Berkas" onclick="javascript:docReader('${site_url}/Docreader/ReaderDok/${obj.dirJustifikasi}')"><span class="glyphicon glyphicon-file"></span>Lihat</a>`;
                 tableResult += `<td>${berkas}</td>`;
                 tableResult += `<td>${catatan}</td>`;
                 tableResult += `<td>${justifikasi}</td></tr>`;
